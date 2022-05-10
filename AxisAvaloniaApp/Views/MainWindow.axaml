@@ -1,0 +1,99 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AxisAvaloniaApp.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AxisAvaloniaApp.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AxisAvaloniaApp">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+  <NativeMenu.Menu>
+    <NativeMenu>
+      <NativeMenuItem Header="File">
+        <NativeMenuItem.Menu>
+          <NativeMenu>
+            <NativeMenuItem Header="Open" Command="{Binding OnOpenClicked}"/>
+            <NativeMenuItemSeperator/>
+            <NativeMenuItem Header="Quit Avalonia" Gesture="CMD+Q"/>
+          </NativeMenu>
+        </NativeMenuItem.Menu>
+      </NativeMenuItem>
+      <NativeMenuItem Header="Edit">
+        <NativeMenuItem.Menu>
+          <NativeMenu>
+            <NativeMenuItem Header="Copy"/>
+            <NativeMenuItem Header="Paste"/>
+          </NativeMenu>
+        </NativeMenuItem.Menu>
+      </NativeMenuItem>
+    </NativeMenu>
+  </NativeMenu.Menu>
+
+  <DockPanel>
+    <NativeMenuBar DockPanel.Dock="Top"/>
+    <TextBlock Text="{Binding Status}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <ListBox Grid.Column="0" Items="{Binding Source}">
+      </ListBox>
+      <TextBlock Grid.Row="1" Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      <ComboBox Grid.Row="2" Items="{Binding Source}"/>
+      <DatePicker Grid.Row="3"/>
+      <CheckBox Content="CheckBox" Grid.Row="4"/>
+      <TextBox Grid.Row="5" Text="{Binding TestStr, Mode=TwoWay}"/>
+      <DataGrid Grid.Row="6" 
+                Name="MyDataGrid" 
+                Items="{Binding Source}" 
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Column 1" Binding="{Binding}"/>
+          <DataGridTextColumn Header="Column 2" Binding="{Binding}"/>
+        </DataGrid.Columns>
+      </DataGrid>
+      <Button Grid.Row="7" Content="{Binding TestStr}" Command="{Binding OnOpenClicked}"/>
+      <Image Grid.Row="8" Source="/Assets/avalonia-logo.ico"/>
+      <Button Grid.Row="9" VerticalContentAlignment="Center">
+        <RelativePanel VerticalAlignment="Center" HorizontalAlignment="Center">
+          <Image Name="ImageButton" Source="/Assets/avalonia-logo.ico" Width="20" Height="20"/>
+          <TextBlock Text="Button" RelativePanel.RightOf="ImageButton" TextAlignment="Center"/>
+        </RelativePanel>
+      </Button>
+      <ToggleSwitch Background="AliceBlue" Grid.Row="10"/>
+      <ToggleButton Content="ToggleButton" Grid.Row="11"/>
+      <TreeView Grid.Row="12" Items="{Binding TreeViewNodes}">
+        <TreeView.ItemTemplate>
+          <TreeDataTemplate ItemsSource="{Binding Nodes}">
+            <TextBlock Text="{Binding Name}"/>
+          </TreeDataTemplate>
+        </TreeView.ItemTemplate>
+      </TreeView>
+    </Grid>
+  </Grid>
+  </DockPanel>
+    
+</Window>
