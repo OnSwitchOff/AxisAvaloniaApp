@@ -33,6 +33,7 @@
     <PackageReference Include="Microinvest.IntegrationService" Version="1.0.0" />
     <PackageReference Include="Microinvest.PDFCreator" Version="1.0.0" />
     <PackageReference Include="Microinvest.SearchService" Version="1.0.0" />
+    <PackageReference Include="WebViewControl-Avalonia" Version="2.91.23" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:contr="using:AxisAvaloniaApp.UserControls"
+        xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AxisAvaloniaApp.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -51,11 +52,14 @@
           <RowDefinition Height="auto"/>
           <RowDefinition Height="auto"/>
           <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <ListBox Grid.Row="0" Items="{Binding Source}"/>
         <contr:UserControl1 Grid.Row="1"/>
         <Image Grid.Row="2" Source="/Assets/avalonia-logo.ico" Width="60" Height="60"/>
-        <TreeView Grid.Row="3" Items="{Binding TreeViewNodes}">
+        <TreeView Grid.Row="3" Items="{Binding TreeViewNodes}" 
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedNode}">
           <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Nodes}">
               <TextBlock Text="{Binding Name}"/>
@@ -63,9 +67,10 @@
           </TreeView.ItemTemplate>
         </TreeView>
         <Calendar Grid.Row="4"/>
-        <Expander Grid.Row="5">
+        <Expander Header="Expand data" Grid.Row="5">
           <TextBox Text="Expander"/>
         </Expander>
+        <webview:WebView Grid.Row="6" x:Name="webview" Address="https://ru.wikipedia.org/wiki/Avalonia"/>
       </Grid>      
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>

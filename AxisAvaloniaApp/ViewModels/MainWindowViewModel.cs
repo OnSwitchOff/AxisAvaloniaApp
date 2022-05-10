@@ -12,6 +12,7 @@ namespace AxisAvaloniaApp.ViewModels
 
         public List<string> Source => new List<string>() { "item 1", "item 2", "item 3" };
 
+        public TreeViewModel SelectedNode { get; set; }
 
         public List<TreeViewModel> TreeViewNodes { get; set; } 
         private string _status;
@@ -52,6 +53,8 @@ namespace AxisAvaloniaApp.ViewModels
                 Name = "Item 2"
             };
             TreeViewNodes.Add(node);
+
+            SelectedNode = TreeViewNodes[0].Nodes[1];
         }
 
     }
