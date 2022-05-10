@@ -3,6 +3,7 @@
         xmlns:vm="using:AxisAvaloniaApp.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:contr="using:AxisAvaloniaApp.UserControls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AxisAvaloniaApp.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -42,24 +43,46 @@
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
+      <Grid Grid.Column="0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0" Items="{Binding Source}"/>
+        <contr:UserControl1 Grid.Row="1"/>
+        <Image Grid.Row="2" Source="/Assets/avalonia-logo.ico" Width="60" Height="60"/>
+        <TreeView Grid.Row="3" Items="{Binding TreeViewNodes}">
+          <TreeView.ItemTemplate>
+            <TreeDataTemplate ItemsSource="{Binding Nodes}">
+              <TextBlock Text="{Binding Name}"/>
+            </TreeDataTemplate>
+          </TreeView.ItemTemplate>
+        </TreeView>
+        <Calendar Grid.Row="4"/>
+        <Expander Grid.Row="5">
+          <TextBox Text="Expander"/>
+        </Expander>
+      </Grid>      
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="20"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
-      <ListBox Grid.Column="0" Items="{Binding Source}">
-      </ListBox>
       <TextBlock Grid.Row="1" Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
       <ComboBox Grid.Row="2" Items="{Binding Source}"/>
       <DatePicker Grid.Row="3"/>
@@ -69,29 +92,37 @@
                 Name="MyDataGrid" 
                 Items="{Binding Source}" 
                 AutoGenerateColumns="False"
-                CanUserResizeColumns="True">
+                CanUserResizeColumns="True" 
+                GridLinesVisibility="All"
+                HorizontalGridLinesBrush="Black"
+                VerticalGridLinesBrush="Black" 
+                AlternatingRowBackground="Gray"
+                HeadersVisibility="All"
+                Height="160">
         <DataGrid.Columns>
           <DataGridTextColumn Header="Column 1" Binding="{Binding}"/>
           <DataGridTextColumn Header="Column 2" Binding="{Binding}"/>
+          <DataGridTemplateColumn Header="CustomColumn" Width="*">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <ComboBox Name="ComboBoxResponsible" FontSize="11">
+                  <ComboBoxItem Content="Test1"></ComboBoxItem>
+                  <ComboBoxItem Content="Test2"></ComboBoxItem>
+                </ComboBox>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
         </DataGrid.Columns>
       </DataGrid>
       <Button Grid.Row="7" Content="{Binding TestStr}" Command="{Binding OnOpenClicked}"/>
-      <Image Grid.Row="8" Source="/Assets/avalonia-logo.ico"/>
-      <Button Grid.Row="9" VerticalContentAlignment="Center">
+      <Button Grid.Row="8" VerticalContentAlignment="Center" Background="GreenYellow">
         <RelativePanel VerticalAlignment="Center" HorizontalAlignment="Center">
           <Image Name="ImageButton" Source="/Assets/avalonia-logo.ico" Width="20" Height="20"/>
           <TextBlock Text="Button" RelativePanel.RightOf="ImageButton" TextAlignment="Center"/>
         </RelativePanel>
       </Button>
-      <ToggleSwitch Background="AliceBlue" Grid.Row="10"/>
-      <ToggleButton Content="ToggleButton" Grid.Row="11"/>
-      <TreeView Grid.Row="12" Items="{Binding TreeViewNodes}">
-        <TreeView.ItemTemplate>
-          <TreeDataTemplate ItemsSource="{Binding Nodes}">
-            <TextBlock Text="{Binding Name}"/>
-          </TreeDataTemplate>
-        </TreeView.ItemTemplate>
-      </TreeView>
+      <ToggleSwitch Background="AliceBlue" Grid.Row="9"/>
+      <ToggleButton Content="ToggleButton" Grid.Row="10"/>
     </Grid>
   </Grid>
   </DockPanel>
