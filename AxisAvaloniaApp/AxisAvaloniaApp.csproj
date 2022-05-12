@@ -47,6 +47,6 @@
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\AxisUno_WinUI_Net5\DataBase\DataBase.csproj" />
+    <ProjectReference Include="..\DataBase\DataBase.csproj" />
   </ItemGroup>
 </Project>
