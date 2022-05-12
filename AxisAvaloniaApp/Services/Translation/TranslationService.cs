@@ -102,77 +102,57 @@ namespace AxisAvaloniaApp.Services.Translation
             this.wishesDictionary.Clear();
             this.SupportedLanguages.Clear();
 
-            Assembly assembly = this.GetType().GetTypeInfo().Assembly;
-            string[] names = assembly.GetManifestResourceNames();
-
-            foreach (string dictionaryPath in names)
+            RootClass? fullDictionary = Helpers.XmlExtensions.DeserializeData<RootClass>(Resources.Dictionary);
+            if (fullDictionary != null)
             {
-                if (!dictionaryPath.Contains("Dictionary.xml"))
+                foreach (Dict dict in fullDictionary.Dictionaries)
                 {
-                    continue;
-                }
-
-                using (Stream? stream = assembly.GetManifestResourceStream(dictionaryPath))
-                {
-                    if (stream != null)
+                    if (dict.Product == "Axis My100R")
                     {
-                        using (StreamReader reader = new StreamReader(stream))
+                        foreach (Language lang in dict.Languages)
                         {
-                            RootClass? fullDictionary = Helpers.XmlExtensions.DeserializeData<RootClass>(reader.ReadToEnd());
-                            if (fullDictionary != null)
+                            this.SupportedLanguages.Add(lang.Text, lang.DisplayName);
+                        }
+
+                        foreach (Data data in dict.Data)
+                        {
+                            foreach (Value value in data.Values)
                             {
-                                foreach (Dict dict in fullDictionary.Dictionaries)
+                                if (value.Lang.ToUpper().Equals(languageCode.ToUpper()) && !this.mainDictionary.ContainsKey(data.Key))
                                 {
-                                    if (dict.Product == "Axis My100R")
-                                    {
-                                        foreach (Language lang in dict.Languages)
-                                        {
-                                            this.SupportedLanguages.Add(lang.Text, lang.DisplayName);
-                                        }
+                                    this.mainDictionary.Add(data.Key, value.Text);
+                                    break;
+                                }
+                            }
+                        }
+                    }
 
-                                        foreach (Data data in dict.Data)
-                                        {
-                                            foreach (Value value in data.Values)
-                                            {
-                                                if (value.Lang.ToUpper().Equals(languageCode.ToUpper()) && !this.mainDictionary.ContainsKey(data.Key))
-                                                {
-                                                    this.mainDictionary.Add(data.Key, value.Text);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
+                    if (dict.Product == "Axis My100R Help")
+                    {
+                        foreach (Data data in dict.Data)
+                        {
+                            foreach (Value value in data.Values)
+                            {
+                                if (value.Lang.ToUpper().Equals(languageCode.ToUpper()) && !this.helpDictionary.ContainsKey(data.Key))
+                                {
+                                    this.helpDictionary.Add(data.Key, value.Text);
+                                    break;
+                                }
+                            }
+                        }
+                    }
 
-                                    if (dict.Product == "Axis My100R Help")
-                                    {
-                                        foreach (Data data in dict.Data)
-                                        {
-                                            foreach (Value value in data.Values)
-                                            {
-                                                if (value.Lang.ToUpper().Equals(languageCode.ToUpper()) && !this.helpDictionary.ContainsKey(data.Key))
-                                                {
-                                                    this.helpDictionary.Add(data.Key, value.Text);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    if (dict.Product == "Axis My100R RandomDictionary")
-                                    {
-                                        foreach (Data data in dict.Data)
-                                        {
-                                            foreach (Value value in data.Values)
-                                            {
-                                                int wishKey = int.Parse(data.Key);
-                                                if (value.Lang.ToUpper().Equals(languageCode.ToUpper()) && !this.wishesDictionary.ContainsKey(wishKey))
-                                                {
-                                                    this.wishesDictionary.Add(wishKey, value.Text);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
+                    if (dict.Product == "Axis My100R RandomDictionary")
+                    {
+                        foreach (Data data in dict.Data)
+                        {
+                            foreach (Value value in data.Values)
+                            {
+                                int wishKey = int.Parse(data.Key);
+                                if (value.Lang.ToUpper().Equals(languageCode.ToUpper()) && !this.wishesDictionary.ContainsKey(wishKey))
+                                {
+                                    this.wishesDictionary.Add(wishKey, value.Text);
+                                    break;
                                 }
                             }
                         }

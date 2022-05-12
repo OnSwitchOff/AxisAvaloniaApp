@@ -49,8 +49,7 @@ namespace AxisAvaloniaApp.Services
             services.RegisterLazySingleton<ISettingsService>(() => new SettingsService(
                 resolver.GetRequiredService<ISettingsRepository>(),
                 resolver.GetRequiredService<IOperationHeaderRepository>(),
-                resolver.GetRequiredService<IPaymentService>(),
-                resolver.GetRequiredService<ITranslationService>()));
+                resolver.GetRequiredService<IPaymentService>()));
             services.Register<ISerializationService>(() => new SerializationService(resolver.GetRequiredService<ISerializationRepository>()));
             services.RegisterLazySingleton<IScanningData>(() => new ScanningService(resolver.GetRequiredService<ISettingsService>()));
             services.RegisterLazySingleton<IPaymentService>(() => new PaymentService());

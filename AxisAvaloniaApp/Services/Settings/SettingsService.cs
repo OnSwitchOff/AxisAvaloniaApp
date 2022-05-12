@@ -18,7 +18,6 @@ namespace AxisAvaloniaApp.Services.Settings
         private readonly ISettingsRepository settingsRepository;
         private readonly IOperationHeaderRepository headerRepository;
         private readonly IPaymentService paymentService;
-        private readonly ITranslationService translationService;
         private char? decimalSeparator = null;
         private string priceFormat = null;
         private string qtyFormat = null;
@@ -32,13 +31,11 @@ namespace AxisAvaloniaApp.Services.Settings
         public SettingsService(
             ISettingsRepository settingsRepository,
             IOperationHeaderRepository headerRepository,
-            IPaymentService paymentService,
-            ITranslationService translationService)
+            IPaymentService paymentService)
         {
             this.settingsRepository = settingsRepository;
             this.headerRepository = headerRepository;
             this.paymentService = paymentService;
-            this.translationService = translationService;
         }
 
         /// <summary>
@@ -110,9 +107,6 @@ namespace AxisAvaloniaApp.Services.Settings
                     // актуализируем язык
                     this.AppSettings[ESettingKeys.Language].Value = ((int)value).ToString();
                     this.AppSettings[ESettingKeys.Language].UpdateData();
-
-                    // обновляем словарь
-                    translationService.InitializeDictionary(value.CombineCode);
                 }
             }
         }
