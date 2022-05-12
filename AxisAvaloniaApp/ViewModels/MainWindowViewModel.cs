@@ -1,4 +1,5 @@
 using AxisAvaloniaApp.Models;
+using DataBase.Repositories.ApplicationLog;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;

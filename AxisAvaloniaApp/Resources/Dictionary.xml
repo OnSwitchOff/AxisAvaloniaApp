@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TranslationDictionaries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Dictionary Product="Axis My100R" Version="1">
+    <Languages>
+      <Language DisplayName="Български">bg-BG</Language> <!--Болгарский-->
+      <Language DisplayName="Ελληνικά">el-GR</Language> <!--Греческий-->
+      <Language DisplayName="English">en-GB</Language> <!--Английский-->
+      <Language DisplayName="Română">ro-RO</Language> <!--Румынский-->
+      <Language DisplayName="Русский">ru-RU</Language> <!--Русский-->
+      <Language DisplayName="Українська">uk-UA</Language> <!--Украинский-->
+      <Language DisplayName="հայերեն">hy-AM</Language> <!--Армянский-->
+      <Language DisplayName="ქართული">ka-GE</Language> <!--Грузинский-->
+    </Languages>
+    <!--Страны-->
+    <Data Key="strBulgaria">
+      <Value Lang="bg-BG">България</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Bulgaria</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Болгария</Value>
+      <Value Lang="uk-UA">Болгарія</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strGeorgia">
+      <Value Lang="bg-BG">Грузия</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Georgia</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Грузия</Value>
+      <Value Lang="uk-UA">Грузія</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strRussia">
+      <Value Lang="bg-BG">Русия</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Russia</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Россия</Value>
+      <Value Lang="uk-UA">Росія</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strUnitedStates">
+      <Value Lang="bg-BG">САЩ</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">UnitedStates</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">США</Value>
+      <Value Lang="uk-UA">США</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strUnitedKingdom">
+      <Value Lang="bg-BG">Великобритания</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">United Kingdom</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Великобритания</Value>
+      <Value Lang="uk-UA">Великобританія</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strUkraine">
+      <Value Lang="bg-BG">Украйна</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Ukraine</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Украина</Value>
+      <Value Lang="uk-UA">Україна</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    
+    <!--Главное меню-->
+    <Data Key="strSales">
+      <Value Lang="bg-BG">Продажби</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Sales</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Продажи</Value>
+      <Value Lang="uk-UA">Продажі</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strSale">
+      <Value Lang="bg-BG">Продажба</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Sale</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Продажа</Value>
+      <Value Lang="uk-UA">Реалізація</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strNewSale">
+      <Value Lang="bg-BG">Нова продажба</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">New sale</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Новая продажа</Value>
+      <Value Lang="uk-UA">Нова реалізація</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strInvoices">
+      <Value Lang="bg-BG">Фактури</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invoices</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Фактуры</Value>
+      <Value Lang="uk-UA">Фактури</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strInvoice">
+      <Value Lang="bg-BG">Фактура</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invoice</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Фактура</Value>
+      <Value Lang="uk-UA">Фактура</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strProformInvoices">
+      <Value Lang="bg-BG">Проформи</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Proforma Invoices</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Счет-проформа</Value>
+      <Value Lang="uk-UA">Рахунок-проформа</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDebitNotes">
+      <Value Lang="bg-BG">Дебитно известие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Debit note</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дебетное извещение</Value>
+      <Value Lang="uk-UA">Дебетне сповіщення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCreditNotes">
+      <Value Lang="bg-BG">Кредитно известие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Credit note</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Документ возврата</Value>
+      <Value Lang="uk-UA">Документ повернення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCashRegister">
+      <Value Lang="bg-BG">Касов апарат</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Cash register</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Кассовый аппарат</Value>
+      <Value Lang="uk-UA">Касовий апарат</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strExchange">
+      <Value Lang="bg-BG">Обмен</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Exchange</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Обмен</Value>
+      <Value Lang="uk-UA">Обмін</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strReports">
+      <Value Lang="bg-BG">Справки</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Reports</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Отчёты</Value>
+      <Value Lang="uk-UA">Звіти</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strSettings">
+      <Value Lang="bg-BG">Настройки</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Settings</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Настройки</Value>
+      <Value Lang="uk-UA">Налаштування</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    
+    <!--Продажа-->
+    <Data Key="strPartner">
+      <Value Lang="bg-BG">Партньор</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Partner</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Партнёр</Value>
+      <Value Lang="uk-UA">Партнер</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strUSNShort">
+      <Value Lang="bg-BG">УНП: </Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">USN: </Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">УНП: </Value>
+      <Value Lang="uk-UA">УНП: </Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strUSN">
+      <Value Lang="bg-BG">Уникален номер на продажба</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Unique sale number</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Уникальный номер продажи</Value>
+      <Value Lang="uk-UA">Унікальний номер продажу</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strTotalSum">
+      <Value Lang="bg-BG">Обща сума</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Total amount</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Общая сумма</Value>
+      <Value Lang="uk-UA">Загальна сума</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+
+
+    <Data Key="strPayment">
+      <Value Lang="bg-BG">Разплащане</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Payment</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Оплата</Value>
+      <Value Lang="uk-UA">Оплата</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVoucher">
+      <Value Lang="bg-BG">Через ваучер</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Voucher</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Ваучером</Value>
+      <Value Lang="uk-UA">Ваучером</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPoints">
+      <Value Lang="bg-BG">Електронни точки</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Points</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Баллы</Value>
+      <Value Lang="uk-UA">Бали</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strOtherPaymentType">
+      <Value Lang="bg-BG">Друг тип плащане</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Other payment type</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Другой тип оплаты</Value>
+      <Value Lang="uk-UA">Інший тип оплати</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCard">
+      <Value Lang="bg-BG">Дебитна/Кредитна</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Debit/Credit</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дебитная/Кредитная</Value>
+      <Value Lang="uk-UA">Дебітна/Кредитна</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strByAccount">
+      <Value Lang="bg-BG">По сметка</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">By account</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">По счёту</Value>
+      <Value Lang="uk-UA">За рахунком</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strInCash">
+      <Value Lang="bg-BG">В брой</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">In cash</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Наличными</Value>
+      <Value Lang="uk-UA">Готівкою</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPaidSumInCash">
+      <Value Lang="bg-BG">Платено</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Paid up in cash</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Оплачено</Value>
+      <Value Lang="uk-UA">Сплачено</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strChange">
+      <Value Lang="bg-BG">Ресто</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Change</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Сдача</Value>
+      <Value Lang="uk-UA">Решта</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    
+    
+    <Data Key="strFastSearch">
+      <Value Lang="bg-BG">Бързо търсене</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Fast search</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Быстрый поиск</Value>
+      <Value Lang="uk-UA">Швидкий пошук</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+  </Dictionary>
+
+  <Dictionary Product="Axis My100R Help" Version="1">
+    <Languages>
+      <Language DisplayName="Български">bg-BG</Language> <!--Болгарский-->
+      <Language DisplayName="Ελληνικά">el-GR</Language> <!--Греческий-->
+      <Language DisplayName="English">en-GB</Language> <!--Английский-->
+      <Language DisplayName="Română">ro-RO</Language> <!--Румынский-->
+      <Language DisplayName="Русский">ru-RU</Language> <!--Русский-->
+      <Language DisplayName="Українська">uk-UA</Language> <!--Украинский-->
+      <Language DisplayName="հայերեն">hy-AM</Language> <!--Армянский-->
+      <Language DisplayName="ქართული">ka-GE</Language> <!--Грузинский-->
+    </Languages>
+    <Data Key="OperationOfSale">
+      <Value Lang="bg-BG">Операция Продажба представлява основната операция за отчитане на търговската дейност. При Продажба се намалява количеството на стоките в склада и се издават документи към клиента. Програма Axis My100R позволява да се отворят, попълват и обработват няколко продажби едновременно. Това е удобно при работа в кафе или ресторант.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operation of 'Sale' is the main operation.After 'Sale' items qty on the stock are decreasing and necesary data to client's documents are preparing. Axis My100R app allows to open, fill and process several sales at the same time that can be easy to work of cafe or restaurant.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Операция "Продажа" является основной операцией. После "Продажи" уменьшается кол-во товаров на складе, а также формируются данные, необходимые для выдачи фактуры клиенту. Приложение Axis My100R может работать с несколькими продажами одновременно, что позволяет облегчить работу кафе и ресторанов.</Value>
+      <Value Lang="uk-UA">Операція "Реалізація" є основною операцією. Після "Реалізації" зменшується к-сть товару на складі, а також формуються дані, необхідні для видачі клієнту фактури. Програма Axis My100R може працювати одночасно с декількома реалізаціями, що може полегшити роботу кафе або ресторанів.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="OperationOfInvoicing">
+      <Value Lang="bg-BG">Операция Фактуриране превръща вече записана продажба във фактура.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operation of 'Invoicing' convert saved sale data to invoice.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Операция «Фактурирование» формирует  счёт-фактуру на основании данных о продаже.</Value>
+      <Value Lang="uk-UA">Операція «Фактурування» формує рахунок-фактуру на підставі даних про продаж.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="OperationOfProformInvoice">
+      <Value Lang="bg-BG">Not translated</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not translated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Not translated</Value>
+      <Value Lang="uk-UA">Not translated</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="OperationOfDebitNote">
+      <Value Lang="bg-BG">Not translated</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not translated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Not translated</Value>
+      <Value Lang="uk-UA">Not translated</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="OperationOfCreditNote">
+      <Value Lang="bg-BG">Not translated</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not translated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Not translated</Value>
+      <Value Lang="uk-UA">Not translated</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="CashRegister">
+      <Value Lang="bg-BG">Управлението на фискално устройство изпълнява задачи по дневен отчет (X - без нулиране на оборота и Z - с нулиране на оборота), служебно внасяне и извеждане на суми от апарата, както и различни отчети по дати, по номер на фискалната памет и дубликат на последния издаден фискален бон.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Fiscal device management executes different tasks like day report (X-report (no zeroing of turn over) and  Z-report (with zeroing of turn over)), deposit or withdraw money, printing of duplicate of check and others. </Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Управление фискальным устройством выполняет различные задачи, такие как дневной отчет (X-отчет (без обнуления оборота) и Z-отчет (с обнулением оборота)), внесение или снятие денег, печать дубликата чека и другие.</Value>
+      <Value Lang="uk-UA">Управління фіскальним пристроєм виконує різні завдання, такі як денний звіт (X-звіт (без обнулення обороту) і Z-звіт (з обнуленням обороту)), внесення або зняття грошей, друк дубліката чека і інші.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="OperationOfExchange">
+      <Value Lang="bg-BG">Бутон Обмен изпълнява задачи за експорт на данни към други системи (счетоводни, ERP, складови или BI), както импорт от външни източници (електронни магазини, отдалечени работни места или предварително създадени операции в Excel)</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operation of 'Exchange' executes tasks both export to another app (bookkeepings, ERP, warehouses etc) and import from other app (web shops, remote work places, tables of Excel etc).</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Операция «Обмен» выполняет задачи как по экспорту в другое приложение (бухгалтерия, ERP, склады и т.д.), так и импорту из других приложений (интернет-магазины, удаленные рабочие места, таблицы Excel и т.д.).</Value>
+      <Value Lang="uk-UA">Операція «Обмін» виконує завдання як з експорту в інші програми (бухгалтерія, ERP, склади і т.д.), так і імпорту з інших програм (інтернет-магазини, віддалені робочі місця, таблиці Excel і т.д.).</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="Reports">
+      <Value Lang="bg-BG">Справките представляват група от предварително зададени отчети по различни разрези на дейността - количествени, сумарни, обобщени и детайли таблици с наличности, номенклатури и документи. Всички справки са подредени в дървовиден списък от елементи.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Reports are group of pre-made reports of different zone of activity (sale, purchase etc) and various parameters (qty, amount etc). Reports are represented a tree view.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Отчеты представляют собой группу готовых отчетов по разным зонам активности (продажа, покупка и т.д.) и различным параметрам (количество, сумма и т.д.). Отчеты представлены в виде дерева.</Value>
+      <Value Lang="uk-UA">Звіти являють собою групу готових звітів по різним зонам активності (продаж, покупка і т.д.) та різним параметрам (кількість, сума і т.д.). Звіти представлені у вигляді дерева.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="Settings">
+      <Value Lang="bg-BG">Настройките на системата позволяват въвеждане на индивидуални данни за фирмата, за свързаните устройства (касови апарати, баркод скенери, принтери и други), за имената на потребители, както и парола за достъп към програма Axis My100R и данните в нея.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">App settings allow input data of your company, connect to devices and services (COM-scanner, fiscal device, POS-terminal, AxisCloud) etc.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Настройки приложения позволяют вводить данные вашей компании, подключаться к устройствам и службам (COM-сканер, фискальное устройство, POS-терминал, AxisCloud) и т.д.</Value>
+      <Value Lang="uk-UA">Налаштування програми дозволяють вводити дані вашої компанії, підключатися до пристроїв і служб (COM-сканер, фіскальний пристрій, POS-термінал, AxisCloud) і т.д.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+
+    <!--Продажа-->
+    <Data Key="EnterPartnerData">
+      <Value Lang="bg-BG">Въведете фирма или част от името на фирма за да филтрирате таблицата отдясно. Филтърът работи по Код, ЕИК, Адрес и всички други полета от таблицата с партньорите. За потвърждение изберете партньор от дясната част или натиснете Enter. Полето може да бъде заключено с катинара, при което всички следващи операции ще се извършат със същата фирма.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter partner name fully or part. Filter works by code, tax code, VAT code, address and other fields of Partners table. To confirm choice of partner you have to select one on the right side or press Enter. The field can be locked and all nex operation will be performed with this partner.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите имя партнера полностью или частично. Фильтр работает по коду, налогому номеру, номеру плательщика НДС, адресу и другим полям таблицы Партнеры. Чтобы подтвердить выбор партнера, вам нужно выбрать его справа или нажать Enter. Поле можно заблокировать, и все последующие операции будут выполняться с этим партнером.</Value>
+      <Value Lang="uk-UA">Введіть ім'я партнера повністю або частково. Фільтр працює за кодом, податковим номером, номером платника ПДВ, адресою та іншими полями таблиці Партнери. Щоб підтвердити вибір партнера, вам необхідно вибрати його справа або натиснути Enter. Поле можна заблокувати, і всі наступні операції будуть виконуватися з цим партнером.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+  </Dictionary>
+
+  <Dictionary Product="Axis My100R RandomDictionary" Version="1">
+    <Languages>
+      <Language DisplayName="Български">bg-BG</Language>
+    </Languages>
+    <Data Key="0">
+      <Value Lang="bg-BG">Здравей! Как си днес?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="1">
+      <Value Lang="bg-BG">Хей, усмихни се.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="2">
+      <Value Lang="bg-BG">Хи-хи! Гъделичкаш ме с мишката!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="3">
+      <Value Lang="bg-BG">Знаеш ли, че нося късмет?!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="4">
+      <Value Lang="bg-BG">Усещам, че ще имаме добри приходи.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="5">
+      <Value Lang="bg-BG">Оборотът днес ще е направо „уау“!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="6">
+      <Value Lang="bg-BG">Знаеш ли, че имаш много хубава усмивка?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="7">
+      <Value Lang="bg-BG">Май съм гладен, а ти?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="8">
+      <Value Lang="bg-BG">Днес ще бъде един успешен ден.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="9">
+      <Value Lang="bg-BG">Може да нямам плочки, но винаги обирам всички точки.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="10">
+      <Value Lang="bg-BG">Пожелавам ти късмет!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="11">
+      <Value Lang="bg-BG">Ако животът ти подаде лимон - направи си лимонада.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="12">
+      <Value Lang="bg-BG">Очаква те изненада от любим човек!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="13">
+      <Value Lang="bg-BG">Хайде да започваме работа!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="14">
+      <Value Lang="bg-BG">Обичам те, както ролка за хартия обича касов апарат!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="15">
+      <Value Lang="bg-BG">Нямам търпение да поработя!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="16">
+      <Value Lang="bg-BG">Искам много продажби.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="17">
+      <Value Lang="bg-BG">Харесва ми да съм тук!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="18">
+      <Value Lang="bg-BG">Да ти се намира нещо сладичко за хапване?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="19">
+      <Value Lang="bg-BG">Следващият клиент ще остави голям бакшиш.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="20">
+      <Value Lang="bg-BG">Пусна ли Z отчета вчера?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="21">
+      <Value Lang="bg-BG">Искаш ли да сме приятели във Facebook?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="22">
+      <Value Lang="bg-BG">Понякога се чудя за какво са ми всички тези копчета.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="23">
+      <Value Lang="bg-BG">Ти си звезда! Нека посветим заедно!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="24">
+      <Value Lang="bg-BG">Седя си и си мисля, понякога само си седя…</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="25">
+      <Value Lang="bg-BG">Тази нощ в 3:15 ч. съседът ми тропа по вратата. Добре, че не спях, а още си свирех на китарата, изкара ми акъла...</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="26">
+      <Value Lang="bg-BG">Качва се един с мен в асансьора и ме пита: - Нагоре ли? - Не, ще завием надясно - знам един по-пряк път...</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="27">
+      <Value Lang="bg-BG">Как да спестите един милион за една година? Просто заделяйте по 2740 лева всеки ден...</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="28">
+      <Value Lang="bg-BG">Как станахте алкохолик? Стриктно спазвах карантината...</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="29">
+      <Value Lang="bg-BG">Как станахте алкохолик? Стриктно спазвах карантината...</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB"></Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU"></Value>
+      <Value Lang="uk-UA"></Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+  </Dictionary>
+</TranslationDictionaries>

@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:contr="using:AxisAvaloniaApp.UserControls"
-        xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AxisAvaloniaApp.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -68,9 +67,8 @@
         </TreeView>
         <Calendar Grid.Row="4"/>
         <Expander Header="Expand data" Grid.Row="5">
-          <TextBox Text="Expander"/>
+          <contr:TextBox1/>
         </Expander>
-        <webview:WebView Grid.Row="6" x:Name="webview" Address="https://ru.wikipedia.org/wiki/Avalonia"/>
       </Grid>      
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>
