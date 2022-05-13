@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AxisAvaloniaApp.UserControls.MainMenuItem">
+  <StackPanel Orientation="Horizontal"
+              Background="Transparent"
+              Height="{Binding $parent.Height}">
+    <Border BorderBrush="{Binding SelectedColor, Mode=TwoWay}"
+            BorderThickness="1.5"
+            Background="White"
+            CornerRadius="3"
+            IsVisible="{Binding $parent.IsSelected, Mode=TwoWay}"/>
+    <Image
+           Source="/Assets/Icons/sale.png"
+           Stretch="UniformToFill"
+           Height="30"
+           Margin="5, 0"/>
+    <TextBlock
+               Text="Test 1"
+               VerticalAlignment="Center"
+               Margin="2, 0" Foreground="White"/>
+  </StackPanel>
+</UserControl>

@@ -3,17 +3,84 @@
         xmlns:vm="using:AxisAvaloniaApp.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:contr="using:AxisAvaloniaApp.UserControls"
-        xmlns:ex="using:AxisAvaloniaApp.UserControls.Extensions"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+        xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions"
+        xmlns:converters="using:AxisAvaloniaApp.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AxisAvaloniaApp.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="AxisAvaloniaApp">
+        Icon="/Assets/AxisIcon.ico"
+        Title="AxisAvaloniaApp"
+        MinWidth="1280"
+        MinHeight="720">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+  <Window.Resources>
+    <converters:BitmapAssetValueConverter x:Key="variableImage"/>
+  </Window.Resources>
 
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid Grid.Column="0" Background="#0e1434">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="40"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <ToggleButton Grid.Row="0" Name="HamburgerButton"
+                    IsChecked="{Binding MainMenuExpanded, Mode=TwoWay}">
+        <ToggleButton.Content>
+          <Image Source="/Assets/Icons/hamburgerButton.png"/>
+        </ToggleButton.Content>
+      </ToggleButton>
+      <ListBox Grid.Row="1" Name="MainMenu"
+               Background="Transparent" 
+               Width="{Binding MainMenuWidth, Mode=TwoWay}"
+               Items="{Binding MainMenuItems}"
+               SelectedItem="{Binding SelectedItem}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Horizontal" Height="20">
+              <Border Name="myBorder"
+                      HorizontalAlignment="Center"
+                     BorderBrush="White"
+                     BorderThickness="1.5"
+                     Background="White"
+                     CornerRadius="3">
+                <i:Interaction.Behaviors>
+                  <ia:DataTriggerBehavior Binding="{Binding IsSelected}" ComparisonCondition="Equal" Value="true">
+                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="Background" Value="White" />
+                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="BorderBrush" Value="White" />
+                  </ia:DataTriggerBehavior>
+                  <ia:DataTriggerBehavior Binding="{Binding IsSelected}" ComparisonCondition="Equal" Value="false">
+                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="Background" Value="Transparent" />
+                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="BorderBrush" Value="Transparent" />
+                  </ia:DataTriggerBehavior>
+                </i:Interaction.Behaviors>
+              </Border>
+              <Image
+                     Source="{Binding IconPath,Converter={StaticResource variableImage}}"
+                     Stretch="UniformToFill"
+                     Margin="5, 0"/>
+              <exControls:AxisTextBlock
+                Background="Transparent"
+                         LocalizeTextKey="{Binding LocalizeKey, Mode=TwoWay}"
+                         VerticalAlignment="Center"
+                         Margin="2, 0" Foreground="White"/>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+    <Grid Grid.Column="1" Background="White">
+      <Calendar></Calendar>
+      <Image Name="TestImage"/>
+    </Grid>
+  </Grid>
+
+  <!--
   <NativeMenu.Menu>
     <NativeMenu>
       <NativeMenuItem Header="File">
@@ -132,5 +199,5 @@
     </Grid>
   </Grid>
   </DockPanel>
-    
+  -->
 </Window>
