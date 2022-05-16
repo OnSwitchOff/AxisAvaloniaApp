@@ -155,6 +155,7 @@ namespace AxisAvaloniaApp.ViewModels
 
                     foreach (string name in printService.InstalledPrinters)
                     {
+                        // fdgdgdf
                         if (name.Contains("dimitar"))
                         {
                             printService.SelectedPrinter = name;
