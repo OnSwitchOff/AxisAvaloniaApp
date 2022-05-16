@@ -1,0 +1,50 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AxisAvaloniaApp.UserControls.NavigationView"
+        xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions"
+        xmlns:converters="using:AxisAvaloniaApp.Converters">
+  <Design.PreviewWith>
+    <controls:NavigationViewItem Foreground="Black"
+                                 IsSelected="False"
+                                 SelectedMarkColor="Black"
+                                 LocalizeKey=""/>
+  </Design.PreviewWith>
+
+  <Styles.Resources>
+    <converters:BitmapAssetValueConverter x:Key="variableImage"/>
+  </Styles.Resources>
+
+  <Style Selector="controls|NavigationViewItem">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal"
+                              Height="20">
+          <Border HorizontalAlignment="Center"
+                  BorderThickness="1.5"
+                  CornerRadius="3"/>
+          <Image Source="{TemplateBinding IconPath,Converter={StaticResource variableImage}}"
+                 Stretch="UniformToFill"
+                 ToolTip.Tip="{Binding ElementName=textLabel, Path=Text, Mode=TwoWay}"
+                 Margin="5, 0"/>
+          <exControls:AxisTextBlock Name="textLabel"
+                                    Background="Transparent"
+                                    Text="{TemplateBinding Text, Mode=TwoWay}"
+                                    LocalizeTextKey="{TemplateBinding LocalizeKey, Mode=TwoWay}"
+                                    VerticalAlignment="Center"
+                                    Margin="2, 0"
+                                    Foreground="{TemplateBinding Foreground, Mode=TwoWay}"/>
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="controls|NavigationViewItem[IsSelected=False] /template/ Border">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  
+  <Style Selector="controls|NavigationViewItem[IsSelected=True] /template/ Border">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="White" />
+  </Style>
+</Styles>

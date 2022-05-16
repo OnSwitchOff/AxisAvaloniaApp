@@ -62,8 +62,15 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         public void InitializeDeviceSettings(ISettingsService settings)
         {
             IDeviceSettings deviceSettings = new DeviceSettings(settings);
-            this.fiscalPrinter = FiscalPrinterService.Instance(deviceSettings, settings.AppLanguage.Convert());
-            this.fiscalPrinter.UniqueSaleNumber = settings.UniqueSaleNumber;
+            try
+            {
+                this.fiscalPrinter = FiscalPrinterService.Instance(deviceSettings, settings.AppLanguage.Convert());
+            }
+            catch (Exception ex)
+            {
+
+            }
+            this.fiscalPrinter.UniqueSaleNumber = 1;// settings.UniqueSaleNumber;
 
             if (this.fiscalPrinter.POSTerminal == null && (bool)settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIsUsed])
             {

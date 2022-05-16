@@ -11,7 +11,8 @@
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
     <None Remove="Assets\AxisIcon.ico" />
-    <None Remove="Assets\Icons\hamburgerButton.png" />
+    <None Remove="Assets\Icons\mainMenu.png" />
+    <None Remove="Assets\Icons\mainMenu_withDots.png" />
     <None Remove="Assets\Icons\sale.png" />
   </ItemGroup>
   <ItemGroup>
@@ -39,11 +40,12 @@
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microinvest.CommonLibrary" Version="1.0.0" />
-    <PackageReference Include="Microinvest.DeviceService" Version="1.0.0" />
+    <PackageReference Include="Microinvest.DeviceService" Version="1.0.1" />
     <PackageReference Include="Microinvest.ExchangeDataService" Version="1.0.0" />
     <PackageReference Include="Microinvest.IntegrationService" Version="1.0.0" />
     <PackageReference Include="Microinvest.PDFCreator" Version="1.0.0" />
     <PackageReference Include="Microinvest.SearchService" Version="1.0.0" />
+    <PackageReference Include="Printing" Version="1.0.0" />
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />

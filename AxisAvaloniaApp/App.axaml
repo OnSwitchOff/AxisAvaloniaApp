@@ -7,6 +7,8 @@
     </Application.DataTemplates>
 
     <Application.Styles>
+      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationView.axaml"/>
+      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationViewItem.axaml"/>
       <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
         <FluentTheme Mode="Light"/>
     </Application.Styles>

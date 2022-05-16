@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.UserControls.Models;
 using DataBase.Repositories.ApplicationLog;
@@ -6,13 +7,16 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
+using System.Windows.Input;
 
 namespace AxisAvaloniaApp.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject
     {
-        private bool mainMenuExpanded = true;
+        private bool mainMenuExpanded = false;
         private double mainMenuWidth = 200;
         public bool MainMenuExpanded
         {
@@ -21,9 +25,11 @@ namespace AxisAvaloniaApp.ViewModels
             {
                 mainMenuExpanded = value;
 
-                MainMenuWidth = mainMenuExpanded ? 200 : 40;
+                MainMenuWidth = mainMenuExpanded ? 40 : 200;
             }
         }
+
+        public IReactiveCommand Command { get; }
 
         public double MainMenuWidth
         {
@@ -88,6 +94,12 @@ namespace AxisAvaloniaApp.ViewModels
 
         public MainWindowViewModel()
         {
+            //Services.Scanning.IScanningData scanningData = Splat.Locator.Current.GetRequiredService<Services.Scanning.IScanningData>();
+            //scanningData.StartCOMScanner("COM4");
+            //scanningData.SendScannedDataEvent += ScanData;
+
+            bool ex = false;
+            Command = ReactiveCommand.Create(RunTheThing);
             Status = $"Application started at {DateTime.Now}";
 
             TreeViewNodes = new List<TreeViewModel>();
@@ -114,5 +126,93 @@ namespace AxisAvaloniaApp.ViewModels
             //SelectedItem = null;
         }
 
+        private void ScanData(string barcode)
+        {
+            System.Diagnostics.Debug.WriteLine(barcode);
+        }
+
+        private async void RunTheThing()
+        {
+            bool res1 = await Command.IsExecuting.Any();
+            if (await Command.IsExecuting.Any())
+            {
+                try
+                {
+                    List<System.Drawing.Image> images = new List<System.Drawing.Image>();
+
+                    //images.Add(System.Drawing.Image.FromFile(@"C:\Users\serhii.rozniuk\Desktop\New folder\NewPdf0.png"));
+                    images.Add(System.Drawing.Image.FromFile(@"C:\Users\serhii.rozniuk\Desktop\wolf.png"));
+
+                    Printing.PrintService printService = new Printing.PrintService();
+                    printService.PageFormat = Printing.Enums.PageFormat.A4;
+                    printService.PageOrientation = Printing.Enums.PageOrientation.Portrait;
+                    printService.Pages = images;
+                    printService.CountCopies = 1;
+                    printService.PrintStatusChanged += (status) =>
+                    {
+                        System.Diagnostics.Debug.WriteLine(status.ToString());
+                    };
+
+                    foreach (string name in printService.InstalledPrinters)
+                    {
+                        if (name.Contains("dimitar"))
+                        {
+                            printService.SelectedPrinter = name;
+                            break;
+                        }
+                    }
+
+                    printService.Print();
+                }
+                catch (Exception ex)
+                {
+
+                }
+                return;
+            }
+
+            try
+            {
+                Services.Payment.IPaymentService paymentService = Splat.Locator.Current.GetRequiredService<Services.Payment.IPaymentService>();
+                Services.Settings.ISettingsService settings = Splat.Locator.Current.GetRequiredService<Services.Settings.ISettingsService>();
+                //Services.Payment.Device.DeviceSettings deviceSettings = new Services.Payment.Device.DeviceSettings(settings);
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceManufacturer].Value = "Datecs";
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceModel].Value = "DatecsFP2000";
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceProtocol].Value = "Lan";
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPAddress].Value = "192.168.60.105";
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceBaudRate].Value = "115200";
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPPort].Value = "9100";
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIsUsed].Value = "true";
+                settings.FiscalPrinterSettings[Enums.ESettingKeys.DevicePassword].Value = "0000";
+                settings.AppLanguage = Microinvest.CommonLibrary.Enums.ELanguages.Bulgarian;
+                Services.Payment.Device.RealDevice realDevice = new Services.Payment.Device.RealDevice(settings);
+                paymentService.SetPaymentTool(realDevice);
+
+                var memory = paymentService.FiscalDevice.FiscalPrinterMemoryNumber;
+                System.Collections.ObjectModel.ObservableCollection<OperationItemModel> items = new System.Collections.ObjectModel.ObservableCollection<OperationItemModel>();
+                items.Add(new OperationItemModel()
+                {
+                    Item = new ItemModel()
+                    {
+                        Id = 1,
+                        Name = "Test item",
+                        VATGroup = new VATGroupModel()
+                        {
+                            Name = "A",
+                            Value = 10,
+                        }
+                    },
+                    Price = 4,
+                    Qty = 5,
+                    Discount = 0,
+
+                });
+                var res = paymentService.FiscalDevice.PayOrderAsync(items, Microinvest.CommonLibrary.Enums.EPaymentTypes.Cash, 20);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }

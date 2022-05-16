@@ -6,6 +6,7 @@
         xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
         xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions"
+        xmlns:userControls="using:AxisAvaloniaApp.UserControls.NavigationView"
         xmlns:converters="using:AxisAvaloniaApp.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AxisAvaloniaApp.Views.MainWindow"
@@ -18,6 +19,32 @@
     <converters:BitmapAssetValueConverter x:Key="variableImage"/>
   </Window.Resources>
 
+  <StackPanel>
+    <Button Content="Click" Command="{Binding Command}"/>
+    <!--
+    <ListBox Items="{Binding MainMenuItems}" SelectedItem="{Binding SelectedItem}">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <userControls:NavigationViewItem IconPath="{Binding IconPath, Mode=OneWay}"
+                                           IsSelected="{Binding IsSelected, Mode=TwoWay}"
+                                               LocalizeKey="{Binding LocalizeKey}"
+                                               Foreground="White"
+                                               SelectedMarkColor="White"/>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>-->
+  </StackPanel>
+
+  <!--
+  <userControls:NavigationView MainMenuItems="{Binding MainMenuItems}">
+    <userControls:NavigationView.Frame>
+      <StackPanel>
+        <TextBlock Text="test"/>
+      </StackPanel>
+    </userControls:NavigationView.Frame>
+  </userControls:NavigationView>
+  -->
+  <!--
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="auto"/>
@@ -27,28 +54,31 @@
       <Grid.RowDefinitions>
         <RowDefinition Height="40"/>
         <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
-      <ToggleButton Grid.Row="0" Name="HamburgerButton"
+      <ToggleButton Grid.Row="0"
+                    Background="Transparent"
                     IsChecked="{Binding MainMenuExpanded, Mode=TwoWay}">
         <ToggleButton.Content>
-          <Image Source="/Assets/Icons/hamburgerButton.png"/>
+          <Image Source="/Assets/Icons/mainMenu.png"/>
         </ToggleButton.Content>
       </ToggleButton>
-      <ListBox Grid.Row="1" Name="MainMenu"
+      <ListBox Grid.Row="1"
                Background="Transparent" 
                Width="{Binding MainMenuWidth, Mode=TwoWay}"
                Items="{Binding MainMenuItems}"
-               SelectedItem="{Binding SelectedItem}">
+               SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
         <ListBox.ItemTemplate>
           <DataTemplate>
-            <StackPanel Orientation="Horizontal" Height="20">
+            <StackPanel Orientation="Horizontal" 
+                        Height="20"                        
+                        PointerEnter="MainMenuItem_PointerEnter"
+                        PointerLeave="MainMenuItem_PointerLeave">
               <Border Name="myBorder"
                       HorizontalAlignment="Center"
-                     BorderBrush="White"
-                     BorderThickness="1.5"
-                     Background="White"
-                     CornerRadius="3">
+                      BorderThickness="1.5"
+                      CornerRadius="3">
                 <i:Interaction.Behaviors>
                   <ia:DataTriggerBehavior Binding="{Binding IsSelected}" ComparisonCondition="Equal" Value="true">
                     <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="Background" Value="White" />
@@ -60,26 +90,36 @@
                   </ia:DataTriggerBehavior>
                 </i:Interaction.Behaviors>
               </Border>
-              <Image
-                     Source="{Binding IconPath,Converter={StaticResource variableImage}}"
+              <Image Source="{Binding IconPath,Converter={StaticResource variableImage}}"
                      Stretch="UniformToFill"
+                     ToolTip.Tip="{Binding ElementName=textLabel, Path=Text, Mode=TwoWay}"
                      Margin="5, 0"/>
-              <exControls:AxisTextBlock
-                Background="Transparent"
-                         LocalizeTextKey="{Binding LocalizeKey, Mode=TwoWay}"
-                         VerticalAlignment="Center"
-                         Margin="2, 0" Foreground="White"/>
+              <exControls:AxisTextBlock Name="textLabel"
+                                        Background="Transparent"
+                                        LocalizeTextKey="{Binding LocalizeKey, Mode=TwoWay}"
+                                        VerticalAlignment="Center"
+                                        Margin="2, 0"
+                                        Foreground="White"/>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
+      <StackPanel Grid.Row="2" Orientation="Vertical">
+        <Separator BorderThickness="2"
+                   BorderBrush="White" 
+                   Margin="5, 0, 0, 0" 
+                   CornerRadius="10"/>
+        <exControls:AxisTextBlock LocalizeTextKey="strSales" 
+                                  Foreground="White" 
+                                  Background="Transparent"/>
+      </StackPanel>
     </Grid>
     <Grid Grid.Column="1" Background="White">
       <Calendar></Calendar>
       <Image Name="TestImage"/>
     </Grid>
   </Grid>
-
+  -->
   <!--
   <NativeMenu.Menu>
     <NativeMenu>
