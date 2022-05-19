@@ -1,4 +1,4 @@
-﻿namespace AxisAvaloniaApp.Models
+﻿namespace AxisAvaloniaApp.UserControls.Models
 {
     /// <summary>
     /// Describes data of item of ComboBox.

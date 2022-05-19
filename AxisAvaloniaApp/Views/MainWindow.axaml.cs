@@ -20,7 +20,6 @@ namespace AxisAvaloniaApp.Views
 
             Button button = new Button();
             button.Click += ButtonClick;
-
         }
 
         private void ButtonClick(object? sender, RoutedEventArgs e)

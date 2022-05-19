@@ -1,4 +1,6 @@
-﻿namespace AxisAvaloniaApp.Models
+﻿using AxisAvaloniaApp.UserControls.Models;
+
+namespace AxisAvaloniaApp.Models
 {
     /// <summary>
     /// Describes data of settings.

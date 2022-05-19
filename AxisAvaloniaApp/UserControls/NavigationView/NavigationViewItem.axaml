@@ -4,9 +4,9 @@
         xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions"
         xmlns:converters="using:AxisAvaloniaApp.Converters">
   <Design.PreviewWith>
-    <controls:NavigationViewItem Foreground="Black"
+    <controls:NavigationViewItem Foreground="White"
                                  IsSelected="False"
-                                 SelectedMarkColor="Black"
+                                 SelectedMarkColor="White"
                                  LocalizeKey=""/>
   </Design.PreviewWith>
 
@@ -17,27 +17,36 @@
   <Style Selector="controls|NavigationViewItem">
     <Setter Property="Template">
       <ControlTemplate>
-        <StackPanel Orientation="Horizontal"
-                              Height="20">
-          <Border HorizontalAlignment="Center"
-                  BorderThickness="1.5"
-                  CornerRadius="3"/>
-          <Image Source="{TemplateBinding IconPath,Converter={StaticResource variableImage}}"
-                 Stretch="UniformToFill"
-                 ToolTip.Tip="{Binding ElementName=textLabel, Path=Text, Mode=TwoWay}"
-                 Margin="5, 0"/>
-          <exControls:AxisTextBlock Name="textLabel"
-                                    Background="Transparent"
-                                    Text="{TemplateBinding Text, Mode=TwoWay}"
-                                    LocalizeTextKey="{TemplateBinding LocalizeKey, Mode=TwoWay}"
-                                    VerticalAlignment="Center"
-                                    Margin="2, 0"
-                                    Foreground="{TemplateBinding Foreground, Mode=TwoWay}"/>
-        </StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <StackPanel Width="4" VerticalAlignment="Center" HorizontalAlignment="Left">
+              <Border HorizontalAlignment="Left"
+                      VerticalAlignment="Center"
+                      Background="{TemplateBinding SelectedMarkColor, Mode=TwoWay}"
+                      BorderBrush="{TemplateBinding SelectedMarkColor, Mode=TwoWay}"
+                      Height="20"
+                      BorderThickness="1.5"
+                      CornerRadius="5"
+                      IsVisible="{TemplateBinding IsSelected, Mode=TwoWay}"/>
+            </StackPanel>
+            <Image Source="{TemplateBinding IconPath,Converter={StaticResource variableImage}}"
+                   Stretch="UniformToFill"
+                   Height="30"
+                   Width="30"
+                   ToolTip.Tip="{Binding ElementName=textLabel, Path=Text, Mode=TwoWay}"
+                   Margin="5, 0"/>
+            <exControls:AxisTextBlock Name="textLabel"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      Text="{TemplateBinding Text, Mode=TwoWay}"
+                                      LocalizeTextKey="{TemplateBinding LocalizeKey, Mode=TwoWay}"
+                                      Margin="2, 0"
+                                      Foreground="{TemplateBinding Foreground, Mode=TwoWay}"/>
+          </StackPanel>
       </ControlTemplate>
     </Setter>
   </Style>
-
+  <!--
   <Style Selector="controls|NavigationViewItem[IsSelected=False] /template/ Border">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="Transparent" />
@@ -47,4 +56,5 @@
     <Setter Property="Background" Value="White" />
     <Setter Property="BorderBrush" Value="White" />
   </Style>
+  -->
 </Styles>

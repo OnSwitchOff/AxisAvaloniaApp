@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.UserControls.Models;
+using AxisAvaloniaApp.UserControls.NavigationView;
 using DataBase.Repositories.ApplicationLog;
 using ReactiveUI;
 using System;
@@ -37,30 +38,19 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref mainMenuWidth, value);
         }
 
-        private ObservableCollection<MainMenuItemModel> mainMenuItems;
+        private ObservableCollection<INavigationViewItem> mainMenuItems;
 
-        public ObservableCollection<MainMenuItemModel> MainMenuItems
+        public ObservableCollection<INavigationViewItem> MainMenuItems
         {
             get => mainMenuItems;
             set => this.RaiseAndSetIfChanged(ref mainMenuItems, value);
         }
 
-        private MainMenuItemModel selectedItem;
-        public MainMenuItemModel SelectedItem
+        private INavigationViewItem selectedItem;
+        public INavigationViewItem SelectedItem
         {
             get => selectedItem;
-            set
-            {
-                if (selectedItem != null)
-                {
-                    selectedItem.IsSelected = false;
-                }
-                if (value != null)
-                {
-                    value.IsSelected = true;
-                }
-                this.RaiseAndSetIfChanged(ref selectedItem, value);
-            }
+            set => this.RaiseAndSetIfChanged(ref selectedItem, value);
         }
 
         public string Greeting => "Welcome to Avalonia!";
@@ -117,10 +107,10 @@ namespace AxisAvaloniaApp.ViewModels
 
             SelectedNode = TreeViewNodes[0].Nodes[1];
 
-            MainMenuItems = new ObservableCollection<MainMenuItemModel>();
-            MainMenuItems.Add(new MainMenuItemModel() { IconPath = "/Assets/Icons/sale.png", LocalizeKey = "strNewSale" });
-            MainMenuItems.Add(new MainMenuItemModel() { IconPath = "/Assets/Icons/sale.png", LocalizeKey = "strNewSale" });
-            MainMenuItems.Add(new MainMenuItemModel() { IconPath = "/Assets/Icons/sale.png", LocalizeKey = "strNewSale" });
+            MainMenuItems = new ObservableCollection<INavigationViewItem>();
+            MainMenuItems.Add(new NavigationViewItemModel() { IconPath = "/Assets/Icons/sale.png", LocalizeKey = "strNewSale" });
+            MainMenuItems.Add(new NavigationViewItemModel() { IconPath = "/Assets/Icons/sale.png", LocalizeKey = "strNewSale", });
+            MainMenuItems.Add(new NavigationViewItemModel() { IconPath = "/Assets/Icons/sale.png", LocalizeKey = "strNewSale" });
 
             SelectedItem = MainMenuItems[2];
             //SelectedItem = null;
@@ -138,32 +128,32 @@ namespace AxisAvaloniaApp.ViewModels
             {
                 try
                 {
-                    List<System.Drawing.Image> images = new List<System.Drawing.Image>();
+                    //List<System.Drawing.Image> images = new List<System.Drawing.Image>();
 
-                    //images.Add(System.Drawing.Image.FromFile(@"C:\Users\serhii.rozniuk\Desktop\New folder\NewPdf0.png"));
-                    images.Add(System.Drawing.Image.FromFile(@"C:\Users\serhii.rozniuk\Desktop\wolf.png"));
+                    ////images.Add(System.Drawing.Image.FromFile(@"C:\Users\serhii.rozniuk\Desktop\New folder\NewPdf0.png"));
+                    //images.Add(System.Drawing.Image.FromFile(@"C:\Users\serhii.rozniuk\Desktop\wolf.png"));
 
-                    Printing.PrintService printService = new Printing.PrintService();
-                    printService.PageFormat = Printing.Enums.PageFormat.A4;
-                    printService.PageOrientation = Printing.Enums.PageOrientation.Portrait;
-                    printService.Pages = images;
-                    printService.CountCopies = 1;
-                    printService.PrintStatusChanged += (status) =>
-                    {
-                        System.Diagnostics.Debug.WriteLine(status.ToString());
-                    };
+                    //Printing.PrintService printService = new Printing.PrintService();
+                    //printService.PageFormat = Printing.Enums.PageFormat.A4;
+                    //printService.PageOrientation = Printing.Enums.PageOrientation.Portrait;
+                    //printService.Pages = images;
+                    //printService.CountCopies = 1;
+                    //printService.PrintStatusChanged += (status) =>
+                    //{
+                    //    System.Diagnostics.Debug.WriteLine(status.ToString());
+                    //};
 
-                    foreach (string name in printService.InstalledPrinters)
-                    {
-                        // fdgdgdf
-                        if (name.Contains("dimitar"))
-                        {
-                            printService.SelectedPrinter = name;
-                            break;
-                        }
-                    }
+                    //foreach (string name in printService.InstalledPrinters)
+                    //{
+                    //    // fdgdgdf
+                    //    if (name.Contains("dimitar"))
+                    //    {
+                    //        printService.SelectedPrinter = name;
+                    //        break;
+                    //    }
+                    //}
 
-                    printService.Print();
+                    //printService.Print();
                 }
                 catch (Exception ex)
                 {

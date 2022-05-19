@@ -7,6 +7,7 @@
         xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
         xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions"
         xmlns:userControls="using:AxisAvaloniaApp.UserControls.NavigationView"
+        xmlns:round="clr-namespace:AxisAvaloniaApp.UserControls.RoundLoader;assembly=AxisAvaloniaApp"
         xmlns:converters="using:AxisAvaloniaApp.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AxisAvaloniaApp.Views.MainWindow"
@@ -18,10 +19,18 @@
   <Window.Resources>
     <converters:BitmapAssetValueConverter x:Key="variableImage"/>
   </Window.Resources>
-
+  
+  <userControls:NavigationView ItemsSource="{Binding MainMenuItems, Mode=TwoWay}" 
+                               SelectedSourceItem="{Binding SelectedItem, Mode=TwoWay}"
+                                >
+    <userControls:NavigationView.Content>
+        <round:RoundLoader LoaderColor="Red" LoaderDiameter="360"/>
+    </userControls:NavigationView.Content>
+  </userControls:NavigationView>
+  <!--
   <StackPanel>
     <Button Content="Click" Command="{Binding Command}"/>
-    <!--
+    
     <ListBox Items="{Binding MainMenuItems}" SelectedItem="{Binding SelectedItem}">
       <ListBox.ItemTemplate>
         <DataTemplate>
@@ -32,9 +41,9 @@
                                                SelectedMarkColor="White"/>
         </DataTemplate>
       </ListBox.ItemTemplate>
-    </ListBox>-->
+    </ListBox>
   </StackPanel>
-
+-->
   <!--
   <userControls:NavigationView MainMenuItems="{Binding MainMenuItems}">
     <userControls:NavigationView.Frame>

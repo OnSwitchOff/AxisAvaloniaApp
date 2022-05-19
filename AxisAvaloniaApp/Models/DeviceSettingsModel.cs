@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AxisAvaloniaApp.UserControls.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AxisAvaloniaApp.Models
 {

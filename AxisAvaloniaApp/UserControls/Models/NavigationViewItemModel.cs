@@ -1,18 +1,15 @@
 ﻿using Avalonia.Controls;
 using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.UserControls.Models
 {
-    public class MainMenuItemModel : ReactiveObject
+    public class NavigationViewItemModel : ReactiveObject, NavigationView.INavigationViewItem
     {
         private string iconPath;
 
         private string localizeKey;
+
+        private string text;
 
         private UserControl content;
 
@@ -28,6 +25,12 @@ namespace AxisAvaloniaApp.UserControls.Models
         {
             get => localizeKey;
             set => this.RaiseAndSetIfChanged(ref localizeKey, value);
+        }
+
+        public string Text
+        {
+            get => text;
+            set => this.RaiseAndSetIfChanged(ref text, value);
         }
 
         public UserControl Content

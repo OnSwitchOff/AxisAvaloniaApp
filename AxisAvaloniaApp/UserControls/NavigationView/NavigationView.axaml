@@ -1,22 +1,17 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:models="using:using:AxisAvaloniaApp.UserControls.Models"
+        xmlns:models="using:AxisAvaloniaApp.UserControls.Models"
         xmlns:controls="using:AxisAvaloniaApp.UserControls.NavigationView"
         xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions">
   <Design.PreviewWith>
-    <controls:NavigationView IsMenuExpanded="True"/>
+    <controls:NavigationView />
   </Design.PreviewWith>
 
-  <Styles.Resources>
-    <DataTemplate x:Key="NavItem">
-      <controls:NavigationViewItem IconPath="{Binding IconPath, Mode=OneWay}"
-                                               LocalizeKey="{Binding LocalizeKey}"
-                                               Foreground="White"
-                                               SelectedMarkColor="White"/>
-    </DataTemplate>    
-  </Styles.Resources>
-
   <Style Selector="controls|NavigationView">
+    <Setter Property="IsCollapsed" Value="False"/>
+    <Setter Property="Width" Value="200"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="MarkColor" Value="White"/>
     <Setter Property="Template">
       <ControlTemplate>
         <Grid>
@@ -28,59 +23,39 @@
             <Grid.RowDefinitions>
               <RowDefinition Height="40"/>
               <RowDefinition Height="auto"/>
-              <RowDefinition Height="auto"/>
               <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <ToggleButton Grid.Row="0"
+                          Margin="8, 0"
                           Background="Transparent"
-                          IsChecked="{TemplateBinding IsMenuExpanded, Mode=TwoWay}">
-              <ToggleButton.Content>
-                <Image Source="/Assets/Icons/mainMenu.png"/>
-              </ToggleButton.Content>
+                          IsChecked="{TemplateBinding IsCollapsed, Mode=TwoWay}">
+              <ToggleButton.Template>
+                <ControlTemplate>
+                  <Panel>
+                    <Image Source="/Assets/Icons/hamburgerButton_Expand.png"
+                           Margin="3"
+                           IsVisible="{Binding !IsChecked, RelativeSource={RelativeSource TemplatedParent}}"/>
+                    <Image Source="/Assets/Icons/hamburgerButton_Collapsed.png"
+                           Margin="3"
+                           IsVisible="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"/>
+                  </Panel>
+                </ControlTemplate>
+              </ToggleButton.Template>
             </ToggleButton>
-            <ListBox Grid.Row="1"
-                     Name="MyListBox"
+            <ListBox Grid.Row="1" 
+                     HorizontalAlignment="Left"
                      Background="Transparent"
-                     Width="{TemplateBinding ExpandedMenuWidth, Mode=TwoWay}"
-                     Items="{TemplateBinding MainMenuItems}"
+                     Foreground="{TemplateBinding Foreground}"
+                     Width="{TemplateBinding Width, Mode=TwoWay}"
+                     Items="{TemplateBinding MenuItems, Mode=TwoWay}"
                      SelectedItem="{TemplateBinding SelectedItem, Mode=TwoWay}">
-              <ListBox.ItemTemplate>
-                <DataTemplate>
-                  <controls:NavigationViewItem IconPath="{Binding IconPath, Mode=OneWay}" 
-                                               LocalizeKey="{Binding LocalizeKey}"
-                                               Foreground="White"
-                                               SelectedMarkColor="White"/>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
             </ListBox>
-            <StackPanel Grid.Row="2" Orientation="Vertical">
-              <Separator BorderThickness="2"
-                         BorderBrush="White"
-                         Margin="5, 0, 0, 0"
-                         CornerRadius="10"/>
-              <exControls:AxisTextBlock LocalizeTextKey="strSales"
-                                        Foreground="White"
-                                        Background="Transparent"/>
-            </StackPanel>
+            <ContentPresenter Grid.Row="2"
+                              Content="{TemplateBinding MenuContent, Mode=OneWay}"/>
           </Grid>
-          <ContentPresenter Grid.Column="1" Content="{TemplateBinding Frame, Mode=OneWay}"/>
+          <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content, Mode=OneWay}"/>
         </Grid>
       </ControlTemplate>
     </Setter>
   </Style>
-  <!--
-  <Style Selector="controls|NavigationView /template/ Rectangle#PART_Rectangle">
-    <Setter Property="Stroke" Value="Black"/>
-    <Setter Property="StrokeThickness" Value="2"/>
-    <Setter Property="Fill" Value="Transparent"/>
-  </Style>
-
-  <Style Selector="controls|NavigationView:pointerover /template/ Rectangle#PART_Rectangle">
-    <Setter Property="Stroke" Value="Gray"/>
-  </Style>
- -->
-  <Style Selector="controls|NavigationView[IsMenuExpanded=False]">
-    <Setter Property="Background" Value="Blue"/>
-  </Style>
-   
 </Styles>
