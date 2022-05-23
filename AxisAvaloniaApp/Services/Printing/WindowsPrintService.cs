@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.Services.Printing
 {
-    public class CashRegisterViewModel : ViewModelBase
+    public class WindowsPrintService : IPrintService
     {
     }
 }

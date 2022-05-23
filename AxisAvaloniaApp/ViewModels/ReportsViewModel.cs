@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class ReportsViewModel
+    public class ReportsViewModel : ViewModelBase
     {
     }
 }

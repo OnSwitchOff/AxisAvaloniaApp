@@ -51,9 +51,9 @@
                      SelectedItem="{TemplateBinding SelectedItem, Mode=TwoWay}">
             </ListBox>
             <ContentPresenter Grid.Row="2"
-                              Content="{TemplateBinding MenuContent, Mode=OneWay}"/>
+                              Content="{TemplateBinding MenuContent, Mode=TwoWay}"/>
           </Grid>
-          <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content, Mode=OneWay}"/>
+          <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content, Mode=TwoWay}"/>
         </Grid>
       </ControlTemplate>
     </Setter>

@@ -9,7 +9,11 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
     public class NavigationView :  TemplatedControl
     {
         private const double collapsedWidth = 65;
-        private double expandedWidth = 200;
+
+        public override void EndInit()
+        {
+            base.EndInit();
+        }
 
         public static readonly StyledProperty<bool> IsCollapsedProperty =
             AvaloniaProperty.Register<NavigationView, bool>(nameof(IsCollapsed), true);
@@ -25,8 +29,7 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
         }
 
         public new static readonly StyledProperty<double> WidthProperty =
-            AvaloniaProperty.Register<NavigationView, double>(nameof(Width), 200);
-
+            AvaloniaProperty.Register<NavigationView, double>(nameof(Width), double.NaN);
 
         /// <summary>
         /// Width of the expanded panel.
@@ -134,14 +137,14 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
             set => SetValue(MenuContentProperty, value);
         }
 
-        public static readonly StyledProperty<object> ContentProperty =
-           AvaloniaProperty.Register<NavigationView, object>(nameof(Content));
+        public static readonly StyledProperty<IControl> ContentProperty =
+           AvaloniaProperty.Register<NavigationView, IControl>(nameof(Content));
 
         /// <summary>
         /// Content of the main window.
         /// </summary>
         /// <date>18.05.2022.</date>
-        public object Content
+        public IControl Content
         {
             get => GetValue(ContentProperty);
             set => SetValue(ContentProperty, value);
@@ -159,13 +162,7 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
             switch (change.Property.Name)
             {
                 case nameof(IsCollapsed):
-                    Width = IsCollapsed ? collapsedWidth : expandedWidth;
-                    break;
-                case nameof(Width):
-                    if (Width != collapsedWidth && Width != expandedWidth)
-                    {
-                        expandedWidth = Width;
-                    }
+                    Width = IsCollapsed ? collapsedWidth : double.NaN;
                     break;
                 case nameof(MenuItems):
                     if (change.NewValue.Value is Collection<NavigationViewItem> newItems)
