@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ucext="using:AxisAvaloniaApp.UserControls.Extensions"
+             mc:Ignorable="d" d:DesignWidth="330" d:DesignHeight="450"
+             x:Class="AxisAvaloniaApp.UserControls.Settings.AdaptiveSettingsItemControl"
+			 x:Name="UC">	
+	<Grid  ColumnDefinitions="Auto,*" RowDefinitions="*,Auto">
+		<Border Name="titleBorder" Grid.RowSpan="2" Grid.ColumnSpan="1" MinWidth="{Binding	ElementName=UC, Path=TitleMinWidth}">
+			<ucext:AxisTextBlock  Padding="0"  LocalizeTextKey="{Binding ElementName=UC, Path=TitleKey}" x:Name="tbLabel"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"  TextAlignment="Left"/>
+		</Border>
+		<ContentPresenter VerticalContentAlignment="Center" Grid.RowSpan="2"  Grid.ColumnSpan="1" Grid.Column="1" Content="{Binding	ElementName=UC, Path=Input, Mode=TwoWay}"/>
+	</Grid>	
+</UserControl>
