@@ -5,6 +5,7 @@ using Avalonia.Styling;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Translation;
 using System;
+using System.Diagnostics;
 
 namespace AxisAvaloniaApp.UserControls.Extensions
 {
@@ -31,13 +32,27 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         public string LocalizeTextKey
         {
             get => GetValue(LocalizeTextKeyProperty);
-            set => SetValue(LocalizeTextKeyProperty, value);
+            set
+            {
+                SetValue(LocalizeTextKeyProperty, value);
+            }     
+            
+        }
+
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property.Name == "LocalizeTextKey")
+            {
+                Localize();               
+                Debug.WriteLine(LocalizeTextKey);
+            }
         }
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
-
             Localize();
         }
 
