@@ -10,7 +10,7 @@ namespace AxisAvaloniaApp.AutofacModules
         {
             builder.RegisterType<MainWindowViewModel>().InstancePerDependency();
             builder.RegisterType<SaleViewModel>().InstancePerDependency();
-            builder.RegisterType<DocumentViewModel>().InstancePerDependency();
+            //builder.RegisterType<DocumentViewModel>().InstancePerDependency();
             builder.RegisterType<CashRegisterViewModel>().InstancePerDependency();
             builder.RegisterType<ExchangeViewModel>().InstancePerDependency();
             builder.RegisterType<ReportsViewModel>().InstancePerDependency();

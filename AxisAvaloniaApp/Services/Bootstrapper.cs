@@ -32,6 +32,10 @@ using AxisAvaloniaApp.Services.AxisCloud;
 using AxisAvaloniaApp.Services.Translation;
 using AxisAvaloniaApp.Services.Validation;
 using AxisAvaloniaApp.Services.Logger;
+using AxisAvaloniaApp.Services.Navigation;
+using Avalonia.Platform;
+using AxisAvaloniaApp.Services.Printing;
+using Avalonia;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -45,6 +49,8 @@ namespace AxisAvaloniaApp.Services
         {
             services.Register<IActivationService>(() => new ActivationService(
                 resolver.GetRequiredService<ISettingsService>(), resolver.GetRequiredService<IThemeSelectorService>()));
+
+            services.Register<INavigationService>(() => new NavigationService());
             services.RegisterLazySingleton<IThemeSelectorService>(() => new ThemeSelectorService());
             services.RegisterLazySingleton<ISettingsService>(() => new SettingsService(
                 resolver.GetRequiredService<ISettingsRepository>(),
@@ -60,6 +66,21 @@ namespace AxisAvaloniaApp.Services
             services.RegisterLazySingleton<ILoggerService>(() => new LoggerService());
             services.RegisterLazySingleton<IValidationService>(() => new ValidationService());
 
+            switch (AvaloniaLocator.Current.GetService<IRuntimePlatform>().GetRuntimeInfo().OperatingSystem)
+            {
+                case OperatingSystemType.WinNT:
+                    services.Register<IPrintService>(() => new WindowsPrintService());
+                    break;
+                case OperatingSystemType.Linux:
+                    services.Register<IPrintService>(() => new LinuxPrintService());
+                    break;
+                case OperatingSystemType.OSX:
+                    services.Register<IPrintService>(() => new MacOSPrintService());
+                    break;
+                default:
+                    throw new NotImplementedException("Service to print doesn't implemented!");
+            }
+
             RegisterViewModels(services);
             RegisterRepositories(services, resolver);
         }
@@ -68,7 +89,10 @@ namespace AxisAvaloniaApp.Services
         {
             services.Register(() => new MainWindowViewModel());
             services.Register(() => new SaleViewModel());
-            services.Register(() => new DocumentViewModel());
+            services.Register(() => new InvoiceViewModel());
+            services.Register(() => new ProformInvoiceViewModel());
+            services.Register(() => new DebitNoteViewModel());
+            services.Register(() => new CreditNoteViewModel());
             services.Register(() => new CashRegisterViewModel());
             services.Register(() => new ExchangeViewModel());
             services.Register(() => new ReportsViewModel());

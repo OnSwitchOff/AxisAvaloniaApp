@@ -1,8 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using AxisAvaloniaApp.Helpers;
-using AxisAvaloniaApp.ViewModels;
 using AxisAvaloniaApp.Views;
 using Splat;
 
@@ -15,6 +13,7 @@ namespace AxisAvaloniaApp
             AvaloniaXamlLoader.Load(this);
         }
 
+        [System.Obsolete]
         public override void OnFrameworkInitializationCompleted()
         {
             // регистрируем зависимости (сервисы)
@@ -23,12 +22,7 @@ namespace AxisAvaloniaApp
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();
-                //{
-                //    DataContext = Locator.Current.GetRequiredService<MainWindowViewModel>(),//new MainWindowViewModel(),
-                //};
             }
-
-            
 
             base.OnFrameworkInitializationCompleted();
         }

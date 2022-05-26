@@ -5,248 +5,103 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-        xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions"
-        xmlns:userControls="using:AxisAvaloniaApp.UserControls.NavigationView"
-        xmlns:round="clr-namespace:AxisAvaloniaApp.UserControls.RoundLoader;assembly=AxisAvaloniaApp"
-        xmlns:converters="using:AxisAvaloniaApp.Converters"
+        xmlns:navView="using:AxisAvaloniaApp.UserControls.NavigationView"
+        xmlns:pages="using:AxisAvaloniaApp.Views"
+        xmlns:helper="using:AxisAvaloniaApp.Helpers" 
+        xmlns:controlEx="using:AxisAvaloniaApp.UserControls.Extensions"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AxisAvaloniaApp.Views.MainWindow"
         Icon="/Assets/AxisIcon.ico"
         Title="AxisAvaloniaApp"
+        TransparencyLevelHint="AcrylicBlur"
         MinWidth="1280"
         MinHeight="720">
 
   <Window.Resources>
-    <converters:BitmapAssetValueConverter x:Key="variableImage"/>
   </Window.Resources>
-  
-  <userControls:NavigationView ItemsSource="{Binding MainMenuItems, Mode=TwoWay}" 
-                               SelectedSourceItem="{Binding SelectedItem, Mode=TwoWay}"
-                                >
-    <userControls:NavigationView.Content>
-        <round:RoundLoader LoaderColor="Red" LoaderDiameter="360"/>
-    </userControls:NavigationView.Content>
-  </userControls:NavigationView>
-  <!--
-  <StackPanel>
-    <Button Content="Click" Command="{Binding Command}"/>
-    
-    <ListBox Items="{Binding MainMenuItems}" SelectedItem="{Binding SelectedItem}">
-      <ListBox.ItemTemplate>
-        <DataTemplate>
-          <userControls:NavigationViewItem IconPath="{Binding IconPath, Mode=OneWay}"
-                                           IsSelected="{Binding IsSelected, Mode=TwoWay}"
-                                               LocalizeKey="{Binding LocalizeKey}"
-                                               Foreground="White"
-                                               SelectedMarkColor="White"/>
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
-  </StackPanel>
--->
-  <!--
-  <userControls:NavigationView MainMenuItems="{Binding MainMenuItems}">
-    <userControls:NavigationView.Frame>
-      <StackPanel>
-        <TextBlock Text="test"/>
-      </StackPanel>
-    </userControls:NavigationView.Frame>
-  </userControls:NavigationView>
-  -->
-  <!--
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="auto"/>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid Grid.Column="0" Background="#0e1434">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="40"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
-      <ToggleButton Grid.Row="0"
-                    Background="Transparent"
-                    IsChecked="{Binding MainMenuExpanded, Mode=TwoWay}">
-        <ToggleButton.Content>
-          <Image Source="/Assets/Icons/mainMenu.png"/>
-        </ToggleButton.Content>
-      </ToggleButton>
-      <ListBox Grid.Row="1"
-               Background="Transparent" 
-               Width="{Binding MainMenuWidth, Mode=TwoWay}"
-               Items="{Binding MainMenuItems}"
-               SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <StackPanel Orientation="Horizontal" 
-                        Height="20"                        
-                        PointerEnter="MainMenuItem_PointerEnter"
-                        PointerLeave="MainMenuItem_PointerLeave">
-              <Border Name="myBorder"
-                      HorizontalAlignment="Center"
-                      BorderThickness="1.5"
-                      CornerRadius="3">
-                <i:Interaction.Behaviors>
-                  <ia:DataTriggerBehavior Binding="{Binding IsSelected}" ComparisonCondition="Equal" Value="true">
-                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="Background" Value="White" />
-                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="BorderBrush" Value="White" />
-                  </ia:DataTriggerBehavior>
-                  <ia:DataTriggerBehavior Binding="{Binding IsSelected}" ComparisonCondition="Equal" Value="false">
-                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="Background" Value="Transparent" />
-                    <ia:ChangePropertyAction TargetObject="{Binding #myBorder}" PropertyName="BorderBrush" Value="Transparent" />
-                  </ia:DataTriggerBehavior>
-                </i:Interaction.Behaviors>
-              </Border>
-              <Image Source="{Binding IconPath,Converter={StaticResource variableImage}}"
-                     Stretch="UniformToFill"
-                     ToolTip.Tip="{Binding ElementName=textLabel, Path=Text, Mode=TwoWay}"
-                     Margin="5, 0"/>
-              <exControls:AxisTextBlock Name="textLabel"
-                                        Background="Transparent"
-                                        LocalizeTextKey="{Binding LocalizeKey, Mode=TwoWay}"
-                                        VerticalAlignment="Center"
-                                        Margin="2, 0"
-                                        Foreground="White"/>
-            </StackPanel>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-      <StackPanel Grid.Row="2" Orientation="Vertical">
-        <Separator BorderThickness="2"
-                   BorderBrush="White" 
-                   Margin="5, 0, 0, 0" 
-                   CornerRadius="10"/>
-        <exControls:AxisTextBlock LocalizeTextKey="strSales" 
-                                  Foreground="White" 
-                                  Background="Transparent"/>
-      </StackPanel>
-    </Grid>
-    <Grid Grid.Column="1" Background="White">
-      <Calendar></Calendar>
-      <Image Name="TestImage"/>
-    </Grid>
-  </Grid>
-  -->
-  <!--
-  <NativeMenu.Menu>
-    <NativeMenu>
-      <NativeMenuItem Header="File">
-        <NativeMenuItem.Menu>
-          <NativeMenu>
-            <NativeMenuItem Header="Open" Command="{Binding OnOpenClicked}"/>
-            <NativeMenuItemSeperator/>
-            <NativeMenuItem Header="Quit Avalonia" Gesture="CMD+Q"/>
-          </NativeMenu>
-        </NativeMenuItem.Menu>
-      </NativeMenuItem>
-      <NativeMenuItem Header="Edit">
-        <NativeMenuItem.Menu>
-          <NativeMenu>
-            <NativeMenuItem Header="Copy"/>
-            <NativeMenuItem Header="Paste"/>
-          </NativeMenu>
-        </NativeMenuItem.Menu>
-      </NativeMenuItem>
-    </NativeMenu>
-  </NativeMenu.Menu>
 
-  <DockPanel>
-    <NativeMenuBar DockPanel.Dock="Top"/>
-    <TextBlock Text="{Binding Status}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-      <Grid Grid.Column="0">
+  <navView:NavigationView Name="NavigationView" 
+                          SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+    <navView:NavigationView.MenuItems>
+      <navView:NavigationViewItem Name="Sale"
+                                  IconPath = "/Assets/Icons/sale.png"
+                                  LocalizeKey = "strNewSale" 
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.SaleViewModel"/>
+      <navView:NavigationViewItem Name="Invoice"
+                                  IconPath = "/Assets/Icons/invoice.png"
+                                  LocalizeKey = "strInvoices"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.InvoiceViewModel"/>
+      <navView:NavigationViewItem Name="ProformInvoice"
+                                  IconPath = "/Assets/Icons/invoice.png"
+                                  LocalizeKey = "strProformInvoices"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.ProformInvoiceViewModel"/>
+      <navView:NavigationViewItem Name="DebitNote"
+                                  IconPath = "/Assets/Icons/invoice.png"
+                                  LocalizeKey = "strDebitNotes"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.DebitNoteViewModel"/>
+      <navView:NavigationViewItem Name="CreditNote"
+                                  IconPath = "/Assets/Icons/invoice.png"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.CreditNoteViewModel"
+                                  LocalizeKey = "strCreditNotes"/>
+      <navView:NavigationViewItem Name="CashRegister"
+                                  IconPath = "/Assets/Icons/cashRegister.png"
+                                  LocalizeKey = "strCashRegister"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.CashRegisterViewModel"/>
+      <navView:NavigationViewItem Name="Exchange"
+                                  IconPath = "/Assets/Icons/exchange.png"
+                                  LocalizeKey = "strExchange"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.ExchangeViewModel"/>
+      <navView:NavigationViewItem Name="Reports"
+                                  IconPath = "/Assets/Icons/reports.png"
+                                  LocalizeKey = "strReports"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.ReportsViewModel"/>
+      <navView:NavigationViewItem Name="Settings"
+                                  IconPath = "/Assets/Icons/settings.png"
+                                  LocalizeKey = "strSettings"
+                                  helper:NavigationExtensions.NavigateTo="AxisAvaloniaApp.ViewModels.SettingsViewModel"/>
+    </navView:NavigationView.MenuItems>
+    <navView:NavigationView.Content>
+      <Grid>
         <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
           <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
+          <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="0" Items="{Binding Source}"/>
-        <contr:UserControl1 Grid.Row="1"/>
-        <Image Grid.Row="2" Source="/Assets/avalonia-logo.ico" Width="60" Height="60"/>
-        <TreeView Grid.Row="3" Items="{Binding TreeViewNodes}" 
-                  SelectionMode="Single"
-                  SelectedItem="{Binding SelectedNode}">
-          <TreeView.ItemTemplate>
-            <TreeDataTemplate ItemsSource="{Binding Nodes}">
-              <TextBlock Text="{Binding Name}"/>
-            </TreeDataTemplate>
-          </TreeView.ItemTemplate>
-        </TreeView>
-        <Calendar Grid.Row="4"/>
-        <Expander Header="Expand data" Grid.Row="5">
-          <ex:AxisTextBlock LocalizeTextKey="strNewSale"/>
-        </Expander>
-      </Grid>      
-    <Grid Grid.Column="1">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
-      <TextBlock Grid.Row="1" Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-      <contr:ComboBox1 Grid.Row="2" 
-                Items="{Binding Source}"
-                IsTextSearchEnabled="True"/>
-      <DatePicker Grid.Row="3"/>
-      <CheckBox Content="CheckBox" Grid.Row="4"/>
-      <TextBox Grid.Row="5" Text="{Binding TestStr, Mode=TwoWay}"/>
-      <DataGrid Grid.Row="6" 
-                Name="MyDataGrid" 
-                Items="{Binding Source}" 
-                AutoGenerateColumns="False"
-                CanUserResizeColumns="True" 
-                GridLinesVisibility="All"
-                HorizontalGridLinesBrush="Black"
-                VerticalGridLinesBrush="Black" 
-                AlternatingRowBackground="Gray"
-                HeadersVisibility="All"
-                Height="160">
-        <DataGrid.Columns>
-          <DataGridTextColumn Header="Column 1" Binding="{Binding}"/>
-          <DataGridTextColumn Header="Column 2" Binding="{Binding}"/>
-          <DataGridTemplateColumn Header="CustomColumn" Width="*">
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate>
-                <ComboBox Name="ComboBoxResponsible" FontSize="11">
-                  <ComboBoxItem Content="Test1"></ComboBoxItem>
-                  <ComboBoxItem Content="Test2"></ComboBoxItem>
-                </ComboBox>
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-        </DataGrid.Columns>
-      </DataGrid>
-      <Button Grid.Row="7" Content="{Binding TestStr}" Command="{Binding OnOpenClicked}"/>
-      <Button Grid.Row="8" VerticalContentAlignment="Center" Background="GreenYellow">
-        <RelativePanel VerticalAlignment="Center" HorizontalAlignment="Center">
-          <Image Name="ImageButton" Source="/Assets/avalonia-logo.ico" Width="20" Height="20"/>
-          <TextBlock Text="Button" RelativePanel.RightOf="ImageButton" TextAlignment="Center"/>
-        </RelativePanel>
-      </Button>
-      <ToggleSwitch Background="AliceBlue" Grid.Row="9"/>
-      <ToggleButton Content="ToggleButton" Grid.Row="10"/>
-    </Grid>
-  </Grid>
-  </DockPanel>
-  -->
+        <ContentControl Grid.Row="0" Content="{Binding Content, Mode=TwoWay}"/>
+        <Grid Grid.Row="1" 
+              Background="#024347" 
+              ColumnDefinitions="*, auto">
+          <TextBlock Grid.Column="0"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Text="{Binding Explanation, Mode=OneWay}"
+                     Foreground="White"
+                     TextWrapping="WrapWithOverflow"/>
+          <Button Grid.Column="1" 
+                  Command="{Binding GoToYouTubeCommand, Mode=OneWay}">
+            <Button.Content>
+              <Image Source="/Assets/Icons/youTube.png" Width="40"/>
+            </Button.Content>
+          </Button>
+        </Grid>
+        <Grid Grid.Row="2"
+              Background="#222222" 
+              ColumnDefinitions="*, *, *">
+          <TextBlock Grid.Column="1" 
+                     Margin="5,0"
+                     Foreground="White"
+                     FontSize="10"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     Text="{Binding AppDateTime^}"/>
+          <TextBlock Grid.Column="2" Margin="5,0"
+                     Foreground="White"
+                     FontSize="10"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Right"
+                     Text="{Binding LicenseData, Mode=TwoWay}"/>
+        </Grid>
+      </Grid>
+    </navView:NavigationView.Content>
+  </navView:NavigationView>
 </Window>
