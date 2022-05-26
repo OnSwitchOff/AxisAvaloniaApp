@@ -80,7 +80,7 @@
           <Button Grid.Column="1" 
                   Command="{Binding GoToYouTubeCommand, Mode=OneWay}">
             <Button.Content>
-              <Image Source="/Assets/Icons/youTube.png" Width="40"/>
+              <Image Source="/Assets/Icons/YouTube.png" Width="40"/>
             </Button.Content>
           </Button>
         </Grid>
