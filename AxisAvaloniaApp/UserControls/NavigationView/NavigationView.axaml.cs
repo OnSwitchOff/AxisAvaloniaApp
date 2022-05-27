@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using System.Collections.ObjectModel;
@@ -10,9 +9,13 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
     {
         private const double collapsedWidth = 65;
 
-        public override void EndInit()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationView"/> class.
+        /// </summary>
+        public NavigationView()
         {
-            base.EndInit();
+            Foreground = Brushes.White;
+            MarkColor = Brushes.White;
         }
 
         public static readonly StyledProperty<bool> IsCollapsedProperty =
@@ -137,14 +140,14 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
             set => SetValue(MenuContentProperty, value);
         }
 
-        public static readonly StyledProperty<IControl> ContentProperty =
-           AvaloniaProperty.Register<NavigationView, IControl>(nameof(Content));
+        public static readonly StyledProperty<object> ContentProperty =
+           AvaloniaProperty.Register<NavigationView, object>(nameof(Content));
 
         /// <summary>
         /// Content of the main window.
         /// </summary>
         /// <date>18.05.2022.</date>
-        public IControl Content
+        public object Content
         {
             get => GetValue(ContentProperty);
             set => SetValue(ContentProperty, value);
@@ -170,6 +173,7 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
                         foreach (NavigationViewItem item in newItems)
                         {
                             item.Foreground = Foreground;
+                            item.SelectedMarkColor = MarkColor;
                         }
                     }
                     break;
@@ -197,7 +201,10 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
                         viewItem.IsSelected = false;
                     }
 
-                    SelectedItem.IsSelected = true;
+                    if (SelectedItem != null)
+                    {
+                        SelectedItem.IsSelected = true;
+                    }
 
                     if (ItemsSource != null && MenuItems.Contains(SelectedItem))
                     {
@@ -214,9 +221,29 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
                     }
                     
                     break;
+                case nameof(Foreground):
+                    break;
             }
 
             base.OnPropertyChanged(change);
+        }
+
+        /// <summary>
+        /// Set Foreground and MarkColor of NavigationViewItems when NavigationView ended init.
+        /// </summary>
+        /// <date>20.05.2022.</date>
+        public override void EndInit()
+        {
+            if (MenuItems != null)
+            {
+                foreach (NavigationViewItem item in MenuItems)
+                {
+                    item.Foreground = Foreground;
+                    item.SelectedMarkColor = MarkColor;
+                }
+            }
+
+            base.EndInit();
         }
     }
 }

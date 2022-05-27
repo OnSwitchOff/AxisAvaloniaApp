@@ -11,15 +11,28 @@
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
     <None Remove="Assets\AxisIcon.ico" />
+    <None Remove="Assets\Icons\arrow_back.png" />
     <None Remove="Assets\Icons\cashRegister.png" />
+    <None Remove="Assets\Icons\close.png" />
+    <None Remove="Assets\Icons\editPageTitle.png" />
     <None Remove="Assets\Icons\exchange.png" />
     <None Remove="Assets\Icons\hamburgerButton_Collapsed.png" />
     <None Remove="Assets\Icons\hamburgerButton_Expand.png" />
     <None Remove="Assets\Icons\invoice.png" />
+    <None Remove="Assets\Icons\lock.png" />
+    <None Remove="Assets\Icons\print.ico" />
     <None Remove="Assets\Icons\reports.png" />
     <None Remove="Assets\Icons\sale.png" />
     <None Remove="Assets\Icons\settings.png" />
+    <None Remove="Assets\Icons\unlock.png" />
     <None Remove="Assets\Icons\YouTube.png" />
+    <None Remove="Resources\Dictionary.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="Resources\Dictionary.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Dictionary.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />

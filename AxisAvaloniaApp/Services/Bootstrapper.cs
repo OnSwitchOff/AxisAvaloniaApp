@@ -36,6 +36,7 @@ using AxisAvaloniaApp.Services.Navigation;
 using Avalonia.Platform;
 using AxisAvaloniaApp.Services.Printing;
 using Avalonia;
+using AxisAvaloniaApp.Services.Explanation;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -63,6 +64,7 @@ namespace AxisAvaloniaApp.Services
             services.Register<IDocumentService>(() => new DocumentService(resolver.GetRequiredService<ISettingsService>()));
             services.RegisterLazySingleton<IAxisCloudService>(() => new AxisCloudService());
             services.RegisterLazySingleton<ITranslationService>(() => new TranslationService(resolver.GetRequiredService<ISettingsService>()));
+            services.RegisterLazySingleton<IExplanationService>(() => new ExplanationService());            
             services.RegisterLazySingleton<ILoggerService>(() => new LoggerService());
             services.RegisterLazySingleton<IValidationService>(() => new ValidationService());
 

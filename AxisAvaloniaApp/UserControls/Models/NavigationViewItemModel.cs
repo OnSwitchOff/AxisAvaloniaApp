@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using ReactiveUI;
+﻿using ReactiveUI;
 
 namespace AxisAvaloniaApp.UserControls.Models
 {
@@ -11,7 +10,7 @@ namespace AxisAvaloniaApp.UserControls.Models
 
         private string text;
 
-        private UserControl content;
+        private Avalonia.Controls.IControl content;
 
         private bool isSelected = false;
 
@@ -33,7 +32,7 @@ namespace AxisAvaloniaApp.UserControls.Models
             set => this.RaiseAndSetIfChanged(ref text, value);
         }
 
-        public UserControl Content
+        public Avalonia.Controls.IControl Content
         {
             get => content;
             set => this.RaiseAndSetIfChanged(ref content, value);

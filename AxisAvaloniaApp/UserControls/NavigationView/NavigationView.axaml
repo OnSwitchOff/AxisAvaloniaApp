@@ -45,12 +45,24 @@
             <ListBox Grid.Row="1" 
                      HorizontalAlignment="Left"
                      Background="Transparent"
-                     Foreground="{TemplateBinding Foreground}"
+                     Foreground="{TemplateBinding Foreground, Mode=OneWay}"
                      Width="{TemplateBinding Width, Mode=TwoWay}"
                      Items="{TemplateBinding MenuItems, Mode=TwoWay}"
+                     SelectionMode="Single"
                      SelectedItem="{TemplateBinding SelectedItem, Mode=TwoWay}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <controls:NavigationViewItem IconPath="{Binding IconPath, Mode=TwoWay}"
+                                               LocalizeKey="{Binding LocalizeKey, Mode=TwoWay}"
+                                               Text="{Binding Text, Mode=TwoWay}"
+                                               Foreground="{Binding Foreground, Mode=TwoWay}"
+                                               SelectedMarkColor="{Binding SelectedMarkColor, Mode=TwoWay}"
+                                               IsSelected="{Binding IsSelected, Mode=TwoWay}"/>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
             </ListBox>
             <ContentPresenter Grid.Row="2"
+                              VerticalContentAlignment="Top"
                               Content="{TemplateBinding MenuContent, Mode=TwoWay}"/>
           </Grid>
           <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content, Mode=TwoWay}"/>

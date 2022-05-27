@@ -29,6 +29,12 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
         private void NavigationViewItem_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
             IsSelected = true;
+
+            //this.RaiseEvent(
+            //    new RoutedEventArgs()
+            //    {
+            //        RoutedEvent = ButtonClickEvent,
+            //    });
         }
 
         public static readonly StyledProperty<string> IconPathProperty =
@@ -108,5 +114,21 @@ namespace AxisAvaloniaApp.UserControls.NavigationView
             get => GetValue(SelectedMarkColorProperty);
             set => SetValue(SelectedMarkColorProperty, value);
         }
+
+        //public static readonly RoutedEvent<RoutedEventArgs> ButtonClickEvent =
+        //    RoutedEvent.Register<RoutedEventArgs>(
+        //        nameof(ButtonClick),
+        //        RoutingStrategies.Bubble,
+        //        typeof(NavigationViewItem));
+
+        ///// <summary>
+        ///// Event of click by the NavigationViewItem.
+        ///// </summary>
+        ///// <date>23.05.2022.</date>
+        //public event EventHandler<RoutedEventArgs> ButtonClick
+        //{
+        //    add => AddHandler(ButtonClickEvent, value);
+        //    remove => RemoveHandler(ButtonClickEvent, value);
+        //}
     }
 }

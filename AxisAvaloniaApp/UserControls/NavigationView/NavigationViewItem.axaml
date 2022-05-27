@@ -47,15 +47,4 @@
       </ControlTemplate>
     </Setter>
   </Style>
-  <!--
-  <Style Selector="controls|NavigationViewItem[IsSelected=False] /template/ Border">
-    <Setter Property="Background" Value="Transparent" />
-    <Setter Property="BorderBrush" Value="Transparent" />
-  </Style>
-  
-  <Style Selector="controls|NavigationViewItem[IsSelected=True] /template/ Border">
-    <Setter Property="Background" Value="White" />
-    <Setter Property="BorderBrush" Value="White" />
-  </Style>
-  -->
 </Styles>

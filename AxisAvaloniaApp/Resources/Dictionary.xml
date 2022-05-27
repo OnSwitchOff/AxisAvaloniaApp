@@ -194,6 +194,36 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strPrint">
+      <Value Lang="bg-BG">Принтиране</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Print</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Печать</Value>
+      <Value Lang="uk-UA">Друк</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCountOfCopies">
+      <Value Lang="bg-BG">Копия</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Copies</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Копии</Value>
+      <Value Lang="uk-UA">Копії</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPrinter">
+      <Value Lang="bg-BG">Принтер</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Printer</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Принтер</Value>
+      <Value Lang="uk-UA">Принтер</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     
     <!--Продажа-->
     <Data Key="strPartner">

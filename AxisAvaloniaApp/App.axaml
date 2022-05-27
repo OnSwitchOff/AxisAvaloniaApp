@@ -9,6 +9,7 @@
     <Application.Styles>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationView.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationViewItem.axaml"/>
+      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/OperationContainer.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/RoundLoader/RoundLoader.axaml"/>
       <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
         <FluentTheme Mode="Light"/>

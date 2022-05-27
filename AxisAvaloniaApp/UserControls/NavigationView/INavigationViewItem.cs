@@ -24,7 +24,7 @@
         /// Data to be shown to user.
         /// </summary>
         /// <date>17.05.2022.</date>
-        public Avalonia.Controls.UserControl Content { get; set; }
+        public Avalonia.Controls.IControl Content { get; set; }
 
         /// <summary>
         /// Flag indicating whether the NavigationViewItem is selected by user.
