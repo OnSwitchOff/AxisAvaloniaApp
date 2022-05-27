@@ -10,5 +10,6 @@ namespace AxisAvaloniaApp.ViewModels
     public class InvoiceViewModel : DocumentViewModel
     {
         protected override EDocumentTypes documentType => EDocumentTypes.Invoice;
+
     }
 }

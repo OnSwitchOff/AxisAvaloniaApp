@@ -15,22 +15,22 @@ namespace AxisAvaloniaApp.UserControls
         int index = 0;
         public OperationContainer()
         {
-            Pages = new ObservableCollection<Bitmap>();
-            Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\woolf.jpg"));
-            Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\kak-pozdravyt-s-8-marta.jpg"));
-            Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\woolf.jpg"));
-            PrintContentHideCommand = ReactiveCommand.Create(() =>
-            {
-                listPages.ScrollIntoView(index);
-                index++;
-                //ActivePage = Pages[1];
-                //PrintContentVisible = false;
-            });
+            //Pages = new ObservableCollection<Bitmap>();
+            ////Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\woolf.jpg"));
+            ////Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\kak-pozdravyt-s-8-marta.jpg"));
+            ////Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\woolf.jpg"));
+            ////PrintContentHideCommand = ReactiveCommand.Create(() =>
+            //{
+            //    listPages.ScrollIntoView(index);
+            //    index++;
+            //    //ActivePage = Pages[1];
+            //    //PrintContentVisible = false;
+            //});
 
-            ViewCloseCommand = ReactiveCommand.Create(() =>
-            {
-                PrintContentVisible = true;
-            });
+            //ViewCloseCommand = ReactiveCommand.Create(() =>
+            //{
+            //    PrintContentVisible = true;
+            //});
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
