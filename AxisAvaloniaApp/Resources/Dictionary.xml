@@ -359,7 +359,6 @@
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
     
-    
     <Data Key="strFastSearch">
       <Value Lang="bg-BG">Бързо търсене</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -370,6 +369,336 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="strFirm">
+	    <Value Lang="bg-BG">Фирма</Value>
+	    <Value Lang="el-GR">Not translated</Value>
+	    <Value Lang="en-GB">Firm</Value>
+	    <Value Lang="ro-RO">Not translated</Value>
+	    <Value Lang="ru-RU">Фирма</Value>
+	    <Value Lang="uk-UA">Фірма</Value>
+	    <Value Lang="hy-AM">Not translated</Value>
+	    <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+	<Data Key="strPrincipal">
+		<Value Lang="bg-BG">МОЛ</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Principal</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">МОЛ</Value>
+		<Value Lang="uk-UA">МВО</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strCity">
+		<Value Lang="bg-BG">Град</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">City</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Город</Value>
+		<Value Lang="uk-UA">Місто</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strAddress">
+		<Value Lang="bg-BG">Адрес</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Address</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Адрес</Value>
+		<Value Lang="uk-UA">Адреса</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strPhone">
+		<Value Lang="bg-BG">Телефон</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Phone</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Телефон</Value>
+		<Value Lang="uk-UA">Телефон</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strTaxNumber">
+		<Value Lang="bg-BG">ЕИК</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Tax number</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Налоговый номер</Value>
+		<Value Lang="uk-UA">Податковий номер</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strVAT">
+		<Value Lang="bg-BG">ДДС</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">VAT</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">НДС</Value>
+		<Value Lang="uk-UA">ПДВ</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strBankName">
+		<Value Lang="bg-BG">Банка</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Name of bank</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Название банка</Value>
+		<Value Lang="uk-UA">Назва банку</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strBankBIC">
+		<Value Lang="bg-BG">BIC</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">BIC of bank</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">BIC банка</Value>
+		<Value Lang="uk-UA">BIC банку</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strOnlineShopNumber">
+		<Value Lang="bg-BG">Номер на онлайн магазина</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Online shop number</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Номер интернет-магазина</Value>
+		<Value Lang="uk-UA">Номер інтернет-магазину</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strOnlineShopType">
+		<Value Lang="bg-BG">Тип на онлайн магазина</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Online store type</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Тип онлайн-магазина</Value>
+		<Value Lang="uk-UA">Тип онлайн-магазину</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strIBAN">
+		<Value Lang="bg-BG">IBAN</Value>
+		<Value Lang="el-GR">IBAN</Value>
+		<Value Lang="en-GB">IBAN</Value>
+		<Value Lang="ro-RO">IBAN</Value>
+		<Value Lang="ru-RU">IBAN</Value>
+		<Value Lang="uk-UA">IBAN</Value>
+		<Value Lang="hy-AM">IBAN</Value>
+		<Value Lang="ka-GE">IBAN</Value>
+	</Data>
+	  <Data Key="strOnlineShopDomainName">
+		  <Value Lang="bg-BG">Име на домейн на онлайн магазина</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Domain name of the online store</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Доменное имя онлайн-магазина</Value>
+		  <Value Lang="uk-UA">Доменне ім'я онлайн-магазину</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strOwnSite">
+		  <Value Lang="bg-BG">Собствен сайт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Own site</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Собственный сайт</Value>
+		  <Value Lang="uk-UA">Власний сайт</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strOnlinePlatform">
+		  <Value Lang="bg-BG">Онлайн платформа</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Online platform</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Онлайн платформа</Value>
+		  <Value Lang="uk-UA">Онлайн платформа</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+
+	  <Data Key="strLanguage">
+		  <Value Lang="bg-BG">Език</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Language</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Язык</Value>
+		  <Value Lang="uk-UA">Мова</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strUserName">
+		  <Value Lang="bg-BG">Име на оператора</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Username</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Имя пользователя</Value>
+		  <Value Lang="uk-UA">Ім'я користувача</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strOperatorCode">
+		  <Value Lang="bg-BG">Код на оператора</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Code of operator</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Код оператора</Value>
+		  <Value Lang="uk-UA">Код оператора</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strUseFiscalPrinter">
+		  <Value Lang="bg-BG">Фискален принтер</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Use a fiscal device</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Использовать фискальный аппарат</Value>
+		  <Value Lang="uk-UA">Використовувати фіскальний пристрій</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strCOMPort">
+		  <Value Lang="bg-BG">Сериен порт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">COM port</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">COM порт</Value>
+		  <Value Lang="uk-UA">COM порт</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strManufacturer">
+		  <Value Lang="bg-BG">Производител</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Manufacturer</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Производитель</Value>
+		  <Value Lang="uk-UA">Виробник</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strModel">
+		  <Value Lang="bg-BG">Модел</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Model</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Модель</Value>
+		  <Value Lang="uk-UA">Модель</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strProtocol">
+		  <Value Lang="bg-BG">Тип на връзка</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Protocol</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Протокол для подключения</Value>
+		  <Value Lang="uk-UA">Протокол для з'єднання</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  
+	  <Data Key="strOperatorPassword">
+      <Value Lang="bg-BG">Парола на оператор</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operator password</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Пароль оператора</Value>
+      <Value Lang="uk-UA">Пароль оператора</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+
+	  <Data Key="strOperatorCode">
+		  <Value Lang="bg-BG">Код на оператора</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Code of operator</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Код оператора</Value>
+		  <Value Lang="uk-UA">Код оператора</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strIPPort">
+		  <Value Lang="bg-BG">IP порт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">IP port</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">IP порт</Value>
+		  <Value Lang="uk-UA">IP порт</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strIPAddress">
+		  <Value Lang="bg-BG">IP адрес (IPv4)</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">IP address (IPv4)</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">IP адрес (IPv4)</Value>
+		  <Value Lang="uk-UA">IP адреса (IPv4)</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strPOSTerminal">
+		  <Value Lang="bg-BG">Картов терминал</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">POS-terminal</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">POS-терминал</Value>
+		  <Value Lang="uk-UA">POS-термінал</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strAxisCloudIntegration">
+		  <Value Lang="bg-BG">Интеграция с AxisCloud</Value>
+		  <Value Lang="el-GR">Ενσωμάτωση με το AxisCloud</Value>
+		  <Value Lang="en-GB">Integration with an AxisCloud app</Value>
+		  <Value Lang="ro-RO">Integrare cu AxisCloud</Value>
+		  <Value Lang="ru-RU">Интеграция с AxisCloud</Value>
+		  <Value Lang="uk-UA">Інтеграція з AxisCloud</Value>
+		  <Value Lang="hy-AM">Ինտեգրում AxisCloud- ի հետ</Value>
+	  </Data>
+	  <Data Key="strBaudRate">
+		  <Value Lang="bg-BG">Скорост</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Baud rate</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Скорость передачи</Value>
+		  <Value Lang="uk-UA">Швидкість передачі</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strLogin">
+		  <Value Lang="bg-BG">Логин</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Login</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Логин</Value>
+		  <Value Lang="uk-UA">Логін</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+	  </Data>
+	  <Data Key="strPassword">
+		  <Value Lang="bg-BG">Парола</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Password</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Пароль</Value>
+		  <Value Lang="uk-UA">Пароль</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+	  </Data>
+	  <Data Key="strLicenseCode">
+		  <Value Lang="bg-BG">Лицензионен код</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">License code</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Код лицензии</Value>
+		  <Value Lang="uk-UA">Код ліцензії</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
   </Dictionary>
 
   <Dictionary Product="Axis My100R Help" Version="1">
@@ -790,6 +1119,7 @@
       <Value Lang="uk-UA"></Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
-    </Data>
+    </Data>	  
+	
   </Dictionary>
 </TranslationDictionaries>

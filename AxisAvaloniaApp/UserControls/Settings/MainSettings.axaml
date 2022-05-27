@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:set="using:AxisAvaloniaApp.UserControls.Settings"
+			 xmlns:ucext="using:AxisAvaloniaApp.UserControls.Extensions"
+             x:Class="AxisAvaloniaApp.UserControls.Settings.MainSettings"
+			 x:Name="UC">
+	<Grid RowDefinitions="40,*,Auto" Margin="0,5">
+		<Border Grid.Row="0" Background="SteelBlue">
+			<TextBlock VerticalAlignment="Center"  Text="Main"  Background="Transparent" Foreground="White" TextAlignment="Center" />
+		</Border>
+
+		<Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0">
+			<ScrollViewer Padding="20,0">
+				<Grid x:Name="AdaptiveSettingsGrid" RowDefinitions="Auto,Auto">
+
+
+					<!--Input for USN-->
+					<set:AdaptiveSettingsItemControl Grid.Row="0"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strLicenseCode" >
+						<set:AdaptiveSettingsItemControl.Input>
+							<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.LicenseCode, Mode=TwoWay}" Watermark="Enter LicenseCode" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						</set:AdaptiveSettingsItemControl.Input>
+					</set:AdaptiveSettingsItemControl>
+
+
+					<Grid   Grid.Row="1" Background="Transparent">
+						<Button  Background="Transparent" BorderThickness="2" BorderBrush="SteelBlue" Foreground="SteelBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">Activate</Button>
+					</Grid>
+				</Grid>
+			</ScrollViewer>
+		</Border>
+
+
+		<Grid  RowDefinitions="Auto,Auto"  Grid.Row="2" Background="Transparent">
+			<Button Grid.Row="1" Background="Transparent" BorderThickness="2" BorderBrush="SteelBlue" Foreground="SteelBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">Buy license</Button>
+		</Grid>
+	</Grid>
+</UserControl>
