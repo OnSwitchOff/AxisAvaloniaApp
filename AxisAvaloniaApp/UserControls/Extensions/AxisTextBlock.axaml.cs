@@ -44,17 +44,6 @@ namespace AxisAvaloniaApp.UserControls.Extensions
             
         }
 
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-
-            if (change.Property.Name == "LocalizeTextKey")
-            {
-                Localize();               
-                Debug.WriteLine(LocalizeTextKey);
-            }
-        }
-
         /// <summary>
         /// Invoke "Localize" method if LocalizeTextKey was changed.
         /// </summary>
