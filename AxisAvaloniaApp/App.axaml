@@ -7,11 +7,15 @@
     </Application.DataTemplates>
 
     <Application.Styles>
+      <FluentTheme Mode="Light"/>
+      <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationView.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationViewItem.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/OperationContainer.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/RoundLoader/RoundLoader.axaml"/>
-      <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
-        <FluentTheme Mode="Light"/>
+      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/Buttons/PaymentButton.axaml"/>
+      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/Buttons/ExecutionButton.axaml"/>
+
+      <StyleInclude Source="/Styles/DataGrid.axaml"/>
     </Application.Styles>
 </Application>

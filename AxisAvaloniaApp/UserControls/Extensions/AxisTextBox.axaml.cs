@@ -26,6 +26,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
             Background = Avalonia.Media.Brushes.White;
 
             this.translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            this.translationService.LanguageChanged += Localize;
             this.explanationService = Splat.Locator.Current.GetRequiredService<IExplanationService>();
         }
 
@@ -40,6 +41,46 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         {
             get => GetValue(ExplanationKeyProperty);
             set => SetValue(ExplanationKeyProperty, value);
+        }
+
+        public static readonly StyledProperty<string> LocalizePlaceholderKeyProperty =
+           AvaloniaProperty.Register<AxisTextBlock, string>(nameof(LocalizePlaceholderKey), string.Empty);
+
+        /// <summary>
+        /// Gets or sets key to search text of placeholder for this TextBox in the dictionary.
+        /// </summary>
+        /// <date>31.05.2022.</date>
+        public string LocalizePlaceholderKey
+        {
+            get => GetValue(LocalizePlaceholderKeyProperty);
+            set => SetValue(LocalizePlaceholderKeyProperty, value);
+        }
+
+        /// <summary>
+        /// Invoke "Localize" method if LocalizePlaceholderKey was changed.
+        /// </summary>
+        /// <typeparam name="T">Type of property.</typeparam>
+        /// <param name="change">AvaloniaPropertyChangedEventArgs.</param>
+        /// <date>31.05.2022.</date>
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+        {
+            switch (change.Property.Name)
+            {
+                case nameof(LocalizePlaceholderKey):
+                    Localize();
+                    break;
+            }
+            base.OnPropertyChanged(change);
+        }
+
+        /// <summary>
+        /// Invoke "Localize" method when AxisTextBox is initialized.
+        /// </summary>
+        /// <date>31.05.2022.</date>
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            Localize();
         }
 
         /// <summary>
@@ -76,6 +117,18 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        /// <summary>
+        ///  Sets localized text if LocalizeTextKey was changed.
+        /// </summary>
+        /// <date>31.05.2022.</date>
+        private void Localize()
+        {
+            if (!string.IsNullOrEmpty(this.LocalizePlaceholderKey))
+            {
+                this.Watermark = translationService.Localize(this.LocalizePlaceholderKey);
+            }
         }
     }
 }

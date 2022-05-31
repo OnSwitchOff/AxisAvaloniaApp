@@ -1,0 +1,44 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=netstandard">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- Add Styles Here -->
+  <Style Selector="DataGrid">
+    <Setter Property="AutoGenerateColumns" Value="False"/>
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="SelectionMode" Value="Extended"/>    
+    <Setter Property="CanUserResizeColumns" Value="True"/>    
+    <Setter Property="GridLinesVisibility" Value="All"/>
+    <Setter Property="AlternatingRowBackground" Value="#b3fff9"/>
+  </Style>
+
+  <Style Selector="DataGridColumnHeader">
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+    <Setter Property="TextBlock.TextTrimming" Value="WordEllipsis"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+  </Style>
+
+  <Style Selector="DataGridCell TextBox" x:DataType="sys:Double">
+    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+  </Style>
+  
+  <Style Selector="DataGridCell TextBlock" x:DataType="sys:Double">
+    <Setter Property="HorizontalAlignment" Value="Right"/>
+  </Style>
+
+  <Style Selector="DataGridCell TextBox" x:DataType="sys:DateTime">
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+  </Style>
+
+  <Style Selector="DataGridCell TextBlock" x:DataType="sys:DateTime">
+    <Setter Property="HorizontalAlignment" Value="Center"/>
+  </Style>
+</Styles>

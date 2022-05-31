@@ -266,8 +266,96 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
-
-
+    <Data Key="strCode">
+      <Value Lang="bg-BG">Код</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Code</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Код</Value>
+      <Value Lang="uk-UA">Код</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strBarcode">
+      <Value Lang="bg-BG">Баркод</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Barcode</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Штрихкод</Value>
+      <Value Lang="uk-UA">Штрихкод</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strGoods">
+      <Value Lang="bg-BG">Стока</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Item</Value>
+      <Value Lang="ro-RO">Marfă</Value>
+      <Value Lang="ru-RU">Товар</Value>
+      <Value Lang="uk-UA">Товар</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strMeasure">
+      <Value Lang="bg-BG">Мярка</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Measure</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Ед. изм.</Value>
+      <Value Lang="uk-UA">Од. вим.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strQtty">
+      <Value Lang="bg-BG">Кол</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Quantity</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Кол-во</Value>
+      <Value Lang="uk-UA">К-сть</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPrice">
+      <Value Lang="bg-BG">Цена</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Price</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Цена</Value>
+      <Value Lang="uk-UA">Ціна</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDiscount">
+      <Value Lang="bg-BG">ТО</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Discount</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Скидка</Value>
+      <Value Lang="uk-UA">Знижка</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strTotalCost">
+      <Value Lang="bg-BG">Стойност</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Total cost</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Общая стоимость</Value>
+      <Value Lang="uk-UA">Загальна вартість</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strNote">
+      <Value Lang="bg-BG">Забележка</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Note</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Примечание</Value>
+      <Value Lang="uk-UA">Примітка</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strPayment">
       <Value Lang="bg-BG">Разплащане</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -358,7 +446,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
-    
+    <Data Key="strSearch">
+      <Value Lang="bg-BG">Търсене</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Search</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Поиск</Value>
+      <Value Lang="uk-UA">Пошук</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strFastSearch">
       <Value Lang="bg-BG">Бързо търсене</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -799,6 +896,16 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Настройки приложения позволяют вводить данные вашей компании, подключаться к устройствам и службам (COM-сканер, фискальное устройство, POS-терминал, AxisCloud) и т.д.</Value>
       <Value Lang="uk-UA">Налаштування програми дозволяють вводити дані вашої компанії, підключатися до пристроїв і служб (COM-сканер, фіскальний пристрій, POS-термінал, AxisCloud) і т.д.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+      <Data Key="Search">
+      <Value Lang="bg-BG">Активира търсене по въведените в полето критерии. Търсенето се осъществява по пълно и частично съвпадение на данните, по комбинирани критерии във всички полета на активната таблица. Скритите полета също участват в търсенето. Таблицата се филтрира и показва единствено списък с елементи, които съдържат търсените данни. </Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Activation of search by input value. App filters by all fields of nomenclature, searches nomenclatures that to meet to criteria fully or part and shows filtered ones to you.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Активация поиска по введённому значению. Приложение фильтрует по всем полям номенклатуры, ищет номенклатуры, которые полностью или частично соответствуют критерию поиска, и показывает вам отфильтрованные.</Value>
+      <Value Lang="uk-UA">Активація пошуку за введеним значенням. Програма фільтрує по всім полям номенклатури, шукає номенклатури, які повністю або частково відповідають критерію пошуку, і показує вам відфільтровані.</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>

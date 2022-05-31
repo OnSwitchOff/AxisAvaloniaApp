@@ -92,6 +92,7 @@
                 CornerRadius="3" 
                 Margin="8, 0"/>
         <controlEx:AxisTextBlock Grid.Row="1" 
+                                 Margin="10, 0"
                                  LocalizeTextKey="strSales" 
                                  Background="Transparent" 
                                  Foreground="White" 

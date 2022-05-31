@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microinvest.DeviceService.Models;
+﻿using Microinvest.DeviceService.Models;
+using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of operation.
     /// </summary>
-    public class OperationItemModel : ObservableObject
+    public class OperationItemModel : ReactiveObject
     {
         private ItemModel item;
         private string code;
@@ -44,6 +44,8 @@ namespace AxisAvaloniaApp.Models
             this.price = 0;
             this.amount = 0;
             this.note = string.Empty;
+
+            this.PropertyChanged += OperationItemModel_PropertyChanged;
         }
 
         /// <summary>
@@ -52,8 +54,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>14.03.2022.</date>
         public ItemModel Item
         {
-            get => this.item;
-            set => this.SetProperty(ref this.item, value);
+            get => item;
+            set => this.RaiseAndSetIfChanged(ref item, value);
         }
 
         /// <summary>
@@ -62,8 +64,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public string Code
         {
-            get => this.code;
-            set => this.SetProperty(ref this.code, value);
+            get => code;
+            set => this.RaiseAndSetIfChanged(ref code, value);
         }
 
         /// <summary>
@@ -72,8 +74,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public string Name
         {
-            get => this.name;
-            set => this.SetProperty(ref this.name, value);
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
         }
 
         /// <summary>
@@ -82,8 +84,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public string Barcode
         {
-            get => this.barcode;
-            set => this.SetProperty(ref this.barcode, value);
+            get => barcode;
+            set => this.RaiseAndSetIfChanged(ref barcode, value);
         }
 
         /// <summary>
@@ -92,8 +94,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public double Qty
         {
-            get => this.qty;
-            set => this.SetProperty(ref this.qty, value);
+            get => qty;
+            set => this.RaiseAndSetIfChanged(ref qty, value);
         }
 
         /// <summary>
@@ -102,8 +104,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public ObservableCollection<ItemCodeModel> Measures
         {
-            get => this.measures;
-            set => this.SetProperty(ref this.measures, value);
+            get => measures;
+            set => this.RaiseAndSetIfChanged(ref measures, value);
         }
 
         /// <summary>
@@ -112,8 +114,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public ItemCodeModel SelectedMeasure
         {
-            get => this.selectedMeasure;
-            set => this.SetProperty(ref this.selectedMeasure, value);
+            get => selectedMeasure;
+            set => this.RaiseAndSetIfChanged(ref selectedMeasure, value);
         }
 
         /// <summary>
@@ -122,8 +124,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public double PartnerDiscount
         {
-            get => this.partnerDiscount;
-            set => this.SetProperty(ref this.partnerDiscount, value);
+            get => partnerDiscount;
+            set => this.RaiseAndSetIfChanged(ref partnerDiscount, value);
         }
 
         /// <summary>
@@ -132,8 +134,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public double ItemDiscount
         {
-            get => this.itemDiscount;
-            set => this.SetProperty(ref this.itemDiscount, value);
+            get => itemDiscount;
+            set => this.RaiseAndSetIfChanged(ref itemDiscount, value);
         }
 
         /// <summary>
@@ -142,8 +144,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public double Discount
         {
-            get => this.discount;
-            set => this.SetProperty(ref this.discount, value);
+            get => discount;
+            set => this.RaiseAndSetIfChanged(ref discount, value);
         }
 
         /// <summary>
@@ -152,8 +154,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public double Price
         {
-            get => this.price;
-            set => this.SetProperty(ref this.price, value);
+            get => price;
+            set => this.RaiseAndSetIfChanged(ref price, value);
         }
 
         /// <summary>
@@ -162,8 +164,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public double Amount
         {
-            get => this.amount;
-            private set => this.SetProperty(ref this.amount, value);
+            get => amount;
+            private set => this.RaiseAndSetIfChanged(ref amount, value);
         }
 
         /// <summary>
@@ -172,8 +174,8 @@ namespace AxisAvaloniaApp.Models
         /// <date>15.03.2022.</date>
         public string Note
         {
-            get => this.note;
-            set => this.SetProperty(ref this.note, value);
+            get => note;
+            set => this.RaiseAndSetIfChanged(ref note, value);
         }
 
         /// <summary>
@@ -201,7 +203,7 @@ namespace AxisAvaloniaApp.Models
         /// </summary>
         /// <param name="e">Event args.</param>
         /// <date>29.03.2022.</date>
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        private void OperationItemModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -236,8 +238,6 @@ namespace AxisAvaloniaApp.Models
                 case nameof(this.PartnerDiscount):
                     break;
             }
-
-            base.OnPropertyChanged(e);
         }
     }
 }

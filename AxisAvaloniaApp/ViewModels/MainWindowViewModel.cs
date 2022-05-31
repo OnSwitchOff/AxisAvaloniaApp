@@ -38,6 +38,7 @@ namespace AxisAvaloniaApp.ViewModels
             IsPointerPressedActivation = false;
 
             WelcomeView = new Views.WelcomeView();
+            Content = WelcomeView;
 
             this.PropertyChanged += MainWindowViewModel_PropertyChanged;
             this.PropertyChanging += MainWindowViewModel_PropertyChanging;
@@ -225,7 +226,10 @@ namespace AxisAvaloniaApp.ViewModels
                                 viewModel.Title = SelectedItem.Text;
                             }
 
-                            SelectedSale = ActiveSales[ActiveSales.Count - 1];
+                            if (ActiveSales.Count > 0)
+                            {
+                                SelectedSale = ActiveSales[ActiveSales.Count - 1];
+                            }
                             IsPointerPressedActivation = false;
                         }
                     }

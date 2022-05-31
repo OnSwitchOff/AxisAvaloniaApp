@@ -1,7 +1,9 @@
 ﻿using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Services.Serialization;
 using AxisAvaloniaApp.Services.Settings;
 using DataBase.Repositories.ApplicationLog;
+using Microinvest.CommonLibrary.Enums;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,10 @@ namespace AxisAvaloniaApp.ViewModels
     public class SaleViewModel : ViewModelBase
     {
         private readonly ISettingsService settingsService;
+        
         public SaleViewModel()
         {
-            this.settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
+            settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
 
             IsCached = false;
 
@@ -29,13 +32,52 @@ namespace AxisAvaloniaApp.ViewModels
             OperationItemModel operationItem = new OperationItemModel()
             {
                 Code = "test",
-                Name = "test",
+                Name = "test11",
+                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+                Measures = new ObservableCollection<ItemCodeModel> 
+                { 
+                    new ItemCodeModel() { Measure = "item" }, 
+                    new ItemCodeModel() { Measure = "box" }
+                },
             };
 
             Items = new ObservableCollection<OperationItemModel>();
             Items.Add(operationItem);
+            operationItem = new OperationItemModel()
+            {
+                Code = "test",
+                Name = "test12",
+                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+                Measures = new ObservableCollection<ItemCodeModel>
+                {
+                    new ItemCodeModel() { Measure = "item" },
+                    new ItemCodeModel() { Measure = "box" }
+                },
+            };
             Items.Add(operationItem);
+            operationItem = new OperationItemModel()
+            {
+                Code = "test",
+                Name = "test23",
+                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+                Measures = new ObservableCollection<ItemCodeModel>
+                {
+                    new ItemCodeModel() { Measure = "item" },
+                    new ItemCodeModel() { Measure = "box" }
+                },
+            };
             Items.Add(operationItem);
+            operationItem = new OperationItemModel()
+            {
+                Code = "test",
+                Name = "test24",
+                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+                Measures = new ObservableCollection<ItemCodeModel>
+                {
+                    new ItemCodeModel() { Measure = "item" },
+                    new ItemCodeModel() { Measure = "box" }
+                },
+            };
             Items.Add(operationItem);
         }
 
@@ -122,13 +164,49 @@ namespace AxisAvaloniaApp.ViewModels
         private ObservableCollection<OperationItemModel> items;
 
         /// <summary>
-        /// Gets or sets amount to pay by document.
+        /// Gets or sets list with items to buy.
         /// </summary>
         /// <date>26.05.2022.</date>
         public ObservableCollection<OperationItemModel> Items
         {
             get => items;
             set => this.RaiseAndSetIfChanged(ref items, value);
+        }
+
+        private ObservableCollection<OperationItemModel> selectedItem;
+
+        /// <summary>
+        /// Gets or sets item that is selected by user.
+        /// </summary>
+        /// <date>27.05.2022.</date>
+        public ObservableCollection<OperationItemModel> SelectedItem
+        {
+            get => selectedItem;
+            set => this.RaiseAndSetIfChanged(ref selectedItem, value);
+        }
+
+        private double amountToPay;
+
+        /// <summary>
+        /// Gets or sets amount to payment.
+        /// </summary>
+        /// <date>30.05.2022.</date>
+        public double AmountToPay
+        {
+            get => amountToPay;
+            set => this.RaiseAndSetIfChanged(ref amountToPay, value);
+        }
+
+        private double change;
+
+        /// <summary>
+        /// Gets or sets amount to payment.
+        /// </summary>
+        /// <date>30.05.2022.</date>
+        public double Change
+        {
+            get => change;
+            set => this.RaiseAndSetIfChanged(ref change, value);
         }
 
         /// <summary>
@@ -147,6 +225,16 @@ namespace AxisAvaloniaApp.ViewModels
         public void ChangeSelectedPartnerLocked()
         {
             IsChoiceOfPartnerEnabled = !IsChoiceOfPartnerEnabled;
+        }
+
+        /// <summary>
+        /// Pay the order.
+        /// </summary>
+        /// <param name="paymentType">Type of payment.</param>
+        /// <date>30.05.2022.</date>
+        public void PaymentSale(EPaymentTypes paymentType)
+        {
+            // TODO: initialize method
         }
     }
 }

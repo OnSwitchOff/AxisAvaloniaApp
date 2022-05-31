@@ -103,31 +103,28 @@ namespace AxisAvaloniaApp.Services.Serialization
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColRowNumberWidth, group, "35"));
                     this.serializationData.Add(
                         ESerializationKeys.ColCodeWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColCodeWidth, group, "25"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColCodeWidth, group, "70"));
                     this.serializationData.Add(
                         ESerializationKeys.ColBarcodeWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColBarcodeWidth, group, "40"));
-                    this.serializationData.Add(
-                        ESerializationKeys.ColNameWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColNameWidth, group, "50"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColBarcodeWidth, group, "110"));
                     this.serializationData.Add(
                         ESerializationKeys.ColMeasureWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColMeasureWidth, group, "45"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColMeasureWidth, group, "80"));
                     this.serializationData.Add(
                         ESerializationKeys.ColQuantityWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColQuantityWidth, group, "66"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColQuantityWidth, group, "80"));
                     this.serializationData.Add(
                         ESerializationKeys.ColPriceWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColPriceWidth, group, "66"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColPriceWidth, group, "80"));
                     this.serializationData.Add(
                         ESerializationKeys.ColDiscountWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColDiscountWidth, group, "40"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColDiscountWidth, group, "80"));
                     this.serializationData.Add(
                         ESerializationKeys.ColTotalSumWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColTotalSumWidth, group, "66"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColTotalSumWidth, group, "145"));
                     this.serializationData.Add(
                         ESerializationKeys.ColNoteWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColNoteWidth, group, "66"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColNoteWidth, group, "100"));
                     break;
                 case ESerializationGroups.Invoice:
                 case ESerializationGroups.Proform:

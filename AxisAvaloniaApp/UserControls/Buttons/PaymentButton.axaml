@@ -1,0 +1,42 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AxisAvaloniaApp.UserControls.Buttons"
+        xmlns:converters="using:AxisAvaloniaApp.Converters"
+        xmlns:controlEx="using:AxisAvaloniaApp.UserControls.Extensions">
+
+  <Styles.Resources>
+    <converters:BitmapAssetValueConverter x:Key="variableImage"/>
+  </Styles.Resources>
+
+  <Design.PreviewWith>
+    <controls:PaymentButton />
+  </Design.PreviewWith>
+
+  <Style Selector="controls|PaymentButton">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Button VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                BorderThickness="0"
+                CornerRadius="0"
+                Background="#FF1B7E83"
+                Margin="3"
+                Command="{TemplateBinding ButtonClick, Mode=TwoWay}"
+                CommandParameter="{TemplateBinding PaymentType}">
+          <Button.Content>
+            <StackPanel Orientation="Vertical">
+              <Image Source="{TemplateBinding ImagePath, Converter={StaticResource variableImage}}" 
+                     Stretch="None"/>
+              <controlEx:AxisTextBlock Text="{TemplateBinding Text}" 
+                                       LocalizeTextKey="{TemplateBinding LocalizeTextKey}"
+                                       Foreground="White"/>
+            </StackPanel>
+          </Button.Content>
+        </Button>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

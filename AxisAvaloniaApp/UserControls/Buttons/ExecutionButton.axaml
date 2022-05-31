@@ -1,0 +1,35 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AxisAvaloniaApp.UserControls.Buttons"
+        xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions">
+  <Design.PreviewWith>
+    <controls:ExecutionButton />
+  </Design.PreviewWith>
+
+  <Style Selector="controls|ExecutionButton">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Button HorizontalAlignment="Stretch"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="2"
+                Margin="2"
+                Command="{TemplateBinding Command}"
+                CommandParameter="{TemplateBinding CommandParameter}">
+          <Button.Content>
+            <controlsEx:AxisTextBlock Foreground="{TemplateBinding Foreground}" 
+                                      Text="{TemplateBinding Text}"
+                                      HorizontalAlignment="Center"
+                                      LocalizeTextKey="{TemplateBinding LocalizeTextKey}"/>
+          </Button.Content>
+        </Button>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
+  </Style>
+</Styles>

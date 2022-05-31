@@ -6,15 +6,35 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:container="using:AxisAvaloniaApp.UserControls"
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:buttons="using:AxisAvaloniaApp.UserControls.Buttons"
+             xmlns:converters="using:AxisAvaloniaApp.Converters"
+             xmlns:enums="using:AxisAvaloniaApp.Enums"
+             xmlns:payment="using:Microinvest.CommonLibrary.Enums"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="450"
              x:Class="AxisAvaloniaApp.Views.SaleView">
 
+  <UserControl.Resources>
+    <ContextMenu x:Key="SaleContextMenu">
+      <controlsEx:CheckedMenuItem Name="CodeMenu" LocalizeTextKey="strCode" />
+      <controlsEx:CheckedMenuItem Name="BarcodeMenu" LocalizeTextKey="strBarcode"/>
+      <controlsEx:CheckedMenuItem Name="NoteMenu" LocalizeTextKey="strNote"/>
+    </ContextMenu>
+    
+    <converters:DoubleToStringConverter x:Key="DoubleToString"/>
+  </UserControl.Resources>
+
   <UserControl.Styles>
+    <StyleInclude Source="/Styles/DataGrid.axaml"/>
+    
     <Style Selector="TextBlock.Title">
       <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontSize" Value="14"/>
       <Setter Property="FontWeight" Value="Bold"/>
-    </Style> 
+    </Style>
+
+    <Style Selector="DataGridColumnHeader">
+      <Setter Property="ContextMenu" Value="{StaticResource SaleContextMenu}"/>
+    </Style>
   </UserControl.Styles>
   
   <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}">
@@ -49,7 +69,8 @@
       <Grid Background="#28AEB9" 
             RowDefinitions="auto, *, auto, auto">
         <Grid Grid.Row="0"
-              ColumnDefinitions="*, *, *">
+              ColumnDefinitions="*, *, *" 
+              Margin="0, 2, 0, 2">
           <Grid Grid.Column="0" 
                 ColumnDefinitions="auto, *, auto">
             <controlsEx:AxisTextBlock Grid.Column="0"
@@ -115,7 +136,6 @@
           <Grid Grid.Column="2"
                 VerticalAlignment="Center" ColumnDefinitions="auto, auto, *">
             <controlsEx:AxisTextBlock Grid.Column="0"
-                                      
                                       Classes="Title" 
                                       LocalizeTextKey="strTotalSum"/>
             <TextBlock Grid.Column="1"
@@ -127,29 +147,304 @@
                        Text="{Binding TotalAmount, Mode=OneWay}"/>
           </Grid>
         </Grid>
-        <DataGrid Grid.Row="1"
-                  Background="White"
-                  Foreground="Black"
+        <DataGrid Grid.Row="1" Classes="SaleGrid"
+                  Name="SaleGrid"
                   Items="{Binding Items}"
-                  AutoGenerateColumns="False"
-                  CanUserResizeColumns="True"
-                  GridLinesVisibility="All"
-                  HorizontalGridLinesBrush="Black"
-                  VerticalGridLinesBrush="Black"
-                  AlternatingRowBackground="Gray"
-                  HeadersVisibility="All">
+                  SelectionMode="Extended"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+          <DataGrid.Styles>
+            <Style Selector="DataGridColumnHeader">
+              <Setter Property="ContextMenu" Value="{StaticResource SaleContextMenu}"/>
+            </Style>
+          </DataGrid.Styles>
           <DataGrid.Columns>
-            <DataGridTextColumn Header="Id" Binding="{Binding Code}" Width="50" Foreground="Black">
-              <DataGridTextColumn.HeaderTemplate>
-                <DataTemplate>
-                  <TextBlock Text="Teste" />
-                </DataTemplate>
-              </DataGridTextColumn.HeaderTemplate>
+            <DataGridTextColumn Binding="{Binding Code}" 
+                                IsVisible="{Binding ElementName=CodeMenu, Path=IsChecked, Mode=OneWay}"
+                                CellStyleClasses="Numeric"
+                                DisplayIndex="0">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strCode"/>
+              </DataGridTextColumn.Header>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="60"/>
+            <DataGridTextColumn Binding="{Binding Barcode}" 
+                                IsVisible="{Binding ElementName=BarcodeMenu, Path=IsChecked, Mode=OneWay}"
+                                DisplayIndex="1">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strBarcode"/>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Name}" 
+                                Width="*"
+                                DisplayIndex="2">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strGoods"/>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            <DataGridTemplateColumn DisplayIndex="3">
+              <DataGridTemplateColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strMeasure"/>
+              </DataGridTemplateColumn.Header>
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding SelectedMeasure.Measure, Mode=OneWay}" VerticalAlignment="Center"/>
+                </DataTemplate>                
+              </DataGridTemplateColumn.CellTemplate>
+              <DataGridTemplateColumn.CellEditingTemplate>
+                <DataTemplate>
+                  <ComboBox Items="{Binding Measures, Mode=OneWay}" 
+                            SelectedItem="{Binding SelectedMeasure}" 
+                            HorizontalAlignment="Stretch" 
+                            PlaceholderText="{Binding SelectedMeasure.Measure, Mode=OneWay}"
+                            VerticalAlignment="Center">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Measure}"/>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTextColumn Binding="{Binding Qty, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Qty}}"
+                                DisplayIndex="4">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strQtty"/>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Price, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}}"
+                                DisplayIndex="5">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strPrice"/>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Discount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}}"
+                                DisplayIndex="6">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strDiscount"/>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Amount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}}"
+                                DisplayIndex="7" 
+                                IsReadOnly="True">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strTotalCost"/>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Note}"
+                                IsVisible="{Binding ElementName=NoteMenu, Path=IsChecked, Mode=OneWay}"
+                                DisplayIndex="8">
+              <DataGridTextColumn.Header>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strNote"/>
+              </DataGridTextColumn.Header>
+            </DataGridTextColumn>
           </DataGrid.Columns>
         </DataGrid>
+
+        <Grid Grid.Row="2"
+              IsVisible="{Binding $parent[UserControl].IsPaymentPanelVisible, Mode=TwoWay}"
+              ColumnDefinitions="*, *, *"
+              RowDefinitions="*, *">
+          <buttons:PaymentButton Grid.Row="0"
+                                 Grid.Column="0"
+                                 PaymentType="Voucher"
+                                 ImagePath="/Assets/Icons/payment_voucher.png"
+                                 LocalizeTextKey="strVoucher"
+                                 ButtonClick="{Binding PaymentSale}"/>
+          <buttons:PaymentButton Grid.Row="0"
+                                 Grid.Column="1"
+                                 PaymentType="ElectronicPoints"
+                                 ImagePath="/Assets/Icons/payment_points.png"
+                                 LocalizeTextKey="strPoints"
+                                 ButtonClick="{Binding PaymentSale}"/>
+          <buttons:PaymentButton Grid.Row="0"
+                                 Grid.Column="3"
+                                 PaymentType="Other1"
+                                 ImagePath="/Assets/Icons/payment_otherType.png"
+                                 LocalizeTextKey="strOtherPaymentType"
+                                 ButtonClick="{Binding PaymentSale}"/>
+          <buttons:PaymentButton Grid.Row="1"
+                                 Grid.Column="0"
+                                 PaymentType="Card"
+                                 ImagePath="/Assets/Icons/payment_card.png"
+                                 LocalizeTextKey="strCard"
+                                 ButtonClick="{Binding PaymentSale}"/>
+          <buttons:PaymentButton Grid.Row="1"
+                                 Grid.Column="1"
+                                 PaymentType="Bank"
+                                 ImagePath="/Assets/Icons/payment_bank.png"
+                                 LocalizeTextKey="strByAccount"
+                                 ButtonClick="{Binding PaymentSale}"/>
+          <buttons:PaymentButton Grid.Row="1"
+                                 Grid.Column="2"
+                                 IsVisible="{Binding !$parent[UserControl].IsPayInCashPanelVisible, Mode=TwoWay}"
+                                 PaymentType="Cash"
+                                 ImagePath="/Assets/Icons/payment_cash.png"
+                                 LocalizeTextKey="strInCash"
+                                 ButtonClick="{Binding $parent[UserControl].ChangeIsPayInCashPanelVisible}"/>
+          <Grid Grid.Row="1"
+                Grid.Column="2"
+                IsVisible="{Binding $parent[UserControl].IsPayInCashPanelVisible, Mode=TwoWay}"
+                Background="#FF1B7E83"
+                Margin="3"
+                RowDefinitions="auto, auto, *, auto">
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="*, auto">
+              <controlsEx:AxisTextBlock Grid.Column="0"
+                                        Foreground="White"
+                                        HorizontalAlignment="Center"
+                                        LocalizeTextKey="strPaidSumInCash"/>
+              <Button Grid.Column="1"
+                      CornerRadius="0"
+                      Padding="4"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      HorizontalAlignment="Right"
+                      Command="{Binding $parent[UserControl].ChangeIsPayInCashPanelVisible}">
+                <Button.Content>
+                  <Image Source="/Assets/Icons/close.png"/>
+                </Button.Content>
+              </Button>
+            </Grid>
+            <TextBox Grid.Row="1" 
+                     Margin="5, 0, 5, 0"
+                     HorizontalContentAlignment="Center"
+                     Text="{Binding AmountToPay, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}, Mode=TwoWay}"/>
+            <Grid Grid.Row="2" ColumnDefinitions="*, auto, *">
+              <controlsEx:AxisTextBlock Grid.Column="0" 
+                                        LocalizeTextKey="strChange" 
+                                        Foreground="White" 
+                                        HorizontalAlignment="Right"/>
+              <TextBlock Grid.Column="1" 
+                         Text=": " 
+                         Foreground="White"/>
+              <TextBlock Grid.Column="2" 
+                         Foreground="White" 
+                         Text="{Binding Change, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}, Mode=TwoWay}" 
+                         HorizontalAlignment="Left"/>
+            </Grid>
+            <buttons:ExecutionButton Grid.Row="3"
+                                     Foreground="White" 
+                                     BorderBrush="White" 
+                                     LocalizeTextKey="strPayment"
+                                     Command="{Binding PaymentSale}"
+                                     CommandParameter="{x:Static payment:EPaymentTypes.Cash}"/>
+          </Grid>
+        </Grid>
+        
+        
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*, auto, auto, auto">
+          <controlsEx:AxisTextBox Grid.Column="1"
+                                  MinWidth="150"
+                                  Name="TextBoxSearch"
+                                  Text="{Binding $parent[UserControl].SearchDataGridRows, Mode=TwoWay}"
+                                  ExplanationKey="Search"
+                                  Margin="0, 2, 0, 2"
+                                  CornerRadius="3, 0, 0, 3"
+                                  Background="White"
+                                  BorderThickness="0"/>
+          <Border Grid.Column="2" 
+                  CornerRadius="0, 3, 3, 0"
+                  Margin="0, 2, 0, 2"
+                  Padding="2"
+                  Background="{Binding ElementName=TextBoxSearch, Path=Background}"
+                  BorderThickness="0">
+            <Image Source="/Assets/AxisIcon.ico" Height="28"/>
+          </Border>
+
+          <buttons:ExecutionButton Grid.Column="3"
+                                   Width="150"
+                                   Foreground="White"
+                                   BorderBrush="White"
+                                   LocalizeTextKey="strPayment"
+                                   Command="{Binding $parent[UserControl].ChangeIsPaymentPanelVisible}"/>
+        </Grid>
       </Grid>
     </container:OperationContainer.WorkContent>
+    <container:OperationContainer.AdditionalContent>
+      <Grid RowDefinitions="*, auto">
+        <Grid Grid.Row="0">
+          
+        </Grid>
+        <Grid Grid.Row="0">
+          
+        </Grid>
+        <Grid Grid.Row="1" 
+              Background="#0e1434" 
+              ColumnDefinitions="*, auto">
+          <controlsEx:AxisTextBox Grid.Column="0" 
+                                  LocalizePlaceholderKey="strSearch" 
+                                  Foreground="White" 
+                                  HorizontalContentAlignment="Center" 
+                                  VerticalContentAlignment="Center"
+                                  Background="Transparent"/>
+          <Button Grid.Column="1" Name="editButton" Command="{Binding $parent[UserControl].ChangeIsEditPanelVisible}">
+            <Button.Content>
+              <StackPanel>
+                <Image Source="/Assets/Icons/doubleArrow_down.png" Width="32"  IsVisible="{Binding !$parent[UserControl].IsEditPanelVisible, Mode=TwoWay}"/>
+                <Image Source="/Assets/Icons/doubleArrow_up.png" Width="32"  IsVisible="{Binding $parent[UserControl].IsEditPanelVisible, Mode=TwoWay}"/>
+              </StackPanel>              
+            </Button.Content>
+          </Button>
+          <Popup IsOpen="{Binding $parent[UserControl].IsEditPanelVisible, Mode=TwoWay}" 
+                 PlacementTarget="{Binding ElementName=editButton}"
+                 PlacementMode="Top">
+            <StackPanel Orientation="Vertical" Background="#28adb9">
+              <StackPanel Orientation="Vertical">
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/partners_add.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/partners_edit.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/partners_delete.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+              </StackPanel>
+              <StackPanel Orientation="Vertical">
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/goods_add.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/goods_edit.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/goods_delete.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+              </StackPanel>
+              <StackPanel Orientation="Vertical">
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/groups_add.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/groups_edit.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+                <Button Background="Transparent">
+                  <Button.Content>
+                    <Image Source="/Assets/Icons/groups_delete.png" Width="32"/>
+                  </Button.Content>
+                </Button>
+              </StackPanel>
+            </StackPanel>
+          </Popup>
+        </Grid>
+      </Grid>
+    </container:OperationContainer.AdditionalContent>
   </container:OperationContainer>
 </UserControl>
