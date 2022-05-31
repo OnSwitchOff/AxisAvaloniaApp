@@ -1,9 +1,11 @@
-﻿namespace AxisAvaloniaApp.Models
+﻿using ReactiveUI;
+
+namespace AxisAvaloniaApp.Models
 {
     /// <summary>
     /// Describes data of partner.
     /// </summary>
-    public partial class PartnerModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+    public partial class PartnerModel : ReactiveObject
     {
         private int id;
         private string name;
@@ -50,7 +52,7 @@
         public int Id
         {
             get => this.id;
-            set => this.SetProperty(ref this.id, value);
+            set => this.RaiseAndSetIfChanged(ref this.id, value);
         }
 
         /// <summary>
@@ -60,7 +62,7 @@
         public string Name
         {
             get => this.name;
-            set => this.SetProperty(ref this.name, value);
+            set => this.RaiseAndSetIfChanged(ref this.name, value);
         }
 
         /// <summary>
@@ -70,7 +72,7 @@
         public string Principal
         {
             get => this.principal;
-            set => this.SetProperty(ref this.principal, value);
+            set => this.RaiseAndSetIfChanged(ref this.principal, value);
         }
 
         /// <summary>
@@ -80,7 +82,7 @@
         public string City
         {
             get => this.city;
-            set => this.SetProperty(ref this.city, value);
+            set => this.RaiseAndSetIfChanged(ref this.city, value);
         }
 
         /// <summary>
@@ -90,7 +92,7 @@
         public string Address
         {
             get => this.address;
-            set => this.SetProperty(ref this.address, value);
+            set => this.RaiseAndSetIfChanged(ref this.address, value);
         }
 
         /// <summary>
@@ -100,7 +102,7 @@
         public string Phone
         {
             get => this.phone;
-            set => this.SetProperty(ref this.phone, value);
+            set => this.RaiseAndSetIfChanged(ref this.phone, value);
         }
 
         /// <summary>
@@ -110,7 +112,7 @@
         public string Email
         {
             get => this.email;
-            set => this.SetProperty(ref this.email, value);
+            set => this.RaiseAndSetIfChanged(ref this.email, value);
         }
 
         /// <summary>
@@ -120,7 +122,7 @@
         public string TaxNumber
         {
             get => this.taxNumber;
-            set => this.SetProperty(ref this.taxNumber, value);
+            set => this.RaiseAndSetIfChanged(ref this.taxNumber, value);
         }
 
         /// <summary>
@@ -130,7 +132,7 @@
         public string VATNumber
         {
             get => this.vATNumber;
-            set => this.SetProperty(ref this.vATNumber, value);
+            set => this.RaiseAndSetIfChanged(ref this.vATNumber, value);
         }
 
         /// <summary>
@@ -140,7 +142,7 @@
         public string BankName
         {
             get => this.bankName;
-            set => this.SetProperty(ref this.bankName, value);
+            set => this.RaiseAndSetIfChanged(ref this.bankName, value);
         }
 
         /// <summary>
@@ -150,7 +152,7 @@
         public string BankBIC
         {
             get => this.bankBIC;
-            set => this.SetProperty(ref this.bankBIC, value);
+            set => this.RaiseAndSetIfChanged(ref this.bankBIC, value);
         }
 
         /// <summary>
@@ -160,7 +162,7 @@
         public string IBAN
         {
             get => this.iBAN;
-            set => this.SetProperty(ref this.iBAN, value);
+            set => this.RaiseAndSetIfChanged(ref this.iBAN, value);
         }
 
         /// <summary>
@@ -170,7 +172,7 @@
         public string DiscountCardNumber
         {
             get => this.discountCardNumber;
-            set => this.SetProperty(ref this.discountCardNumber, value);
+            set => this.RaiseAndSetIfChanged(ref this.discountCardNumber, value);
         }
 
         /// <summary>
@@ -180,7 +182,7 @@
         public GroupModel Group
         {
             get => this.group;
-            set => this.SetProperty(ref this.group, value);
+            set => this.RaiseAndSetIfChanged(ref this.group, value);
         }
 
         /// <summary>
@@ -190,7 +192,7 @@
         public Microinvest.CommonLibrary.Enums.ENomenclatureStatuses Status
         {
             get => this.status;
-            set => this.SetProperty(ref this.status, value);
+            set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
         /// <summary>

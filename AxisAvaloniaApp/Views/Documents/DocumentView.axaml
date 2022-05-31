@@ -3,19 +3,234 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:container="using:AxisAvaloniaApp.UserControls"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1800" d:DesignHeight="1450"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+			 xmlns:ucModels="using:AxisAvaloniaApp.UserControls.Models"
              x:Class="AxisAvaloniaApp.Views.DocumentView">
-  <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" >
+	<UserControl.Styles>
+		<Style Selector="Button.WhiteBorder:pointerover /template/ ContentPresenter#PART_ContentPresenter" >
+		  <Setter Property="Background" Value="Transparent" />
+		  <Setter Property="BorderBrush" Value="White"/>
+		</Style>
+	</UserControl.Styles>
+    <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" >
+	    <container:OperationContainer.TitleContent>
+			<Grid Height="50">
+				<Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
+					<controlsEx:AxisTextBlock Text="{Binding Title}" FontSize="18" Foreground="White" FontWeight="Bold"  />
+				</Border>
+			</Grid>
+		</container:OperationContainer.TitleContent>
     <container:OperationContainer.WorkContent>
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="Document view!"/>
-        <TextBox Grid.Row="1"/>
-      </Grid>
+		<Grid Background="#28AEB9"
+			 RowDefinitions="Auto,*">
+			<DataGrid Grid.Row="1"
+					  Background="White"
+					  Foreground="Black"
+					  Items="{Binding Items}"
+					  SelectionMode="Single"
+					  SelectedItem="{Binding SelectedItem}"
+					  AutoGenerateColumns="False"
+					  CanUserResizeColumns="True"
+					  GridLinesVisibility="All"
+					  HorizontalGridLinesBrush="Black"
+					  VerticalGridLinesBrush="Black"
+					  AlternatingRowBackground="Gray"
+					  HeadersVisibility="All">
+				<DataGrid.Styles>
+					<Style Selector="DataGridCell TextBox:focus">
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+						<Setter Property="CornerRadius" Value="0" />
+						<Setter Property="Padding" Value="5,2" />
+					</Style>
+					<Style Selector="DataGridCell.rightTextAligment TextBox:focus">
+						<Setter Property="TextAlignment" Value="Left" />
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+						<Setter Property="CornerRadius" Value="0" />
+						<Setter Property="Padding" Value="5,2" />
+					</Style>
+					<Style Selector="DataGridCell TextBlock" >
+						<Setter Property="Margin" Value="7.5" />
+					</Style>
+					<Style Selector="DataGridCell.rightTextAligment TextBlock" >
+						<Setter Property="HorizontalAlignment" Value="Right" />
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridTextColumn Binding="{Binding Sale, Mode=TwoWay}" SortMemberPath="Sale" Width="{StaticResource SaleColumnWidth}" Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strSale" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding SaleDate, Mode=TwoWay}"  Width="100" Foreground="Black" CellStyleClasses="rightTextAligment">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strDate" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding Client.Name, Mode=TwoWay}" Width="*" Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strClient" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding Amount, Mode=TwoWay}" Width="100" Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strSum" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding InvoiceNumber, Mode=TwoWay}" Width="100" Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strInvoice" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding InvoiceDateString, Mode=TwoWay}" Width="100" Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strDate" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
     </container:OperationContainer.WorkContent>
+	  <container:OperationContainer.AdditionalContent>
+		  <ScrollViewer>
+			  <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+				  <Border Margin="10,0">
+						<Grid ColumnDefinitions="100,*" RowDefinitions="Auto,Auto,Auto,Auto">
+
+							<Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
+								<controlsEx:AxisTextBlock LocalizeTextKey="strInvoiceData" FontSize="18" Foreground="White"  TextWrapping="Wrap" />
+							</Border>
+							
+							<Border Grid.Row="1" VerticalAlignment="Center">
+								<controlsEx:AxisTextBlock LocalizeTextKey="strNumber" Foreground="White"  Padding="0,0,10,0"  TextWrapping="Wrap"/>
+							</Border>
+							<Border Grid.Row="2" VerticalAlignment="Center">
+								<controlsEx:AxisTextBlock LocalizeTextKey="strDate" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
+							</Border>
+							<Border Grid.Row="3" VerticalAlignment="Center">
+								<controlsEx:AxisTextBlock LocalizeTextKey="strPrepared" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap"/>
+							</Border>			
+
+							<TextBox Text="{Binding SelectedItem.InvoiceNumber, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+							<DatePicker SelectedDate="{Binding SelectedItem.InvoiceDateTimeOffset, Mode=TwoWay}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
+							<TextBox Text="{Binding SelectedItem.InvoicePrepared, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						</Grid>
+				  </Border>
+				  <Border Margin="10,0" Grid.Row="1">
+					  <Grid ColumnDefinitions="100,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+						  <Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strPartnerData" FontSize="18" Foreground="White" TextWrapping="Wrap"   />
+						  </Border>
+
+						  <Border Grid.Row="1" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strTaxNumber" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap" />
+						  </Border>
+						  <Border Grid.Row="2" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strVATNumber" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap" />
+						  </Border>
+						  <Border Grid.Row="3" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strCompanyName" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap" />
+						  </Border>
+						  <Border Grid.Row="4" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strPrincipal" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+						  <Border Grid.Row="5" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strCity" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+						  <Border Grid.Row="6" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strAddress" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+						  <Border Grid.Row="7" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strPhone" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+						  <Border Grid.Row="8" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strReceiver" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+
+						  <TextBox Text="{Binding SelectedItem.Client.TaxNumber, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Client.VATNumber, Mode=TwoWay}" Grid.Row="2" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Client.Name, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Client.Principal, Mode=TwoWay}" Grid.Row="4" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Client.City, Mode=TwoWay}" Grid.Row="5" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Client.Address, Mode=TwoWay}" Grid.Row="6" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Client.Phone, Mode=TwoWay}" Grid.Row="7" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Receiver, Mode=TwoWay}" Grid.Row="8" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+
+					  </Grid>
+				  </Border>
+				  <Border Margin="10,0" Grid.Row="2">
+					  <Grid ColumnDefinitions="100,*" RowDefinitions="Auto,Auto,Auto,Auto">
+
+						  <Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strDealData" FontSize="18" Foreground="White"   />
+						  </Border>
+
+						  <Border Grid.Row="1" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strPlaceDeal" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+						  <Border Grid.Row="2" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strDate" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+						  <Border Grid.Row="3" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strDescription" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap"/>
+						  </Border>
+
+						  <TextBox Text="{Binding SelectedItem.DealPlace, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <DatePicker SelectedDate="{Binding SelectedItem.DealDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
+						  <TextBox Text="{Binding SelectedItem.Description, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+					  </Grid>
+				  </Border>
+				  
+				  <Border  Grid.Row="3" VerticalAlignment="Top" MinHeight="40" HorizontalAlignment="Stretch">
+					  <Button VerticalAlignment="Top" Margin="40,20,40,10" HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="2" Classes="WhiteBorder">
+						  <controlsEx:AxisTextBlock LocalizeTextKey="strPrint" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
+					  </Button>
+				  </Border>
+
+				  <Border Margin="10,0,10,20" Grid.Row="4">
+					  <Grid ColumnDefinitions="100,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+
+						  <Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strFilter" FontSize="18" Foreground="White"  TextWrapping="Wrap" />
+						  </Border>
+
+						  <Border Grid.Row="1" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strPeriod" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap" />
+						  </Border>
+						  <Border Grid.Row="2" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strFrom" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap" />
+						  </Border>
+						  <Border Grid.Row="3" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strTo" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap" />
+						  </Border>
+						  <Border Grid.Row="4" VerticalAlignment="Center">
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strFastSearch" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap" />
+						  </Border>
+
+						  
+					
+						<ComboBox  HorizontalAlignment="Stretch"  Items="{Binding Periods, Mode=TwoWay}" SelectedItem="{Binding SelectedPeriod, Mode=TwoWay}" Grid.Row="1" Height="32" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<controlsEx:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="5,2"  TextAlignment="Left" Padding="0"  />
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>						  
+						<DatePicker SelectedDate="{Binding FromDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
+						<DatePicker SelectedDate="{Binding ToDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
+						 						
+						<TextBox Text="{Binding FilterString, Mode=TwoWay}" Grid.Row="4" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						<Button Grid.Row="4" Grid.Column="1" Content="F" Height="18" Width="18" HorizontalAlignment="Right" Margin="5,1,10,1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+		
+						</Button>				
+				  </Grid>
+				  </Border>
+			  </Grid>
+		  </ScrollViewer>
+	  </container:OperationContainer.AdditionalContent>
   </container:OperationContainer>
   
 </UserControl>

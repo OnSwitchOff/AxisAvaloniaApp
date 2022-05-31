@@ -10,7 +10,6 @@ namespace AxisAvaloniaApp.Views
         public InvoiceView()
         {
             InitializeComponent();
-
             this.DataContext = Splat.Locator.Current.GetRequiredService<ViewModels.InvoiceViewModel>();
         }
 
