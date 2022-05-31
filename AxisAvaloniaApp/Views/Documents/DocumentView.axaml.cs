@@ -2,6 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.UserControls.Models;
+using System;
+using System.Collections.Generic;
 
 namespace AxisAvaloniaApp.Views
 {
@@ -9,7 +12,9 @@ namespace AxisAvaloniaApp.Views
     {
         public DocumentView()
         {
+            this.Resources.Add("SaleColumnWidth", new DataGridLength(100));
             InitializeComponent();
+
         }
 
         private void InitializeComponent()
@@ -17,4 +22,6 @@ namespace AxisAvaloniaApp.Views
             AvaloniaXamlLoader.Load(this);
         }
     }
+
+
 }

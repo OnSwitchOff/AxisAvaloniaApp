@@ -1,4 +1,5 @@
 ﻿using AxisAvaloniaApp.UserControls.Models;
+using ReactiveUI;
 
 namespace AxisAvaloniaApp.Models
 {
@@ -18,7 +19,7 @@ namespace AxisAvaloniaApp.Models
         public string OnlineShopNumber
         {
             get => this.onlineShopNumber;
-            set => this.SetProperty(ref this.onlineShopNumber, value);
+            set => this.RaiseAndSetIfChanged(ref this.onlineShopNumber, value);
         }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace AxisAvaloniaApp.Models
         public ComboBoxItemModel ShopType
         {
             get => this.shopType;
-            set => this.SetProperty(ref this.shopType, value);
+            set => this.RaiseAndSetIfChanged(ref this.shopType, value);
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace AxisAvaloniaApp.Models
         public string OnlineShopDomainName
         {
             get => this.onlineShopDomainName;
-            set => this.SetProperty(ref this.onlineShopDomainName, value);
+            set => this.RaiseAndSetIfChanged(ref this.onlineShopDomainName, value);
         }
     }
 }

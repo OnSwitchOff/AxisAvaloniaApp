@@ -699,6 +699,237 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+
+	  <Data Key="strSale">
+		  <Value Lang="bg-BG">Продажба</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Sale</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Продажа</Value>
+		  <Value Lang="uk-UA">Реалізація</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strDate">
+		  <Value Lang="bg-BG">Дата</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Date</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Дата</Value>
+		  <Value Lang="uk-UA">Дата</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strClient">
+		  <Value Lang="bg-BG">Клиент</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Client</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Клиент</Value>
+		  <Value Lang="uk-UA">Клієнт</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strSum">
+		  <Value Lang="bg-BG">Сума</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Sum</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Сумма</Value>
+		  <Value Lang="uk-UA">Сума</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strInvoice">
+		  <Value Lang="bg-BG">Фактура</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Invoice</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Фактура</Value>
+		  <Value Lang="uk-UA">Фактура</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strDate">
+		  <Value Lang="bg-BG">Дата</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Date</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Дата</Value>
+		  <Value Lang="uk-UA">Дата</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strInvoiceData">
+		  <Value Lang="bg-BG">Данни за фактура</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Invoice data</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Данные фактуры</Value>
+		  <Value Lang="uk-UA">Дані фактури</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strNumber">
+		  <Value Lang="bg-BG">Номер</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Number</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Номер</Value>
+		  <Value Lang="uk-UA">Номер</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strPrepared">
+		  <Value Lang="bg-BG">Съставил</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Prepared</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Подготовил</Value>
+		  <Value Lang="uk-UA">Підготував</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strPartnerData">
+		  <Value Lang="bg-BG">Данни за купувача</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Partner data</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Данные покупателя</Value>
+		  <Value Lang="uk-UA">Дані покупця</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strTaxNumber">
+		  <Value Lang="bg-BG">ЕИК</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Tax number</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Налоговый номер</Value>
+		  <Value Lang="uk-UA">Податковий номер</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strVATNumber">
+		  <Value Lang="bg-BG">ДДС номер</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Number of VAT</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Номер НДС</Value>
+		  <Value Lang="uk-UA">Номер ПДВ</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strCompanyName">
+		  <Value Lang="bg-BG">Име на фирма</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Name of company</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Название компании</Value>
+		  <Value Lang="uk-UA">Назва компанії</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strReceiver">
+		  <Value Lang="bg-BG">Получател</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Receiver</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Получатель</Value>
+		  <Value Lang="uk-UA">Отримувач</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strDealData">
+		  <Value Lang="bg-BG">Данни за сделката</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Deal data</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Данные сделки</Value>
+		  <Value Lang="uk-UA">Дані угоди</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strPlaceDeal">
+		  <Value Lang="bg-BG">Място</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Place</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Место</Value>
+		  <Value Lang="uk-UA">Місце</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strDescription">
+		  <Value Lang="bg-BG">Описание</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Description</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Описание</Value>
+		  <Value Lang="uk-UA">Описання</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strPrint">
+		  <Value Lang="bg-BG">Печат</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Print</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Печать</Value>
+		  <Value Lang="uk-UA">Друк</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strFilter">
+		  <Value Lang="bg-BG">Филтър</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Filter</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Фильтр</Value>
+		  <Value Lang="uk-UA">Фільтр</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strPeriod">
+		  <Value Lang="bg-BG">Период</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Period</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Период</Value>
+		  <Value Lang="uk-UA">Період</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strFrom">
+		  <Value Lang="bg-BG">От</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">From</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">От</Value>
+		  <Value Lang="uk-UA">Від</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strTo">
+		  <Value Lang="bg-BG">До</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">To</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">До</Value>
+		  <Value Lang="uk-UA">До</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strFastSearch">
+		  <Value Lang="bg-BG">Бързо търсене</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Fast search</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Быстрый поиск</Value>
+		  <Value Lang="uk-UA">Швидкий пошук</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
   </Dictionary>
 
   <Dictionary Product="Axis My100R Help" Version="1">
