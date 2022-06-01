@@ -7,15 +7,17 @@ namespace AxisAvaloniaApp.Views
 {
     public partial class InvoiceView : DocumentView
     {
-        public InvoiceView()
+        public InvoiceView():base(Enums.ESerializationGroups.Invoice, Splat.Locator.Current.GetRequiredService<ViewModels.InvoiceViewModel>())
         {
-            InitializeComponent();
-            this.DataContext = Splat.Locator.Current.GetRequiredService<ViewModels.InvoiceViewModel>();
+            //InitializeComponent();           
         }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        //private void InitializeComponent()
+        //{
+        //    AvaloniaXamlLoader.Load(this);
+        //}
+
+
+        
     }
 }

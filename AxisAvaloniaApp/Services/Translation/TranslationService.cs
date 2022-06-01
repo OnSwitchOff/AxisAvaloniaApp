@@ -89,6 +89,7 @@ namespace AxisAvaloniaApp.Services.Translation
         /// <date>12.04.2022.</date>
         public void InitializeDictionary(string languageCode)
         {
+            languageCode = "bg-BG";
             bool firstInitialize = false;
             if (this.SupportedLanguages.Count == 0)
             {

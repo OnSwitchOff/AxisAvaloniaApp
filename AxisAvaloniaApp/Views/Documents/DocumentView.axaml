@@ -7,6 +7,7 @@
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+			 xmlns:conv="using:AxisAvaloniaApp.Converters"
 			 xmlns:ucModels="using:AxisAvaloniaApp.UserControls.Models"
              x:Class="AxisAvaloniaApp.Views.DocumentView">
 	<UserControl.Styles>
@@ -37,8 +38,8 @@
 					  GridLinesVisibility="All"
 					  HorizontalGridLinesBrush="Black"
 					  VerticalGridLinesBrush="Black"
-					  AlternatingRowBackground="Gray"
-					  HeadersVisibility="All">
+					  HeadersVisibility="All"
+					  x:Name="dg">
 				<DataGrid.Styles>
 					<Style Selector="DataGridCell TextBox:focus">
 						<Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -57,34 +58,60 @@
 					<Style Selector="DataGridCell.rightTextAligment TextBlock" >
 						<Setter Property="HorizontalAlignment" Value="Right" />
 					</Style>
+					<Style Selector="DataGridColumnHeader">
+						<Setter Property="ContextMenu">
+							<Setter.Value>								
+								<ContextMenu Name="DocumentContextMenu">
+									<controlsEx:CheckedMenuItem Name="CityMenu" LocalizeTextKey="strCode" />
+									<controlsEx:CheckedMenuItem Name="AddressMenu" LocalizeTextKey="strBarcode"/>
+									<controlsEx:CheckedMenuItem Name="PhoneMenu" LocalizeTextKey="strNote"/>
+								</ContextMenu>
+							</Setter.Value>
+						</Setter>
+					</Style>
 				</DataGrid.Styles>
 				<DataGrid.Columns>
-					<DataGridTextColumn Binding="{Binding Sale, Mode=TwoWay}" SortMemberPath="Sale" Width="{StaticResource SaleColumnWidth}" Foreground="Black">
+					<DataGridTextColumn  Binding="{Binding Sale, Mode=TwoWay}" SortMemberPath="Sale" MinWidth="75"  Width="{StaticResource ColAcctWidth}" Foreground="Black">
 						<DataGridTextColumn.Header>
-							<controlsEx:AxisTextBlock LocalizeTextKey="strSale" />
+							<controlsEx:AxisTextBlock LocalizeTextKey="strSale"  />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding SaleDate, Mode=TwoWay}"  Width="100" Foreground="Black" CellStyleClasses="rightTextAligment">
+					<DataGridTextColumn Binding="{Binding SaleDate, Mode=TwoWay}" MinWidth="75" Width="{StaticResource ColDateWidth}" Foreground="Black" CellStyleClasses="rightTextAligment">
 						<DataGridTextColumn.Header>
 							<controlsEx:AxisTextBlock LocalizeTextKey="strDate" />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding Client.Name, Mode=TwoWay}" Width="*" Foreground="Black">
+					<DataGridTextColumn Binding="{Binding Client.Name, Mode=TwoWay}"  MinWidth="75" Width="*" Foreground="Black">
 						<DataGridTextColumn.Header>
 							<controlsEx:AxisTextBlock LocalizeTextKey="strClient" />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding Amount, Mode=TwoWay}" Width="100" Foreground="Black">
+					<DataGridTextColumn Binding="{Binding Client.City, Mode=TwoWay}" IsVisible="{Binding ElementName=CityMenu, Path=IsChecked, Mode=OneWay}" Width="{StaticResource ColCityWidth}" MinWidth="75" Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strCity" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding Client.Address, Mode=TwoWay}" IsVisible="{Binding ElementName=AddressMenu, Path=IsChecked, Mode=OneWay}" Width="{StaticResource ColAddressWidth}" MinWidth="75"  Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strAddress" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding Client.Phone, Mode=TwoWay}" IsVisible="{Binding ElementName=PhoneMenu, Path=IsChecked, Mode=OneWay}" Width="{StaticResource ColPhoneWidth}" MinWidth="75" Foreground="Black">
+						<DataGridTextColumn.Header>
+							<controlsEx:AxisTextBlock LocalizeTextKey="strPhone" />
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Binding="{Binding Amount, Mode=TwoWay}"  Width="{StaticResource ColSumWidth}" MinWidth="75" Foreground="Black">
 						<DataGridTextColumn.Header>
 							<controlsEx:AxisTextBlock LocalizeTextKey="strSum" />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding InvoiceNumber, Mode=TwoWay}" Width="100" Foreground="Black">
+					<DataGridTextColumn Binding="{Binding InvoiceNumber, Mode=TwoWay}" MinWidth="75"  Width="{StaticResource ColDocumentNumberWidth}" Foreground="Black">
 						<DataGridTextColumn.Header>
 							<controlsEx:AxisTextBlock LocalizeTextKey="strInvoice" />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding InvoiceDateString, Mode=TwoWay}" Width="100" Foreground="Black">
+					<DataGridTextColumn Binding="{Binding InvoiceDateString, Mode=TwoWay}" MinWidth="75"  Width="{StaticResource ColDocumentDateWidth}" Foreground="Black">
 						<DataGridTextColumn.Header>
 							<controlsEx:AxisTextBlock LocalizeTextKey="strDate" />
 						</DataGridTextColumn.Header>
@@ -224,7 +251,7 @@
 						 						
 						<TextBox Text="{Binding FilterString, Mode=TwoWay}" Grid.Row="4" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 						<Button Grid.Row="4" Grid.Column="1" Content="F" Height="18" Width="18" HorizontalAlignment="Right" Margin="5,1,10,1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-		
+			
 						</Button>				
 				  </Grid>
 				  </Border>
