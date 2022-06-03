@@ -14,6 +14,7 @@
     <None Remove="Assets\Icons\arrow_back.png" />
     <None Remove="Assets\Icons\cashRegister.png" />
     <None Remove="Assets\Icons\close.png" />
+    <None Remove="Assets\Icons\delete_all.png" />
     <None Remove="Assets\Icons\doubleArrow_down.png" />
     <None Remove="Assets\Icons\doubleArrow_up.png" />
     <None Remove="Assets\Icons\editPageTitle.png" />
@@ -40,6 +41,7 @@
     <None Remove="Assets\Icons\print.ico" />
     <None Remove="Assets\Icons\reports.png" />
     <None Remove="Assets\Icons\sale.png" />
+    <None Remove="Assets\Icons\search.png" />
     <None Remove="Assets\Icons\settings.png" />
     <None Remove="Assets\Icons\unlock.png" />
     <None Remove="Assets\Icons\YouTube.png" />

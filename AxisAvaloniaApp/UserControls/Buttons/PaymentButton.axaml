@@ -24,7 +24,7 @@
                 CornerRadius="0"
                 Background="#FF1B7E83"
                 Margin="3"
-                Command="{TemplateBinding ButtonClick, Mode=TwoWay}"
+                Command="{TemplateBinding Command, Mode=TwoWay}"
                 CommandParameter="{TemplateBinding PaymentType}">
           <Button.Content>
             <StackPanel Orientation="Vertical">

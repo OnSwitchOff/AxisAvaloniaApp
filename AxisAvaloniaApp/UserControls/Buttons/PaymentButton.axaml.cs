@@ -20,17 +20,17 @@ namespace AxisAvaloniaApp.UserControls.Buttons
             translationService.LanguageChanged += Localize;
         }
 
-        public static readonly StyledProperty<ICommand> ButtonClickProperty =
-           AvaloniaProperty.Register<PaymentButton, ICommand>(nameof(ButtonClick));
+        public static readonly StyledProperty<ICommand> CommandProperty =
+           AvaloniaProperty.Register<PaymentButton, ICommand>(nameof(Command));
 
         /// <summary>
         /// Gets or sets a command to invoke when button was pressed.
         /// </summary>
         /// <date>30.05.2022.</date>
-        public ICommand ButtonClick
+        public ICommand Command
         {
-            get => GetValue(ButtonClickProperty);
-            set => SetValue(ButtonClickProperty, value);
+            get => GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
         }
 
         public static readonly StyledProperty<EPaymentTypes> PaymentTypeProperty =
