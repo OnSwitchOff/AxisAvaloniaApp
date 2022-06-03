@@ -134,6 +134,9 @@ namespace AxisAvaloniaApp.Services.Serialization
                         ESerializationKeys.ColAcctWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColAcctWidth, group, "75"));
                     this.serializationData.Add(
+                        ESerializationKeys.ColDateWidth,
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColDateWidth, group, "100"));
+                    this.serializationData.Add(
                         ESerializationKeys.ColCompanyWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColCompanyWidth, group, "150"));
                     this.serializationData.Add(
@@ -145,9 +148,6 @@ namespace AxisAvaloniaApp.Services.Serialization
                     this.serializationData.Add(
                         ESerializationKeys.ColPhoneWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColPhoneWidth, group, "50"));
-                    this.serializationData.Add(
-                        ESerializationKeys.ColDateWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColDateWidth, group, "100"));
                     this.serializationData.Add(
                         ESerializationKeys.ColSumWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColSumWidth, group, "66"));

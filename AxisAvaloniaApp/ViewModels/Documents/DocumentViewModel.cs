@@ -15,6 +15,7 @@ namespace AxisAvaloniaApp.ViewModels
     public abstract class DocumentViewModel : ViewModelBase
     {
         protected abstract EDocumentTypes documentType { get; }
+
         private DataGridLength saleColumnWidth;
         private ObservableCollection<ComboBoxItemModel> periods;
         private ComboBoxItemModel selectedPeriod;
@@ -110,6 +111,9 @@ namespace AxisAvaloniaApp.ViewModels
         private DateTimeOffset? invoiceDateTimeOffset;    
         private string invoicePrepared;
         private PartnerModel client;
+        private string city;
+        private string address;
+        private string phone;
         private string receiver;
         private string dealDateString;
         private DateTimeOffset? dealDateTimeOffset;
@@ -140,6 +144,9 @@ namespace AxisAvaloniaApp.ViewModels
             get => client;
             set => this.RaiseAndSetIfChanged(ref client, value);
         }
+        public string City { get => city; set => this.RaiseAndSetIfChanged(ref city, value); }
+        public string Address { get => address; set => this.RaiseAndSetIfChanged(ref address, value); }
+        public string Phone { get => phone; set => this.RaiseAndSetIfChanged(ref phone, value); }
         public string Receiver { get => receiver; set => this.RaiseAndSetIfChanged(ref receiver, value); }
         public string DealDateString { get => dealDateString; set => this.RaiseAndSetIfChanged(ref dealDateString, value); }
         public DateTimeOffset? DealDateTimeOffset
