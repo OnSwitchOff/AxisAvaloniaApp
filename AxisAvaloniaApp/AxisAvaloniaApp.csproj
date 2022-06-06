@@ -14,6 +14,7 @@
     <None Remove="Assets\Icons\arrow_back.png" />
     <None Remove="Assets\Icons\cashRegister.png" />
     <None Remove="Assets\Icons\close.png" />
+    <None Remove="Assets\Icons\delete_all.png" />
     <None Remove="Assets\Icons\doubleArrow_down.png" />
     <None Remove="Assets\Icons\doubleArrow_up.png" />
     <None Remove="Assets\Icons\editPageTitle.png" />

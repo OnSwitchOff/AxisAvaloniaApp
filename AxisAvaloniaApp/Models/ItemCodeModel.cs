@@ -12,7 +12,6 @@ namespace AxisAvaloniaApp.Models
         private string code;
         private string measure;
         private double multiplier;
-        private ObservableCollection<string> measures = new ObservableCollection<string> { "шт", "л" };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemCodeModel"/> class.
@@ -63,12 +62,6 @@ namespace AxisAvaloniaApp.Models
         {
             get => this.multiplier;
             set => this.SetProperty(ref this.multiplier, value);
-        }
-
-        public ObservableCollection<string> Measures
-        {
-            get => measures;
-            set => SetProperty(ref measures, value);
         }
 
         /// <summary>

@@ -1,0 +1,44 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AxisAvaloniaApp.UserControls.ComboBoxes"
+        xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions">
+  <Design.PreviewWith>
+    <controls:ComboBoxWithTreeView />
+  </Design.PreviewWith>
+
+  <Style Selector="controls|ComboBoxWithTreeView">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid HorizontalAlignment="Stretch">
+          <controlsEx:AxisComboBox Name="comboBox" 
+                                   MaxDropDownHeight="0"
+                                   PlaceholderText="{TemplateBinding PlaceholderText}"
+                                   HorizontalAlignment="Stretch"
+                                   ExplanationKey="{TemplateBinding ExplanationKey}"/>
+          <Popup HorizontalAlignment="Stretch"
+                 PlacementTarget="{Binding comboBox}" 
+                 PlacementMode="{TemplateBinding PlacementMode}"
+                 IsOpen="{Binding ElementName=comboBox, Path=IsDropDownOpen, Mode=TwoWay}">
+            <TreeView Width="{Binding $parent[TemplatedControl].Bounds.Width}" Name="treeView"
+                      Background="White"
+                      Margin="1, 0, 1, 0"
+                      MaxHeight="150"
+                      Items="{TemplateBinding Items}"
+                      ItemTemplate="{TemplateBinding ItemTemplate}"
+                      SelectedItem="{TemplateBinding SelectedItem, Mode=TwoWay}"
+                      SelectionMode="Single">
+            </TreeView>
+          </Popup>
+        </Grid>        
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="controls|ComboBoxWithTreeView /template/ComboBox[IsDropDownOpen=true]">
+    <Setter Property="CornerRadius" Value="4, 4, 0, 0"/>
+  </Style>
+  <Style Selector="controls|ComboBoxWithTreeView ComboBox[IsDropDownOpen=false]">
+    <Setter Property="CornerRadius" Value="4"/>
+  </Style>
+</Styles>

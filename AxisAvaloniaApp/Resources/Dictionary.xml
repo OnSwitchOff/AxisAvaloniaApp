@@ -346,6 +346,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strDiscount_Percent">
+      <Value Lang="bg-BG">Отстъпка, %</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Discount, %</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Скидка, %</Value>
+      <Value Lang="uk-UA">Знижка, %</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strTotalCost">
       <Value Lang="bg-BG">Стойност</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -466,6 +476,183 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strItemGroup">
+      <Value Lang="bg-BG">Група на стоките</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Group of item</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Группа товара</Value>
+      <Value Lang="uk-UA">Група товару</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strItemsGroups">
+      <Value Lang="bg-BG">Групи на стоките</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Groups of items</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Группы товаров</Value>
+      <Value Lang="uk-UA">Групи товарів</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strItems">
+      <Value Lang="bg-BG">Стоки</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Items</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Товары</Value>
+      <Value Lang="uk-UA">Товари</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
+    <Data Key="strItemType">
+      <Value Lang="bg-BG">Тип на стока</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Type of item</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Тип товара</Value>
+      <Value Lang="uk-UA">Тип товару</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strItemType_Standard">
+      <Value Lang="bg-BG">Стока</Value>
+      <Value Lang="el-GR">Προϊόν</Value>
+      <Value Lang="en-GB">Product</Value>
+      <Value Lang="ro-RO">Produs</Value>
+      <Value Lang="ru-RU">Товар</Value>
+      <Value Lang="uk-UA">Товар</Value>
+      <Value Lang="hy-AM">Արտադրանք</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strItemType_Excise">
+      <Value Lang="bg-BG">Акциз</Value>
+      <Value Lang="el-GR">Ειδικός φόρος κατανάλωσης</Value>
+      <Value Lang="en-GB">Excise tax</Value>
+      <Value Lang="ro-RO">Acciza</Value>
+      <Value Lang="ru-RU">Акциз</Value>
+      <Value Lang="uk-UA">Акциз</Value>
+      <Value Lang="hy-AM">Ակցիզային հարկ</Value>
+    </Data>
+    <Data Key="strItemType_Work">
+      <Value Lang="bg-BG">Работа</Value>
+      <Value Lang="el-GR">Εργασία</Value>
+      <Value Lang="en-GB">Work</Value>
+      <Value Lang="ro-RO">Muncă</Value>
+      <Value Lang="ru-RU">Работа</Value>
+      <Value Lang="uk-UA">Робота</Value>
+      <Value Lang="hy-AM">Աշխատանք</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strItemType_Service">
+      <Value Lang="bg-BG">Услуга</Value>
+      <Value Lang="el-GR">Υπηρεσία</Value>
+      <Value Lang="en-GB">Service</Value>
+      <Value Lang="ro-RO">Serviciu</Value>
+      <Value Lang="ru-RU">Услуга</Value>
+      <Value Lang="uk-UA">Послуга</Value>
+      <Value Lang="hy-AM">Ծառայություն</Value>
+    </Data>
+    <Data Key="strItemType_LottaryTicket">
+      <Value Lang="bg-BG">Билет за лотария</Value>
+      <Value Lang="el-GR">Λαχείο</Value>
+      <Value Lang="en-GB">Lottary ticket</Value>
+      <Value Lang="ro-RO">Bilet de loterie</Value>
+      <Value Lang="ru-RU">Лотерейный билет</Value>
+      <Value Lang="uk-UA">Лотерейний квиток</Value>
+      <Value Lang="hy-AM">Վիճակախաղի տոմս</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strItemType_Payment">
+      <Value Lang="bg-BG">Услуга за плащане</Value>
+      <Value Lang="el-GR">Υπηρεσία πληρωμών</Value>
+      <Value Lang="en-GB">Payment service</Value>
+      <Value Lang="ro-RO">Serviciu de plată</Value>
+      <Value Lang="ru-RU">Платежный сервис</Value>
+      <Value Lang="uk-UA">Платіжний сервіс</Value>
+      <Value Lang="hy-AM">Վճարման ծառայություն</Value>
+    </Data>
+    <Data Key="strItemType_Other">
+      <Value Lang="bg-BG">Друг тип на стока</Value>
+      <Value Lang="el-GR">Άλλο είδος προϊόντος</Value>
+      <Value Lang="en-GB">Other goods type</Value>
+      <Value Lang="ro-RO">Alt tip de produs</Value>
+      <Value Lang="ru-RU">Другой тип товара</Value>
+      <Value Lang="uk-UA">Інший тип товару</Value>
+      <Value Lang="hy-AM">Այլ տեսակի արտադրանք</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strItemName">
+      <Value Lang="bg-BG">Име</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Name</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Наименование</Value>
+      <Value Lang="uk-UA">Найменування</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strAdditionalIds">
+      <Value Lang="bg-BG">Допълнителни идентификатори</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Additional Ids</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дополнительные идентификаторы</Value>
+      <Value Lang="uk-UA">Додаткові ідентифікатори</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strMultiplier">
+      <Value Lang="bg-BG">Коеф.тр.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Multiplier</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Коэф. трансформации</Value>
+      <Value Lang="uk-UA">Коеф. трансформації</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPartnerGroup">
+      <Value Lang="bg-BG">Група на партньорите</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Group of partner</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Группа партнёра</Value>
+      <Value Lang="uk-UA">Група партнера</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPartnersGroups">
+      <Value Lang="bg-BG">Групи на партньорите</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Groups of partners</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Группы партнёров</Value>
+      <Value Lang="uk-UA">Групи партнерів</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPartners">
+      <Value Lang="bg-BG">Партньори</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Partners</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Партнёры</Value>
+      <Value Lang="uk-UA">Партнери</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDiscountCard">
+      <Value Lang="bg-BG">Карта за отстъпки</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Discount card</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Скидочная карта</Value>
+      <Value Lang="uk-UA">Дисконтна карта</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>  
     <Data Key="strFastSearch">
       <Value Lang="bg-BG">Бързо търсене</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -546,6 +733,26 @@
 		<Value Lang="hy-AM">Not translated</Value>
 		<Value Lang="ka-GE">Not translated</Value>
 	</Data>
+    <Data Key="strVATNumber">
+      <Value Lang="bg-BG">ДДС номер</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Number of VAT</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номер НДС</Value>
+      <Value Lang="uk-UA">Номер ПДВ</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVATGroup">
+      <Value Lang="bg-BG">ДДС група</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Group of VAT</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Группа НДС</Value>
+      <Value Lang="uk-UA">Група ПДВ</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	<Data Key="strBankName">
 		<Value Lang="bg-BG">Банка</Value>
 		<Value Lang="el-GR">Not translated</Value>
@@ -566,6 +773,16 @@
 		<Value Lang="hy-AM">Not translated</Value>
 		<Value Lang="ka-GE">Not translated</Value>
 	</Data>
+    <Data Key="strEmail">
+      <Value Lang="bg-BG">E-mail</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">E-mail</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">E-mail</Value>
+      <Value Lang="uk-UA">E-mail</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	<Data Key="strOnlineShopNumber">
 		<Value Lang="bg-BG">Номер на онлайн магазина</Value>
 		<Value Lang="el-GR">Not translated</Value>
@@ -1037,6 +1254,26 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strSave">
+      <Value Lang="bg-BG">Запис</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Save</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Сохранить</Value>
+      <Value Lang="uk-UA">Зберегти</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCancel">
+      <Value Lang="bg-BG">Отказ</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Cancel</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Отменить</Value>
+      <Value Lang="uk-UA">Відмінити</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strExport">
 		  <Value Lang="bg-BG">Експорт</Value>
 		  <Value Lang="el-GR">Not translated</Value>
@@ -1170,7 +1407,227 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
-
+    <Data Key="EnterOrEditItemCode">
+      <Value Lang="bg-BG">Въведете или редактирайте кода на стоката. Полето приема произволни буквено-цифрови стойности, но препоръчваме да въвеждате до 5 цифри с чел по-лесно търсене на тази стока в бъдеще. При създаване на нова стока, програма Axis My100R предлага и автоматично попълва следващия свободен код на стока.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit code of item. You can use any digits and letters, but we recommend to use no more as 5 digits to aesy a search. App proposes default item code for new item.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте код товара. Вы можете использовать любые цифры и буквы, но мы рекомендуем использовать цифры в количестве не не более 5 для облегчения поиска. При создании нового товара программа сама предлагает код товара по умолчанию.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте код товару. Ви можете використовувати будь-які цифри і букви, але ми рекомендуємо використовувати цифри в кількості не не більше 5 для полегшення пошуку. При створенні нового товару програма сама пропонує код товару за замовчуванням.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditItemName">
+      <Value Lang="bg-BG">Въведете или редактирайте името на стоката. Въведете данните така, както ще ви е най-удобно при търсене на стоката, като имате предвид, че въведените данни ще бъдат отпечатвани във фискалните бонове, стоковите разписки и фактурите, които се издават от програмата.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit name of item. Entered name should be easy for you to search, but you must remember this name will use in the receipts, invoices, reports etc.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте название товара. Введенное название должно быть удобным для поиска, но вы должны помнить, что оно будет использоваться в квитанциях, счетах-фактурах, отчетах и ​​т.д.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте назву товару. Введена назва має бути зручною для пошуку, але ви повинні пам'ятати, що вона буде використовуватися в квитанціях, рахунках-фактурах, звітах і т.д.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditItemBarcode">
+      <Value Lang="bg-BG">Въведете или редактирайте основния баркод на стоката. Ако полето се оцвети в червен цвят, това означава, че въведените цифри не отговарят на EAN-8 или EAN-13 стандарта, но въпреки това програма Axis My100R ще приеме и обработва този код. Препоръчително е използване на баркодове само с цифри, като полето позволява въвеждане на буквено-цифрени баркодове.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit barcode of item. If field is colored by red entered value is not barcode but app will save it either way. It is recommended to use digits without special symbols and spaces.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте штрих-код товара. Если поле окрашено в красный цвет, введенное значение не является штрих-кодом, но приложение все равно его сохранит. Рекомендуется использовать цифры без специальных символов и пробелов.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте штрих-код товару. Якщо поле забарвлене в червоний колір, введене значення не є штрих-кодом, але програма все одно його збереже. Рекомендується використовувати цифри без спеціальних символів і пробілів.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="ChooseItemGroup">
+      <Value Lang="bg-BG">Изберете група на стоката. Полето е автоматично попълнено с последно избрания елемент от списъка с групите.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Choose item group. Default value is the last selected group.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите группу товаров. Значение по умолчанию - последняя выбранная группа.</Value>
+      <Value Lang="uk-UA">Виберіть групу товарів. Значення за замовчуванням - остання обрана група.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectItemVATGroup">
+      <Value Lang="bg-BG">Укажете ДДС групата на стоката. Тази група ще участва при печат на фискални документи и данъчни фактури.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select the VAT group of the item from the dropdown list. This group will be used for fiscal receipts and invoices.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">В раскрывающемся списке выберите группу НДС товара. Эта группа будет использоваться для фискальных чеков и счетов-фактур.</Value>
+      <Value Lang="uk-UA">У списку виберіть групу ПДВ товару. Ця група буде використовуватися для фіскальних чеків і рахунків-фактур.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectItemType">
+      <Value Lang="bg-BG">Посочете типа на стоката от падащия списък. Ако не знаете или не можете да определите типа на стоката - оставете стойността по подразбиране в програмата.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select the item type from the dropdown list. If you don't know the type of the item, leave the default.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите тип товара из раскрывающегося списка. Если вы не знаете тип товара, оставьте значение по умолчанию.</Value>
+      <Value Lang="uk-UA">Виберіть тип товару із списку. Якщо ви не знаєте тип товару, залиште значення за замовчуванням.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditItemSalePrice">
+      <Value Lang="bg-BG">Въведете или редактирайте продажната цена на стоката. Цената включва ДДС и е форматирана според регионалните настройки на валутата в операционната система Windows.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit sale price of item with VAT.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте цену реализации товара с НДС.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте ціну реалізації товару з ПДВ.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditCompanyName">
+      <Value Lang="bg-BG">Въведете или редактирайте точното юридическо наименование на фирмата. Тази информация ще се отпечатва върху фактурите и справките. Препоръчваме да не използвате кавички или други специални знаци. Изпишете данните правилно. Ако това е частно лице, въведете нейното име.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit the exact name of company. This information will be printed on invoices and reports. If it is possible, avoid using quotation marks or other special characters. If it is a private person you should enter its name.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте точное название компании. Эта информация будет напечатана на счетах-фактурах и в отчётах. По возможности избегайте использования кавычек или других специальных символов. Если это частное лицо, вам следует указать его имя.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте точну назву компанії. Ця інформація буде надрукована на рахунках-фактурах та у звітах. По можливості уникайте використання лапок або інших спеціальних символів. Якщо це приватна особа, вам слід вказати її ім'я.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditPrincipal">
+      <Value Lang="bg-BG">Въведете или редактирайте материално отговорното лице на фирмата. Ако това е частно лице, въведете отново нейното име, както в полето за име на фирмата. Полето ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit financial person in charge of company. If it is a private person you should enter name like in the 'Name of company' field. This value will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте материально-ответственное лицо компании. Если это физическое лицо, введите имя, как в поле «Название компании». Это значение будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте матеріально-відповідальну особу компанії. Якщо це фізична особа, введіть ім'я, як в полі «Назва компанії». Це значення буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditRegisterData_City">
+      <Value Lang="bg-BG">Въведете или редактирайте града по адресна регистрация на тази фирма или града, в който работи този продукт. Полето ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit the city where the company is registered or the city where Axis My100R operates. This value will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте город, в котором зарегистрирована данная компания, или город, в котором работает Axis My100R. Это значение будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте місто, в якому зареєстрована дана компанія, або місто, в якому працює Axis My100R. Це значення буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditRegisterData_Address">
+      <Value Lang="bg-BG">Въведете или редактирайте адреса според регистрацията на тази фирма или адреса на обекта, в който работи този продукт. Препоръчваме да не използвате кавички или други специални знаци. Полето ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit the address where the company is registered or the address where Axis My100R operates. Avoid using quotes and other special characters whenever possible. This value will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте адрес, по которому зарегистрирована данная компания, или адрес, по которому работает Axis My100R. По возможности избегайте использования кавычек и других специальных символов. Это значение будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте адресу, за якою зареєстрована дана компанія, або адреса, за якою працює Axis My100R. По можливості уникайте використання лапок та інших спеціальних символів. Це значення буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditPhone">
+      <Value Lang="bg-BG">Въведете или редактирайте телефона, на който можете да намерите партньора. Този телефон ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit phone to connect with partner. This phone will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте телефон для связи с партнером. Этот телефон будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте телефон для зв'язку з партнером. Цей телефон буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditTaxNumber">
+      <Value Lang="bg-BG">Въведете или редактирайте ЕИК на тази фирма. Не използвайте интервали, въведете само цифри. Ако това е частно лице може да въведете нейното ЕГН или да оставите полето празно. Тази информация се използва при издаването на фактури след Продажба на стоки. Ако полето е оцветено в червено, това означава, че имате грешка при въвеждане на данните.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit tax number of company. If it is a private person you can enter its tax number. This number will be used in documents prepared by Axis My100R. If field is colored by red it means you entered invalid tax number.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте налоговый номер данной компании. Если это частное лицо, вы можете ввести его налоговый номер. Этот номер будет использоваться в документах, подготовленных Axis My100R. Если поле окрашено в красный цвет, значит, вы ввели неверный налоговый номер.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте податковий номер даної компанії. Якщо це приватна особа, ви можете ввести її податковий номер. Цей номер буде використовуватися в документах, підготовлених Axis My100R. Якщо поле забарвлене в червоний колір, значить, ви ввели невірний податковий номер.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditVATNumber">
+      <Value Lang="bg-BG">Въведете или редактирайте ДДС номер на фирмата, ако тя има активна ДДС регистрация. Не използвайте интервали, въведете префикс от 2 латински букви и след това само цифри. Ако това е частно лице оставете полето празно. Тази информация се използва при издаването на фактури след Продажба на стоки. Ако полето е оцветено в червено, това означава, че имате грешка при въвеждане на данните.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit VAT number of a company if it has registered as VAT payer. This number will be used in documents prepared by Axis My100R. If field is colored by red it means you entered invalid VAT number.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте номер плательщика НДС данной компании, если она зарегистрирована как плательщик НДС. Этот номер будет использоваться в документах, подготовленных Axis My100R. Если поле окрашено в красный цвет, значит, вы ввели неверный номер плательщика НДС.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте номер платника ПДВ даної компанії, якщо вона зареєстрована як платник ПДВ. Цей номер буде використовуватися в документах, підготовлених Axis My100R. Якщо поле забарвлене в червоний колір, значить, ви ввели невірний номер платника ПДВ.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditCompanyBankName">
+      <Value Lang="bg-BG">Въведете или редактирайте името на банката, обслужваща този партньор.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit the name of the bank serving this partner.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте название банка, обслуживающего данного партнёра.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте назву банку, який обслуговує партнера.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditCompanyBankBIC">
+      <Value Lang="bg-BG">Въведете или редактирайте BIC на банката, обслужваща този партньор.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit the BIC of the bank serving this partner.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте BIC банка, обслуживающего данного партнёра.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте BIC банку, який обслуговує партнера.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditCompanyIBAN">
+      <Value Lang="bg-BG">Въведете или редактирайте номера на банковата сметка на този партньор.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit the bank account number of this partner.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте номер банковского счёта данного партнёра.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте номер банківського рахунку партнера.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditPartnerDiscountCard">
+      <Value Lang="bg-BG">Въведете или редактирайте номер на карта за отстъпка за този партньор. При всяка продажба на този партньор, програмата автоматично ще попълва в съответното поле процент отстъпка от групата на партньора, като по този начин ще имате индивидуална система за лоялни клиенти.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit discount card number of partner. App will use discount of partner from a group of partners for every purchase of this partner so you will have something like a loyalty program.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте номер дисконтной карты партнёра. При каждой покупке программа автоматически заполнит имеющуюся у данного партнёра  скидку (берётся из группы партнёров), что позволит вам использовать программу лояльности.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте номер дисконтної картки партнера. При кожній покупці програма автоматично заповнить наявну у даного партнера знижку (береться з групи партнерів), що дозволить вам використовувати програму лояльності.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditPartnerEmail">
+      <Value Lang="bg-BG">Въведете или редактирайте e-mail, на който можете да намерите партньора. Този e-mail ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit e-mail to connect with partner. This e-mail will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте e-mail для связи с партнером. Этот e-mail будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте e-mail для зв'язку з партнером. Цей e-mail буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectPartnerGroup">
+      <Value Lang="bg-BG">Изберете група на партньора. Полето е автоматично попълнено с последно избрания елемент от списъка с групите.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Choose partner group. Default value is the last selected group.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите группу партнёров. Значение по умолчанию - последняя выбранная группа.</Value>
+      <Value Lang="uk-UA">Виберіть групу партнерів. Значення за замовчуванням - остання обрана група.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditGroupName">
+      <Value Lang="bg-BG">Въведете или редактирайте името на групата.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit name of group.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте название группы.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте назву групи.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOrEditGroupDiscount">
+      <Value Lang="bg-BG">Въведете или редактирайте процент отстъпка, която ще се прилага за всички елементи от тази група.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter or edit percent of discount that will use for all elements including in this group.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите или отредактируйте процент скидки, которая будет использоваться для всех элементов, входящих в эту группу.</Value>
+      <Value Lang="uk-UA">Введіть або відредагуйте відсоток знижки, яка буде використовуватися для всіх елементів, що входять в цю групу.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    
     <!--Продажа-->
     <Data Key="EnterPartnerData">
       <Value Lang="bg-BG">Въведете фирма или част от името на фирма за да филтрирате таблицата отдясно. Филтърът работи по Код, ЕИК, Адрес и всички други полета от таблицата с партньорите. За потвърждение изберете партньор от дясната част или натиснете Enter. Полето може да бъде заключено с катинара, при което всички следващи операции ще се извършат със същата фирма.</Value>
