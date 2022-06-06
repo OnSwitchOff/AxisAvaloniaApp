@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microinvest.CommonLibrary.Enums;
+﻿using Microinvest.CommonLibrary.Enums;
+using ReactiveUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -8,7 +8,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of item.
     /// </summary>
-    public class ItemModel : ObservableObject
+    public class ItemModel : ReactiveObject
     {
         private int id;
         private string code;
@@ -48,7 +48,7 @@ namespace AxisAvaloniaApp.Models
         public int Id
         {
             get => this.id;
-            set => this.SetProperty(ref this.id, value);
+            set => this.RaiseAndSetIfChanged(ref this.id, value);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace AxisAvaloniaApp.Models
         public string Code
         {
             get => this.code;
-            set => this.SetProperty(ref this.code, value);
+            set => this.RaiseAndSetIfChanged(ref this.code, value);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace AxisAvaloniaApp.Models
         public ObservableCollection<ItemCodeModel> Codes
         {
             get => this.codes;
-            set => this.SetProperty(ref this.codes, value);
+            set => this.RaiseAndSetIfChanged(ref this.codes, value);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace AxisAvaloniaApp.Models
         public string Name
         {
             get => this.name;
-            set => this.SetProperty(ref this.name, value);
+            set => this.RaiseAndSetIfChanged(ref this.name, value);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace AxisAvaloniaApp.Models
         public string Barcode
         {
             get => this.barcode;
-            set => this.SetProperty(ref this.barcode, value);
+            set => this.RaiseAndSetIfChanged(ref this.barcode, value);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace AxisAvaloniaApp.Models
             get => this.measure;
             set
             {
-                this.SetProperty(ref this.measure, value);
+                this.RaiseAndSetIfChanged(ref this.measure, value);
             }
         }
 
@@ -111,7 +111,7 @@ namespace AxisAvaloniaApp.Models
         public decimal Price
         {
             get => this.price;
-            set => this.SetProperty(ref this.price, value);
+            set => this.RaiseAndSetIfChanged(ref this.price, value);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace AxisAvaloniaApp.Models
         public GroupModel Group
         {
             get => this.group;
-            set => this.SetProperty(ref this.group, value);
+            set => this.RaiseAndSetIfChanged(ref this.group, value);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace AxisAvaloniaApp.Models
         public VATGroupModel VATGroup
         {
             get => this.vATGroup;
-            set => this.SetProperty(ref this.vATGroup, value);
+            set => this.RaiseAndSetIfChanged(ref this.vATGroup, value);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace AxisAvaloniaApp.Models
         public EItemTypes ItemType
         {
             get => this.itemType;
-            set => this.SetProperty(ref this.itemType, value);
+            set => this.RaiseAndSetIfChanged(ref this.itemType, value);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace AxisAvaloniaApp.Models
         public ENomenclatureStatuses Status
         {
             get => this.status;
-            set => this.SetProperty(ref this.status, value);
+            set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
 

@@ -109,7 +109,16 @@ namespace AxisAvaloniaApp.ViewModels
             ItemsGroups.Add(itemGroup);
             PartnersGroups.Add(partnerGroup);
 
-            SelectedPartnersGroup = PartnersGroups[1].SubGroups[1];
+            SelectedItemsGroup = ItemsGroups[1].SubGroups[0];
+            //ItemsGroups[1].IsSelected = true;
+            //ItemsGroups[1].IsExpanded = true;
+            //SelectedItemsGroup.IsSelected = true;
+            //SelectedItemsGroup.IsExpanded = true;
+            SelectedPartnersGroup = PartnersGroups[0].SubGroups[0];
+            //PartnersGroups[0].IsSelected = true;
+            //PartnersGroups[0].IsExpanded = true;
+            //SelectedPartnersGroup.IsSelected = true;
+            //SelectedPartnersGroup.IsExpanded = true;
 
 
             Partners = new ObservableCollection<PartnerModel>();
@@ -521,8 +530,9 @@ namespace AxisAvaloniaApp.ViewModels
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="items">List of items.</param>
         /// <date>03.06.2022.</date>
-        public void AddItem(ItemModel item)
+        public void DeleteItems(System.Collections.IList items)
         {
             // TODO: initialize method
         }
@@ -530,8 +540,19 @@ namespace AxisAvaloniaApp.ViewModels
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="items">List of items.</param>
         /// <date>03.06.2022.</date>
         public void AddItems(System.Collections.IList items)
+        {
+            // TODO: initialize method
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="partner"></param>
+        /// <date>03.06.2022.</date>
+        public void AddPartner(PartnerModel partner)
         {
             // TODO: initialize method
         }

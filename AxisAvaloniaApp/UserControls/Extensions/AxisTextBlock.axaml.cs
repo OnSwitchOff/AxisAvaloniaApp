@@ -37,11 +37,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         public string LocalizeTextKey
         {
             get => GetValue(LocalizeTextKeyProperty);
-            set
-            {
-                SetValue(LocalizeTextKeyProperty, value);
-            }     
-            
+            set => SetValue(LocalizeTextKeyProperty, value);
         }
 
         /// <summary>

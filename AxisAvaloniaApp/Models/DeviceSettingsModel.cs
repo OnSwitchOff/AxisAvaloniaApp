@@ -1,12 +1,12 @@
 ﻿using AxisAvaloniaApp.UserControls.Models;
-using CommunityToolkit.Mvvm.ComponentModel;
+using ReactiveUI;
 
 namespace AxisAvaloniaApp.Models
 {
     /// <summary>
     /// Describes data to set device settings.
     /// </summary>
-    public class DeviceSettingsModel : ObservableObject
+    public class DeviceSettingsModel : ReactiveObject
     {
         private ComboBoxItemModel manufacturer;
         private ComboBoxItemModel model;
@@ -26,7 +26,7 @@ namespace AxisAvaloniaApp.Models
         public ComboBoxItemModel Manufacturer
         {
             get => this.manufacturer;
-            set => this.SetProperty(ref this.manufacturer, value);
+            set => this.RaiseAndSetIfChanged(ref this.manufacturer, value);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace AxisAvaloniaApp.Models
         public ComboBoxItemModel Model
         {
             get => this.model;
-            set => this.SetProperty(ref this.model, value);
+            set => this.RaiseAndSetIfChanged(ref this.model, value);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace AxisAvaloniaApp.Models
         public ComboBoxItemModel Protocol
         {
             get => this.protocol;
-            set => this.SetProperty(ref this.protocol, value);
+            set => this.RaiseAndSetIfChanged(ref this.protocol, value);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace AxisAvaloniaApp.Models
         public string SerialPort
         {
             get => this.serialPort;
-            set => this.SetProperty(ref this.serialPort, value);
+            set => this.RaiseAndSetIfChanged(ref this.serialPort, value);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace AxisAvaloniaApp.Models
         public int BaudRate
         {
             get => this.baudRate;
-            set => this.SetProperty(ref this.baudRate, value);
+            set => this.RaiseAndSetIfChanged(ref this.baudRate, value);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace AxisAvaloniaApp.Models
         public string IPAddress
         {
             get => this.iPAddress;
-            set => this.SetProperty(ref this.iPAddress, value);
+            set => this.RaiseAndSetIfChanged(ref this.iPAddress, value);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace AxisAvaloniaApp.Models
         public int IPPort
         {
             get => this.iPPort;
-            set => this.SetProperty(ref this.iPPort, value);
+            set => this.RaiseAndSetIfChanged(ref this.iPPort, value);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace AxisAvaloniaApp.Models
         public string Login
         {
             get => this.login;
-            set => this.SetProperty(ref this.login, value);
+            set => this.RaiseAndSetIfChanged(ref this.login, value);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace AxisAvaloniaApp.Models
         public string Password
         {
             get => this.password;
-            set => this.SetProperty(ref this.password, value);
+            set => this.RaiseAndSetIfChanged(ref this.password, value);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace AxisAvaloniaApp.Models
         public int OperatorCode
         {
             get => this.operatorCode;
-            set => this.SetProperty(ref this.operatorCode, value);
+            set => this.RaiseAndSetIfChanged(ref this.operatorCode, value);
         }
     }
 }

@@ -1,0 +1,39 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AxisAvaloniaApp.UserControls.GroupBox"
+        xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions">
+    <Design.PreviewWith>
+      <controls:GroupBox />
+    </Design.PreviewWith>
+
+  <Style Selector="controls|GroupBox">
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="Padding" Value="5, 10, 5, 5"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid>
+          <Border Background="Transparent" 
+                  BorderBrush="{TemplateBinding BorderBrush}" 
+                  BorderThickness="{TemplateBinding BorderThickness}" 
+                  Margin="3, 8, 3, 0" 
+                  Padding="{Binding $parent[Template].Padding, Mode=TwoWay}">
+            <StackPanel Orientation="Vertical">
+              <ContentPresenter Content="{TemplateBinding Content}" Margin="{TemplateBinding ContentMargin, Mode=TwoWay}"/>
+            </StackPanel>
+          </Border>
+          <StackPanel Background="{TemplateBinding ParentBackground}" 
+                      Margin="5, 0"
+                      VerticalAlignment="Top" 
+                      HorizontalAlignment="Left">
+            <controlsEx:AxisTextBlock Text="{TemplateBinding Header}" 
+                                      LocalizeTextKey="{TemplateBinding LocalizeTextKey}"
+                                      Foreground="{Binding $parent[Template].Foreground}"
+                                      FontSize="{Binding $parent[Template].FontSize}"
+                                      FontWeight="{Binding $parent[Template].FontWeight}"
+                                      Margin="{TemplateBinding HeaderMargin}"/>
+          </StackPanel>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Generators;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using AxisAvaloniaApp.Enums;
@@ -18,71 +20,77 @@ namespace AxisAvaloniaApp.Views
 {
     public partial class SaleView : UserControl
     {
-        DataGrid saleGrid;
+        private DataGrid saleGrid;
+        private DataGrid itemsGrid;
+        private DataGrid partnersGrid;
         ContextMenu saleContextMenu;
         TreeView itemsGroupsTreeView;
         TreeView partnersGroupsTreeView;
         private readonly ISerializationService serializationSale;
+        private readonly ISerializationService serializationItems;
+        private readonly ISerializationService serializationPartners;
+        private Dictionary<int, ESerializationKeys> saleDataGridColumns;
+        private Dictionary<int, ESerializationKeys> itemsDataGridColumns;
+        private Dictionary<int, ESerializationKeys> partnersDataGridColumns;
 
         public SaleView()
         {
             InitializeComponent();
 
-            IsPaymentPanelVisible = false;
-            IsPayInCashPanelVisible = false;
-            IsEditPanelVisible = false;
-
             this.DataContext = Splat.Locator.Current.GetRequiredService<ViewModels.SaleViewModel>();
             (this.DataContext as ViewModels.ViewModelBase).ViewClosing += SerializeVisualData;
 
             serializationSale = Splat.Locator.Current.GetRequiredService<ISerializationService>();
-            serializationSale.InitSerializationData(Enums.ESerializationGroups.Sale);
-            saleGrid = this.FindControl<DataGrid>("SaleGrid");
-            foreach (var column in saleGrid.Columns)
-            {
-                switch (column.DisplayIndex)
-                {
-                    case 0:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColCodeWidth]);
-                        break;
-                    case 1:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColBarcodeWidth]);
-                        break;
-                    case 3:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColMeasureWidth]);
-                        break;
-                    case 4:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColQuantityWidth]);
-                        break;
-                    case 5:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColPriceWidth]);
-                        break;
-                    case 6:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColDiscountWidth]);
-                        break;
-                    case 7:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColTotalSumWidth]);
-                        break;
-                    case 8:
-                        column.Width = new DataGridLength((double)serializationSale[Enums.ESerializationKeys.ColNoteWidth]);
-                        break;
-                }
-            }
+            serializationItems = Splat.Locator.Current.GetRequiredService<ISerializationService>();
+            serializationPartners = Splat.Locator.Current.GetRequiredService<ISerializationService>();            
 
-            itemsGroupsTreeView = this.FindControl<TreeView>("ItemsGroupsTreeView");
-            partnersGroupsTreeView = this.FindControl<TreeView>("PartnersGroupsTreeView");
-
-            saleContextMenu = this.FindControl<ContextMenu>("SaleContextMenu");
-            if (saleContextMenu != null)
+            saleDataGridColumns = new Dictionary<int, ESerializationKeys>()
             {
-                foreach(CheckedMenuItem item in saleContextMenu.Items)
-                {
-                    if (item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
-                    {
-                        item.IsChecked = ((EAdditionalSaleTableColumns)serializationSale[ESerializationKeys.AddColumns] & column) > 0;
-                    }                    
-                }
-            }
+                {1, ESerializationKeys.ColCodeWidth},
+                {2, ESerializationKeys.ColBarcodeWidth },
+                {4, ESerializationKeys.ColMeasureWidth },
+                {5, ESerializationKeys.ColQuantityWidth },
+                {6, ESerializationKeys.ColPriceWidth },
+                {7, ESerializationKeys.ColDiscountWidth },
+                {8, ESerializationKeys.ColTotalSumWidth },
+                {9, ESerializationKeys.ColNoteWidth },
+            };
+
+            itemsDataGridColumns = new Dictionary<int, ESerializationKeys>()
+            {
+                {1, ESerializationKeys.ColCodeWidth},
+                {2, ESerializationKeys.ColBarcodeWidth },
+                {3, ESerializationKeys.ColMeasureWidth },
+                {4, ESerializationKeys.ColPriceWidth },
+                {5, ESerializationKeys.ColVATGroupWidth },
+            };
+
+            partnersDataGridColumns = new Dictionary<int, ESerializationKeys>()
+            {
+                {1, ESerializationKeys.ColPrincipalWidth},
+                {2, ESerializationKeys.ColPhoneWidth},
+                {3, ESerializationKeys.ColCityWidth},
+                {4, ESerializationKeys.ColAddressWidth},
+                {5, ESerializationKeys.ColTaxNumberWidth},
+                {6, ESerializationKeys.ColVATNumberWidth},
+                {7, ESerializationKeys.ColEMailWidth},
+                {8, ESerializationKeys.ColDiscountCardWidth},
+            };
+            
+            IsPaymentPanelVisible = false;
+            IsPayInCashPanelVisible = false;
+            IsEditPanelVisible = false;
+
+            DeserializeVisualData();
+
+
+
+
+
+
+
+
+            
 
             TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
             if (textBox != null)
@@ -101,6 +109,86 @@ namespace AxisAvaloniaApp.Views
             {
                 textBoxVATNumber.KeyDown += TextBoxFindPartner_KeyDown;
             }
+        }
+
+        private void DeserializeVisualData()
+        {
+            serializationSale.InitSerializationData(ESerializationGroups.Sale);
+            saleGrid = this.FindControl<DataGrid>("SaleGrid");
+            foreach (var column in saleGrid.Columns)
+            {
+                if (saleDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    column.Width = new DataGridLength((double)serializationSale[saleDataGridColumns[column.DisplayIndex]]);
+                }
+            }
+            saleContextMenu = this.FindControl<ContextMenu>("SaleContextMenu");
+            if (saleContextMenu != null)
+            {
+                foreach (CheckedMenuItem item in saleContextMenu.Items)
+                {
+                    if (item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
+                    {
+                        item.IsChecked = ((EAdditionalSaleTableColumns)serializationSale[ESerializationKeys.AddColumns] & column) > 0;
+                    }
+                }
+            }
+
+            serializationItems.InitSerializationData(ESerializationGroups.ItemsNomenclature);
+            itemsGroupsTreeView = this.FindControl<TreeView>("ItemsGroupsTreeView");
+            itemsGrid = this.FindControl<DataGrid>("ItemsGrid");
+            foreach (var column in itemsGrid.Columns)
+            {
+                if (itemsDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    column.Width = new DataGridLength((double)serializationItems[itemsDataGridColumns[column.DisplayIndex]]);
+                }
+            }
+
+            serializationPartners.InitSerializationData(ESerializationGroups.PartnersNomenclature);
+            partnersGroupsTreeView = this.FindControl<TreeView>("PartnersGroupsTreeView");
+            partnersGroupsTreeView.SelectionChanged += dsadsa;
+            partnersGroupsTreeView.ItemContainerGenerator.Dematerialized += fsdf;
+            partnersGroupsTreeView.ItemContainerGenerator.Materialized += fsdf1;
+            partnersGroupsTreeView.ItemContainerGenerator.Recycled += fsdf2;
+            //partnersGroupsTreeView.AttachedToVisualTree += trerfsd;
+        }
+
+        private void dsadsa(object? sender, SelectionChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void fsdf2(object? sender, ItemContainerEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void fsdf1(object? sender, ItemContainerEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void fsdf(object? sender, ItemContainerEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void ItemsGroupsTreeView_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void PartnersGroupsTreeView_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void OnMeasureInvalidated()
+        {
+            base.OnMeasureInvalidated();
+
+           // if (partnersGroupsTreeView.ItemContainerGenerator.Index = .Containers.)
         }
 
         private void SerializeVisualData(string viewId)
@@ -225,27 +313,27 @@ namespace AxisAvaloniaApp.Views
             base.OnPropertyChanged(change);
         }
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
+        //protected override void OnInitialized()
+        //{
+        //    base.OnInitialized();
 
-            TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
-            if (textBox != null)
-            {
-                textBox.Focus();
-            }
-        }
+        //    TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
+        //    if (textBox != null)
+        //    {
+        //        textBox.Focus();
+        //    }
+        //}
 
-        public override void EndInit()
-        {
-            base.EndInit();
+        //public override void EndInit()
+        //{
+        //    base.EndInit();
 
-            //TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
-            //if (textBox != null)
-            //{
-            //    textBox.Focus();
-            //}
-        }
+        //    //TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
+        //    //if (textBox != null)
+        //    //{
+        //    //    textBox.Focus();
+        //    //}
+        //}
 
         private void ChangeIsPaymentPanelVisible()
         {
@@ -327,24 +415,14 @@ namespace AxisAvaloniaApp.Views
             }
         }
 
-        private void ItemsGroupsTreeView_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        private void ItemsGroupsTreeView_GotFocus(object? sender, GotFocusEventArgs e)
         {
-            switch (e.Property.Name)
-            { 
-                case nameof(TreeView.SelectedItem):
-                    ActiveNomenclature = ENomenclatures.ItemsGroups;
-                    break;
-            }
+            ActiveNomenclature = ENomenclatures.ItemsGroups;
         }
 
-        private void PartnersGroupsTreeView_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        private void PartnersGroupsTreeView_GotFocus(object? sender, GotFocusEventArgs e)
         {
-            switch (e.Property.Name)
-            {
-                case nameof(TreeView.SelectedItem):
-                    ActiveNomenclature = ENomenclatures.PartnersGroups;
-                    break;
-            }
+            ActiveNomenclature = ENomenclatures.PartnersGroups;
         }
 
         private void EditNomenclatureButton_Click(object? sender, RoutedEventArgs e)
