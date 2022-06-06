@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AxisAvaloniaApp.Models;
 using Avalonia.Controls;
 using AxisAvaloniaApp.UserControls.Models;
+using System.Reactive;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -16,15 +17,23 @@ namespace AxisAvaloniaApp.ViewModels
     {
         protected abstract EDocumentTypes documentType { get; }
 
-        private DataGridLength saleColumnWidth;
+        #region MainContent
+        private DocumentItem selectedItem;
+        private ObservableCollection<DocumentItem> items;
+        #endregion
+
+        #region Filter section
         private ObservableCollection<ComboBoxItemModel> periods;
         private ComboBoxItemModel selectedPeriod;
+
         private string fromDateString;
         private DateTimeOffset? fromDateTimeOffset;
+
         private string toDateString;
         private DateTimeOffset? toDateTimeOffset;
+
         private string filterString;
-        private DocumentItem selectedItem;
+        #endregion
 
         public DocumentItem SelectedItem {
             get=>selectedItem;
@@ -33,7 +42,7 @@ namespace AxisAvaloniaApp.ViewModels
                 this.RaiseAndSetIfChanged(ref selectedItem, value);
             }
         }
-        public ObservableCollection<DocumentItem> Items { get; set; }
+        public ObservableCollection<DocumentItem> Items { get => items; set => this.RaiseAndSetIfChanged(ref items, value); }
         public ObservableCollection<ComboBoxItemModel> Periods
         {
             get => periods;
@@ -103,26 +112,41 @@ namespace AxisAvaloniaApp.ViewModels
 
     public class DocumentItem: ReactiveObject
     {
+        #region Fields
         private string sale;
-        private string saleDate;
-        private string amount;
-        private string invoiceNumber;
-        private string invoiceDateString;
-        private DateTimeOffset? invoiceDateTimeOffset;    
-        private string invoicePrepared;
+        private string saleDateString;
+        private DateTimeOffset? saleDateTimeOffset;
         private PartnerModel client;
         private string city;
         private string address;
         private string phone;
+        private string amount;
+        private string invoiceNumber;
+        private string invoiceDateString;
+        private DateTimeOffset? invoiceDateTimeOffset;        
+        private string invoicePrepared;
         private string receiver;
         private string dealDateString;
         private DateTimeOffset? dealDateTimeOffset;
         private string dealPlace;
         private string description;
+        #endregion
 
-
+        #region Properties
         public string Sale { get => sale; set => this.RaiseAndSetIfChanged(ref sale, value); }
-        public string SaleDate { get => saleDate; set => this.RaiseAndSetIfChanged(ref saleDate, value); }
+        public string SaleDateString { get => saleDateString; set => this.RaiseAndSetIfChanged(ref saleDateString, value); }
+        public DateTimeOffset? SaleDateTimeOffset
+        {
+            get => saleDateTimeOffset;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref saleDateTimeOffset, value);
+                if (value != null)
+                {
+                    SaleDateString = ((DateTimeOffset)SaleDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                }
+            }
+        }
         public string Amount { get => amount; set => this.RaiseAndSetIfChanged(ref amount, value); }
         public string InvoiceNumber { get => invoiceNumber; set => this.RaiseAndSetIfChanged(ref invoiceNumber, value); }
         public string InvoiceDateString { get => invoiceDateString; set => this.RaiseAndSetIfChanged(ref invoiceDateString, value); }
@@ -163,12 +187,16 @@ namespace AxisAvaloniaApp.ViewModels
         }
         public string DealPlace { get => dealPlace; set =>  this.RaiseAndSetIfChanged(ref dealPlace, value);}
         public string Description { get => description; set => this.RaiseAndSetIfChanged(ref description, value);}
-       
+        #endregion
+
+        #region Commands
+        public ReactiveCommand<Unit, Unit> PrintCommand { get;}
+        #endregion
 
         public DocumentItem()
         {
             Sale = "sale";
-            SaleDate = "saleDate";            
+            SaleDateTimeOffset = new DateTimeOffset(DateTime.Now);         
             Amount = "amount";
             InvoiceNumber = "invoice#";
             InvoiceDateTimeOffset = new DateTimeOffset(DateTime.Now);
@@ -195,25 +223,26 @@ namespace AxisAvaloniaApp.ViewModels
             DealPlace = "DealPlace";
             Description = "Description";
 
-         
+
+            PrintCommand = ReactiveCommand.Create(Print);
         }
 
-        public DocumentItem(string sale, string saleDate, PartnerModel client, string amount, string invoice, DateTime invoiceDate)
+        public DocumentItem(string sale, DateTime saleDate, PartnerModel client, string amount, string invoice, DateTime invoiceDate)
         {
             Sale = sale;
-            SaleDate = saleDate;
+            SaleDateTimeOffset = new DateTimeOffset(saleDate);
             Client = client;
             Amount = amount;
             InvoiceNumber = invoice;
             InvoiceDateTimeOffset = new DateTimeOffset(invoiceDate);
+            PrintCommand = ReactiveCommand.Create(Print);
         }
 
         public DocumentItem(int x)
         {
 
-
             Sale = "sale"+x;
-            SaleDate = "saleDate";
+            SaleDateTimeOffset = new DateTimeOffset(DateTime.Now); ;
             InvoicePrepared = "InvoicePrepared"+x;
 
             Client = new PartnerModel();
@@ -240,8 +269,12 @@ namespace AxisAvaloniaApp.ViewModels
             DealPlace = "DealPlace";
             Description = "Description";
 
+            PrintCommand = ReactiveCommand.Create(Print);
         }
 
-      
+        void Print()
+        {
+
+        }      
     }
 }
