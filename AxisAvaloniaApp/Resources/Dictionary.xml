@@ -84,6 +84,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="strPurchase">
+		<Value Lang="bg-BG">Покупка</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Purchase</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Покупка</Value>
+		<Value Lang="uk-UA">Покупка</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
     <Data Key="strSale">
       <Value Lang="bg-BG">Продажба</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -1024,6 +1034,26 @@
 		  <Value Lang="ro-RO">Not translated</Value>
 		  <Value Lang="ru-RU">Быстрый поиск</Value>
 		  <Value Lang="uk-UA">Швидкий пошук</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strExport">
+		  <Value Lang="bg-BG">Експорт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Export</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Экспорт</Value>
+		  <Value Lang="uk-UA">Експорт</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strImport">
+		  <Value Lang="bg-BG">Импорт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Import</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Импорт</Value>
+		  <Value Lang="uk-UA">Імпорт</Value>
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>

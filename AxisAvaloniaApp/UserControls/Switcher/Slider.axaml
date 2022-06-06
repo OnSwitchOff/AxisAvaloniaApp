@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="120" d:DesignHeight="30"
+			 xmlns:ext="using:AxisAvaloniaApp.UserControls.Extensions"
+             x:Class="AxisAvaloniaApp.UserControls.Switcher.Slider"
+			 x:Name="UC">
+	<Canvas x:Name="canvas"  VerticalAlignment="Stretch">
+		<Border  x:Name="glyph" PointerEnter="Glyph_PointerEnter" PointerLeave="Glyph_PointerExit" Canvas.Top="0" VerticalAlignment="Stretch">
+			<Grid x:Name="gr" ColumnDefinitions="Auto,Auto,Auto" VerticalAlignment="Stretch">
+				<Border x:Name="LeftContent">
+					<ext:AxisTextBlock LocalizeTextKey="{Binding ElementName=UC, Path=LeftContentKey}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Border>
+				<Border Grid.Column="1"  Width="{Binding ElementName=UC, Path=GlyphWidth, Mode=TwoWay}">
+					<Ellipse Width="10" Height="10" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="tgl"    Fill="{Binding ElementName=UC, Path=Foreground}"  >
+					</Ellipse>
+				</Border>
+				<Border x:Name="RightContent"  Grid.Column="2">
+					<ext:AxisTextBlock   LocalizeTextKey="{Binding ElementName=UC, Path=RightContentKey}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Border>
+			</Grid>
+		</Border>
+	</Canvas>
+</UserControl>

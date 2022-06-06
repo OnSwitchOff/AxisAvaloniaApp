@@ -76,7 +76,7 @@
 							<controlsEx:AxisTextBlock LocalizeTextKey="strSale"  />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding SaleDate, Mode=TwoWay}" MinWidth="75" Width="{StaticResource ColDateWidth}" Foreground="Black" CellStyleClasses="rightTextAligment">
+					<DataGridTextColumn Binding="{Binding SaleDateString, Mode=TwoWay}" MinWidth="75" Width="{StaticResource ColDateWidth}" Foreground="Black" CellStyleClasses="rightTextAligment">
 						<DataGridTextColumn.Header>
 							<controlsEx:AxisTextBlock LocalizeTextKey="strDate" />
 						</DataGridTextColumn.Header>
@@ -122,7 +122,7 @@
     </container:OperationContainer.WorkContent>
 	  <container:OperationContainer.AdditionalContent>
 		  <ScrollViewer>
-			  <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+			  <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Margin="6,0">
 				  <Border Margin="10,0">
 						<Grid ColumnDefinitions="100,*" RowDefinitions="Auto,Auto,Auto,Auto">
 
@@ -212,7 +212,7 @@
 				  </Border>
 				  
 				  <Border  Grid.Row="3" VerticalAlignment="Top" MinHeight="40" HorizontalAlignment="Stretch">
-					  <Button VerticalAlignment="Top" Margin="40,20,40,10" HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="2" Classes="WhiteBorder">
+					  <Button VerticalAlignment="Top" Margin="40,20,40,10" Command="{Binding SelectedItem.PrintCommand}" HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="2" Classes="WhiteBorder">
 						  <controlsEx:AxisTextBlock LocalizeTextKey="strPrint" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
 					  </Button>
 				  </Border>
@@ -249,10 +249,10 @@
 						<DatePicker SelectedDate="{Binding FromDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
 						<DatePicker SelectedDate="{Binding ToDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
 						 						
-						<TextBox Text="{Binding FilterString, Mode=TwoWay}" Grid.Row="4" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
-						<Button Grid.Row="4" Grid.Column="1" Content="F" Height="18" Width="18" HorizontalAlignment="Right" Margin="5,1,10,1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-			
-						</Button>				
+						<TextBox Text="{Binding FilterString, Mode=TwoWay}" Watermark="FilterString" Grid.Row="4" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						<Border Grid.Row="4" Grid.Column="1" Height="24" Width="24"	Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,10,0" Padding="0" >
+							<Image Source="/Assets/Icons/search.png"/>
+						</Border>				
 				  </Grid>
 				  </Border>
 			  </Grid>

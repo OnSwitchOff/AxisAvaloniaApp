@@ -40,6 +40,7 @@
     <None Remove="Assets\Icons\print.ico" />
     <None Remove="Assets\Icons\reports.png" />
     <None Remove="Assets\Icons\sale.png" />
+    <None Remove="Assets\Icons\search.png" />
     <None Remove="Assets\Icons\settings.png" />
     <None Remove="Assets\Icons\unlock.png" />
     <None Remove="Assets\Icons\YouTube.png" />

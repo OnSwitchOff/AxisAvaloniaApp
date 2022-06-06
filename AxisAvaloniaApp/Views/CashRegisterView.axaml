@@ -2,8 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:container="using:AxisAvaloniaApp.UserControls"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+            
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="1450"
+			 xmlns:container="using:AxisAvaloniaApp.UserControls"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
@@ -25,37 +26,37 @@
 					<Border Margin="10">
 						<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,30,Auto,Auto,Auto,30,Auto,Auto,60,Auto,Auto">
 
-							<Button Grid.Row="0" Grid.Column="0"  Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
-								<controlsEx:AxisTextBlock Text="Z-отчёт" Foreground="White" TextAlignment="Center" />
+							<Button Grid.Row="0" Grid.Column="0"  Margin="0" Command="{Binding Z_ReportCommand}" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+								<controlsEx:AxisTextBlock Text="Z-отчёт"  Foreground="White" TextAlignment="Center" />
 							</Button>
-							<Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<Button Grid.Row="0" Grid.Column="1" Command="{Binding X_ReportCommand}" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="X-отчёт" Foreground="White" TextAlignment="Center" />
 							</Button>
-							<Button Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<Button Grid.Row="1" Grid.ColumnSpan="2" Command="{Binding DuplicateChequeCommand}" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="Дубликат чека" Foreground="White"  TextAlignment="Center"/>
 							</Button>
 
 							<controlsEx:AxisTextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Внесение/Снятие денег с кассы" VerticalAlignment="Stretch" Foreground="White" TextAlignment="Center" />
-							<TextBox Grid.Row="4" Grid.ColumnSpan="2" CornerRadius="0" Margin="0,3" Padding="10,0" TextAlignment="Right" VerticalContentAlignment="Center" Background="White" BorderThickness="0"/>
-							<Button Grid.Row="5" Grid.Column="0"  Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<TextBox Grid.Row="4" Text="{Binding CashAmount, Mode=TwoWay}" Grid.ColumnSpan="2" CornerRadius="0" Margin="0,3" Padding="10,0" TextAlignment="Right" VerticalContentAlignment="Center" Background="White" BorderThickness="0"/>
+							<Button Grid.Row="5" Grid.Column="0" Command="{Binding DepositeCashCommand}"  Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="Внесение" Foreground="White" TextAlignment="Center" />
 							</Button>
-							<Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<Button Grid.Row="5" Grid.Column="1" Command="{Binding WithdrawCashCommand}" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="Снятие" Foreground="White" TextAlignment="Center" />
 							</Button>
 
 							<controlsEx:AxisTextBlock Grid.Row="7" Grid.ColumnSpan="2" Text="Месячные отчеты" Margin="0,3" VerticalAlignment="Stretch" Foreground="White" TextAlignment="Center" />
-							<Button Grid.Row="8" Grid.Column="0"  Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<Button Grid.Row="8" Grid.Column="0" Command="{Binding CurrentMonthReportCommand}"  Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="Текущий месяц" Foreground="White" TextAlignment="Center" />
 							</Button>
-							<Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<Button Grid.Row="8" Grid.Column="1" Command="{Binding LastMonthReportCommand}" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="Предыдущий месяц" Foreground="White" TextAlignment="Center" />
 							</Button>
 
-							<Button Grid.Row="10" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<Button Grid.Row="10" Grid.ColumnSpan="2" Command="{Binding ResetPOSterminalCommand}" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="Обнулить POS-терминал" Foreground="White"  TextAlignment="Center"/>
 							</Button>
-							<Button Grid.Row="11" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
+							<Button Grid.Row="11" Grid.ColumnSpan="2" Command="{Binding ClearCommand}" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="White">
 								<controlsEx:AxisTextBlock Text="Очистить" Foreground="White"  TextAlignment="Center"/>
 							</Button>
 							
