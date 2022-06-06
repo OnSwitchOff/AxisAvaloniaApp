@@ -12,6 +12,7 @@ namespace AxisAvaloniaApp.Models
     public class OperationItemModel : ReactiveObject
     {
         private ItemModel item;
+        private int recordId;
         private string code;
         private string name;
         private string barcode;
@@ -31,6 +32,7 @@ namespace AxisAvaloniaApp.Models
         public OperationItemModel()
         {
             this.item = new ItemModel();
+            this.recordId = 1;
             this.code = string.Empty;
             this.name = string.Empty;
             this.barcode = string.Empty;
@@ -56,6 +58,16 @@ namespace AxisAvaloniaApp.Models
         {
             get => item;
             set => this.RaiseAndSetIfChanged(ref item, value);
+        }
+
+        /// <summary>
+        /// Gets or sets id of the record.
+        /// </summary>
+        /// <date>03.06.2022.</date>
+        public int RecordId
+        {
+            get => recordId;
+            set => this.RaiseAndSetIfChanged(ref recordId, value);
         }
 
         /// <summary>

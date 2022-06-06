@@ -183,9 +183,6 @@ namespace AxisAvaloniaApp.Services.Serialization
                         ESerializationKeys.SelectedGroupNodeTag,
                         new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupNodeTag, group, "-2"));
                     this.serializationData.Add(
-                        ESerializationKeys.ColNameWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColNameWidth, group, "50"));
-                    this.serializationData.Add(
                         ESerializationKeys.ColCodeWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColCodeWidth, group, "35"));
                     this.serializationData.Add(
@@ -209,9 +206,6 @@ namespace AxisAvaloniaApp.Services.Serialization
                         ESerializationKeys.SelectedGroupNodeTag,
                         new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupNodeTag, group, "-2"));
                     this.serializationData.Add(
-                        ESerializationKeys.ColCompanyWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColCompanyWidth, group, "90"));
-                    this.serializationData.Add(
                         ESerializationKeys.ColPrincipalWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColPrincipalWidth, group, "90"));
                     this.serializationData.Add(
@@ -234,7 +228,7 @@ namespace AxisAvaloniaApp.Services.Serialization
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColVATNumberWidth, group, "80"));
                     this.serializationData.Add(
                         ESerializationKeys.ColDiscountCardWidth,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.ColVATGroupWidth, group, "90"));
+                        new SerializationItemModel(this.serialization, ESerializationKeys.ColDiscountCardWidth, group, "90"));
                     break;
             }
         }

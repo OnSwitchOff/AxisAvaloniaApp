@@ -2,9 +2,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:container="using:AxisAvaloniaApp.UserControls"
+             xmlns:groupBox="using:AxisAvaloniaApp.UserControls.GroupBox"
+             mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="450"
              x:Class="AxisAvaloniaApp.Views.ReportsView">
-  <Grid>
-    <TextBlock Text="Reports view!"/>
-  </Grid>
+
+  <UserControl.Styles>
+    <StyleInclude Source="/Styles/DataGrid.axaml"/>
+    <StyleInclude Source="/Styles/TextBlock.axaml"/>
+  </UserControl.Styles>
+  
+  <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}">
+    <container:OperationContainer.TitleContent>
+      <TextBlock Text="{Binding Title, Mode=TwoWay}" Classes="Title"/>
+    </container:OperationContainer.TitleContent>
+    <container:OperationContainer.WorkContent>
+      <DataGrid Name="ReportGrid" AutoGenerateColumns="True" Items="{Binding Source, Mode=TwoWay}" />
+    </container:OperationContainer.WorkContent>
+    <container:OperationContainer.AdditionalContent>
+      <Grid RowDefinitions="*, auto, *">
+        <TreeView Grid.Row="0" Background="Red">
+          
+        </TreeView>
+        
+        <groupBox:GroupBox Grid.Row="1"
+                           LocalizeTextKey="strFilter">
+          <groupBox:GroupBox.Content>
+            <StackPanel>
+              <TextBlock Text="dada" Foreground="Black"/>
+              <TextBlock  Text="Test" Foreground="White" Margin="5, 0, 5, 0"/>
+            </StackPanel>
+          </groupBox:GroupBox.Content>
+        </groupBox:GroupBox>
+      </Grid>
+    </container:OperationContainer.AdditionalContent>
+  </container:OperationContainer>
 </UserControl>

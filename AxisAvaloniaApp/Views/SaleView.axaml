@@ -30,20 +30,8 @@
 
   <UserControl.Styles>
     <StyleInclude Source="/Styles/DataGrid.axaml"/>
+    <StyleInclude Source="/Styles/TextBlock.axaml"/>
     
-    <Style Selector="TextBlock.Title">
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="FontSize" Value="14"/>
-      <Setter Property="FontWeight" Value="Bold"/>
-    </Style>
-
-    <Style Selector="TextBlock.Edit">
-      <Setter Property="HorizontalAlignment" Value="Left"/>
-      <Setter Property="VerticalAlignment" Value="Center"/>
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="Margin" Value="5, 0, 5, 0"/>
-    </Style>
-
     <Style Selector="TextBox.RightMargin">
       <Setter Property="Margin" Value="0, 0, 5, 0"/>
     </Style>
@@ -60,6 +48,10 @@
     <Style Selector="FlyoutPresenter">
       <Setter Property="Background" Value="#28adb9"/>
       <Setter Property="Padding" Value="0"/>
+    </Style>
+    
+    <Style Selector="TreeViewItem">
+      <Setter Property="IsExpanded" Value="True" />
     </Style>
   </UserControl.Styles>
   
@@ -182,6 +174,9 @@
                   SelectionMode="Extended"
                   SelectedItem="{Binding selectedOrderRecord, Mode=TwoWay}"
                   PropertyChanged="DataGridSale_PropertyChanged">
+          <DataGrid.KeyBindings>
+            <KeyBinding Gesture="Delete" Command="{Binding DeleteItems}" CommandParameter="{Binding $self.SelectedItems}"/>
+          </DataGrid.KeyBindings>
           <DataGrid.Styles>
             <Style Selector="DataGridColumnHeader">
               <Setter Property="ContextMenu">
@@ -196,17 +191,23 @@
             </Style>
           </DataGrid.Styles>
           <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding RecordId}"
+                                MinWidth="40"
+                                IsReadOnly="True"
+                                CellStyleClasses="Right"
+                                CanUserSort="False" 
+                                DisplayIndex="0"/>
             <DataGridTextColumn Binding="{Binding Code}"
                                 IsVisible="{Binding ElementName=CodeMenu, Path=IsChecked, Mode=OneWay}"
                                 CellStyleClasses="Right"
-                                DisplayIndex="0">
+                                DisplayIndex="1">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strCode"/>
               </DataGridTextColumn.Header>
             </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Barcode}" 
                                 IsVisible="{Binding ElementName=BarcodeMenu, Path=IsChecked, Mode=OneWay}"
-                                DisplayIndex="1">
+                                DisplayIndex="2">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strBarcode"/>
               </DataGridTextColumn.Header>
@@ -214,12 +215,12 @@
             <DataGridTextColumn Binding="{Binding Name}" 
                                 Width="*"
                                 MinWidth="200"
-                                DisplayIndex="2">
+                                DisplayIndex="3">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strGoods"/>
               </DataGridTextColumn.Header>
             </DataGridTextColumn>
-            <DataGridTemplateColumn DisplayIndex="3">
+            <DataGridTemplateColumn DisplayIndex="4">
               <DataGridTemplateColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strMeasure"/>
               </DataGridTemplateColumn.Header>
@@ -246,28 +247,28 @@
             </DataGridTemplateColumn>
             <DataGridTextColumn Binding="{Binding Qty, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Qty}}" 
                                 CellStyleClasses="Right"
-                                DisplayIndex="4">
+                                DisplayIndex="5">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strQtty"/>
               </DataGridTextColumn.Header>
             </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Price, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}}"
                                 CellStyleClasses="Right"
-                                DisplayIndex="5">
+                                DisplayIndex="6">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strPrice"/>
               </DataGridTextColumn.Header>
             </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Discount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}}"
                                 CellStyleClasses="Right"
-                                DisplayIndex="6">
+                                DisplayIndex="7">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strDiscount"/>
               </DataGridTextColumn.Header>
             </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Amount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}}"
                                 CellStyleClasses="Right"
-                                DisplayIndex="7" 
+                                DisplayIndex="8" 
                                 IsReadOnly="True">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strTotalCost"/>
@@ -275,7 +276,7 @@
             </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Note}"
                                 IsVisible="{Binding ElementName=NoteMenu, Path=IsChecked, Mode=OneWay}"
-                                DisplayIndex="8">
+                                DisplayIndex="9">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strNote"/>
               </DataGridTextColumn.Header>
@@ -828,7 +829,7 @@
           <!--Edit group of partners-->
           <Grid RowDefinitions="auto, auto, *"
                 ColumnDefinitions="auto, *"
-                IsVisible="{Binding $parent[UserControl].ActiveNomenclature, Converter={StaticResource NomenclatureToBool}, ConverterParameter={x:Static miEnums:ENomenclatures.ItemsGroups}}">
+                IsVisible="{Binding $parent[UserControl].ActiveNomenclature, Converter={StaticResource NomenclatureToBool}, ConverterParameter={x:Static miEnums:ENomenclatures.PartnersGroups}}">
             <controlsEx:AxisTextBlock Grid.Row="0"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -881,8 +882,13 @@
                         Name="ItemsGroupsTreeView"
                         Items="{Binding ItemsGroups, Mode=TwoWay}"
                         SelectedItem="{Binding SelectedItemsGroup, Mode=TwoWay}"
-                        Background="White"
-                        PropertyChanged="ItemsGroupsTreeView_PropertyChanged">
+                        Background="White" 
+                        GotFocus="ItemsGroupsTreeView_GotFocus">
+                <TreeView.Styles>
+                  <Style Selector="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}"/>
+                  </Style>
+                </TreeView.Styles>
                 <TreeView.DataTemplates>
                   <TreeDataTemplate ItemsSource="{Binding SubGroups}">
                     <TextBlock Text="{Binding Name}"/>
@@ -908,7 +914,7 @@
                 </DataGrid.KeyBindings>
                 <i:Interaction.Behaviors>
                   <ia:EventTriggerBehavior EventName="DoubleTapped">
-                    <ia:InvokeCommandAction Command="{Binding AddItem}" CommandParameter="{Binding $self.SelectedItem}"/>
+                    <ia:InvokeCommandAction Command="{Binding AddItems}" CommandParameter="{Binding $self.SelectedItems}"/>
                   </ia:EventTriggerBehavior>
                 </i:Interaction.Behaviors>
                 <DataGrid.Styles>
@@ -988,9 +994,9 @@
               <TreeView Grid.Row="1"
                         Name="PartnersGroupsTreeView"
                         Items="{Binding PartnersGroups, Mode=TwoWay}"
-                        SelectedItem="{Binding SelectedPartnesGroup, Mode=TwoWay}"
-                        Background="White"
-                        PropertyChanged="PartnersGroupsTreeView_PropertyChanged">
+                        SelectedItem="{Binding SelectedPartnersGroup, Mode=TwoWay}"
+                        Background="White" 
+                        GotFocus="PartnersGroupsTreeView_GotFocus">
                 <TreeView.ItemTemplate>
                   <TreeDataTemplate ItemsSource="{Binding SubGroups}">
                     <TextBlock Text="{Binding Name}"/>
@@ -1008,6 +1014,14 @@
                         Items="{Binding Partners, Mode=TwoWay}"
                         SelectedItem="{Binding SelectedPartner}"
                         SelectionMode="Single">
+                <DataGrid.KeyBindings>
+                  <KeyBinding Gesture="Enter" Command="{Binding AddPartner}" CommandParameter="{Binding $self.SelectedItem}"/>
+                </DataGrid.KeyBindings>
+                <i:Interaction.Behaviors>
+                  <ia:EventTriggerBehavior EventName="DoubleTapped">
+                    <ia:InvokeCommandAction Command="{Binding AddPartner}" CommandParameter="{Binding $self.SelectedItem}"/>
+                  </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
                 <DataGrid.Styles>
                   <Style Selector="DataGridColumnHeader">
                     <Setter Property="ContextMenu">

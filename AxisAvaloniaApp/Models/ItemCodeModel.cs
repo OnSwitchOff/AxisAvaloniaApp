@@ -1,12 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
+﻿using ReactiveUI;
 
 namespace AxisAvaloniaApp.Models
 {
     /// <summary>
     /// Describes data of additional code of item.
     /// </summary>
-    public class ItemCodeModel : ObservableObject
+    public class ItemCodeModel : ReactiveObject
     {
         private int id;
         private string code;
@@ -31,7 +30,7 @@ namespace AxisAvaloniaApp.Models
         public int Id
         {
             get => this.id;
-            set => this.SetProperty(ref this.id, value);
+            set => this.RaiseAndSetIfChanged(ref this.id, value);
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace AxisAvaloniaApp.Models
         public string Code
         {
             get => this.code;
-            set => this.SetProperty(ref this.code, value);
+            set => this.RaiseAndSetIfChanged(ref this.code, value);
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace AxisAvaloniaApp.Models
         public string Measure
         {
             get => this.measure;
-            set => this.SetProperty(ref this.measure, value);
+            set => this.RaiseAndSetIfChanged(ref this.measure, value);
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace AxisAvaloniaApp.Models
         public double Multiplier
         {
             get => this.multiplier;
-            set => this.SetProperty(ref this.multiplier, value);
+            set => this.RaiseAndSetIfChanged(ref this.multiplier, value);
         }
 
         /// <summary>

@@ -37,6 +37,7 @@ using Avalonia.Platform;
 using AxisAvaloniaApp.Services.Printing;
 using Avalonia;
 using AxisAvaloniaApp.Services.Explanation;
+using AxisAvaloniaApp.Services.Reports;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -67,6 +68,7 @@ namespace AxisAvaloniaApp.Services
             services.RegisterLazySingleton<IExplanationService>(() => new ExplanationService());            
             services.RegisterLazySingleton<ILoggerService>(() => new LoggerService());
             services.RegisterLazySingleton<IValidationService>(() => new ValidationService());
+            services.Register<IReportsService>(() => new BulgarianReportsService());
 
             switch (AvaloniaLocator.Current.GetService<IRuntimePlatform>().GetRuntimeInfo().OperatingSystem)
             {
@@ -83,11 +85,11 @@ namespace AxisAvaloniaApp.Services
                     throw new NotImplementedException("Service to print doesn't implemented!");
             }
 
-            RegisterViewModels(services);
+            RegisterViewModels(services, resolver);
             RegisterRepositories(services, resolver);
         }
 
-        private static void RegisterViewModels(IMutableDependencyResolver services)
+        private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.Register(() => new MainWindowViewModel());
             services.Register(() => new SaleViewModel());
@@ -97,7 +99,7 @@ namespace AxisAvaloniaApp.Services
             services.Register(() => new CreditNoteViewModel());
             services.Register(() => new CashRegisterViewModel());
             services.Register(() => new ExchangeViewModel());
-            services.Register(() => new ReportsViewModel());
+            services.Register(() => new ReportsViewModel(resolver.GetRequiredService<IReportsService>()));
             services.Register(() => new SettingsViewModel());
         }
 

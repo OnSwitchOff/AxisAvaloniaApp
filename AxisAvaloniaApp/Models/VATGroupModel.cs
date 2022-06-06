@@ -1,11 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using ReactiveUI;
 
 namespace AxisAvaloniaApp.Models
 {
     /// <summary>
     /// Describes data of VAT group.
     /// </summary>
-    public class VATGroupModel : ObservableObject
+    public class VATGroupModel : ReactiveObject
     {
         private int id;
         private string name;
@@ -28,7 +28,7 @@ namespace AxisAvaloniaApp.Models
         public int Id
         {
             get => this.id;
-            set => this.SetProperty(ref this.id, value);
+            set => this.RaiseAndSetIfChanged(ref this.id, value);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace AxisAvaloniaApp.Models
         public string Name
         {
             get => this.name;
-            set => this.SetProperty(ref this.name, value);
+            set => this.RaiseAndSetIfChanged(ref this.name, value);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace AxisAvaloniaApp.Models
         public double Value
         {
             get => this.value;
-            set => this.SetProperty(ref this.value, value);
+            set => this.RaiseAndSetIfChanged(ref this.value, value);
         }
 
         /// <summary>

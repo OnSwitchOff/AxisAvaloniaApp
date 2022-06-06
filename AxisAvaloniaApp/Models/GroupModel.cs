@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using ReactiveUI;
 using System.Collections.ObjectModel;
 
 namespace AxisAvaloniaApp.Models
@@ -6,7 +6,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of group.
     /// </summary>
-    public class GroupModel : ObservableObject
+    public class GroupModel : ReactiveObject
     {
         private int id;
         private string name;
@@ -36,7 +36,7 @@ namespace AxisAvaloniaApp.Models
         public int Id
         {
             get => this.id;
-            set => this.SetProperty(ref this.id, value);
+            set => this.RaiseAndSetIfChanged(ref this.id, value);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace AxisAvaloniaApp.Models
         public string Name
         {
             get => this.name;
-            set => this.SetProperty(ref this.name, value);
+            set => this.RaiseAndSetIfChanged(ref this.name, value);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace AxisAvaloniaApp.Models
         public string Path
         {
             get => this.path;
-            set => this.SetProperty(ref this.path, value);
+            set => this.RaiseAndSetIfChanged(ref this.path, value);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace AxisAvaloniaApp.Models
         public double Discount
         {
             get => this.discount;
-            set => this.SetProperty(ref this.discount, value);
+            set => this.RaiseAndSetIfChanged(ref this.discount, value);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace AxisAvaloniaApp.Models
         public bool IsExpanded
         {
             get => this.isExpanded;
-            set => this.SetProperty(ref this.isExpanded, value);
+            set => this.RaiseAndSetIfChanged(ref this.isExpanded, value);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace AxisAvaloniaApp.Models
         public GroupModel ParentGroup
         {
             get => this.parentGroup;
-            set => this.SetProperty(ref this.parentGroup, value);
+            set => this.RaiseAndSetIfChanged(ref this.parentGroup, value);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace AxisAvaloniaApp.Models
         public ObservableCollection<GroupModel> SubGroups
         {
             get => this.subGroups;
-            set => this.SetProperty(ref this.subGroups, value);
+            set => this.RaiseAndSetIfChanged(ref this.subGroups, value);
         }
 
         /// <summary>
