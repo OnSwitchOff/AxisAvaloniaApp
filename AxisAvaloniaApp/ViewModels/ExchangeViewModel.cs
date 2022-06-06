@@ -18,20 +18,21 @@ namespace AxisAvaloniaApp.ViewModels
         private ObservableCollection<ComboBoxItemModel> exportToItems;
         private ComboBoxItemModel selectedExportToItem;
         private bool isSaleOperation;
-        public bool IsImportDirection { get => isImportDirection; set => this.RaiseAndSetIfChanged(ref isImportDirection, value); }  
+        public bool IsImportDirection { get => isImportDirection; set { this.RaiseAndSetIfChanged(ref isImportDirection, value); this.RaisePropertyChanged("IsAnotherApplication");}  }
         public ObservableCollection<ComboBoxItemModel> ImportFromItems
         {
             get => importFromItems;
             set => this.RaiseAndSetIfChanged(ref importFromItems, value);
         }
-        public ComboBoxItemModel SelectedImportFromItem { get => selectedImportFromItem; set => this.RaiseAndSetIfChanged(ref selectedImportFromItem, value); }
+        public ComboBoxItemModel SelectedImportFromItem { get => selectedImportFromItem; set { this.RaiseAndSetIfChanged(ref selectedImportFromItem, value); this.RaisePropertyChanged("IsAnotherApplication"); } }
         public ObservableCollection<ComboBoxItemModel> ExportToItems
         {
             get => exportToItems;
             set => this.RaiseAndSetIfChanged(ref exportToItems, value);
         }
-        public ComboBoxItemModel SelectedExportToItem { get => selectedExportToItem; set => this.RaiseAndSetIfChanged(ref selectedExportToItem, value); }
-        public bool IsSaleOperation { get => isSaleOperation; set => this.RaiseAndSetIfChanged(ref isSaleOperation, value); }
+        public ComboBoxItemModel SelectedExportToItem { get => selectedExportToItem; set { this.RaiseAndSetIfChanged(ref selectedExportToItem, value);  this.RaisePropertyChanged("IsAnotherApplication"); } }
+    public bool IsSaleOperation { get => isSaleOperation; set => this.RaiseAndSetIfChanged(ref isSaleOperation, value); }
+        public bool IsAnotherApplication { get => (IsImportDirection && SelectedImportFromItem != null &&  SelectedImportFromItem.Key == "item1") || (!IsImportDirection && SelectedExportToItem != null && SelectedExportToItem.Key == "item1"); }
         public ReactiveCommand<Unit, Unit> ChangeDirectionCommand { get; }
 
         public ExchangeViewModel()

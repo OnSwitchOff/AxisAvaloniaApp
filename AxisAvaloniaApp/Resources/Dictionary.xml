@@ -1294,6 +1294,45 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+	  <Data Key="strExchangeDirection">
+		  <Value Lang="bg-BG">Посока на обмен</Value>
+		  <Value Lang="el-GR">Κατεύθυνση ανταλλαγής</Value>
+		  <Value Lang="en-GB">Exchange direction</Value>
+		  <Value Lang="ro-RO">Direcția de schimb</Value>
+		  <Value Lang="ru-RU">Направление обмена</Value>
+		  <Value Lang="uk-UA">Напрямок обміну</Value>
+		  <Value Lang="hy-AM">Փոխանակման ուղղություն</Value>
+	  </Data>
+	  <Data Key="strExportTo">
+		  <Value Lang="bg-BG">Експортиране в</Value>
+		  <Value Lang="el-GR">Εξαγωγή στο</Value>
+		  <Value Lang="en-GB">Export to</Value>
+		  <Value Lang="ro-RO">Exportați în</Value>
+		  <Value Lang="ru-RU">Экспорт к</Value>
+		  <Value Lang="uk-UA">Експорт до</Value>
+		  <Value Lang="hy-AM">Արտահանել ին</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strImportFrom">
+		  <Value Lang="bg-BG">Импортиране от</Value>
+		  <Value Lang="el-GR">Εισαγωγή από το </Value>
+		  <Value Lang="en-GB">Import from</Value>
+		  <Value Lang="ro-RO">Importați din</Value>
+		  <Value Lang="ru-RU">Импорт из</Value>
+		  <Value Lang="uk-UA">Імпорт з</Value>
+		  <Value Lang="hy-AM">Ներմուծում ից</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strOperType">
+		  <Value Lang="bg-BG">Тип на операция</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Operation type</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Тип операции</Value>
+		  <Value Lang="uk-UA">Тип операції</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
   </Dictionary>
 
   <Dictionary Product="Axis My100R Help" Version="1">
