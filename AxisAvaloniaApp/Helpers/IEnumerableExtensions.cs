@@ -27,5 +27,17 @@ namespace AxisAvaloniaApp.Helpers
                 .FirstOrDefault(x => comparer.Equals(x.a, value));
             return found == null ? -1 : found.i;
         }
+
+        public static int Count(this System.Collections.IEnumerable obj)
+        {
+            int count = 0;
+
+            foreach (var cur in obj)
+            {
+                count++;
+            }
+
+            return count;
+        }
     }
 }

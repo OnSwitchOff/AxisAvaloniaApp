@@ -64,7 +64,10 @@ namespace AxisAvaloniaApp.Views
             if (DataContext is ViewModels.MainWindowViewModel viewModel)
             {
                 viewModel.IsPointerPressedActivation = true;
-                viewModel.SelectedItem = sender as NavigationViewItem;
+                if (sender is NavigationViewItem item)
+                {
+                    viewModel.SelectedItem = item;
+                }
             }
         }
     }

@@ -8,6 +8,14 @@ namespace AxisAvaloniaApp.Services.Reports
     public class ReportItemModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ReportItemModel"/> class.
+        /// </summary>
+        public ReportItemModel()
+        {
+            ReportKey = -1;
+        }
+
+        /// <summary>
         /// Key to identify report.
         /// </summary>
         /// <date>06.06.2022.</date>

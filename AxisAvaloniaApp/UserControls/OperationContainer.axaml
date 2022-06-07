@@ -55,7 +55,7 @@
                           BorderBrush="Gray" 
                           BorderThickness="0.5"/>
             <ContentPresenter Grid.Column="2"
-                              Margin="0,10,0,0"
+                              Margin="2"
                               Content="{TemplateBinding AdditionalContent, Mode=OneWay}"/>
           </Grid>
 
