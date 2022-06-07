@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AxisAvaloniaApp.UserControls.Extensions;
-using AxisAvaloniaApp.ViewModels;
+using AxisAvaloniaApp.ViewModels.Settings;
 
 namespace AxisAvaloniaApp.UserControls.Settings
 {
@@ -89,6 +89,7 @@ namespace AxisAvaloniaApp.UserControls.Settings
             }
 
             ViewModel.TitleMinWidth = minTitleWidth + 12;
+            ViewModel.TitleMinWidth = 250;
         }
 
         private void InitializeComponent()

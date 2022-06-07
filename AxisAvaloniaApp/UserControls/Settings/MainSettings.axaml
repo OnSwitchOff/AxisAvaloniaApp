@@ -7,9 +7,20 @@
 			 xmlns:ucext="using:AxisAvaloniaApp.UserControls.Extensions"
              x:Class="AxisAvaloniaApp.UserControls.Settings.MainSettings"
 			 x:Name="UC">
-	<Grid RowDefinitions="40,*,Auto" Margin="0,5">
-		<Border Grid.Row="0" Background="SteelBlue">
-			<TextBlock VerticalAlignment="Center"  Text="Main"  Background="Transparent" Foreground="White" TextAlignment="Center" />
+	<UserControl.Styles>
+		<Style Selector="Border">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+		<Style Selector="TextBox">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+	</UserControl.Styles>
+	<Grid RowDefinitions="50,*,Auto" Margin="0">
+		<Border Grid.Row="0" BorderThickness="0,0,0,1" Margin="20,5,0,5">
+			<ucext:AxisTextBlock  VerticalAlignment="Center"  LocalizeTextKey="strBasics"  Background="Transparent" Padding="20,0" Foreground="Black"  FontSize="18"  TextAlignment="Left" />
 		</Border>
 
 		<Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0">
@@ -20,7 +31,7 @@
 					<!--Input for USN-->
 					<set:AdaptiveSettingsItemControl Grid.Row="0"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strLicenseCode" >
 						<set:AdaptiveSettingsItemControl.Input>
-							<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.LicenseCode, Mode=TwoWay}" Watermark="Enter LicenseCode" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+							<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.LicenseCode, Mode=TwoWay}" LocalizePlaceholderKey="strFirm"	ExplanationKey="strFirm" FontSize="12"  Margin="10,5" VerticalContentAlignment="Center" CornerRadius="0"/>
 						</set:AdaptiveSettingsItemControl.Input>
 					</set:AdaptiveSettingsItemControl>
 

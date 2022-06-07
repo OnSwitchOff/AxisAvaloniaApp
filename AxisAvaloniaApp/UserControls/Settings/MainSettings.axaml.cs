@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using AxisAvaloniaApp.ViewModels;
+using AxisAvaloniaApp.ViewModels.Settings;
 
 namespace AxisAvaloniaApp.UserControls.Settings
 {

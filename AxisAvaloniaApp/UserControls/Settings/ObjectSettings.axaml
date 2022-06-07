@@ -11,98 +11,109 @@
 	<UserControl.Resources>
 		<conv:BitmapAssetValueConverter x:Key="IconAssetsConv" />
 	</UserControl.Resources>
-    <Grid RowDefinitions="40,*,Auto" Margin="0,5">
-		<Border Grid.Row="0" Background="SteelBlue">
-			<TextBlock  VerticalAlignment="Center"  Text="Firma"  Background="Transparent" Foreground="White" TextAlignment="Center" />	   
+	<UserControl.Styles>
+		<Style Selector="Border">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+		<Style Selector="TextBox">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+	</UserControl.Styles>
+    <Grid RowDefinitions="50,*,Auto" Margin="0">
+		<Border Grid.Row="0" BorderThickness="0,0,0,1" Margin="20,5,0,5">
+			<ucext:AxisTextBlock  VerticalAlignment="Center"  LocalizeTextKey="strFirm"  Background="Transparent" Padding="20,0" Foreground="Black"  FontSize="18"  TextAlignment="Left" />	   
 		</Border>
 		
-		<Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0">
+		<Border Grid.Row="1"  BorderThickness="0">
 			<ScrollViewer Padding="20,0">
 				<Grid x:Name="AdaptiveSettingsGrid" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 				<!--Input for firm/object-->
 				<set:AdaptiveSettingsItemControl Grid.Row="0"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strFirm" >
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.Firm, Mode=TwoWay}" Watermark="Enter Firm" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox  Text="{Binding	ElementName=UC, Path=ViewModel.Firm, Mode=TwoWay}" LocalizePlaceholderKey="strFirm"	ExplanationKey="strFirm" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for Principal-->
 				<set:AdaptiveSettingsItemControl Grid.Row="1" TitleKey="strPrincipal" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" >
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.Principal, Mode=TwoWay}"  Watermark="Enter Principal" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.Principal, Mode=TwoWay}"  LocalizePlaceholderKey="strPrincipal" ExplanationKey="strPrincipal" FontSize="12"  Margin="10,5" Padding="20,0"  VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for City-->
 				<set:AdaptiveSettingsItemControl Grid.Row="2" TitleKey="strCity" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.City, Mode=TwoWay}"  Watermark="Enter City" FontSize="12"  Margin="5" VerticalContentAlignment="Center"  CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.City, Mode=TwoWay}"  LocalizePlaceholderKey="strCity" ExplanationKey="strCity" FontSize="12"  Margin="10,5" Padding="20,0"  VerticalContentAlignment="Center"  CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for Address-->
 				<set:AdaptiveSettingsItemControl Grid.Row="3" TitleKey="strAddress" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.Address, Mode=TwoWay}" Watermark="Enter Address" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.Address, Mode=TwoWay}" LocalizePlaceholderKey="strAddress" ExplanationKey="strAddress" FontSize="12"  Margin="10,5" Padding="20,0"  VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for Phone-->
 				<set:AdaptiveSettingsItemControl Grid.Row="4" TitleKey="strPhone" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.Phone, Mode=TwoWay}" Watermark="Enter Phone" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.Phone, Mode=TwoWay}" LocalizePlaceholderKey="strPhone" ExplanationKey="strPhone" FontSize="12"  Margin="10,5" Padding="20,0"  VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for TaxNumber-->
 				<set:AdaptiveSettingsItemControl Grid.Row="5" TitleKey="strTaxNumber" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.TaxNumber, Mode=TwoWay}" Watermark="TaxNumber" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.TaxNumber, Mode=TwoWay}" LocalizePlaceholderKey="strTaxNumber" ExplanationKey="strTaxNumber" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for DDS-->
 				<set:AdaptiveSettingsItemControl Grid.Row="6" TitleKey="strVAT" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" >
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.Vat, Mode=TwoWay}" Watermark="VAT" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.Vat, Mode=TwoWay}" LocalizePlaceholderKey="strPrincipal" ExplanationKey="strPrincipal" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for BankName-->
 				<set:AdaptiveSettingsItemControl Grid.Row="7" TitleKey="strBankName" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.BankName, Mode=TwoWay}" Watermark="BankName" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.BankName, Mode=TwoWay}" LocalizePlaceholderKey="strBankName" ExplanationKey="strBankName" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for BankBIC-->
 				<set:AdaptiveSettingsItemControl Grid.Row="8" TitleKey="strBankBIC" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.BankBIC, Mode=TwoWay}" Watermark="BankBIC" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.BankBIC, Mode=TwoWay}" LocalizePlaceholderKey="strBankBIC" ExplanationKey="strBankBIC" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for IBAN-->
 				<set:AdaptiveSettingsItemControl Grid.Row="9" TitleKey="strIBAN" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.IBAN, Mode=TwoWay}" Watermark="IBAN" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.IBAN, Mode=TwoWay}" LocalizePlaceholderKey="strIBAN" ExplanationKey="strIBAN" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for OnlineShopNumber-->
 				<set:AdaptiveSettingsItemControl Grid.Row="10" TitleKey="strOnlineShopNumber" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.OnlineShopNumber, Mode=TwoWay}" Watermark="OnlineShopNumber" FontSize="12"  Margin="5" VerticalContentAlignment="Center"  CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.OnlineShopNumber, Mode=TwoWay}" LocalizePlaceholderKey="strOnlineShopNumber" ExplanationKey="strOnlineShopNumber" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center"  CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 
 				<!--Input for OnlineShopType-->
 				<set:AdaptiveSettingsItemControl Grid.Row="11" TitleKey="strOnlineShopType" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.OnlineShopTypes}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedOnlineShopType, Mode=TwoWay}" CornerRadius="0">
+						<ComboBox Margin="10,5" HorizontalAlignment="Stretch" Height="30"  Items="{Binding	ElementName=UC, Path=ViewModel.OnlineShopTypes}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedOnlineShopType, Mode=TwoWay}" CornerRadius="0">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
-									<ucext:AxisTextBlock LocalizeTextKey="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+									<ucext:AxisTextBlock LocalizeTextKey="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"  TextAlignment="Left" Padding="0"  />
 								</DataTemplate>							
 							</ComboBox.ItemTemplate>
 						</ComboBox>
@@ -112,14 +123,14 @@
 				<!--Input for OnlineShopDomainName-->
 				<set:AdaptiveSettingsItemControl Grid.Row="13" TitleKey="strOnlineShopDomainName" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 					<set:AdaptiveSettingsItemControl.Input>
-						<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.OnlineShopDomainName, Mode=TwoWay}" Watermark="OnlineShopDomainName" FontSize="12"  Margin="5" VerticalContentAlignment="Center"  CornerRadius="0"/>
+						<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.OnlineShopDomainName, Mode=TwoWay}" ExplanationKey="strOnlineShopDomainName" LocalizePlaceholderKey="strOnlineShopDomainName" FontSize="12"  Padding="20,0" Margin="10,5" VerticalContentAlignment="Center"  CornerRadius="0"/>
 					</set:AdaptiveSettingsItemControl.Input>
 				</set:AdaptiveSettingsItemControl>
 				</Grid>
 			</ScrollViewer>
 		</Border>
 		
-		<Grid  RowDefinitions="Auto,Auto"  Grid.Row="2" Background="Transparent">
+		<Grid  RowDefinitions="Auto,Auto"  Grid.Row="2" Background="Transparent" IsVisible="False">
 			<Image Grid.Row="0" Width="75" Height="73" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"
 			  Source="{Binding	ElementName=UC, Path=ViewModel.IconSource, Mode=OneWay, Converter={StaticResource IconAssetsConv}}"/>
 			<Button Grid.Row="1" Command="{Binding	ElementName=UC, Path=ViewModel.ShowChoseIconCommand}" Background="Transparent" BorderThickness="2" BorderBrush="SteelBlue" Foreground="SteelBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">Logo</Button>

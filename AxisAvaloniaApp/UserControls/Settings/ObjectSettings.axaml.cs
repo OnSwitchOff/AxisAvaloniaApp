@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using AxisAvaloniaApp.UserControls.Extensions;
-using AxisAvaloniaApp.ViewModels;
+using AxisAvaloniaApp.ViewModels.Settings;
 using System.Diagnostics;
 
 namespace AxisAvaloniaApp.UserControls.Settings
