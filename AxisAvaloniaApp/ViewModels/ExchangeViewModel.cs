@@ -31,7 +31,10 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref exportToItems, value);
         }
         public ComboBoxItemModel SelectedExportToItem { get => selectedExportToItem; set { this.RaiseAndSetIfChanged(ref selectedExportToItem, value);  this.RaisePropertyChanged("IsAnotherApplication"); } }
-    public bool IsSaleOperation { get => isSaleOperation; set => this.RaiseAndSetIfChanged(ref isSaleOperation, value); }
+        public bool IsSaleOperation { 
+            get => isSaleOperation;
+            set => this.RaiseAndSetIfChanged(ref isSaleOperation, value);
+        }
         public bool IsAnotherApplication { get => (IsImportDirection && SelectedImportFromItem != null &&  SelectedImportFromItem.Key == "item1") || (!IsImportDirection && SelectedExportToItem != null && SelectedExportToItem.Key == "item1"); }
         public ReactiveCommand<Unit, Unit> ChangeDirectionCommand { get; }
 

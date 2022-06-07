@@ -8,7 +8,20 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
 			 xmlns:switch ="using:AxisAvaloniaApp.UserControls.Switcher"
+			 xmlns:gb="using:AxisAvaloniaApp.UserControls.GroupBox"
              x:Class="AxisAvaloniaApp.Views.ExchangeView">
+	<UserControl.Styles>
+		<Style Selector="ComboBox.Light">
+			<Setter Property="BorderBrush" Value="Black"/>
+			<Setter Property="Foreground" Value="Black"/>
+		</Style>
+		<Style Selector="ComboBox.Light Border:pointerover">
+			<Setter Property="BorderBrush" Value="Black"/>
+		</Style>
+		<Style Selector="ComboBox.Light Path">
+			<Setter Property="Fill" Value="Black"/>
+		</Style>
+	</UserControl.Styles>
 	<container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" >
 		<container:OperationContainer.TitleContent>
 			<Grid Height="50">
@@ -28,26 +41,12 @@
 					<Border Margin="10">
 						<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 
-							<!--<Border Grid.Column="1" BorderThickness="2" BorderBrush="White" CornerRadius="5">
-								<Grid ColumnDefinitions="Auto,Auto,Auto" >
-									<Border Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" IsVisible="{Binding IsImportDirection}">
-										<controlsEx:AxisTextBlock Text="Import" FontSize="18" Foreground="Black" FontWeight="Bold" Margin="10,5" />
-									</Border>
-									<Button Grid.Row="0" Grid.Column="1" Width="40" Command="{Binding ChangeDirectionCommand}" VerticalAlignment="Stretch" Margin="0" BorderThickness="0" BorderBrush="White">
-									
-									</Button>								
-									<Border Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" IsVisible="{Binding !IsImportDirection}">
-										<controlsEx:AxisTextBlock Text="Export" FontSize="18" Foreground="Black" FontWeight="Bold" Margin="4"  />
-									</Border>
-								</Grid>
-							</Border>-->
-
 							<Border Grid.Row="0" Grid.Column="0">			
-								<controlsEx:AxisTextBlock LocalizeTextKey="strExchangeDirection" FontSize="18" Foreground="White"  Margin="4"  />		
+								<controlsEx:AxisTextBlock LocalizeTextKey="strExchangeDirection" FontSize="18" Foreground="White"  Margin="4" VerticalAlignment="Center"  />		
 							</Border>
 
-							<Border Padding="2" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="White" CornerRadius="10" >
-								<switch:Slider  GlyphWidth="20"  Foreground="White" RightContentKey="strExport" LeftContentKey="strImport" IsChecked="{Binding IsImportDirection,Mode= TwoWay}" Width="100" Height="20"/>
+							<Border Padding="2" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="White" CornerRadius="10" Margin="4" >
+								<switch:Slider  GlyphWidth="20"  Foreground="White" RightContentKey="strExport" LeftContentKey="strImport" IsChecked="{Binding IsImportDirection,Mode= TwoWay}" Width="100" Height="20" Margin="4"/>
 							</Border>
 					
 
@@ -55,11 +54,17 @@
 							<Border Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsImportDirection, Mode=TwoWay}">
 								<controlsEx:AxisTextBlock LocalizeTextKey="strImportFrom" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
 							</Border>
-							<Border Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsImportDirection, Mode=TwoWay}">					
-								<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ImportFromItems}" SelectedItem="{Binding, Path=SelectedImportFromItem, Mode=TwoWay}" CornerRadius="0">
+							<Border Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsImportDirection, Mode=TwoWay}">
+	
+								<ComboBox Margin="5" HorizontalAlignment="Stretch" BorderBrush="White" Classes="Light" Items="{Binding	ImportFromItems}" Height="30" SelectedItem="{Binding, Path=SelectedImportFromItem, Mode=TwoWay}" CornerRadius="0" VerticalAlignment="Center">
+									<ComboBox.ItemsPanel>
+										<ItemsPanelTemplate>
+											<StackPanel Orientation="Vertical" Background="red"></StackPanel>
+										</ItemsPanelTemplate>
+									</ComboBox.ItemsPanel>
 									<ComboBox.ItemTemplate>
 										<DataTemplate>
-											<controlsEx:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+											<controlsEx:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"  TextAlignment="Left" Padding="0"  />
 										</DataTemplate>
 									</ComboBox.ItemTemplate>
 								</ComboBox>				
@@ -70,69 +75,74 @@
 								<controlsEx:AxisTextBlock LocalizeTextKey="strExportTo" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
 							</Border>
 							<Border Grid.Row="2" Grid.Column="1" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ExportToItems}" SelectedItem="{Binding Path=SelectedExportToItem, Mode=TwoWay}" CornerRadius="0">
+								<ComboBox Margin="5" Height="30" HorizontalAlignment="Stretch" Classes="Light" Items="{Binding	ExportToItems}" SelectedItem="{Binding Path=SelectedExportToItem, Mode=TwoWay}" CornerRadius="0">
 									<ComboBox.ItemTemplate>
 										<DataTemplate>
-											<controlsEx:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+											<controlsEx:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"  TextAlignment="Left" Padding="0"  />
 										</DataTemplate>
 									</ComboBox.ItemTemplate>
 								</ComboBox>
 							</Border>
 
 							<Border Grid.Row="3" Grid.Column="0" IsVisible="{Binding IsAnotherApplication, Mode=TwoWay}">
-								<controlsEx:AxisTextBlock LocalizeTextKey="strOperType" FontSize="18" Foreground="White" Margin="4"  />
+								<controlsEx:AxisTextBlock LocalizeTextKey="strOperType" FontSize="18" Foreground="White" Margin="4" VerticalAlignment="Center"  />
 							</Border>
-							<Border Grid.Row="3" Grid.Column="1" IsVisible="{Binding IsAnotherApplication, Mode=TwoWay}" Padding="2"  VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="White" CornerRadius="10" >
-								<switch:Slider  GlyphWidth="20"  Foreground="White" LeftContentKey="strSale" RightContentKey="strPurchase" IsChecked="{Binding IsSaleOperation,Mode= TwoWay}" Width="100" Height="20"/>
-							</Border>
-
-
-							<Border Grid.Row="4" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<controlsEx:AxisTextBlock LocalizeTextKey="strFilter" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+							<Border Grid.Row="3" Grid.Column="1" IsVisible="{Binding IsAnotherApplication, Mode=TwoWay}" Padding="2"  VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="White" CornerRadius="10" Margin="4" >
+								<switch:Slider  GlyphWidth="20"  Foreground="White" LeftContentKey="strSale" RightContentKey="strPurchase" IsChecked="{Binding IsSaleOperation,Mode= TwoWay}" Width="100" Height="20" Margin="4"/>
 							</Border>
 
-							<Border Grid.Row="5" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<controlsEx:AxisTextBlock LocalizeTextKey="strNumber" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-							</Border>
 
-							<Border Grid.Row="6" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<Grid	ColumnDefinitions="Auto,*">
-									<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-									<TextBox Grid.Column="2" Text="from"/>
-								</Grid>
-							</Border>
+							<gb:GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" LocalizeTextKey="strFilter" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
+								<gb:GroupBox.Content>
+									<Grid Margin="10,5" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+										<Border Grid.Row="5" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
+											<controlsEx:AxisTextBlock LocalizeTextKey="strNumber" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+										</Border>
 
-							<Border Grid.Row="7" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<Grid	ColumnDefinitions="Auto,*">
-									<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-									<TextBox Grid.Column="2" Text="to"/>
-								</Grid>
-							</Border>
+										<Border Grid.Row="6" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}" >
+											<Grid	ColumnDefinitions="Auto,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<TextBox Grid.Column="2" Text="from" Margin="4"/>
+											</Grid>
+										</Border>
 
-							<Border Grid.Row="8" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<controlsEx:AxisTextBlock LocalizeTextKey="strDate" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-							</Border>
+										<Border Grid.Row="7" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
+											<Grid	ColumnDefinitions="Auto,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<TextBox Grid.Column="2" Text="to" Margin="4"/>
+											</Grid>
+										</Border>
 
-							<Border Grid.Row="9" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<Grid	ColumnDefinitions="Auto,*">
-									<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-									<DatePicker  Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
-								</Grid>
-							</Border>
-							<Border Grid.Row="10" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-								<Grid	ColumnDefinitions="Auto,*">
-									<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-									<DatePicker  Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
-								</Grid>
-							</Border>
+										<Border Grid.Row="8" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
+											<controlsEx:AxisTextBlock LocalizeTextKey="strDate" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+										</Border>
+
+										<Border Grid.Row="9" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
+											<Grid	ColumnDefinitions="Auto,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<DatePicker  Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="4" />
+											</Grid>
+										</Border>
+										<Border Grid.Row="10" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
+											<Grid	ColumnDefinitions="Auto,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<DatePicker  Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="4" />
+											</Grid>
+										</Border>
+									</Grid>
+								</gb:GroupBox.Content>
+							</gb:GroupBox>
+							
+							
+							
 							<Border Grid.Row="11" Grid.ColumnSpan="2" >
-								<Button VerticalAlignment="Top" Margin="40,20,40,10"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="2" Classes="WhiteBorder">
-									<controlsEx:AxisTextBlock LocalizeTextKey="strPrint" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
+								<Button VerticalAlignment="Top" Margin="5,5,5,2.5"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="1" Classes="WhiteBorder">
+									<controlsEx:AxisTextBlock LocalizeTextKey="strExecute" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
 								</Button>
 							</Border>
 							<Border Grid.Row="12" Grid.ColumnSpan="2" >
-								<Button VerticalAlignment="Top" Margin="40,20,40,10"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="2" Classes="WhiteBorder">
-									<controlsEx:AxisTextBlock LocalizeTextKey="strPrint" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
+								<Button VerticalAlignment="Top" Margin="5,2.5,5,5"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="1" Classes="WhiteBorder">
+									<controlsEx:AxisTextBlock LocalizeTextKey="strClear" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
 								</Button>
 							</Border>
 						</Grid>

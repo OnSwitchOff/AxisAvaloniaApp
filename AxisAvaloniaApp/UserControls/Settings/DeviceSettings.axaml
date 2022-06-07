@@ -7,10 +7,24 @@
              mc:Ignorable="d"  d:DesignHeight="800" d:DesignWidth="320" MinHeight="200" MinWidth="200"
              x:Class="AxisAvaloniaApp.UserControls.Settings.DeviceSettings"
 			 x:Name="UC">
-
-	<Grid RowDefinitions="40,*,Auto" Margin="0,5">
-		<Border Grid.Row="0" Background="SteelBlue">
-			<TextBlock VerticalAlignment="Center"  Text="Devices"  Background="Transparent" Foreground="White" TextAlignment="Center" />
+	<UserControl.Styles>
+		<Style Selector="Border">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+		<Style Selector="TextBox">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter	Property="BorderBrush" Value="DarkGray"/>
+		</Style>
+	</UserControl.Styles>
+	<UserControl.Resources>
+		<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="Transparent"/>
+		<SolidColorBrush x:Key="ExpanderDropDownBorderBrush" Color="Transparent"/>
+	</UserControl.Resources>
+	<Grid RowDefinitions="50,*,Auto" Margin="0">
+		<Border Grid.Row="0" BorderThickness="0,0,0,1" Margin="20,5,0,5">
+			<ucext:AxisTextBlock  VerticalAlignment="Center"  LocalizeTextKey="strDevices"  Background="Transparent" Padding="20,0" Foreground="Black"  FontSize="18"  TextAlignment="Left" />
 		</Border>
 		
 		<Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0">
@@ -19,12 +33,12 @@
 		
 					<Grid Grid.Row="0" Background="Transparent">
 						<!--Input for SerialPort-->
-						<set:AdaptiveSettingsItemControl Grid.Row="0" TitleKey="strCOMPort" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+						<set:AdaptiveSettingsItemControl Grid.Row="0" TitleKey="strCOMPort" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth, Mode=TwoWay}" Margin="20,0,10,0">
 							<set:AdaptiveSettingsItemControl.Input>
-								<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.SerialPortItems}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedSerialPortItem, Mode=TwoWay}" CornerRadius="0">
+								<ComboBox Margin="10,5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.SerialPortItems}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedSerialPortItem, Mode=TwoWay}" CornerRadius="0">
 									<ComboBox.ItemTemplate>
 										<DataTemplate>
-											<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+											<ucext:AxisTextBlock Background="Transparent" Text="{Binding Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
 										</DataTemplate>
 									</ComboBox.ItemTemplate>
 								</ComboBox>
@@ -32,13 +46,13 @@
 						</set:AdaptiveSettingsItemControl>
 					</Grid>
 
-					<Expander Grid.Row="1" Background="SteelBlue" CornerRadius="0" HorizontalContentAlignment="Stretch">
+					<Expander Grid.Row="1"  CornerRadius="0" HorizontalContentAlignment="Stretch" BorderThickness="0,0,0,1" >
 						<Expander.Header>
 							<Grid ColumnDefinitions="Auto,*">
 								<Image Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
 								  Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
 								<Border Grid.Column="1" >
-									<TextBlock VerticalAlignment="Center"  Text="Fiscal device"  Background="Transparent" Foreground="White" TextAlignment="Center" />
+									<ucext:AxisTextBlock VerticalAlignment="Center"  LocalizeTextKey="strFiscalDevice"  Background="Transparent"  TextAlignment="Center" />
 								</Border>
 							</Grid>
 						</Expander.Header>
@@ -49,7 +63,7 @@
 							</CheckBox>
 
 							<!--Input for SelectedFiscalDeviceManufacturer-->
-							<set:AdaptiveSettingsItemControl Grid.Row="1" TitleKey="strManufacturer" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<set:AdaptiveSettingsItemControl Grid.Row="1" TitleKey="strManufacturer" TitleMinWidth="{Binding ElementName=UC, Path=ViewModel.TitleMinWidth, Mode=TwoWay}">
 								<set:AdaptiveSettingsItemControl.Input>
 									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceManufacturers}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedFiscalDeviceManufacturer, Mode=TwoWay}" CornerRadius="0">
 										<ComboBox.ItemTemplate>
@@ -118,13 +132,13 @@
 						</Grid>
 					</Expander>
 
-					<Expander Grid.Row="2" Background="SteelBlue" CornerRadius="0" HorizontalContentAlignment="Stretch">
+					<Expander Grid.Row="2"  CornerRadius="0" HorizontalContentAlignment="Stretch" BorderThickness="0,0,0,1">
 						<Expander.Header>
 							<Grid ColumnDefinitions="Auto,*">
 								<Image Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
 								  Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
 								<Border Grid.Column="1" >
-									<TextBlock VerticalAlignment="Center"  Text="Card`s terminal"  Background="Transparent" Foreground="White" TextAlignment="Center" />
+									<ucext:AxisTextBlock VerticalAlignment="Center"  LocalizeTextKey="strPOSTerminal"  Background="Transparent"  TextAlignment="Center" />
 								</Border>
 							</Grid>
 						</Expander.Header>
@@ -218,13 +232,13 @@
 						</Grid>
 					</Expander>
 
-					<Expander Grid.Row="3" Background="SteelBlue" CornerRadius="0" HorizontalContentAlignment="Stretch">
+					<Expander Grid.Row="3"  CornerRadius="0" HorizontalContentAlignment="Stretch" BorderThickness="0,0,0,1">
 						<Expander.Header>
 							<Grid ColumnDefinitions="Auto,*">
 								<Image Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
 								  Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
 								<Border Grid.Column="1" >
-									<TextBlock VerticalAlignment="Center"  Text="AxisCloud`s inteagration"  Background="Transparent" Foreground="White" TextAlignment="Center" />
+									<ucext:AxisTextBlock VerticalAlignment="Center"  LocalizeTextKey="strAxisCloudIntegration"  Background="Transparent"  TextAlignment="Center" />
 								</Border>
 							</Grid>
 						</Expander.Header>

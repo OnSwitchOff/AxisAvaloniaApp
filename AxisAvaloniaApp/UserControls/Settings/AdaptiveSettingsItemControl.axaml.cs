@@ -113,8 +113,8 @@ namespace AxisAvaloniaApp.UserControls.Settings
                     Grid.SetRow(((Grid)this.Content).Children[1] as Control, 0);
                     Grid.SetRowSpan(((Grid)this.Content).Children[1] as Control, 2);
 
-                    ((Control)((Border)((Grid)this.Content).Children[0]).Child).HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
-                    ((TextBlock)((Border)((Grid)this.Content).Children[0]).Child).TextAlignment = Avalonia.Media.TextAlignment.Left;
+                    ((Control)((Border)((Grid)this.Content).Children[0]).Child).HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right;
+                    ((TextBlock)((Border)((Grid)this.Content).Children[0]).Child).TextAlignment = Avalonia.Media.TextAlignment.Right;
                 }
             }
         }

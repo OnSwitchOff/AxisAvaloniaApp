@@ -12,13 +12,20 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.ViewModels.Settings
 {
-    public class DocumentSettingsViewModel : ReactiveObject
+    public class DocumentSettingsViewModel : ReactiveObject, IVisible
     {
 
         private readonly ISettingsService settingsService;
         private readonly ITranslationService translationService;
+
+        private bool isVisible;
+        public bool IsVisible
+        {
+            get => isVisible;
+            set => this.RaiseAndSetIfChanged(ref isVisible, value);
+        }
 
         private double titleMinWidth;
         public double TitleMinWidth
@@ -98,6 +105,6 @@ namespace AxisAvaloniaApp.ViewModels
         {
 
 
-        }       
+        }
     }
 }

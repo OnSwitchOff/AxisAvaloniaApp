@@ -1333,7 +1333,76 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
-  </Dictionary>
+	  <Data Key="strExecute">
+		  <Value Lang="bg-BG">Изпълнение</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Execute</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Выполнить</Value>
+		  <Value Lang="uk-UA">Виконати</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strClear">
+		  <Value Lang="bg-BG">Изчистване</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Clear</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Очистить</Value>
+		  <Value Lang="uk-UA">Очистити</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+    <Data Key="strDocuments">
+        <Value Lang="bg-BG">Документи</Value>
+        <Value Lang="el-GR">Not translated</Value>
+        <Value Lang="en-GB">Documents</Value>
+        <Value Lang="ro-RO">Not translated</Value>
+        <Value Lang="ru-RU">Документы</Value>
+        <Value Lang="uk-UA">Документи</Value>
+        <Value Lang="hy-AM">Not translated</Value>
+        <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDevices">
+        <Value Lang="bg-BG">Устройства</Value>
+        <Value Lang="el-GR">Not translated</Value>
+        <Value Lang="en-GB">Devices</Value>
+        <Value Lang="ro-RO">Not translated</Value>
+        <Value Lang="ru-RU">Устройства</Value>
+        <Value Lang="uk-UA">Пристрої</Value>
+        <Value Lang="hy-AM">Not translated</Value>
+        <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+      <Data Key="strBasics">
+          <Value Lang="bg-BG">Основни</Value>
+          <Value Lang="el-GR">Not translated</Value>
+          <Value Lang="en-GB">Main</Value>
+          <Value Lang="ro-RO">Not translated</Value>
+          <Value Lang="ru-RU">Основные</Value>
+          <Value Lang="uk-UA">Основні</Value>
+          <Value Lang="hy-AM">Not translated</Value>
+          <Value Lang="ka-GE">Not translated</Value>
+       </Data>
+	  <Data Key="strAxisCloudIntegration">
+		  <Value Lang="bg-BG">Интеграция с AxisCloud</Value>
+		  <Value Lang="el-GR">Ενσωμάτωση με το AxisCloud</Value>
+		  <Value Lang="en-GB">Integration with an AxisCloud app</Value>
+		  <Value Lang="ro-RO">Integrare cu AxisCloud</Value>
+		  <Value Lang="ru-RU">Интеграция с AxisCloud</Value>
+		  <Value Lang="uk-UA">Інтеграція з AxisCloud</Value>
+		  <Value Lang="hy-AM">Ինտեգրում AxisCloud- ի հետ</Value>
+	  </Data>
+	  <Data Key="strFiscalDevice">
+		  <Value Lang="bg-BG">Фискално устройство</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Fiscal device</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Фискальное устройство</Value>
+		  <Value Lang="uk-UA">Фіскальний пристрій</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+ </Dictionary>
 
   <Dictionary Product="Axis My100R Help" Version="1">
     <Languages>

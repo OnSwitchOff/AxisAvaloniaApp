@@ -11,15 +11,22 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.ViewModels.Settings
 {
-    public class ObjectSettingsViewModel : ReactiveObject
+    public class ObjectSettingsViewModel : ReactiveObject, IVisible
     {
         private double titleMinWidth;
         public double TitleMinWidth
         {
             get => titleMinWidth;
             set => this.RaiseAndSetIfChanged(ref titleMinWidth, value);
+        }
+
+        private bool isVisible;
+        public bool IsVisible
+        {
+            get => isVisible;
+            set => this.RaiseAndSetIfChanged(ref isVisible, value);
         }
 
         private string firm;
@@ -151,7 +158,7 @@ namespace AxisAvaloniaApp.ViewModels
             IconSource = "/Assets/AxisIcon.ico";
             ShowChoseIconCommand = ReactiveCommand.Create(ShowChoseIconDialog);
         }
-        
+
 
         private ObservableCollection<ComboBoxItemModel> GetOnlineShopTypesCollection()
         {
@@ -164,14 +171,14 @@ namespace AxisAvaloniaApp.ViewModels
 
         async void ShowChoseIconDialog()
         {
-    
+
             OpenFileDialog dialog = new OpenFileDialog();
             string[]? filePath = await dialog.ShowAsync(new Window());
-            dialog.Filters.Add(new FileDialogFilter() { Name = "PNG", Extensions = { "png" } } );
+            dialog.Filters.Add(new FileDialogFilter() { Name = "PNG", Extensions = { "png" } });
             if (filePath != null)
             {
                 IconSource = filePath[0];
             }
         }
-    }   
+    }
 }

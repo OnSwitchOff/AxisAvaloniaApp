@@ -7,8 +7,8 @@
              x:Class="AxisAvaloniaApp.UserControls.Settings.AdaptiveSettingsItemControl"
 			 x:Name="UC">	
 	<Grid  ColumnDefinitions="Auto,*" RowDefinitions="*,Auto">
-		<Border Name="titleBorder" Grid.RowSpan="2" Grid.ColumnSpan="1" MinWidth="{Binding	ElementName=UC, Path=TitleMinWidth}">
-			<ucext:AxisTextBlock  Padding="0"  LocalizeTextKey="{Binding ElementName=UC, Path=TitleKey}" x:Name="tbLabel"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"  TextAlignment="Left"/>
+		<Border Name="titleBorder" Grid.RowSpan="2" Grid.ColumnSpan="1" MinWidth="{Binding	ElementName=UC, Path=TitleMinWidth}"  >
+			<ucext:AxisTextBlock  Padding="0"  LocalizeTextKey="{Binding ElementName=UC, Path=TitleKey}" x:Name="tbLabel"  VerticalAlignment="Center"  Margin="5"  />
 		</Border>
 		<ContentPresenter VerticalContentAlignment="Center" Grid.RowSpan="2"  Grid.ColumnSpan="1" Grid.Column="1" Content="{Binding	ElementName=UC, Path=Input, Mode=TwoWay}"/>
 	</Grid>	
