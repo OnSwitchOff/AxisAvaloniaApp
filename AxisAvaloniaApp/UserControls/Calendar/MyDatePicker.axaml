@@ -5,15 +5,23 @@
 			 xmlns:c="using:AxisAvaloniaApp.UserControls.MyCalendar"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AxisAvaloniaApp.UserControls.MyCalendar.MyDatePicker"
+			 xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
 			 x:Name="UC">
-	<Grid>
-		<Border x:Name="MainBorder" PointerReleased="PointerReleased" BorderBrush="Gray" BorderThickness="0" Background="Transparent" Padding="2">
-			<Image  Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0" Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
+	<Grid ColumnDefinitions="*,Auto" MinHeight="30" Grid.Row="2" Grid.Column="1"  >
+		<Border PointerReleased="PointerReleased">
+			<controlsEx:AxisTextBlock  Text="{Binding ElementName=UC, Path=SelectedDateString, Mode=TwoWay}" TextAlignment="Center"  VerticalAlignment="Center" />
 		</Border>
-		<Popup IsOpen="{Binding	ElementName=UC, Path=IsExpanded, Mode=TwoWay}" PlacementMode="Bottom" >
+		<Border Grid.Column="1" PointerReleased="PointerReleased">
+			<Grid>
+				<Border x:Name="MainBorder"  BorderBrush="Gray" BorderThickness="0" Background="Transparent" Padding="2">
+					<Image   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0" Source="avares://AxisAvaloniaApp/Assets/Icons/calendar.png"/>
+				</Border>				
+			</Grid>
+		</Border>
+		<Popup IsOpen="{Binding	ElementName=UC, Path=IsExpanded, Mode=TwoWay}" PlacementMode="AnchorAndGravity" PlacementAnchor="BottomRight" PlacementGravity="BottomLeft" >
 			<Border PointerLeave="PointerLeave" VerticalAlignment="Center" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="Black" CornerRadius="0" Width="245" Padding="5" Background="White" >
 				<c:Month Name="MonthView" SelectedDate="{Binding ElementName=UC, Path=SelectedDate, Mode=TwoWay}"/>
 			</Border>
 		</Popup>
-	</Grid>
+	</Grid>	
 </UserControl>

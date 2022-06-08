@@ -18,6 +18,11 @@ namespace AxisAvaloniaApp.ViewModels
         private ObservableCollection<ComboBoxItemModel> exportToItems;
         private ComboBoxItemModel selectedExportToItem;
         private bool isSaleOperation;
+        private string numberFrom;
+        private string numberTo;
+        private DateTime dateFrom;
+        private DateTime dateTo;
+
         public bool IsImportDirection { get => isImportDirection; set { this.RaiseAndSetIfChanged(ref isImportDirection, value); this.RaisePropertyChanged("IsAnotherApplication");}  }
         public ObservableCollection<ComboBoxItemModel> ImportFromItems
         {
@@ -37,12 +42,18 @@ namespace AxisAvaloniaApp.ViewModels
         }
         public bool IsAnotherApplication { get => (IsImportDirection && SelectedImportFromItem != null &&  SelectedImportFromItem.Key == "item1") || (!IsImportDirection && SelectedExportToItem != null && SelectedExportToItem.Key == "item1"); }
         public ReactiveCommand<Unit, Unit> ChangeDirectionCommand { get; }
+        public string NumberFrom { get => numberFrom; set => this.RaiseAndSetIfChanged(ref numberFrom, value); }
+        public string NumberTo { get => numberTo; set => this.RaiseAndSetIfChanged(ref numberTo, value); }
+        public DateTime DateFrom { get => dateFrom; set => this.RaiseAndSetIfChanged(ref dateFrom, value); }
+        public DateTime DateTo { get => dateTo; set => this.RaiseAndSetIfChanged(ref dateTo, value); }
 
         public ExchangeViewModel()
         {
             ChangeDirectionCommand = ReactiveCommand.Create(ChangeDirection);
             ImportFromItems = GetImportFromItemsCollection();
             ExportToItems = GetExportToItemsCollection();
+            DateTo = DateTime.Now;
+            DateFrom = DateTo.AddDays(-5);
         }
 
         private ObservableCollection<ComboBoxItemModel> GetImportFromItemsCollection()

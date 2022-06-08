@@ -12,6 +12,7 @@
     <None Remove=".gitignore" />
     <None Remove="Assets\AxisIcon.ico" />
     <None Remove="Assets\Icons\arrow_back.png" />
+    <None Remove="Assets\Icons\calendar.png" />
     <None Remove="Assets\Icons\cashRegister.png" />
     <None Remove="Assets\Icons\close.png" />
     <None Remove="Assets\Icons\delete_all.png" />
