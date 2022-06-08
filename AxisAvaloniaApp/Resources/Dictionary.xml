@@ -1518,6 +1518,16 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+	  <Data Key="strLogo">
+		  <Value Lang="bg-BG">Лого</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Logo</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Логотип</Value>
+		  <Value Lang="uk-UA">Логотип</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
     
     <!--Welcome view-->
     <Data Key="strThanksToChoice">

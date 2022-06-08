@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+             x:Class="AxisAvaloniaApp.UserControls.MyCalendar.Month">
+	<Grid RowDefinitions="Auto,*,Auto">
+		<Grid ColumnDefinitions="*,Auto,Auto">
+			<Border   Grid.Row="0" Grid.Column="0">
+				<TextBlock x:Name="CurrentMonthTextBlock" Padding="10,6" VerticalAlignment="Center" />
+			</Border>
+			<Button Grid.Column="1" Click="OnPreviousClick" Margin="6" Padding="2" CornerRadius="0" VerticalAlignment="Center" VerticalContentAlignment="Center">
+				<Border Width="11" Height="11">
+					<Path Data="M 11 0 L 0 6 L 11 11 Z" Fill="Gray"/>
+				</Border>
+			</Button>
+			<Button Grid.Column="2" Click="OnNextClick" Margin="6" Padding="2" CornerRadius="0" VerticalAlignment="Center"  VerticalContentAlignment="Center">
+				<Border Width="11" Height="11">
+					<Path Data="M 0 0 L 11 6 L 0 11 Z" Fill="Gray"/>
+				</Border>
+			</Button>
+		</Grid>		
+		<Grid Grid.Row="1" x:Name="DaysGrid" ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+			<Border   Grid.Row="0" Grid.Column="0" Padding="3">
+				<controlsEx:AxisTextBlock Text="Mo" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</Border>
+			<Border   Grid.Row="0" Grid.Column="1" Padding="3">
+				<controlsEx:AxisTextBlock Text="Tu" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</Border>
+			<Border   Grid.Row="0" Grid.Column="2" Padding="3">
+				<controlsEx:AxisTextBlock Text="We" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</Border>
+			<Border   Grid.Row="0" Grid.Column="3" Padding="3">
+				<controlsEx:AxisTextBlock Text="Th" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</Border>
+			<Border   Grid.Row="0" Grid.Column="4" Padding="3">
+				<controlsEx:AxisTextBlock Text="Fr" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</Border>
+			<Border   Grid.Row="0" Grid.Column="5" Padding="3">
+				<controlsEx:AxisTextBlock Text="Sa" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</Border>
+			<Border   Grid.Row="0" Grid.Column="6" Padding="3">
+				<controlsEx:AxisTextBlock Text="Su" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+			</Border>
+		</Grid>		
+	</Grid>
+</UserControl>

@@ -4,27 +4,70 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:settings="using:AxisAvaloniaApp.UserControls.Settings"
 			 xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+			 xmlns:conv="using:AxisAvaloniaApp.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AxisAvaloniaApp.Views.SettingsView">
+	<UserControl.Resources>
+		<conv:BitmapAssetValueConverter x:Key="IconAssetsConv" />
+	</UserControl.Resources>
+	<UserControl.Styles>
+		<Style Selector="Button.WhiteBorder:pointerover /template/ ContentPresenter#PART_ContentPresenter" >
+			<Setter Property="Background" Value="{DynamicResource SystemControlHighlightListAccentLowBrush}" />
+			<Setter Property="BorderBrush" Value="White"/>
+		</Style>
+		<Style Selector="ListBoxItem TextBlock">
+			<Setter Property="Foreground" Value="White" />
+		</Style>
+		<!--
+		<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="Yellow" />
+		</Style>
+		<Style Selector="ListBoxItem:pointerover TextBlock">
+			<Setter Property="Foreground" Value="Black" />
+		</Style>
+	
+		<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#0080FF" />
+		</Style>
+		<Style Selector="ListBoxItem:selected TextBlock">
+			<Setter Property="Foreground" Value="White" />
+		</Style>	-->
+	</UserControl.Styles>
   <Grid>
 	  <Grid.ColumnDefinitions>
 		  <ColumnDefinition Width="Auto"/>
 		  <ColumnDefinition Width="*" MaxWidth="700"/>
 		  <ColumnDefinition Width="Auto"/>
 	  </Grid.ColumnDefinitions>
-	   <ListBox Grid.Column="0" Background="SteelBlue" MinWidth="200" Padding="0,40,0,0" SelectionMode="Single" Items="{Binding Sections}" SelectedItem="{Binding SelectedSection}">
+	  <Grid.RowDefinitions>
+		  <RowDefinition Height="Auto"/>
+		  <RowDefinition />
+		  <RowDefinition Height="Auto"/>
+	
+	  </Grid.RowDefinitions>
+	  <Grid  RowDefinitions="Auto,Auto" Grid.Row="2" Background="SteelBlue"  IsVisible="True">
+		  <Border Grid.Row="0">
+			  <Image  Width="120" Height="120" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20"
+		Source="{Binding ObjectSettings.IconSource, Mode=OneWay, Converter={StaticResource IconAssetsConv}}"/>
+		  </Border>	
+		  <Button Classes="WhiteBorder" Grid.Row="1" Command="{Binding ObjectSettings.ShowChoseIconCommand}" Background="Transparent" BorderThickness="2" BorderBrush="White" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">
+			  <controlsEx:AxisTextBlock LocalizeTextKey="strLogo" FontSize="14" Foreground="White" Background="Transparent" TextAlignment="Center" />
+		  </Button>
+	  </Grid>
+	  
+	   <ListBox Grid.Column="0" Grid.Row="1" Background="SteelBlue" MinWidth="200" Padding="0,40,0,0" SelectionMode="Single" Items="{Binding Sections}" SelectedItem="{Binding SelectedSection}">
 		  <ListBox.ItemTemplate>
 			  <DataTemplate>
 				  <Border  VerticalAlignment="Center" Height="30"  Padding="0" Margin="0">
-					  <controlsEx:AxisTextBlock LocalizeTextKey="{Binding Key}" FontSize="14"  Foreground="White" VerticalAlignment="Center" Padding="10,0"  />
+					  <controlsEx:AxisTextBlock LocalizeTextKey="{Binding Key}" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />
 				  </Border>
 			  </DataTemplate>
 		  </ListBox.ItemTemplate>
 	  </ListBox>
 	  
-	  <settings:ObjectSettings Grid.Column="1" ViewModel="{Binding ObjectSettings}"  IsVisible="{Binding ObjectSettings.IsVisible, Mode=TwoWay}"/>
-	  <settings:DocumentSettings Grid.Column="1" ViewModel="{Binding DocumentSettings}"   IsVisible="{Binding DocumentSettings.IsVisible, Mode=TwoWay}" />
-	  <settings:DeviceSettings Grid.Column="1" ViewModel="{Binding DeviceSettings}"   IsVisible="{Binding DeviceSettings.IsVisible, Mode=TwoWay}"/>
-	  <settings:MainSettings Grid.Column="1" ViewModel="{Binding MainSettings}"   IsVisible="{Binding MainSettings.IsVisible, Mode=TwoWay}"/>
+	  <settings:ObjectSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding ObjectSettings}"  IsVisible="{Binding ObjectSettings.IsVisible, Mode=TwoWay}"/>
+	  <settings:DocumentSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding DocumentSettings}"   IsVisible="{Binding DocumentSettings.IsVisible, Mode=TwoWay}" />
+	  <settings:DeviceSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding DeviceSettings}"   IsVisible="{Binding DeviceSettings.IsVisible, Mode=TwoWay}"/>
+	  <settings:MainSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding MainSettings}"   IsVisible="{Binding MainSettings.IsVisible, Mode=TwoWay}"/>
   </Grid>
 </UserControl>

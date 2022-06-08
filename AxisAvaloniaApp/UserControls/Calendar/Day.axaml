@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			  xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+             x:Class="AxisAvaloniaApp.UserControls.MyCalendar.Day">
+	<Border x:Name="OuterBorder" BorderThickness="2" Padding="1">
+		<Border x:Name="InnerBorder">
+			<controlsEx:AxisTextBlock x:Name="AxisTextBlock"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+		</Border>
+	</Border>
+</UserControl>

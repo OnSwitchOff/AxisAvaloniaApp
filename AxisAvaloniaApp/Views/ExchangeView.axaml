@@ -7,6 +7,7 @@
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+			 xmlns:c="using:AxisAvaloniaApp.UserControls.MyCalendar"
 			 xmlns:switch ="using:AxisAvaloniaApp.UserControls.Switcher"
 			 xmlns:gb="using:AxisAvaloniaApp.UserControls.GroupBox"
              x:Class="AxisAvaloniaApp.Views.ExchangeView">
@@ -31,9 +32,14 @@
 			</Grid>
 		</container:OperationContainer.TitleContent>
 		<container:OperationContainer.WorkContent>
-			<Border  VerticalAlignment="Center" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="Black" CornerRadius="10" >
-				<switch:Slider   GlyphWidth="20" IsChecked="True" Width="100" Height="20"/>
-			</Border>
+			<Grid ColumnDefinitions="Auto,Auto" Height="30">
+				<Border BorderBrush="Black" BorderThickness="1">
+					<controlsEx:AxisTextBlock Width="200" Text="{Binding ElementName=Calendar, Path=SelectedDateString, Mode=TwoWay}" TextAlignment="Center"  VerticalAlignment="Center" />
+				</Border>
+				<Border Grid.Column="1">
+					<c:MyDatePicker x:Name="Calendar" />
+				</Border>
+			</Grid>
 		</container:OperationContainer.WorkContent>
 		<container:OperationContainer.AdditionalContent>
 			<ScrollViewer>
@@ -41,9 +47,10 @@
 					<Border Margin="10">
 						<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 
-							<Border Grid.Row="0" Grid.Column="0">			
+							<Border Grid.Row="0" Grid.Column="0" >			
 								<controlsEx:AxisTextBlock LocalizeTextKey="strExchangeDirection" FontSize="18" Foreground="White"  Margin="4" VerticalAlignment="Center"  />		
 							</Border>
+
 
 							<Border Padding="2" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="White" CornerRadius="10" Margin="4" >
 								<switch:Slider  GlyphWidth="20"  Foreground="White" RightContentKey="strExport" LeftContentKey="strImport" IsChecked="{Binding IsImportDirection,Mode= TwoWay}" Width="100" Height="20" Margin="4"/>
