@@ -10,6 +10,7 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
+    <None Remove="Assets\Application.png" />
     <None Remove="Assets\AxisIcon.ico" />
     <None Remove="Assets\Icons\arrow_back.png" />
     <None Remove="Assets\Icons\calendar.png" />
@@ -46,6 +47,8 @@
     <None Remove="Assets\Icons\settings.png" />
     <None Remove="Assets\Icons\unlock.png" />
     <None Remove="Assets\Icons\YouTube.png" />
+    <None Remove="Assets\InputDataToLaptop.png" />
+    <None Remove="Assets\OperationSchema.png" />
     <None Remove="Resources\Dictionary.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +75,6 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.12" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.12" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="0.10.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.12" />
     <PackageReference Include="Avalonia.Xaml.Interactions" Version="0.10.12" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
