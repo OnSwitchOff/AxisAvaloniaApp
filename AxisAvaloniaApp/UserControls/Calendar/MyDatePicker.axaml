@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="using:AxisAvaloniaApp.UserControls.MyCalendar"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AxisAvaloniaApp.UserControls.MyCalendar.MyDatePicker"
+			 x:Name="UC">
+	<Grid>
+		<Border x:Name="MainBorder" PointerReleased="PointerReleased" BorderBrush="Gray" BorderThickness="0" Background="Transparent" Padding="2">
+			<Image  Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0" Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
+		</Border>
+		<Popup IsOpen="{Binding	ElementName=UC, Path=IsExpanded, Mode=TwoWay}" PlacementMode="Bottom" >
+			<Border PointerLeave="PointerLeave" VerticalAlignment="Center" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="Black" CornerRadius="0" Width="245" Padding="5" Background="White" >
+				<c:Month Name="MonthView" SelectedDate="{Binding ElementName=UC, Path=SelectedDate, Mode=TwoWay}"/>
+			</Border>
+		</Popup>
+	</Grid>
+</UserControl>

@@ -7,6 +7,7 @@
              mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="300" MinHeight="200" MinWidth="200"
              x:Class="AxisAvaloniaApp.UserControls.Settings.DocumentSettings"
 			 x:Name="UC">
+	
 	<UserControl.Styles>
 		<Style Selector="Border">
 			<Setter	Property="BorderBrush" Value="DarkGray"/>

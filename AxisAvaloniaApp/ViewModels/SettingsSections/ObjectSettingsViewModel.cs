@@ -173,8 +173,9 @@ namespace AxisAvaloniaApp.ViewModels.Settings
         {
 
             OpenFileDialog dialog = new OpenFileDialog();
-            string[]? filePath = await dialog.ShowAsync(new Window());
             dialog.Filters.Add(new FileDialogFilter() { Name = "PNG", Extensions = { "png" } });
+            string[]? filePath = await dialog.ShowAsync(new Window());
+
             if (filePath != null)
             {
                 IconSource = filePath[0];

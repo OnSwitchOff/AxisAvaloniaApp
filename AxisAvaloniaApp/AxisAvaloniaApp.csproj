@@ -100,6 +100,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="UserControls\Calendar\Month.axaml.cs">
+      <DependentUpon>Month.axaml</DependentUpon>
+    </Compile>
     <Compile Update="UserControls\Extensions\AxisTextBlock.axaml.cs">
       <DependentUpon>AxisTextBlock.axaml</DependentUpon>
     </Compile>
