@@ -65,7 +65,6 @@ namespace AxisAvaloniaApp.UserControls.MyCalendar
         {
             InitializeComponent();
             monthView = this.FindControl<Month>("MonthView");
-           
         }
 
         private void PointerLeave(object? sender, Avalonia.Input.PointerEventArgs e)

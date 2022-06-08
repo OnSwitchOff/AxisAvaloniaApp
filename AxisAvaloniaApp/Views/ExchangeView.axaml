@@ -32,12 +32,9 @@
 			</Grid>
 		</container:OperationContainer.TitleContent>
 		<container:OperationContainer.WorkContent>
-			<Grid ColumnDefinitions="Auto,Auto" Height="30">
-				<Border BorderBrush="Black" BorderThickness="1">
-					<controlsEx:AxisTextBlock Width="200" Text="{Binding ElementName=Calendar, Path=SelectedDateString, Mode=TwoWay}" TextAlignment="Center"  VerticalAlignment="Center" />
-				</Border>
-				<Border Grid.Column="1">
-					<c:MyDatePicker x:Name="Calendar" />
+			<Grid ColumnDefinitions="Auto" Height="30">
+				<Border	Background="Red"  BorderBrush="White" BorderThickness="1">
+					<c:MyDatePicker Foreground="White"  SelectedDate="{Binding DateFrom, Mode=TwoWay}" />
 				</Border>
 			</Grid>
 		</container:OperationContainer.WorkContent>
@@ -107,16 +104,16 @@
 										</Border>
 
 										<Border Grid.Row="6" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}" >
-											<Grid	ColumnDefinitions="Auto,*">
-												<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-												<TextBox Grid.Column="2" Text="from" Margin="4"/>
+											<Grid	ColumnDefinitions="30,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<controlsEx:AxisTextBox Grid.Column="2" Text="{Binding NumberFrom, Mode=TwoWay}" Margin="4" LocalizePlaceholderKey="strFrom" FontSize="14" VerticalAlignment="Center" Foreground="White" />
 											</Grid>
 										</Border>
 
 										<Border Grid.Row="7" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-											<Grid	ColumnDefinitions="Auto,*">
-												<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-												<TextBox Grid.Column="2" Text="to" Margin="4"/>
+											<Grid	ColumnDefinitions="30,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<controlsEx:AxisTextBox Grid.Column="2" Text="{Binding NumberTo, Mode=TwoWay}" Margin="4" LocalizePlaceholderKey="strTo" FontSize="14" VerticalAlignment="Center" Foreground="White" />
 											</Grid>
 										</Border>
 
@@ -124,18 +121,22 @@
 											<controlsEx:AxisTextBlock LocalizeTextKey="strDate" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
 										</Border>
 
-										<Border Grid.Row="9" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-											<Grid	ColumnDefinitions="Auto,*">
-												<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-												<DatePicker  Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="4" />
+										<Border Grid.Row="9" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}" Margin="2">
+											<Grid ColumnDefinitions="30,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<Border  Height="30" BorderThickness="1" BorderBrush="White" Grid.Row="2" Grid.Column="1"  >
+													<c:MyDatePicker Foreground="White"  SelectedDate="{Binding DateFrom, Mode=TwoWay}" />
+												</Border>
 											</Grid>
 										</Border>
-										<Border Grid.Row="10" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-											<Grid	ColumnDefinitions="Auto,*">
-												<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-												<DatePicker  Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="4" />
+										<Border Grid.Row="10" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}" Margin="2">
+											<Grid	ColumnDefinitions="30,*">
+												<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+												<Border  Height="30" BorderThickness="1" BorderBrush="White" Grid.Row="2" Grid.Column="1"  >
+													<c:MyDatePicker  SelectedDate="{Binding DateTo, Mode=TwoWay}"  Height="30" Grid.Row="2" Grid.Column="1" />
+												</Border>
 											</Grid>
-										</Border>
+										</Border> 
 									</Grid>
 								</gb:GroupBox.Content>
 							</gb:GroupBox>
