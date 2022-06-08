@@ -3,37 +3,115 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:container="using:AxisAvaloniaApp.UserControls"
+             xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
              xmlns:groupBox="using:AxisAvaloniaApp.UserControls.GroupBox"
+             xmlns:buttons="using:AxisAvaloniaApp.UserControls.Buttons"
              mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="450"
              x:Class="AxisAvaloniaApp.Views.ReportsView">
 
   <UserControl.Styles>
     <StyleInclude Source="/Styles/DataGrid.axaml"/>
     <StyleInclude Source="/Styles/TextBlock.axaml"/>
+
+    <Style Selector="TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="0, 3, 15, 3"/>
+    </Style>
+
+    <Style Selector="TextBox">
+      <Setter Property="Margin" Value="0, 3, 0, 3"/>
+    </Style>
+
+    <Style Selector="DatePicker">
+      <Setter Property="Margin" Value="0, 3, 0, 3"/>
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
   </UserControl.Styles>
   
-  <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}">
+  <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" 
+                                PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}">
     <container:OperationContainer.TitleContent>
-      <TextBlock Text="{Binding Title, Mode=TwoWay}" Classes="Title"/>
+      <controlsEx:AxisTextBlock LocalizeTextKey="strReports" Classes="Title"/>
     </container:OperationContainer.TitleContent>
     <container:OperationContainer.WorkContent>
-      <DataGrid Name="ReportGrid" AutoGenerateColumns="True" Items="{Binding Source, Mode=TwoWay}" />
+      <Grid>
+      <DataGrid Name="ReportGrid"
+                IsReadOnly="True"
+                Items="{Binding Source, Mode=TwoWay}" 
+                LoadingRow="DataGrid_LoadingRow"/>
+      <TextBlock Text="Axis avalonia app" 
+                 FontSize="48" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 Foreground="Gray" 
+                 IsVisible="{Binding $parent[UserControl].IsPlaceholderVisible, Mode=TwoWay}"/>
+      </Grid>
     </container:OperationContainer.WorkContent>
     <container:OperationContainer.AdditionalContent>
       <Grid RowDefinitions="*, auto, *">
-        <TreeView Grid.Row="0" Background="Red">
-          
+        <TreeView Grid.Row="0" Items="{Binding SupportedReports, Mode=TwoWay}"
+                        SelectedItem="{Binding SelectedReport, Mode=TwoWay}"
+                        Background="White">
+          <TreeView.ItemTemplate>
+            <TreeDataTemplate ItemsSource="{Binding SubReports}">
+              <controlsEx:AxisTextBlock LocalizeTextKey="{Binding LocalizeReportNameKey}"/>
+            </TreeDataTemplate>
+          </TreeView.ItemTemplate>
         </TreeView>
         
         <groupBox:GroupBox Grid.Row="1"
                            LocalizeTextKey="strFilter">
           <groupBox:GroupBox.Content>
-            <StackPanel>
-              <TextBlock Text="dada" Foreground="Black"/>
-              <TextBlock  Text="Test" Foreground="White" Margin="5, 0, 5, 0"/>
-            </StackPanel>
+            <Grid Margin="5, 0, 5, 0"
+                  ColumnDefinitions="auto, *"
+                  RowDefinitions="auto, auto, auto, 20, auto, auto, auto">
+              <controlsEx:AxisTextBlock Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        LocalizeTextKey="strNumber"/>
+              <controlsEx:AxisTextBlock Grid.Row="1"
+                                        Grid.Column="0"
+                                        LocalizeTextKey="strFrom"/>
+              <controlsEx:AxisTextBox Grid.Row="1"
+                                      Grid.Column="1"
+                                      Text="{Binding StartAcct, Mode=TwoWay}"
+                                      ExplanationKey="EnterStartAcctNumber"/>
+              <controlsEx:AxisTextBlock Grid.Row="2"
+                                        Grid.Column="0"
+                                        LocalizeTextKey="strTo"/>
+              <controlsEx:AxisTextBox Grid.Row="2"
+                                      Grid.Column="1"
+                                      Text="{Binding EndAcct, Mode=TwoWay}"
+                                      ExplanationKey="EnterEndAcctNumber"/>
+              <controlsEx:AxisTextBlock Grid.Row="4"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        LocalizeTextKey="strDate"/>
+              <controlsEx:AxisTextBlock Grid.Row="5"
+                                        Grid.Column="0"
+                                        LocalizeTextKey="strFrom"/>
+              <DatePicker Grid.Row="5"
+                          Grid.Column="1" 
+                          SelectedDate="{Binding StartDate, Mode=TwoWay}"/>
+              <controlsEx:AxisTextBlock Grid.Row="6"
+                                        Grid.Column="0"
+                                        LocalizeTextKey="strTo"/>
+              <DatePicker Grid.Row="6"
+                          Grid.Column="1"
+                          SelectedDate="{Binding EndDate, Mode=TwoWay}"/>
+            </Grid>
           </groupBox:GroupBox.Content>
         </groupBox:GroupBox>
+        <StackPanel Grid.Row="2" 
+                    Margin="15, 10, 15, 0" 
+                    Orientation="Vertical" 
+                    Spacing="5">
+          <buttons:ExecutionButton LocalizeTextKey="strCreateReport"
+                                   Command="{Binding GenerateReport}"/>
+          <buttons:ExecutionButton LocalizeTextKey="strPrint_Export"
+                                   Command="{Binding Print_Export}"/>
+        </StackPanel>
+        
       </Grid>
     </container:OperationContainer.AdditionalContent>
   </container:OperationContainer>

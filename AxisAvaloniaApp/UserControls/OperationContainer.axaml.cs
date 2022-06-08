@@ -15,6 +15,11 @@ namespace AxisAvaloniaApp.UserControls
         int index = 0;
         public OperationContainer()
         {
+            PrintContentHideCommand = ReactiveCommand.Create(() =>
+            {
+               PrintContentVisible = false;
+            });
+
             //Pages = new ObservableCollection<Bitmap>();
             ////Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\woolf.jpg"));
             ////Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\kak-pozdravyt-s-8-marta.jpg"));

@@ -38,6 +38,7 @@ using AxisAvaloniaApp.Services.Printing;
 using Avalonia;
 using AxisAvaloniaApp.Services.Explanation;
 using AxisAvaloniaApp.Services.Reports;
+using AxisAvaloniaApp.Services.Reports.Bulgaria;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -99,7 +100,9 @@ namespace AxisAvaloniaApp.Services
             services.Register(() => new CreditNoteViewModel());
             services.Register(() => new CashRegisterViewModel());
             services.Register(() => new ExchangeViewModel());
-            services.Register(() => new ReportsViewModel(resolver.GetRequiredService<IReportsService>()));
+            services.Register(() => new ReportsViewModel(
+                resolver.GetRequiredService<IReportsService>(), 
+                resolver.GetRequiredService<ISerializationService>()));
             services.Register(() => new SettingsViewModel());
         }
 
