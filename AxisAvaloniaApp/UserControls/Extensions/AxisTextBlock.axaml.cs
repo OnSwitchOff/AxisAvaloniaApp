@@ -5,7 +5,6 @@ using Avalonia.Styling;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Translation;
 using System;
-using System.Diagnostics;
 
 namespace AxisAvaloniaApp.UserControls.Extensions
 {
@@ -47,14 +46,15 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         /// <param name="change">AvaloniaPropertyChangedEventArgs.</param>
         /// <date>25.05.2022.</date>
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
+        {            
+            base.OnPropertyChanged(change);
+
             switch (change.Property.Name)
             {
                 case nameof(LocalizeTextKey):
                     Localize();
                     break;
             }
-            base.OnPropertyChanged(change);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         {
             if (!string.IsNullOrEmpty(this.LocalizeTextKey))
             {
-                this.Text = translationService.Localize(this.LocalizeTextKey);
+                this.Text = translationService.Localize(this.LocalizeTextKey).TrimStart('\n');
             }
         }
     }

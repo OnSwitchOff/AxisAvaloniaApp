@@ -10,6 +10,7 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
+    <None Remove="Assets\Application.png" />
     <None Remove="Assets\AxisIcon.ico" />
     <None Remove="Assets\Icons\arrow_back.png" />
     <None Remove="Assets\Icons\cashRegister.png" />
@@ -45,6 +46,8 @@
     <None Remove="Assets\Icons\settings.png" />
     <None Remove="Assets\Icons\unlock.png" />
     <None Remove="Assets\Icons\YouTube.png" />
+    <None Remove="Assets\InputDataToLaptop.png" />
+    <None Remove="Assets\OperationSchema.png" />
     <None Remove="Resources\Dictionary.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -100,9 +103,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="UserControls\Extensions\AxisTextBlock.axaml.cs">
-      <DependentUpon>AxisTextBlock.axaml</DependentUpon>
     </Compile>
     <Compile Update="UserControls\Extensions\CheckedMenuItem.axaml.cs">
       <DependentUpon>CheckedMenuItem.axaml</DependentUpon>
