@@ -73,7 +73,7 @@
                       Padding="4"
                       Background="Transparent"
                       BorderThickness="0" 
-                      Command="{TemplateBinding PrintContentHideCommand}">
+                      Command="{TemplateBinding BackToOperationContentCommand}">
                 <Button.Content>
                   <Image Source="/Assets/Icons/arrow_back.png"/>
                 </Button.Content>
@@ -82,6 +82,7 @@
             <Grid Grid.Row="1" ColumnDefinitions="auto, *">
               <StackPanel Grid.Column="0" 
                           Orientation="Vertical"
+                          MaxWidth="280"
                           Margin="3">
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                   <Button Padding="5" 
@@ -116,6 +117,41 @@
                                           FontSize="16"
                                           FontWeight="Bold"
                                           Foreground="#FF1B7E83"/>
+                <ComboBox Items="{TemplateBinding Printers}"
+                          SelectedItem="{TemplateBinding SelectedPrinter, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <Grid ColumnDefinitions="auto, *">
+                        <Image Grid.Column="0"
+                               Height="40"
+                               Source="/Assets/Icons/printer_dev.png"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding}"
+                                   Margin="5, 0"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <controlsEx:AxisTextBlock LocalizeTextKey="strSettings"
+                                            HorizontalAlignment="Left"
+                                            FontSize="16"
+                                            FontWeight="Bold"
+                                            Foreground="#FF1B7E83"/>
+                <ComboBox>
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <Grid ColumnDefinitions="auto, *">
+                        <Image Grid.Column="0"
+                               Height="40"
+                               Source="/Assets/Icons/papers.png"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding}"
+                                   Margin="5, 0"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
               </StackPanel>
               <ListBox Name="ListPages"
                        Grid.Column="1"

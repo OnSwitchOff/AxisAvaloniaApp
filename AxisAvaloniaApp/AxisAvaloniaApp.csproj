@@ -30,6 +30,7 @@
     <None Remove="Assets\Icons\hamburgerButton_Expand.png" />
     <None Remove="Assets\Icons\invoice.png" />
     <None Remove="Assets\Icons\lock.png" />
+    <None Remove="Assets\Icons\papers.png" />
     <None Remove="Assets\Icons\partners_add.png" />
     <None Remove="Assets\Icons\partners_delete.png" />
     <None Remove="Assets\Icons\partners_edit.png" />
@@ -40,6 +41,7 @@
     <None Remove="Assets\Icons\payment_points.png" />
     <None Remove="Assets\Icons\payment_voucher.png" />
     <None Remove="Assets\Icons\print.ico" />
+    <None Remove="Assets\Icons\printer_dev.png" />
     <None Remove="Assets\Icons\reports.png" />
     <None Remove="Assets\Icons\sale.png" />
     <None Remove="Assets\Icons\search.png" />
