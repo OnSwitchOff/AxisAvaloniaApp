@@ -27,10 +27,10 @@ namespace AxisAvaloniaApp.ViewModels
         private ComboBoxItemModel selectedPeriod;
 
         private string fromDateString;
-        private DateTimeOffset? fromDateTimeOffset;
+        private DateTime fromDateTimeOffset;
 
         private string toDateString;
-        private DateTimeOffset? toDateTimeOffset;
+        private DateTime toDateTimeOffset;
 
         private string filterString;
         #endregion
@@ -54,7 +54,7 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedPeriod, value);
         }
         public string FromDateString { get => fromDateString; set => this.RaiseAndSetIfChanged(ref fromDateString, value); }
-        public DateTimeOffset? FromDateTimeOffset
+        public DateTime FromDateTimeOffset
         {
             get => fromDateTimeOffset;
             set
@@ -62,12 +62,12 @@ namespace AxisAvaloniaApp.ViewModels
                 this.RaiseAndSetIfChanged(ref fromDateTimeOffset, value);
                 if (value != null)
                 {
-                    FromDateString = ((DateTimeOffset)FromDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                    FromDateString = ((DateTime)FromDateTimeOffset).Date.ToString("dd.MM.yyyy");
                 }
             }
         }
         public string ToDateString { get => toDateString; set => this.RaiseAndSetIfChanged(ref toDateString, value); }
-        public DateTimeOffset? ToDateTimeOffset
+        public DateTime ToDateTimeOffset
         {
             get => toDateTimeOffset;
             set
@@ -75,7 +75,7 @@ namespace AxisAvaloniaApp.ViewModels
                 this.RaiseAndSetIfChanged(ref toDateTimeOffset, value);
                 if (value != null)
                 {
-                    ToDateString = ((DateTimeOffset)ToDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                    ToDateString = ((DateTime)ToDateTimeOffset).Date.ToString("dd.MM.yyyy");
                 }
             }
         }
@@ -85,8 +85,8 @@ namespace AxisAvaloniaApp.ViewModels
         {
             Periods = GetPeriodsCollection();
             SelectedPeriod = Periods[0];
-            FromDateTimeOffset = new DateTimeOffset(DateTime.Today);
-            ToDateTimeOffset = new DateTimeOffset(DateTime.Today);
+            FromDateTimeOffset = DateTime.Today;
+            ToDateTimeOffset = DateTime.Today;
             FilterString = "filterstring";
             //Items = new ObservableCollection<DocumentItem>() { new DocumentItem(1), new DocumentItem(2), new DocumentItem(3) };
             Items = new ObservableCollection<DocumentItem>() { new DocumentItem(4), new DocumentItem(5), new DocumentItem(6) };
@@ -115,7 +115,7 @@ namespace AxisAvaloniaApp.ViewModels
         #region Fields
         private string sale;
         private string saleDateString;
-        private DateTimeOffset? saleDateTimeOffset;
+        private DateTime saleDateTimeOffset;
         private PartnerModel client;
         private string city;
         private string address;
@@ -123,11 +123,11 @@ namespace AxisAvaloniaApp.ViewModels
         private string amount;
         private string invoiceNumber;
         private string invoiceDateString;
-        private DateTimeOffset? invoiceDateTimeOffset;        
+        private DateTime invoiceDateTimeOffset;        
         private string invoicePrepared;
         private string receiver;
         private string dealDateString;
-        private DateTimeOffset? dealDateTimeOffset;
+        private DateTime dealDateTimeOffset;
         private string dealPlace;
         private string description;
         #endregion
@@ -135,7 +135,7 @@ namespace AxisAvaloniaApp.ViewModels
         #region Properties
         public string Sale { get => sale; set => this.RaiseAndSetIfChanged(ref sale, value); }
         public string SaleDateString { get => saleDateString; set => this.RaiseAndSetIfChanged(ref saleDateString, value); }
-        public DateTimeOffset? SaleDateTimeOffset
+        public DateTime SaleDateTimeOffset
         {
             get => saleDateTimeOffset;
             set
@@ -143,14 +143,14 @@ namespace AxisAvaloniaApp.ViewModels
                 this.RaiseAndSetIfChanged(ref saleDateTimeOffset, value);
                 if (value != null)
                 {
-                    SaleDateString = ((DateTimeOffset)SaleDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                    SaleDateString = ((DateTime)SaleDateTimeOffset).Date.ToString("dd.MM.yyyy");
                 }
             }
         }
         public string Amount { get => amount; set => this.RaiseAndSetIfChanged(ref amount, value); }
         public string InvoiceNumber { get => invoiceNumber; set => this.RaiseAndSetIfChanged(ref invoiceNumber, value); }
         public string InvoiceDateString { get => invoiceDateString; set => this.RaiseAndSetIfChanged(ref invoiceDateString, value); }
-        public DateTimeOffset? InvoiceDateTimeOffset
+        public DateTime InvoiceDateTimeOffset
         {
             get => invoiceDateTimeOffset;
             set
@@ -158,7 +158,7 @@ namespace AxisAvaloniaApp.ViewModels
                 this.RaiseAndSetIfChanged(ref invoiceDateTimeOffset, value);
                 if (value != null)
                 {
-                    InvoiceDateString = ((DateTimeOffset)InvoiceDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                    InvoiceDateString = ((DateTime)InvoiceDateTimeOffset).Date.ToString("dd.MM.yyyy");
                 }
             }
         }
@@ -173,7 +173,7 @@ namespace AxisAvaloniaApp.ViewModels
         public string Phone { get => phone; set => this.RaiseAndSetIfChanged(ref phone, value); }
         public string Receiver { get => receiver; set => this.RaiseAndSetIfChanged(ref receiver, value); }
         public string DealDateString { get => dealDateString; set => this.RaiseAndSetIfChanged(ref dealDateString, value); }
-        public DateTimeOffset? DealDateTimeOffset
+        public DateTime DealDateTimeOffset
         {
             get => dealDateTimeOffset;
             set
@@ -181,7 +181,7 @@ namespace AxisAvaloniaApp.ViewModels
                 this.RaiseAndSetIfChanged(ref dealDateTimeOffset, value);
                 if (value != null)
                 {
-                    DealDateString = ((DateTimeOffset)DealDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                    DealDateString = ((DateTime)DealDateTimeOffset).Date.ToString("dd.MM.yyyy");
                 }
             }
         }
@@ -196,10 +196,10 @@ namespace AxisAvaloniaApp.ViewModels
         public DocumentItem()
         {
             Sale = "sale";
-            SaleDateTimeOffset = new DateTimeOffset(DateTime.Now);         
+            SaleDateTimeOffset = DateTime.Now;         
             Amount = "amount";
             InvoiceNumber = "invoice#";
-            InvoiceDateTimeOffset = new DateTimeOffset(DateTime.Now);
+            InvoiceDateTimeOffset = DateTime.Now;
             InvoicePrepared = "prep";
 
             Client = new PartnerModel();
@@ -219,7 +219,7 @@ namespace AxisAvaloniaApp.ViewModels
             Client.VATNumber = "VatNumber";
 
             Receiver = "Reciever";
-            DealDateTimeOffset = new DateTimeOffset(DateTime.Now);
+            DealDateTimeOffset = DateTime.Now;
             DealPlace = "DealPlace";
             Description = "Description";
 
@@ -230,11 +230,11 @@ namespace AxisAvaloniaApp.ViewModels
         public DocumentItem(string sale, DateTime saleDate, PartnerModel client, string amount, string invoice, DateTime invoiceDate)
         {
             Sale = sale;
-            SaleDateTimeOffset = new DateTimeOffset(saleDate);
+            SaleDateTimeOffset = saleDate;
             Client = client;
             Amount = amount;
             InvoiceNumber = invoice;
-            InvoiceDateTimeOffset = new DateTimeOffset(invoiceDate);
+            InvoiceDateTimeOffset = invoiceDate;
             PrintCommand = ReactiveCommand.Create(Print);
         }
 
@@ -242,7 +242,7 @@ namespace AxisAvaloniaApp.ViewModels
         {
 
             Sale = "sale"+x;
-            SaleDateTimeOffset = new DateTimeOffset(DateTime.Now); ;
+            SaleDateTimeOffset = DateTime.Now; ;
             InvoicePrepared = "InvoicePrepared"+x;
 
             Client = new PartnerModel();
@@ -264,8 +264,8 @@ namespace AxisAvaloniaApp.ViewModels
             Receiver = "Reciever";
             Amount = "amount";
             InvoiceNumber = "invoice#";
-            InvoiceDateTimeOffset = new DateTimeOffset(DateTime.Now);
-            DealDateTimeOffset = new DateTimeOffset(DateTime.Now);
+            InvoiceDateTimeOffset = DateTime.Now;
+            DealDateTimeOffset = DateTime.Now;
             DealPlace = "DealPlace";
             Description = "Description";
 

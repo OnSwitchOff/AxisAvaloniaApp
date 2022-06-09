@@ -9,7 +9,7 @@
     <Application.Styles>
       <FluentTheme Mode="Light"/>
       <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-      <StyleInclude Source="avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml"/>
+	<!--<StyleInclude Source="avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml"/>-->
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationView.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/NavigationView/NavigationViewItem.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/OperationContainer.axaml"/>
@@ -17,8 +17,7 @@
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/Buttons/PaymentButton.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/Buttons/ExecutionButton.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/ComboBoxes/ComboBoxWithTreeView.axaml"/>
-      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/GroupBox/GroupBox.axaml"/>
-      
+      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/GroupBox/GroupBox.axaml"/>     
 
       <StyleInclude Source="/Styles/DataGrid.axaml"/>
       <StyleInclude Source="/Styles/TextBlock.axaml"/>
