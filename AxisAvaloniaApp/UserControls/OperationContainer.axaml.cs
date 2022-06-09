@@ -15,7 +15,7 @@ namespace AxisAvaloniaApp.UserControls
         int index = 0;
         public OperationContainer()
         {
-            PrintContentHideCommand = ReactiveCommand.Create(() =>
+            BackToOperationContentCommand = ReactiveCommand.Create(() =>
             {
                PrintContentVisible = false;
             });
@@ -36,6 +36,15 @@ namespace AxisAvaloniaApp.UserControls
             //{
             //    PrintContentVisible = true;
             //});
+
+            Printers = new ObservableCollection<string>();
+            foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
+            {
+                Printers.Add(printer);
+            }
+
+            System.Drawing.Printing.PrinterSettings settings = new System.Drawing.Printing.PrinterSettings();
+            SelectedPrinter = settings.PrinterName;
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -110,17 +119,17 @@ namespace AxisAvaloniaApp.UserControls
             set => SetValue(PrintContentVisibleProperty, value);
         }
 
-        public static readonly StyledProperty<IReactiveCommand> PrintContentHideCommandProperty =
-            AvaloniaProperty.Register<OperationContainer, IReactiveCommand>(nameof(PrintContentHideCommand));
+        public static readonly StyledProperty<IReactiveCommand> BackToOperationContentCommandProperty =
+            AvaloniaProperty.Register<OperationContainer, IReactiveCommand>(nameof(BackToOperationContentCommand));
 
         /// <summary>
         /// Gets or sets a command that invoked if button "X" of the print content is pressed.
         /// </summary>
         /// <date>25.05.2022.</date>
-        private IReactiveCommand PrintContentHideCommand
+        private IReactiveCommand BackToOperationContentCommand
         {
-            get => GetValue(PrintContentHideCommandProperty);
-            set => SetValue(PrintContentHideCommandProperty, value);
+            get => GetValue(BackToOperationContentCommandProperty);
+            set => SetValue(BackToOperationContentCommandProperty, value);
         }
 
         public static readonly StyledProperty<ObservableCollection<Bitmap>> PagesProperty =
@@ -173,6 +182,32 @@ namespace AxisAvaloniaApp.UserControls
         {
             get => GetValue(CountOfCopiesProperty);
             set => SetValue(CountOfCopiesProperty, value);
+        }
+
+        public static readonly StyledProperty<ObservableCollection<string>> PrintersProperty =
+           AvaloniaProperty.Register<OperationContainer, ObservableCollection<string>>(nameof(Printers));
+
+        /// <summary>
+        /// Gets or sets list with enabled printers.
+        /// </summary>
+        /// <date>08.06.2022.</date>
+        public ObservableCollection<string> Printers
+        {
+            get => GetValue(PrintersProperty);
+            set => SetValue(PrintersProperty, value);
+        }
+
+        public static readonly StyledProperty<string> SelectedPrinterProperty =
+           AvaloniaProperty.Register<OperationContainer, string>(nameof(SelectedPrinter));
+
+        /// <summary>
+        /// Gets or sets printer is selected by user.
+        /// </summary>
+        /// <date>08.06.2022.</date>
+        public string SelectedPrinter
+        {
+            get => GetValue(SelectedPrinterProperty);
+            set => SetValue(SelectedPrinterProperty, value);
         }
 
         //public static readonly StyledProperty<object> PrintContentProperty =
