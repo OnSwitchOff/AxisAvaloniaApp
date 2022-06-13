@@ -6,6 +6,7 @@
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
              xmlns:groupBox="using:AxisAvaloniaApp.UserControls.GroupBox"
              xmlns:buttons="using:AxisAvaloniaApp.UserControls.Buttons"
+             xmlns:calendar="using:AxisAvaloniaApp.UserControls.MyCalendar"
              mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="450"
              x:Class="AxisAvaloniaApp.Views.ReportsView">
 
@@ -13,18 +14,13 @@
     <StyleInclude Source="/Styles/DataGrid.axaml"/>
     <StyleInclude Source="/Styles/TextBlock.axaml"/>
 
-    <Style Selector="TextBlock">
+    <Style Selector="TextBlock.Margin">
       <Setter Property="VerticalAlignment" Value="Center"/>
       <Setter Property="Margin" Value="0, 3, 15, 3"/>
     </Style>
 
     <Style Selector="TextBox">
       <Setter Property="Margin" Value="0, 3, 0, 3"/>
-    </Style>
-
-    <Style Selector="DatePicker">
-      <Setter Property="Margin" Value="0, 3, 0, 3"/>
-      <Setter Property="HorizontalAlignment" Value="Stretch"/>
     </Style>
   </UserControl.Styles>
   
@@ -68,37 +64,56 @@
               <controlsEx:AxisTextBlock Grid.Row="0"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
+                                        Classes="Margin"
                                         LocalizeTextKey="strNumber"/>
               <controlsEx:AxisTextBlock Grid.Row="1"
                                         Grid.Column="0"
+                                        Classes="Margin"
                                         LocalizeTextKey="strFrom"/>
               <controlsEx:AxisTextBox Grid.Row="1"
                                       Grid.Column="1"
-                                      Text="{Binding StartAcct, Mode=TwoWay}"
+                                      Text="{Binding AcctFrom, Mode=TwoWay}"
+                                      UseFloatingWatermark="True"
+                                      InputDataChecker="OnlyDigits"
                                       ExplanationKey="EnterStartAcctNumber"/>
               <controlsEx:AxisTextBlock Grid.Row="2"
                                         Grid.Column="0"
+                                        Classes="Margin"
                                         LocalizeTextKey="strTo"/>
               <controlsEx:AxisTextBox Grid.Row="2"
                                       Grid.Column="1"
-                                      Text="{Binding EndAcct, Mode=TwoWay}"
+                                      Text="{Binding AcctTo, Mode=TwoWay}"
+                                      InputDataChecker="OnlyDigits"
                                       ExplanationKey="EnterEndAcctNumber"/>
               <controlsEx:AxisTextBlock Grid.Row="4"
                                         Grid.Column="0"
                                         Grid.ColumnSpan="2"
+                                        Classes="Margin"
                                         LocalizeTextKey="strDate"/>
               <controlsEx:AxisTextBlock Grid.Row="5"
                                         Grid.Column="0"
+                                        Classes="Margin"
                                         LocalizeTextKey="strFrom"/>
-              <DatePicker Grid.Row="5"
-                          Grid.Column="1" 
-                          SelectedDate="{Binding StartDate, Mode=TwoWay}"/>
+              <Border Grid.Row="5"
+                      Grid.Column="1"
+                      Height="30"
+                      BorderThickness="1"
+                      BorderBrush="White"
+                      Margin="0, 0, 0, 3">
+                <calendar:MyDatePicker SelectedDate="{Binding DateFrom, Mode=TwoWay}"/>
+              </Border>              
               <controlsEx:AxisTextBlock Grid.Row="6"
                                         Grid.Column="0"
+                                        Classes="Margin"
                                         LocalizeTextKey="strTo"/>
-              <DatePicker Grid.Row="6"
-                          Grid.Column="1"
-                          SelectedDate="{Binding EndDate, Mode=TwoWay}"/>
+              <Border Grid.Row="6"
+                      Grid.Column="1"
+                      Height="30"
+                      BorderThickness="1"
+                      BorderBrush="White"
+                      Margin="0, 3, 0, 5">
+                <calendar:MyDatePicker SelectedDate="{Binding DateTo, Mode=TwoWay}"/>
+              </Border>
             </Grid>
           </groupBox:GroupBox.Content>
         </groupBox:GroupBox>

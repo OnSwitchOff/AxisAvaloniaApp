@@ -1,12 +1,16 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
+using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Explanation;
 using AxisAvaloniaApp.Services.Translation;
+using AxisAvaloniaApp.Services.Validation;
 using System;
+using System.Reflection;
 
 namespace AxisAvaloniaApp.UserControls.Extensions
 {
@@ -15,6 +19,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         Type IStyleable.StyleKey => typeof(TextBox);
         private ITranslationService translationService;
         private IExplanationService explanationService;
+        private IValidationService validationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AxisTextBox"/> class.
@@ -22,12 +27,11 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         public AxisTextBox()
         {
             InitializeComponent();
-
             Background = Avalonia.Media.Brushes.White;
 
             this.translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
-            this.translationService.LanguageChanged += Localize;
             this.explanationService = Splat.Locator.Current.GetRequiredService<IExplanationService>();
+            this.validationService = Splat.Locator.Current.GetRequiredService<IValidationService>();
         }
 
         public static readonly StyledProperty<string> ExplanationKeyProperty =
@@ -54,6 +58,67 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         {
             get => GetValue(LocalizePlaceholderKeyProperty);
             set => SetValue(LocalizePlaceholderKeyProperty, value);
+        }
+
+        public static readonly StyledProperty<EInputDataCheckers> InputDataCheckerProperty =
+           AvaloniaProperty.Register<AxisTextBlock, EInputDataCheckers>(nameof(InputDataChecker), EInputDataCheckers.AllData);
+
+        /// <summary>
+        /// Gets or sets parameter to validate input data.
+        /// </summary>
+        /// <date>10.06.2022.</date>
+        public EInputDataCheckers InputDataChecker
+        {
+            get => GetValue(InputDataCheckerProperty);
+            set => SetValue(InputDataCheckerProperty, value);
+        }
+
+        public static readonly StyledProperty<bool> IsErrorIconVisibleProperty =
+            AvaloniaProperty.Register<AxisTextBlock, bool>(nameof(IsErrorIconVisible), false);
+
+        /// <summary>
+        /// Gets or sets value indicating whether icon of error is visible.
+        /// </summary>
+        /// <date>10.06.2022.</date>
+        private bool IsErrorIconVisible
+        {
+            get => GetValue(IsErrorIconVisibleProperty);
+            set => SetValue(IsErrorIconVisibleProperty, value);
+        }
+
+        public static readonly StyledProperty<string> LocalizeErrorDescriptionKeyProperty =
+            AvaloniaProperty.Register<AxisTextBlock, string>(nameof(LocalizeErrorDescriptionKey), string.Empty);
+
+        /// <summary>
+        /// Gets or sets key to search description of error in the dictionary.
+        /// </summary>
+        /// <date>10.06.2022.</date>
+        private string LocalizeErrorDescriptionKey
+        {
+            get => GetValue(LocalizeErrorDescriptionKeyProperty);
+            set => SetValue(LocalizeErrorDescriptionKeyProperty, value);
+        }
+
+        /// <summary>
+        /// Subscribes to LanguageChanged event when the AxisTextBox is added to a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.translationService.LanguageChanged += Localize;
+            base.OnAttachedToVisualTree(e);
+        }
+
+        /// <summary>
+        /// Unsubscribes for LanguageChanged event when the AxisTextBox is removed from a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.translationService.LanguageChanged -= Localize;
+            base.OnDetachedFromVisualTree(e);
         }
 
         /// <summary>
@@ -108,6 +173,64 @@ namespace AxisAvaloniaApp.UserControls.Extensions
             base.OnPointerLeave(e);
 
             explanationService.ExplanationStr = string.Empty;
+        }
+
+        /// <summary>
+        /// Check input data.
+        /// </summary>
+        /// <param name="e">TextInputEventArgs.</param>
+        /// <date>10.06.2022.</date>
+        protected override void OnTextInput(TextInputEventArgs e)
+        {
+            if (e.Text != null)
+            {
+                switch (InputDataChecker)
+                {
+                    case EInputDataCheckers.OnlyDigits:
+                        e.Handled = !validationService.IsDigit(e.Text[0]);
+                        break;
+                    case EInputDataCheckers.OnlyLetters:
+                        e.Handled = !validationService.IsLetter(e.Text[0]);
+                        break;
+                    case EInputDataCheckers.OnlyLettersAndSpaces:
+                        e.Handled = !validationService.IsLetterOrSpace(e.Text[0]);
+                        break;
+                    case EInputDataCheckers.OnlyDigitsAndLetters:
+                        e.Handled = !(validationService.IsDigit(e.Text[0]) || validationService.IsLetter(e.Text[0]));
+                        break;
+                    case EInputDataCheckers.OnlyDigitsAndPoint:
+                        e.Handled = !(validationService.IsDigit(e.Text[0]) || 
+                            (e.Text[0].Equals('.') && !string.IsNullOrEmpty(this.Text) && this.Text.Replace(',', '.').IndexOf('.') == -1) || 
+                            (e.Text[0].Equals(',') && !string.IsNullOrEmpty(this.Text) && this.Text.Replace('.', ',').IndexOf(',') == -1));
+                        break;
+                }
+            }
+
+            base.OnTextInput(e);
+        }
+
+        /// <summary>
+        /// Shows icon and description of error when data is not valid.
+        /// </summary>
+        /// <typeparam name="T">type of valoniaProperty.</typeparam>
+        /// <param name="property">AvaloniaProperty.</param>
+        /// <param name="value">BindingValue.</param>
+        /// <date>10.06.2022.</date>
+        protected override void UpdateDataValidation<T>(AvaloniaProperty<T> property, BindingValue<T> value)
+        {
+            IsErrorIconVisible = value.Type == BindingValueType.DataValidationErrorWithFallback;
+
+            if (value.HasError && value.Type == BindingValueType.DataValidationErrorWithFallback)
+            {
+                LocalizeErrorDescriptionKey = value.Error.Message;
+                var ctor = value.GetType().GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, new[] { typeof(BindingValueType), typeof(T), typeof(Exception) });//.GetProperty("Error");
+                if (ctor != null)
+                {
+                    value = (BindingValue<T>)ctor.Invoke(new object[] { value.Type, value.Value, new DataValidationException("") });
+                }
+            }
+
+            base.UpdateDataValidation(property, value);
         }
 
         /// <summary>

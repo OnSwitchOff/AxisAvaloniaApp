@@ -20,7 +20,9 @@
     <None Remove="Assets\Icons\doubleArrow_down.png" />
     <None Remove="Assets\Icons\doubleArrow_up.png" />
     <None Remove="Assets\Icons\editPageTitle.png" />
+    <None Remove="Assets\Icons\error.jpg" />
     <None Remove="Assets\Icons\exchange.png" />
+    <None Remove="Assets\Icons\exportToPDF.png" />
     <None Remove="Assets\Icons\goods_add.png" />
     <None Remove="Assets\Icons\goods_delete.png" />
     <None Remove="Assets\Icons\goods_edit.png" />
@@ -31,7 +33,16 @@
     <None Remove="Assets\Icons\hamburgerButton_Expand.png" />
     <None Remove="Assets\Icons\invoice.png" />
     <None Remove="Assets\Icons\lock.png" />
-    <None Remove="Assets\Icons\papers.png" />
+    <None Remove="Assets\Icons\orientationLandscape.jpg" />
+    <None Remove="Assets\Icons\orientationPortrait.jpg" />
+    <None Remove="Assets\Icons\pageFormat.png" />
+    <None Remove="Assets\Icons\pages_Collated.png" />
+    <None Remove="Assets\Icons\pages_Uncollated.png" />
+    <None Remove="Assets\Icons\papers_All.png" />
+    <None Remove="Assets\Icons\papers_Current.png" />
+    <None Remove="Assets\Icons\papers_Custom.png" />
+    <None Remove="Assets\Icons\papers_even.png" />
+    <None Remove="Assets\Icons\papers_odd.png" />
     <None Remove="Assets\Icons\partners_add.png" />
     <None Remove="Assets\Icons\partners_delete.png" />
     <None Remove="Assets\Icons\partners_edit.png" />
@@ -89,6 +100,7 @@
     <PackageReference Include="Microinvest.IntegrationService" Version="1.0.0" />
     <PackageReference Include="Microinvest.PDFCreator" Version="1.0.0" />
     <PackageReference Include="Microinvest.SearchService" Version="1.0.0" />
+    <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />

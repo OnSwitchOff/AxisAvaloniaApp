@@ -111,6 +111,28 @@ namespace AxisAvaloniaApp.Views
             }
         }
 
+        /// <summary>
+        /// Subscribes to LanguageChanged event when the PaymentButton is added to a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            //this.translationService.LanguageChanged += Localize;
+            base.OnAttachedToVisualTree(e);
+        }
+
+        /// <summary>
+        /// Unsubscribes for LanguageChanged event when the PaymentButton is removed from a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            //this.translationService.LanguageChanged -= Localize;
+            base.OnDetachedFromVisualTree(e);
+        }
+
         private void DeserializeVisualData()
         {
             serializationSale.InitSerializationData(ESerializationGroups.Sale);

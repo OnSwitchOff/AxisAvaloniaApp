@@ -214,6 +214,66 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strPrintAllPages">
+      <Value Lang="bg-BG">Принтиране на всички страници</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Print all pages</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Печатать все страницы</Value>
+      <Value Lang="uk-UA">Друкувати всі сторінки</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPrintCurrentPage">
+      <Value Lang="bg-BG">Принтиране на текущата страница</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Print current page</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Печатать текущую страницу</Value>
+      <Value Lang="uk-UA">Друкувати поточну сторінку</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
+    <Data Key="strPrintCustom">
+      <Value Lang="bg-BG">Принтиране на избраните страници</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Custom print</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Печатать выбранные страницы</Value>
+      <Value Lang="uk-UA">Друкувати вибрані сторінки</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
+    <Data Key="strPrintOddPages">
+      <Value Lang="bg-BG">Принтиране на нечетните страници</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Print odd pages</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Печатать нечётные страницы</Value>
+      <Value Lang="uk-UA">Друкувати непарні сторінки</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
+    <Data Key="strPrintEvenPages">
+      <Value Lang="bg-BG">Принтиране на четните страници</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Print even pages</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Печатать чётные страницы</Value>
+      <Value Lang="uk-UA">Друкувати парні сторінки</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPages">
+      <Value Lang="bg-BG">Страници</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Pages</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Страницы</Value>
+      <Value Lang="uk-UA">Сторінки</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
     <Data Key="strCountOfCopies">
       <Value Lang="bg-BG">Копия</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -231,6 +291,46 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Принтер</Value>
       <Value Lang="uk-UA">Принтер</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCollated">
+      <Value Lang="bg-BG">Сортиране</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Collated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Сортировать</Value>
+      <Value Lang="uk-UA">Сортувати</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strUncollated">
+      <Value Lang="bg-BG">Не сортиране</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Uncollated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Не сортировать</Value>
+      <Value Lang="uk-UA">Не сортувати</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPortraitOrientation">
+      <Value Lang="bg-BG">Ориентация на книга</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Portrait orientation</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Книжная ориентация</Value>
+      <Value Lang="uk-UA">Книжкова орієнтація</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strLandscapeOrientation">
+      <Value Lang="bg-BG">Портретна ориентация</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Landscape orientation</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Портретная ориентация</Value>
+      <Value Lang="uk-UA">Портретна орієнтація</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>

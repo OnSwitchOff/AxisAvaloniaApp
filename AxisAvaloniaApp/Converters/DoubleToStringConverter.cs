@@ -1,13 +1,9 @@
 ﻿using Avalonia.Data.Converters;
 using AxisAvaloniaApp.Enums;
-using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Settings;
+using Splat;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Converters
 {
@@ -17,7 +13,7 @@ namespace AxisAvaloniaApp.Converters
 
         public DoubleToStringConverter()
         {
-            settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
+            settingsService = Locator.Current.GetService<ISettingsService>();
         }
 
 
@@ -42,6 +38,8 @@ namespace AxisAvaloniaApp.Converters
                                 return parsedValue.ToString(settingsService.QtyFormat);
                             case EDoubleTypes.Price:
                                 return parsedValue.ToString(settingsService.PriceFormat);
+                            case EDoubleTypes.F0_Percent:
+                                return ((double)value).ToString("F0") + "%";
                         }
                     }
                     else

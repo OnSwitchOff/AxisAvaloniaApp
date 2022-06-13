@@ -17,7 +17,6 @@ namespace AxisAvaloniaApp.UserControls.Buttons
         public PaymentButton()
         {
             translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
-            translationService.LanguageChanged += Localize;
         }
 
         public static readonly StyledProperty<ICommand> CommandProperty =
@@ -83,6 +82,28 @@ namespace AxisAvaloniaApp.UserControls.Buttons
         {
             get => GetValue(TextProperty);
             set => SetValue(TextProperty, value);
+        }
+
+        /// <summary>
+        /// Subscribes to LanguageChanged event when the PaymentButton is added to a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.translationService.LanguageChanged += Localize;
+            base.OnAttachedToVisualTree(e);
+        }
+
+        /// <summary>
+        /// Unsubscribes for LanguageChanged event when the PaymentButton is removed from a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.translationService.LanguageChanged -= Localize;
+            base.OnDetachedFromVisualTree(e);
         }
 
         /// <summary>

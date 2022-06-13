@@ -1,10 +1,20 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions" 
         xmlns:controls="using:AxisAvaloniaApp.UserControls"
-        xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions">
+        xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+        xmlns:converters="using:AxisAvaloniaApp.Converters"
+        xmlns:enums="using:AxisAvaloniaApp.Enums">
   <Design.PreviewWith>
     <controls:OperationContainer PrintContentVisible="True" />
   </Design.PreviewWith>
+
+  <Styles.Resources>
+    <converters:BitmapAssetValueConverter x:Key="BitmapAsset"/>
+    <converters:EPrintingModesToBoolConverter x:Key="EPrintingModesToBool"/>
+    <converters:DoubleToStringConverter x:Key="DoubleToString"/>
+  </Styles.Resources>
 
   <Style Selector="controls|OperationContainer">
     <!-- Set Defaults -->
@@ -82,9 +92,10 @@
             <Grid Grid.Row="1" ColumnDefinitions="auto, *">
               <StackPanel Grid.Column="0" 
                           Orientation="Vertical"
+                          Spacing="2"
                           MaxWidth="280"
                           Margin="3">
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <StackPanel Orientation="Horizontal">
                   <Button Padding="5" 
                           Background="Transparent" 
                           BorderBrush="Gray" 
@@ -138,41 +149,188 @@
                                             FontSize="16"
                                             FontWeight="Bold"
                                             Foreground="#FF1B7E83"/>
-                <ComboBox>
+                <ComboBox Name="ComboBoxPrintingModes" Items="{TemplateBinding PrintingModes}"
+                          SelectedItem="{TemplateBinding SelectedPrintingMode, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch">
                   <ComboBox.ItemTemplate>
                     <DataTemplate>
                       <Grid ColumnDefinitions="auto, *">
                         <Image Grid.Column="0"
                                Height="40"
-                               Source="/Assets/Icons/papers.png"/>
+                               Margin="0, 3, 0,0"
+                               Source="{Binding ImagePath, Converter={StaticResource BitmapAsset}}"/>
+                        <controlsEx:AxisTextBlock Grid.Column="1"
+                                                  LocalizeTextKey="{Binding LocalizeKey}"
+                                                  Margin="5, 0"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Grid ColumnDefinitions="auto, *" >
+                  <controlsEx:AxisTextBlock Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            LocalizeTextKey="strPages"/>
+                  <TextBox Grid.Column="1" 
+                           Name="TextBoxPagesToPrint"
+                           Text="{TemplateBinding PagesToPrint}"
+                           HorizontalAlignment="Stretch"
+                           IsEnabled="{Binding ElementName=ComboBoxPrintingModes, Path=SelectedItem.PrintType, Converter={StaticResource EPrintingModesToBool}, ConverterParameter={x:Static enums:EPrintingModes.CustomPrint}, Mode=OneWay}"/>
+                </Grid>
+                <ComboBox Items="{TemplateBinding SortingModes}"
+                          SelectedItem="{TemplateBinding SelectedSortingMode}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <Grid ColumnDefinitions="auto, *"
+                            RowDefinitions="auto, auto">
+                        <Image Grid.Column="0"
+                               Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Height="40"
+                               Margin="0, 3, 0,0"
+                               Source="{Binding ImagePath, Converter={StaticResource BitmapAsset}}"/>
+                        <controlsEx:AxisTextBlock Grid.Column="1"
+                                                  Grid.Row="0"
+                                                  LocalizeTextKey="{Binding LocalizeKey}"
+                                                  Margin="5, 0"/>
                         <TextBlock Grid.Column="1"
-                                   Text="{Binding}"
+                                   Grid.Row="1"
+                                   Text="{Binding AdditionalData}"
+                                   Foreground="Gray"
                                    Margin="5, 0"/>
                       </Grid>
                     </DataTemplate>
                   </ComboBox.ItemTemplate>
                 </ComboBox>
+                <ComboBox Items="{TemplateBinding Orientations}"
+                          SelectedItem="{TemplateBinding SelectedOrientation}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <Grid ColumnDefinitions="auto, *">
+                        <Image Grid.Column="0"
+                               Height="40"
+                               Margin="0, 3, 0,0"
+                               Source="{Binding ImagePath, Converter={StaticResource BitmapAsset}}"/>
+                        <controlsEx:AxisTextBlock Grid.Column="1"
+                                                  LocalizeTextKey="{Binding LocalizeKey}"
+                                                  Margin="5, 0"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <ComboBox Items="{TemplateBinding PageFormats}"
+                          SelectedItem="{TemplateBinding SelectedPageFormat, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <Grid ColumnDefinitions="auto, *"
+                            RowDefinitions="auto, auto">
+                        <Image Grid.Column="0"
+                               Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Height="40"
+                               Margin="0, 3, 0,0"
+                               Source="{Binding ImagePath, Converter={StaticResource BitmapAsset}}"/>
+                        <controlsEx:AxisTextBlock Grid.Column="1"
+                                                  Grid.Row="0"
+                                                  Text="{Binding LocalizeKey}"
+                                                  Margin="5, 0"/>
+                        <TextBlock Grid.Column="1"
+                                   Grid.Row="1"
+                                   Text="{Binding AdditionalData}"
+                                   Foreground="Gray"
+                                   Margin="5, 0"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button Background="Transparent"
+                        BorderBrush="Gray"
+                        BorderThickness="0.5"
+                        Margin="1, 50, 1, 1">
+                  <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                      <Image Source="/Assets/Icons/exportToPDF.png" Stretch="Uniform" Height="40"/>
+                      <controlsEx:AxisTextBlock LocalizeTextKey="strExport" 
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Background="Transparent"
+                                                FontWeight="Bold"/>
+                    </StackPanel>
+                  </Button.Content>
+                </Button>
               </StackPanel>
-              <ListBox Name="ListPages"
-                       Grid.Column="1"
-                       Items="{TemplateBinding Pages, Mode=TwoWay}"
-                       SelectedItem="{TemplateBinding ActivePage, Mode=TwoWay}"
-                       SelectionMode="Single"
-                       Background="Transparent"
-                       Margin="5, 0, 5, 0">
-                <ListBox.Styles>
-                  <Style Selector="ListBoxItem">
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                  </Style>
-                </ListBox.Styles>
-                <ListBox.ItemTemplate>
-                  <DataTemplate>
-                    <Image Source="{Binding}"
-                           Margin="3"/>
-                  </DataTemplate>
-                </ListBox.ItemTemplate>
-              </ListBox>
+
+              <Grid Grid.Column="1"
+                    RowDefinitions="*, auto">
+                <ScrollViewer Grid.Row="0"
+                              Padding="30"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                  <ItemsRepeater Name="ListPages" 
+                                 Items="{TemplateBinding Pages, Mode=TwoWay}"
+                                Width="{TemplateBinding PageWidth, Mode=TwoWay}">
+                    <ItemsRepeater.Styles>
+                    </ItemsRepeater.Styles>
+                    <ItemsRepeater.ItemTemplate>
+                      <DataTemplate>
+                        <Border BorderBrush="Gray" 
+                                BorderThickness="1" 
+                                Background="White" 
+                                Padding="10"
+                                Margin="0, 5, 0, 5">
+                          <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="PointerPressed">
+                              <ia:ChangePropertyAction PropertyName="Background" Value="Gray"/>
+                            </ia:EventTriggerBehavior>
+                          </i:Interaction.Behaviors>
+                          <Image Source="{Binding}"/>
+                        </Border>
+                      </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                  </ItemsRepeater>
+                  <!--
+                  <ListBox Name="ListPages" 
+                           Items="{TemplateBinding Pages, Mode=TwoWay}"
+                           SelectedItem="{TemplateBinding ActivePage, Mode=TwoWay}"
+                           SelectionMode="Single"
+                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                           Background="Transparent"
+                           Width="{TemplateBinding PageWidth, Mode=TwoWay}">
+                    <ListBox.Styles>
+                      <Style Selector="ListBoxItem">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="BorderBrush" Value="Gray"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Margin" Value="0, 5, 0, 5"/>
+                      </Style>
+                    </ListBox.Styles>
+                    <ListBox.ItemTemplate>
+                      <DataTemplate>
+                        <Image Source="{Binding}"/>
+                      </DataTemplate>
+                    </ListBox.ItemTemplate>
+                  </ListBox>
+                  -->
+                </ScrollViewer>
+                <Grid Grid.Row="1"
+                      ColumnDefinitions="100, auto"
+                      Margin="50, 0, 50, 0">
+                  <TextBlock Grid.Column="0" 
+                             Text="{TemplateBinding Scale,
+                             Converter={StaticResource DoubleToString}, 
+                             ConverterParameter={x:Static enums:EDoubleTypes.F0_Percent}, 
+                             Mode=OneWay}"
+                             HorizontalAlignment="Right"/>
+                  <Slider Grid.Column="1"
+                          Minimum="50" 
+                          Maximum="200" Width="300"
+                          Value="{TemplateBinding Scale, Mode=TwoWay}"
+                          Margin="10, 0"/>
+                </Grid>                
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

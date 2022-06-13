@@ -23,7 +23,6 @@ namespace AxisAvaloniaApp.UserControls.Extensions
 
             IsChecked = false;
             this.translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
-            this.translationService.LanguageChanged += Localize;
         }
 
         public static readonly StyledProperty<bool> IsCheckedProperty =
@@ -51,6 +50,28 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         {
             get => GetValue(LocalizeTextKeyProperty);
             set => SetValue(LocalizeTextKeyProperty, value);
+        }
+
+        /// <summary>
+        /// Subscribes to LanguageChanged event when the CheckedMenuItem is added to a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.translationService.LanguageChanged += Localize;
+            base.OnAttachedToVisualTree(e);
+        }
+
+        /// <summary>
+        /// Unsubscribes for LanguageChanged event when the CheckedMenuItem is removed from a rooted visual tree.
+        /// </summary>
+        /// <param name="e">VisualTreeAttachmentEventArgs</param>
+        /// <date>09.06.2022.</date>
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.translationService.LanguageChanged -= Localize;
+            base.OnDetachedFromVisualTree(e);
         }
 
         /// <summary>
