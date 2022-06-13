@@ -60,10 +60,10 @@
 							</Border>
 							<Border Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsImportDirection, Mode=TwoWay}">
 	
-								<ComboBox Margin="5" HorizontalAlignment="Stretch" BorderBrush="White" Classes="Light" Items="{Binding	ImportFromItems}" Height="30" SelectedItem="{Binding, Path=SelectedImportFromItem, Mode=TwoWay}" CornerRadius="0" VerticalAlignment="Center">
+								<ComboBox Margin="5" HorizontalAlignment="Stretch" BorderBrush="Black" Classes="Light" Items="{Binding	ImportFromItems}" Height="30" SelectedItem="{Binding, Path=SelectedImportFromItem, Mode=TwoWay}" CornerRadius="0" VerticalAlignment="Center">
 									<ComboBox.ItemsPanel>
 										<ItemsPanelTemplate>
-											<StackPanel Orientation="Vertical" Background="red"></StackPanel>
+											<StackPanel Orientation="Vertical"></StackPanel>
 										</ItemsPanelTemplate>
 									</ComboBox.ItemsPanel>
 									<ComboBox.ItemTemplate>
@@ -144,12 +144,12 @@
 							
 							
 							<Border Grid.Row="11" Grid.ColumnSpan="2" >
-								<Button VerticalAlignment="Top" Margin="5,5,5,2.5"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="1" Classes="WhiteBorder">
+								<Button VerticalAlignment="Top" Margin="5,5,5,2.5"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="1" Classes="WhiteBorder" Command="{Binding ExecuteCommand}">
 									<controlsEx:AxisTextBlock LocalizeTextKey="strExecute" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
 								</Button>
 							</Border>
 							<Border Grid.Row="12" Grid.ColumnSpan="2" >
-								<Button VerticalAlignment="Top" Margin="5,2.5,5,5"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="1" Classes="WhiteBorder">
+								<Button VerticalAlignment="Top" Margin="5,2.5,5,5"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="1" Classes="WhiteBorder" Command="{Binding ClearCommand}">
 									<controlsEx:AxisTextBlock LocalizeTextKey="strClear" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
 								</Button>
 							</Border>

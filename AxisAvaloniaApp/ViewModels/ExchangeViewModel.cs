@@ -41,19 +41,28 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref isSaleOperation, value);
         }
         public bool IsAnotherApplication { get => (IsImportDirection && SelectedImportFromItem != null &&  SelectedImportFromItem.Key == "item1") || (!IsImportDirection && SelectedExportToItem != null && SelectedExportToItem.Key == "item1"); }
-        public ReactiveCommand<Unit, Unit> ChangeDirectionCommand { get; }
         public string NumberFrom { get => numberFrom; set => this.RaiseAndSetIfChanged(ref numberFrom, value); }
         public string NumberTo { get => numberTo; set => this.RaiseAndSetIfChanged(ref numberTo, value); }
         public DateTime DateFrom { get => dateFrom; set => this.RaiseAndSetIfChanged(ref dateFrom, value); }
         public DateTime DateTo { get => dateTo; set => this.RaiseAndSetIfChanged(ref dateTo, value); }
 
+        #region Commands
+        public ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearCommand { get; }
+        #endregion
+
+
         public ExchangeViewModel()
         {
-            ChangeDirectionCommand = ReactiveCommand.Create(ChangeDirection);
+            ExecuteCommand = ReactiveCommand.Create(Execute);
+            ClearCommand = ReactiveCommand.Create(Clear);
+
             ImportFromItems = GetImportFromItemsCollection();
             ExportToItems = GetExportToItemsCollection();
             DateTo = DateTime.Now;
             DateFrom = DateTo.AddDays(-5);
+
+
         }
 
         private ObservableCollection<ComboBoxItemModel> GetImportFromItemsCollection()
@@ -85,9 +94,14 @@ namespace AxisAvaloniaApp.ViewModels
             return result;
         }
 
-        private void ChangeDirection()
+        private void Execute()
         {
-            IsImportDirection = !IsImportDirection;
+        
+        }
+
+        private void Clear()
+        {
+
         }
     }
 }

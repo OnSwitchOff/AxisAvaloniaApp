@@ -8,6 +8,7 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
 			 xmlns:conv="using:AxisAvaloniaApp.Converters"
+			 xmlns:c="using:AxisAvaloniaApp.UserControls.MyCalendar"
 			 xmlns:ucModels="using:AxisAvaloniaApp.UserControls.Models"
              x:Class="AxisAvaloniaApp.Views.DocumentView">
 	<UserControl.Styles>
@@ -141,7 +142,9 @@
 							</Border>			
 
 							<TextBox Text="{Binding SelectedItem.InvoiceNumber, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
-							<DatePicker SelectedDate="{Binding SelectedItem.InvoiceDateTimeOffset, Mode=TwoWay}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
+							<Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Margin="5,2" >
+								<c:MyDatePicker Foreground="White"  SelectedDate="{Binding SelectedItem.InvoiceDateTimeOffset, Mode=TwoWay}" />
+							</Border>
 							<TextBox Text="{Binding SelectedItem.InvoicePrepared, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 						</Grid>
 				  </Border>
@@ -205,8 +208,10 @@
 							  <controlsEx:AxisTextBlock LocalizeTextKey="strDescription" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap"/>
 						  </Border>
 
-						  <TextBox Text="{Binding SelectedItem.DealPlace, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
-						  <DatePicker SelectedDate="{Binding SelectedItem.DealDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
+						  <TextBox Text="{Binding SelectedItem.DealPlace, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>						
+						  <Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Margin="5,2" >
+							  <c:MyDatePicker Foreground="White"  SelectedDate="{Binding SelectedItem.DealDateTimeOffset, Mode=TwoWay}" />
+						  </Border>
 						  <TextBox Text="{Binding SelectedItem.Description, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 					  </Grid>
 				  </Border>
@@ -246,9 +251,12 @@
 								</DataTemplate>
 							</ComboBox.ItemTemplate>
 						</ComboBox>						  
-						<DatePicker SelectedDate="{Binding FromDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
-						<DatePicker SelectedDate="{Binding ToDateTimeOffset, Mode=TwoWay}" Height="34" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2" />
-						 						
+						<Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Margin="5,2" >
+							<c:MyDatePicker Foreground="White"  SelectedDate="{Binding FromDateTimeOffset, Mode=TwoWay}" />
+						</Border>
+						<Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1" CornerRadius="0" Margin="5,2" >
+							<c:MyDatePicker Foreground="White"  SelectedDate="{Binding ToDateTimeOffset, Mode=TwoWay}" />
+						</Border>
 						<TextBox Text="{Binding FilterString, Mode=TwoWay}" Watermark="FilterString" Grid.Row="4" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 						<Border Grid.Row="4" Grid.Column="1" Height="24" Width="24"	Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,10,0" Padding="0" >
 							<Image Source="/Assets/Icons/search.png"/>

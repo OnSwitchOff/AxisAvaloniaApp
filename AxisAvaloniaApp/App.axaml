@@ -17,8 +17,7 @@
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/Buttons/PaymentButton.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/Buttons/ExecutionButton.axaml"/>
       <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/ComboBoxes/ComboBoxWithTreeView.axaml"/>
-      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/GroupBox/GroupBox.axaml"/>
-      
+      <StyleInclude Source="avares://AxisAvaloniaApp/UserControls/GroupBox/GroupBox.axaml"/>     
 
       <StyleInclude Source="/Styles/DataGrid.axaml"/>
       <StyleInclude Source="/Styles/TextBlock.axaml"/>
