@@ -32,10 +32,13 @@
 			</Grid>
 		</container:OperationContainer.TitleContent>
 		<container:OperationContainer.WorkContent>
-			<Grid ColumnDefinitions="Auto" Height="30">
+			<Grid ColumnDefinitions="Auto,Auto" Height="30">
 				<Border	Background="Red"  BorderBrush="White" BorderThickness="1">
 					<c:MyDatePicker Foreground="White"  SelectedDate="{Binding DateFrom, Mode=TwoWay}" />
 				</Border>
+				<TextBox Grid.Column="1"  Height="30"  Margin="0 0 15 0" Text="{Binding NumberTo, Mode=TwoWay}" >
+
+				</TextBox>
 			</Grid>
 		</container:OperationContainer.WorkContent>
 		<container:OperationContainer.AdditionalContent>
@@ -100,25 +103,25 @@
 								<gb:GroupBox.Content>
 									<Grid Margin="10,5" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 										<Border Grid.Row="5" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-											<controlsEx:AxisTextBlock LocalizeTextKey="strNumber" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+											<controlsEx:AxisTextBlock LocalizeTextKey="strNumber" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4" />
 										</Border>
 
 										<Border Grid.Row="6" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}" >
 											<Grid	ColumnDefinitions="30,*">
 												<controlsEx:AxisTextBlock LocalizeTextKey="strFrom" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-												<controlsEx:AxisTextBox Grid.Column="2" Text="{Binding NumberFrom, Mode=TwoWay}" Margin="4" LocalizePlaceholderKey="strFrom" FontSize="14" VerticalAlignment="Center" Foreground="White" />
+												<controlsEx:AxisTextBox Grid.Column="2" Text="{Binding NumberFrom, Mode=TwoWay}" Margin="4" LocalizePlaceholderKey="strFrom" FontSize="14" VerticalAlignment="Center" />
 											</Grid>
 										</Border>
 
 										<Border Grid.Row="7" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
 											<Grid	ColumnDefinitions="30,*">
 												<controlsEx:AxisTextBlock LocalizeTextKey="strTo" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4" />
-												<controlsEx:AxisTextBox Grid.Column="2" Text="{Binding NumberTo, Mode=TwoWay}" Margin="4" LocalizePlaceholderKey="strTo" FontSize="14" VerticalAlignment="Center" Foreground="White" />
+												<controlsEx:AxisTextBox Grid.Column="2" Text="{Binding NumberTo, Mode=TwoWay}" Margin="4"  LocalizePlaceholderKey="strTo" FontSize="14" VerticalAlignment="Center"  />
 											</Grid>
 										</Border>
 
 										<Border Grid.Row="8" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}">
-											<controlsEx:AxisTextBlock LocalizeTextKey="strDate" FontSize="18" VerticalAlignment="Center" Foreground="White"  Margin="4" />
+											<controlsEx:AxisTextBlock LocalizeTextKey="strDate" FontSize="14" VerticalAlignment="Center" Foreground="White"  Margin="4"  />
 										</Border>
 
 										<Border Grid.Row="9" Grid.ColumnSpan="2" IsVisible="{Binding !IsImportDirection, Mode=TwoWay}" Margin="2">

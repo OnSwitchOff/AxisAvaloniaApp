@@ -23,25 +23,25 @@
 		</Grid>		
 		<Grid Grid.Row="1" x:Name="DaysGrid" ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 			<Border   Grid.Row="0" Grid.Column="0" Padding="3">
-				<controlsEx:AxisTextBlock Text="Mo" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<controlsEx:AxisTextBlock LocalizeTextKey="strShortMonday" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Border>
 			<Border   Grid.Row="0" Grid.Column="1" Padding="3">
-				<controlsEx:AxisTextBlock Text="Tu" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<controlsEx:AxisTextBlock LocalizeTextKey="strShortTuesday" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Border>
 			<Border   Grid.Row="0" Grid.Column="2" Padding="3">
-				<controlsEx:AxisTextBlock Text="We" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<controlsEx:AxisTextBlock LocalizeTextKey="strShortWednesday" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Border>
 			<Border   Grid.Row="0" Grid.Column="3" Padding="3">
-				<controlsEx:AxisTextBlock Text="Th" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<controlsEx:AxisTextBlock LocalizeTextKey="strShortThursday" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Border>
 			<Border   Grid.Row="0" Grid.Column="4" Padding="3">
-				<controlsEx:AxisTextBlock Text="Fr" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<controlsEx:AxisTextBlock LocalizeTextKey="strShortFriday" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Border>
 			<Border   Grid.Row="0" Grid.Column="5" Padding="3">
-				<controlsEx:AxisTextBlock Text="Sa" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<controlsEx:AxisTextBlock LocalizeTextKey="strShortSaturday" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Border>
 			<Border   Grid.Row="0" Grid.Column="6" Padding="3">
-				<controlsEx:AxisTextBlock Text="Su" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				<controlsEx:AxisTextBlock LocalizeTextKey="strShortSunday" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Border>
 		</Grid>		
 	</Grid>

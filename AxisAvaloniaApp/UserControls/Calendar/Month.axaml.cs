@@ -48,7 +48,7 @@ namespace AxisAvaloniaApp.UserControls.MyCalendar
             daysGrid = this.FindControl<Grid>("DaysGrid");
             currentMonthTextBlock = this.FindControl<TextBlock>("CurrentMonthTextBlock");
             FirstDate = new DateTime(SelectedDate.Year, SelectedDate.Month, 1);
-
+            FirstDate.ToString("ddd");
         }
 
        
