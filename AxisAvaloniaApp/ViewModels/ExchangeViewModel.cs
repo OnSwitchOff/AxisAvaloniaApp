@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data;
+using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Printing;
 using AxisAvaloniaApp.UserControls.Models;
 using ReactiveUI;
@@ -67,6 +68,7 @@ namespace AxisAvaloniaApp.ViewModels
 
         public ExchangeViewModel()
         {
+            printService = Splat.Locator.Current.GetRequiredService<IPrintService>();
 
             ExecuteCommand = ReactiveCommand.Create(Execute);
             ClearCommand = ReactiveCommand.Create(Clear);
