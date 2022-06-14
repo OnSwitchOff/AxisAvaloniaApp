@@ -1,9 +1,7 @@
 ﻿using AxisAvaloniaApp.Services.Reports;
-using AxisAvaloniaApp.Helpers;
 using ReactiveUI;
 using System.Collections;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
 using System;
 using AxisAvaloniaApp.Services.Serialization;
 
@@ -15,14 +13,13 @@ namespace AxisAvaloniaApp.ViewModels
         private readonly ISerializationService serializationService;
 
         private bool isMainContentVisible;
-        //private ObservableCollection<ReportItemModel> supportedReports;
         private ReportItemModel selectedReport;
         private ObservableCollection<ReportDataModel> columnsData;
         private IEnumerable source;
-        private string startAcct;
-        private string endAcct;
-        private DateTimeOffset? startDate = null;
-        private DateTimeOffset? endDate = null;
+        private string acctFrom;
+        private string acctTo;
+        private DateTime dateFrom = new DateTime(2022, 1, 1);
+        private DateTime dateTo = DateTime.Today;
 
         /// <summary>
         /// 
@@ -36,6 +33,11 @@ namespace AxisAvaloniaApp.ViewModels
             serializationService.InitSerializationData(Enums.ESerializationGroups.Report);
 
             IsMainContentVisible = true;
+
+            RegisterValidationData<ReportsViewModel, string>(this, nameof(AcctFrom), () => 
+            {
+                return AcctFrom != null && AcctFrom.Equals("22");
+            }, "strPartner");
         }
 
         /// <summary>
@@ -84,28 +86,29 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref source, value);
         }
 
-        public string StartAcct
+
+        public string AcctFrom
         {
-            get => startAcct;
-            set => this.RaiseAndSetIfChanged(ref startAcct, value);
+            get => acctFrom;
+            set => this.RaiseAndSetIfChanged(ref acctFrom, value);
         }
 
-        public string EndAcct
+        public string AcctTo
         {
-            get => endAcct;
-            set => this.RaiseAndSetIfChanged(ref endAcct, value);
+            get => acctTo;
+            set => this.RaiseAndSetIfChanged(ref acctTo, value);
         }
 
-        public DateTimeOffset? StartDate
+        public DateTime DateFrom
         {
-            get => startDate;
-            set => this.RaiseAndSetIfChanged(ref startDate, value);
+            get => dateFrom;
+            set => this.RaiseAndSetIfChanged(ref dateFrom, value);
         }
 
-        public DateTimeOffset? EndDate
+        public DateTime DateTo
         {
-            get => endDate;
-            set => this.RaiseAndSetIfChanged(ref endDate, value);
+            get => dateTo;
+            set => this.RaiseAndSetIfChanged(ref dateTo, value);
         }
 
         public void GenerateReport()

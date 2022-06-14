@@ -1,7 +1,27 @@
 <TextBox xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AxisAvaloniaApp.UserControls.Extensions.AxisTextBox">
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:label="using:AxisAvaloniaApp.UserControls.Extensions"
+         mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="30"
+         x:Class="AxisAvaloniaApp.UserControls.Extensions.AxisTextBox">
+  <TextBox.Styles>
+    <Style Selector="ToolTip">
+      <Setter Property="BorderBrush" Value="Red"/>
+      <Setter Property="BorderThickness" Value="2"/> 
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="CornerRadius" Value="0"/>
+    </Style>
+  </TextBox.Styles>
+  <TextBox.InnerRightContent>
+    <Image Source="/Assets/Icons/error.jpg"
+           Height="20"
+           Margin="3"
+           IsVisible="{Binding $parent[TextBox].IsErrorIconVisible, Mode=TwoWay}"           
+           ToolTip.Placement="Left">
+        <ToolTip.Tip>
+          <label:AxisTextBlock LocalizeTextKey="{Binding $parent[TextBox].LocalizeErrorDescriptionKey, Mode=TwoWay}"/>
+        </ToolTip.Tip>
+    </Image>
+  </TextBox.InnerRightContent>
 </TextBox>

@@ -4,5 +4,6 @@
     {
         Qty,
         Price,
+        F0_Percent,
     }
 }

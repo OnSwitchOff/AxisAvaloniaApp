@@ -68,7 +68,7 @@ namespace AxisAvaloniaApp.Services
             services.RegisterLazySingleton<ITranslationService>(() => new TranslationService(resolver.GetRequiredService<ISettingsService>()));
             services.RegisterLazySingleton<IExplanationService>(() => new ExplanationService());            
             services.RegisterLazySingleton<ILoggerService>(() => new LoggerService());
-            services.RegisterLazySingleton<IValidationService>(() => new ValidationService());
+            services.RegisterLazySingleton<IValidationService>(() => new ValidationService(resolver.GetRequiredService<ISettingsService>()));
             services.Register<IReportsService>(() => new BulgarianReportsService());
 
             switch (AvaloniaLocator.Current.GetService<IRuntimePlatform>().GetRuntimeInfo().OperatingSystem)
