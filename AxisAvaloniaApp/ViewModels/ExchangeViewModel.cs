@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data;
+using AxisAvaloniaApp.Services.Printing;
 using AxisAvaloniaApp.UserControls.Models;
 using ReactiveUI;
 using System;
@@ -14,6 +15,8 @@ namespace AxisAvaloniaApp.ViewModels
 {
     public class ExchangeViewModel : ViewModelBase
     {
+        private readonly IPrintService printService;
+
         private bool isImportDirection;
         private ObservableCollection<ComboBoxItemModel> importFromItems;
         private ComboBoxItemModel selectedImportFromItem;
@@ -107,7 +110,7 @@ namespace AxisAvaloniaApp.ViewModels
 
         private void Execute()
         {
-        
+            printService.GetPrinters();
         }
 
         private void Clear()

@@ -11,7 +11,7 @@ namespace AxisAvaloniaApp.Services.Printing
 {
     public interface IPrintService
     {
-       
+        void GetPrinters();
     }
 
 }

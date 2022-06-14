@@ -8,5 +8,9 @@ namespace AxisAvaloniaApp.Services.Printing
 {
     public class MacOSPrintService : IPrintService
     {
+        public void GetPrinters()
+        {
+
+        }
     }
 }

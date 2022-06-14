@@ -8,5 +8,9 @@ namespace AxisAvaloniaApp.Services.Printing
 {
     public class WindowsPrintService : IPrintService
     {
+        public void GetPrinters()
+        {
+
+        }
     }
 }
