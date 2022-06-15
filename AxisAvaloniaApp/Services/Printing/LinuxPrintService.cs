@@ -1,5 +1,4 @@
-﻿using SharpIpp.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Printing;
