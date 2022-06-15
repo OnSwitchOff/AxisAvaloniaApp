@@ -8,9 +8,67 @@ namespace AxisAvaloniaApp.Services.Printing
 {
     public class MacOSPrintService : IPrintService
     {
-        public void GetPrinters()
+        Encoding defaultEnc = new UTF8Encoding();
+        public List<string> GetPrinters()
         {
+            List<string> result = new List<string>();
+            try
+            {
+                System.Diagnostics.ProcessStartInfo process = new System.Diagnostics.ProcessStartInfo();
+                process.UseShellExecute = false;
+                process.FileName = "lpstat";
+                process.Arguments = "-e";
+                process.RedirectStandardOutput = true;
 
+                System.Diagnostics.Process cmd = System.Diagnostics.Process.Start(process);
+
+                string? line;
+
+                while ((line = cmd.StandardOutput.ReadLine()) != null)
+                {
+                    result.Add(line);
+                }
+
+                cmd.WaitForExit();
+
+            }
+            catch (Exception e)
+            {
+                return result;
+            }
+            return result;
+        }
+
+        public bool SendByteArrayToPrinter(string szPrinterName, byte[] bytes)
+        {
+            try
+            {
+                var myProcess = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = "lpr",
+                        Arguments = $"-T receipt -P \"{szPrinterName}\" -l ",
+                        UseShellExecute = false,
+                        RedirectStandardInput = true
+                    }
+                };
+
+                myProcess.Start();
+
+                var myStreamWriter = myProcess.StandardInput;
+
+                myStreamWriter.Write(defaultEnc.GetString(bytes));
+                myStreamWriter.Close();
+                myProcess.WaitForExit();
+                myProcess.Close();
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

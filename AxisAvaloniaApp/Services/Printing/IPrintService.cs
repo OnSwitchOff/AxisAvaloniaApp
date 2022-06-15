@@ -11,7 +11,8 @@ namespace AxisAvaloniaApp.Services.Printing
 {
     public interface IPrintService
     {
-        void GetPrinters();
+        List<string> GetPrinters();
+        bool SendByteArrayToPrinter(string printerName, byte[] bytes);
     }
 
 }

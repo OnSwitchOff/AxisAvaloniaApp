@@ -1,6 +1,8 @@
 ﻿using SharpIpp.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,35 +13,67 @@ namespace AxisAvaloniaApp.Services.Printing
 {
     public class LinuxPrintService : IPrintService
     {
-        public void GetPrinters()
+        Encoding defaultEnc = new UTF8Encoding();
+        public List<string> GetPrinters()
         {
-            var client = new SharpIpp.SharpIppClient();
-            CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
-            CancellationToken token = cancelTokenSource.Token;
-            var r =  client.GetCUPSPrintersAsync(new CUPSGetPrintersRequest(), token);
-            //await using var stream = File.Open(@"c:\file.pdf", FileMode.Open);
-            //var printerUri = new Uri("ipp://192.168.0.1:631");
-            //var request = new PrintJobRequest
-            //{
-            //    PrinterUri = printerUri,
-            //    Document = stream,
-            //    JobName = "Test Job",
-            //    IppAttributeFidelity = false,
-            //    DocumentName = "Document Name",
-            //    DocumentFormat = "application/octet-stream",
-            //    DocumentNaturalLanguage = "en",
-            //    MultipleDocumentHandling = MultipleDocumentHandling.SeparateDocumentsCollatedCopies,
-            //    Copies = 1,
-            //    Finishings = Finishings.None,
-            //    PageRanges = new[] { new Range(1, 1) },
-            //    Sides = Sides.OneSided,
-            //    NumberUp = 1,
-            //    OrientationRequested = Orientation.Portrait,
-            //    PrinterResolution = new Resolution(600, 600, ResolutionUnit.DotsPerInch),
-            //    PrintQuality = PrintQuality.Normal
-            //};
-            //request.Jo
-            //var response = await client.PrintJobAsync(request);
+            List<string> result = new List<string>();
+            try
+            {
+                System.Diagnostics.ProcessStartInfo process = new System.Diagnostics.ProcessStartInfo();
+                process.UseShellExecute = false;
+                process.FileName = "lpstat";
+                process.Arguments = "-e";
+                process.RedirectStandardOutput = true;
+
+                System.Diagnostics.Process cmd = System.Diagnostics.Process.Start(process);
+
+                string? line;
+
+                while ((line = cmd.StandardOutput.ReadLine()) != null)
+                {
+                    result.Add(line);
+                }
+
+                cmd.WaitForExit();
+
+            }
+            catch (Exception e)
+            {
+                return result;
+            }
+            return result;
+        }
+
+        public bool SendByteArrayToPrinter(string szPrinterName, byte[] bytes)
+        {
+            try
+            {
+                var myProcess = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = "lpr",
+                        Arguments = $"-T receipt -P \"{szPrinterName}\" -l ",
+                        UseShellExecute = false,
+                        RedirectStandardInput = true
+                    }
+                };
+
+                myProcess.Start();
+
+                var myStreamWriter = myProcess.StandardInput;
+
+                myStreamWriter.Write(defaultEnc.GetString(bytes));
+                myStreamWriter.Close();
+                myProcess.WaitForExit();
+                myProcess.Close();
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
