@@ -49,9 +49,10 @@ namespace AxisAvaloniaApp.ViewModels.Settings
         {
             var x1 = await activationService.GetStatus("123124");
             var x2 = await activationService.TryLicense("123124","123");
-            var x3 = await activationService.GetLastVersion();
 
-            var r2 = await x3.Content.ReadAsStringAsync();
+            var x3 = await activationService.GetLastVersion();
+            x3.EnsureSuccessStatusCode();
+            var r2 = await x3.Content.ReadAsStringAsync();            
             VersionResponse.GetLastVersion r = JsonConvert.DeserializeObject<VersionResponse.GetLastVersion>(r2);
         }
     }
