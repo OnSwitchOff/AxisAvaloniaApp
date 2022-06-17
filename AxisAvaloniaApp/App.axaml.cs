@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using AxisAvaloniaApp.Helpers;
-using AxisAvaloniaApp.Services.Activation;
+using AxisAvaloniaApp.Services.StartUp;
 using AxisAvaloniaApp.Views;
 using Splat;
 
@@ -21,7 +21,7 @@ namespace AxisAvaloniaApp
             // регистрируем зависимости (сервисы)
             Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
-            IActivationService activationService = Locator.Current.GetRequiredService<IActivationService>();
+            IStartUpService activationService = Locator.Current.GetRequiredService<IStartUpService>();
             activationService.ActivateAsync();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

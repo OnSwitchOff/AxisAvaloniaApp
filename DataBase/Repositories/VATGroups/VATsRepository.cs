@@ -25,5 +25,17 @@ namespace DataBase.Repositories.VATGroups
 
             return databaseContext.Vatgroups.AsAsyncEnumerable();
         }
+
+        /// <summary>
+        /// Adds new VAT groups to the database.
+        /// </summary>
+        /// <param name="vATGroups">List with VAT groups to add to the database.</param>
+        /// <returns>Returns 0 if VAT groups were not added to database; otherwise returns count of new records.</returns>
+        /// <date>17.06.2022.</date>
+        public System.Threading.Tasks.Task<int> AddVATGroupsAsync(IList<Entities.VATGroups.VATGroup> vATGroups)
+        {
+            databaseContext.Vatgroups.AddRangeAsync(vATGroups);
+            return databaseContext.SaveChangesAsync();
+        }
     }
 }

@@ -913,6 +913,76 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strVATGroupA">
+      <Value Lang="bg-BG">Данъчна група A</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax group A</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговая группа А</Value>
+      <Value Lang="uk-UA">Податкова група А</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVATGroupB">
+      <Value Lang="bg-BG">Данъчна група Б</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax group B</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговая группа Б</Value>
+      <Value Lang="uk-UA">Податкова група Б</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVATGroupC">
+      <Value Lang="bg-BG">Данъчна група В</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax group C</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговая группа В</Value>
+      <Value Lang="uk-UA">Податкова група В</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVATGroupD">
+      <Value Lang="bg-BG">Данъчна група Г</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax group D</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговая группа Г</Value>
+      <Value Lang="uk-UA">Податкова група Г</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVATGroup1">
+      <Value Lang="bg-BG">Данъчна група 1</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax group 1</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговая группа 1</Value>
+      <Value Lang="uk-UA">Податкова група 1</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVATGroup2">
+      <Value Lang="bg-BG">Данъчна група 2</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax group 2</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговая группа 2</Value>
+      <Value Lang="uk-UA">Податкова група 2</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strVATGroup3">
+      <Value Lang="bg-BG">Данъчна група 3</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax group 3</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговая группа 3</Value>
+      <Value Lang="uk-UA">Податкова група 3</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strBankName">
 		  <Value Lang="bg-BG">Банка</Value>
 		  <Value Lang="el-GR">Not translated</Value>

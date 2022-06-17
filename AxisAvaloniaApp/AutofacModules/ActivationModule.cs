@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using AxisAvaloniaApp.Services.Activation;
+using AxisAvaloniaApp.Services.StartUp;
 
 namespace AxisAvaloniaApp.AutofacModules
 {
@@ -7,7 +7,7 @@ namespace AxisAvaloniaApp.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ActivationService>().As<IActivationService>().InstancePerLifetimeScope();
+            builder.RegisterType<StartUpService>().As<IStartUpService>().InstancePerLifetimeScope();
         }
     }
 }

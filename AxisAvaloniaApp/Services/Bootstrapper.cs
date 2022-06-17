@@ -3,7 +3,7 @@ using System;
 using AxisAvaloniaApp.AutofacModules;
 using Autofac.Extensions.DependencyInjection;
 using Splat;
-using AxisAvaloniaApp.Services.Activation;
+using AxisAvaloniaApp.Services.StartUp;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.Services.ThemeSelector;
@@ -50,7 +50,7 @@ namespace AxisAvaloniaApp.Services
         [Obsolete]
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.Register<IActivationService>(() => new ActivationService(
+            services.Register<IStartUpService>(() => new StartUpService(
                 resolver.GetRequiredService<ISettingsService>(),
                 resolver.GetRequiredService<IScanningData>(),
                 resolver.GetRequiredService<IPaymentService>(),

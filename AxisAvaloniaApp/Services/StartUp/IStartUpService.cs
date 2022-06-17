@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.Services.Activation
+namespace AxisAvaloniaApp.Services.StartUp
 {
-    public interface IActivationService
+    public interface IStartUpService
     {
         /// <summary>
         /// Runs activation handlers to perform the program activation.
