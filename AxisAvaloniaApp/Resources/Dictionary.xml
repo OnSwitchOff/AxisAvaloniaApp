@@ -1817,6 +1817,77 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+	  <Data Key="strShortMonday">
+		  <Value Lang="bg-BG">Пн</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Mo</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Пн</Value>
+		  <Value Lang="uk-UA">Пн</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	   <Data Key="strShortTuesday">
+		  <Value Lang="bg-BG">Вт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Tu</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Вт</Value>
+		  <Value Lang="uk-UA">Вв</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  <Data Key="strShortWednesday">
+		  <Value Lang="bg-BG">Ср</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">We</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Ср</Value>
+		  <Value Lang="uk-UA">Ср</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	   <Data Key="strShortThursday">
+		  <Value Lang="bg-BG">Чт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Th</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Чт</Value>
+		  <Value Lang="uk-UA">Чт</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	    <Data Key="strShortFriday">
+		  <Value Lang="bg-BG">Пт</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Fr</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Пт</Value>
+		  <Value Lang="uk-UA">Not translated</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	   <Data Key="strShortSaturday">
+		  <Value Lang="bg-BG">Сб</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Sa</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Сб</Value>
+		  <Value Lang="uk-UA">Not translated</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	   <Data Key="strShortSunday">
+		  <Value Lang="bg-BG">Нд</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Su</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Вс</Value>
+		  <Value Lang="uk-UA">Нд</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+	  
     <Data Key="strExportLogFile">
       <Value Lang="bg-BG">Експортиране на лог-файл</Value>
       <Value Lang="el-GR">Not translated</Value>

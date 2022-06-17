@@ -28,9 +28,7 @@ namespace AxisAvaloniaApp.UserControls
             });
 
             Pages = new ObservableCollection<Bitmap>();
-            Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\woolf.jpg"));
-            Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\kak-pozdravyt-s-8-marta.jpg"));
-            Pages.Add(new Bitmap(@"C:\Users\serhii.rozniuk\Desktop\wolf.png"));
+ 
             //PrintContentHideCommand = ReactiveCommand.Create(() =>
             //{
             //    listPages.ScrollIntoView(index);

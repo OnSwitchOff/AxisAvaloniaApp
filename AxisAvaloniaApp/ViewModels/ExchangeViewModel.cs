@@ -1,8 +1,12 @@
-﻿using AxisAvaloniaApp.UserControls.Models;
+﻿using Avalonia.Data;
+using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Printing;
+using AxisAvaloniaApp.UserControls.Models;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -12,6 +16,8 @@ namespace AxisAvaloniaApp.ViewModels
 {
     public class ExchangeViewModel : OperationViewModelBase
     {
+        private readonly IPrintService printService;
+
         private bool isImportDirection;
         private ObservableCollection<ComboBoxItemModel> importFromItems;
         private ComboBoxItemModel selectedImportFromItem;
@@ -42,18 +48,28 @@ namespace AxisAvaloniaApp.ViewModels
         }
         public bool IsAnotherApplication { get => (IsImportDirection && SelectedImportFromItem != null &&  SelectedImportFromItem.Key == "item1") || (!IsImportDirection && SelectedExportToItem != null && SelectedExportToItem.Key == "item1"); }
         public string NumberFrom { get => numberFrom; set => this.RaiseAndSetIfChanged(ref numberFrom, value); }
-        public string NumberTo { get => numberTo; set => this.RaiseAndSetIfChanged(ref numberTo, value); }
+        public string NumberTo
+        {
+            get => numberTo;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref numberTo, value);
+            }
+        }
         public DateTime DateFrom { get => dateFrom; set => this.RaiseAndSetIfChanged(ref dateFrom, value); }
         public DateTime DateTo { get => dateTo; set => this.RaiseAndSetIfChanged(ref dateTo, value); }
 
         #region Commands
         public ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearCommand { get; }
+       
         #endregion
 
 
         public ExchangeViewModel()
         {
+            printService = Splat.Locator.Current.GetRequiredService<IPrintService>();
+
             ExecuteCommand = ReactiveCommand.Create(Execute);
             ClearCommand = ReactiveCommand.Create(Clear);
 
@@ -96,7 +112,7 @@ namespace AxisAvaloniaApp.ViewModels
 
         private void Execute()
         {
-        
+            printService.GetPrinters();
         }
 
         private void Clear()
