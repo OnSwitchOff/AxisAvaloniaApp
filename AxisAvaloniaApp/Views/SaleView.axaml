@@ -83,12 +83,11 @@
         </Button>
       </Grid>
     </container:OperationContainer.TitleContent>
-    <container:OperationContainer.WorkContent>
-      <Grid Background="#28AEB9" 
+    <container:OperationContainer.WorkContent  >
+      <Grid x:Name="ContentGrid" Background="#28AEB9" 
             RowDefinitions="auto, *, auto, auto"
             IsEnabled="{Binding IsNomenclaturePanelVisible}">
-        <Grid Grid.Row="0"
-              ColumnDefinitions="*, *, *" 
+        <WrapPanel  Grid.Row="0" Orientation="Horizontal" Width="{Binding   ElementName=ContentGrid, Path=Width, Mode=OneWay}" 
               Margin="0, 2, 0, 2">
           <Grid Grid.Column="0" 
                 ColumnDefinitions="auto, *, auto">
@@ -106,7 +105,8 @@
                                     IsEnabled="{Binding IsChoiceOfPartnerEnabled, Mode=TwoWay}"
                                     Text="{Binding OperationPartnerString, Mode=TwoWay}"
                                     ExplanationKey = "EnterPartnerData" 
-                                    PropertyChanged="TextBoxPartner_PropertyChanged"/>
+                                    PropertyChanged="TextBoxPartner_PropertyChanged"
+									MinWidth="200"/>
             <Button Grid.Column="2"
                     Name="buttonLockPartner"
                     CornerRadius="0, 3, 3, 0"
@@ -156,17 +156,20 @@
           <Grid Grid.Column="2"
                 VerticalAlignment="Center" ColumnDefinitions="auto, auto, *">
             <controlsEx:AxisTextBlock Grid.Column="0"
+									  Padding="5,10,0,10"
                                       Classes="Title" 
                                       LocalizeTextKey="strTotalSum"/>
             <TextBlock Grid.Column="1"
                        Classes="Title"
+					   Padding="0,10"
                        Text=":"/>
             <TextBlock Grid.Column="2"
                        Classes="Title"
                        Margin="5, 0"
+					   Padding="0,10"
                        Text="{Binding TotalAmount, Mode=OneWay}"/>
           </Grid>
-        </Grid>
+        </WrapPanel>
         <DataGrid Grid.Row="1"
                   Name="SaleGrid"
                   IsEnabled="{Binding OperationPartner, Converter={StaticResource ObjectToBool}}"
