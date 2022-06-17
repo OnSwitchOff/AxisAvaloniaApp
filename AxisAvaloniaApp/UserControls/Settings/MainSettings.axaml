@@ -37,7 +37,7 @@
 
 
 					<Grid   Grid.Row="1" Background="Transparent">
-						<Button  Background="Transparent" BorderThickness="2" BorderBrush="SteelBlue" Foreground="SteelBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">Activate</Button>
+						<Button Command="{Binding	ElementName=UC, Path=ViewModel.ActivateCommand}"  Background="Transparent" BorderThickness="2" BorderBrush="SteelBlue" Foreground="SteelBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">Activate</Button>
 					</Grid>
 				</Grid>
 			</ScrollViewer>

@@ -39,6 +39,7 @@ using Avalonia;
 using AxisAvaloniaApp.Services.Explanation;
 using AxisAvaloniaApp.Services.Reports;
 using AxisAvaloniaApp.Services.Reports.Bulgaria;
+using AxisAvaloniaApp.Services.Activation;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -56,6 +57,8 @@ namespace AxisAvaloniaApp.Services
                 resolver.GetRequiredService<IPaymentService>(),
                 resolver.GetRequiredService<IAxisCloudService>(),
                 resolver.GetRequiredService<ILoggerService>()));
+
+            services.Register<IActivationService>(() => new ActivationService("https://axis.sx/"));
 
             services.Register<INavigationService>(() => new NavigationService());
             services.RegisterLazySingleton<IThemeSelectorService>(() => new ThemeSelectorService());
