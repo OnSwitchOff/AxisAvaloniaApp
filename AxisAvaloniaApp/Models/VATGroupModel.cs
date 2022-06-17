@@ -5,7 +5,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of VAT group.
     /// </summary>
-    public class VATGroupModel : ReactiveObject
+    public class VATGroupModel : BaseModel
     {
         private int id;
         private string name;

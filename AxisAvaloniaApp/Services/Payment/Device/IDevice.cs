@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using AxisAvaloniaApp.Services.Settings;
 
 namespace AxisAvaloniaApp.Services.Payment.Device
 {
@@ -26,13 +25,6 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// </summary>
         /// <date>16.03.2022.</date>
         string FiscalPrinterMemoryNumber { get; }
-
-        /// <summary>
-        /// Initialize settings of device.
-        /// </summary>
-        /// <param name="settings">Application settings.</param>
-        /// <date>17.03.2022.</date>
-        void InitializeDeviceSettings(ISettingsService settings);
 
         /// <summary>
         /// Pay order by POS terminal (if it is used) and print fiscal receipt.

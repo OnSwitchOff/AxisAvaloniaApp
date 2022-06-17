@@ -13,6 +13,7 @@
     <None Remove="Assets\Application.png" />
     <None Remove="Assets\AxisIcon.ico" />
     <None Remove="Assets\Icons\arrow_back.png" />
+    <None Remove="Assets\Icons\axisCloudLogo.png" />
     <None Remove="Assets\Icons\calendar.png" />
     <None Remove="Assets\Icons\cashRegister.png" />
     <None Remove="Assets\Icons\close.png" />
@@ -23,6 +24,7 @@
     <None Remove="Assets\Icons\error.jpg" />
     <None Remove="Assets\Icons\exchange.png" />
     <None Remove="Assets\Icons\exportToPDF.png" />
+    <None Remove="Assets\Icons\fiscalDeviceLogo.png" />
     <None Remove="Assets\Icons\goods_add.png" />
     <None Remove="Assets\Icons\goods_delete.png" />
     <None Remove="Assets\Icons\goods_edit.png" />
@@ -33,6 +35,23 @@
     <None Remove="Assets\Icons\hamburgerButton_Expand.png" />
     <None Remove="Assets\Icons\invoice.png" />
     <None Remove="Assets\Icons\lock.png" />
+    <None Remove="Assets\Icons\MessageBox\avalonia.ico" />
+    <None Remove="Assets\Icons\MessageBox\battery.ico" />
+    <None Remove="Assets\Icons\MessageBox\bluetooth.ico" />
+    <None Remove="Assets\Icons\MessageBox\database.ico" />
+    <None Remove="Assets\Icons\MessageBox\error.ico" />
+    <None Remove="Assets\Icons\MessageBox\folder.ico" />
+    <None Remove="Assets\Icons\MessageBox\forbidden.ico" />
+    <None Remove="Assets\Icons\MessageBox\info.ico" />
+    <None Remove="Assets\Icons\MessageBox\lock.ico" />
+    <None Remove="Assets\Icons\MessageBox\plus.ico" />
+    <None Remove="Assets\Icons\MessageBox\settings.ico" />
+    <None Remove="Assets\Icons\MessageBox\speaker.ico" />
+    <None Remove="Assets\Icons\MessageBox\stop.ico" />
+    <None Remove="Assets\Icons\MessageBox\stopwatch.ico" />
+    <None Remove="Assets\Icons\MessageBox\success.ico" />
+    <None Remove="Assets\Icons\MessageBox\warning.ico" />
+    <None Remove="Assets\Icons\MessageBox\wifi.ico" />
     <None Remove="Assets\Icons\orientationLandscape.jpg" />
     <None Remove="Assets\Icons\orientationPortrait.jpg" />
     <None Remove="Assets\Icons\pageFormat.png" />
@@ -52,6 +71,7 @@
     <None Remove="Assets\Icons\payment_otherType.png" />
     <None Remove="Assets\Icons\payment_points.png" />
     <None Remove="Assets\Icons\payment_voucher.png" />
+    <None Remove="Assets\Icons\pOSTerminalIcon.png" />
     <None Remove="Assets\Icons\print.ico" />
     <None Remove="Assets\Icons\printer_dev.png" />
     <None Remove="Assets\Icons\reports.png" />
@@ -95,7 +115,7 @@
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microinvest.CommonLibrary" Version="1.0.0" />
-    <PackageReference Include="Microinvest.DeviceService" Version="1.0.1" />
+    <PackageReference Include="Microinvest.DeviceService" Version="1.0.2" />
     <PackageReference Include="Microinvest.ExchangeDataService" Version="1.0.0" />
     <PackageReference Include="Microinvest.IntegrationService" Version="1.0.0" />
     <PackageReference Include="Microinvest.PDFCreator" Version="1.0.0" />

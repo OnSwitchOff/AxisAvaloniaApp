@@ -13,7 +13,7 @@ using System.Reactive;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public abstract class DocumentViewModel : ViewModelBase
+    public abstract class DocumentViewModel : OperationViewModelBase
     {
         protected abstract EDocumentTypes documentType { get; }
 

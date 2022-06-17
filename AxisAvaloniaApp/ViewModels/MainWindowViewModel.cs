@@ -148,7 +148,7 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     break;
                 case nameof(Content):
-                    if (Content != null && Content.DataContext != null && Content.DataContext is ViewModelBase viewModel)
+                    if (Content != null && Content.DataContext != null && Content.DataContext is OperationViewModelBase viewModel)
                     {
                         viewModel.ViewTitleChanging -= View_PageTitleChanging;
                         viewModel.ViewClosing -= View_ViewClosing;
@@ -207,7 +207,7 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     break;
                 case nameof(Content):
-                    if (Content != null && Content.DataContext != null && Content.DataContext is ViewModelBase viewModel)
+                    if (Content != null && Content.DataContext != null && Content.DataContext is OperationViewModelBase viewModel)
                     {
                         viewModel.ViewTitleChanging += View_PageTitleChanging;
                         viewModel.ViewClosing += View_ViewClosing;
@@ -257,7 +257,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>26.05.2022.</date>
         private void View_ViewClosing(string viewId)
         {
-            INavigationViewItem closingView = ActiveSales.FirstOrDefault(i => (i.Content.DataContext as ViewModelBase).ViewId == viewId);
+            INavigationViewItem closingView = ActiveSales.FirstOrDefault(i => (i.Content.DataContext as OperationViewModelBase).ViewId == viewId);
             if (closingView != null)
             {
                 ActiveSales.Remove(closingView);

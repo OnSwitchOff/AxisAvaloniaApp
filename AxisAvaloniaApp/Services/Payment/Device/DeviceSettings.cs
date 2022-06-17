@@ -5,7 +5,23 @@
     /// </summary>
     public class DeviceSettings : Microinvest.DeviceService.Interfaces.IDeviceSettings
     {
-        private Settings.ISettingsService settings;
+        private string fiscalPrinterManufacturer;
+        private string fiscalPrinterModel;
+        private string fiscalPrinterProtocol;
+        private string fiscalPrinterSerialPort;
+        private string fiscalPrinterBaudRate;
+        private string fiscalPrinterIPAddress;
+        private string fiscalPrinterIPPort;
+        private string fiscalPrinterLogin;
+        private string fiscalPrinterOperatorCode;
+        private string fiscalPrinterPassword;
+        private string pOSTerminalManufacturer;
+        private string pOSTerminalModel;
+        private string pOSTerminalProtocol;
+        private string pOSTerminalSerialPort;
+        private string pOSTerminalBaudRate;
+        private string pOSTerminalIPAddress;
+        private string pOSTerminalIPPort;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceSettings"/> class.
@@ -13,7 +29,57 @@
         /// <param name="settings">Application settings.</param>
         public DeviceSettings(Settings.ISettingsService settings)
         {
-            this.settings = settings;
+            fiscalPrinterManufacturer = settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceManufacturer];
+            fiscalPrinterModel = settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceModel];
+            fiscalPrinterProtocol = settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceProtocol];
+            fiscalPrinterSerialPort = settings.FiscalPrinterSettings[Enums.ESettingKeys.ComPort];
+            fiscalPrinterBaudRate = settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceBaudRate];
+            fiscalPrinterIPAddress = settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPAddress];
+            fiscalPrinterIPPort = settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPPort];
+            fiscalPrinterLogin = settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceLogin];
+            fiscalPrinterOperatorCode = settings.FiscalPrinterSettings[Enums.ESettingKeys.OperatorCode];
+            fiscalPrinterPassword = settings.FiscalPrinterSettings[Enums.ESettingKeys.DevicePassword];
+
+            pOSTerminalManufacturer = settings.POSTerminalSettings[Enums.ESettingKeys.DeviceManufacturer];
+            pOSTerminalModel = settings.POSTerminalSettings[Enums.ESettingKeys.DeviceModel];
+            pOSTerminalProtocol = settings.POSTerminalSettings[Enums.ESettingKeys.DeviceProtocol];
+            pOSTerminalSerialPort = settings.POSTerminalSettings[Enums.ESettingKeys.ComPort];
+            pOSTerminalBaudRate = settings.POSTerminalSettings[Enums.ESettingKeys.DeviceBaudRate];
+            pOSTerminalIPAddress = settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIPAddress];
+            pOSTerminalIPPort = settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIPPort];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceSettings"/> class.
+        /// </summary>
+        /// <param name="printer">Settings of the fiscal printer.</param>
+        /// <param name="terminal">Settings of the POS terminal</param>
+        public DeviceSettings(Models.DeviceSettingsModel printer, Models.DeviceSettingsModel terminal)
+        {
+            if (printer != null)
+            {
+                fiscalPrinterManufacturer = printer.Manufacturer.Value.ToString();
+                fiscalPrinterModel = printer.Model.Value.ToString();
+                fiscalPrinterProtocol = printer.Protocol.Value.ToString();
+                fiscalPrinterSerialPort = printer.SerialPort;
+                fiscalPrinterBaudRate = printer.BaudRate.ToString();
+                fiscalPrinterIPAddress = printer.IPAddress;
+                fiscalPrinterIPPort = printer.IPPort.ToString();
+                fiscalPrinterLogin = printer.Login;
+                fiscalPrinterOperatorCode = printer.OperatorCode.ToString();
+                fiscalPrinterPassword = printer.Password;
+            }
+
+            if (terminal != null)
+            {
+                pOSTerminalManufacturer = terminal.Manufacturer.Value.ToString();
+                pOSTerminalModel = terminal.Model.Value.ToString();
+                pOSTerminalProtocol = terminal.Protocol.Value.ToString();
+                pOSTerminalSerialPort = terminal.SerialPort;
+                pOSTerminalBaudRate = terminal.BaudRate.ToString();
+                pOSTerminalIPAddress = terminal.IPAddress;
+                pOSTerminalIPPort = terminal.IPPort.ToString();
+            }
         }
 
         /// <summary>
@@ -22,8 +88,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterManufacturer
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceManufacturer];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceManufacturer].Value = value;
+            get => fiscalPrinterManufacturer;
+            set => fiscalPrinterManufacturer = value;
         }
 
         /// <summary>
@@ -32,8 +98,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterModel
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceModel];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceModel].Value = value;
+            get => fiscalPrinterModel;
+            set => fiscalPrinterModel = value;
         }
 
         /// <summary>
@@ -42,8 +108,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterProtocol
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceProtocol];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceProtocol].Value = value;
+            get => fiscalPrinterProtocol;
+            set => fiscalPrinterProtocol = value;
         }
 
         /// <summary>
@@ -52,8 +118,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterSerialPort
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.ComPort];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.ComPort].Value = value;
+            get => fiscalPrinterSerialPort;
+            set => fiscalPrinterSerialPort = value;
         }
 
         /// <summary>
@@ -62,8 +128,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterBaudRate
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceBaudRate];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceBaudRate].Value = value;
+            get => fiscalPrinterBaudRate;
+            set => fiscalPrinterBaudRate = value;
         }
 
         /// <summary>
@@ -72,8 +138,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterIPAddress
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPAddress];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPAddress].Value = value;
+            get => fiscalPrinterIPAddress;
+            set => fiscalPrinterIPAddress = value;
         }
 
         /// <summary>
@@ -82,8 +148,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterIPPort
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPPort];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPPort].Value = value;
+            get => fiscalPrinterIPPort;
+            set => fiscalPrinterIPPort = value;
         }
 
         /// <summary>
@@ -92,8 +158,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterLogin
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceLogin];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceLogin].Value = value;
+            get => fiscalPrinterLogin;
+            set => fiscalPrinterLogin = value;
         }
 
         /// <summary>
@@ -102,8 +168,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterOperatorCode
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.OperatorCode];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.OperatorCode].Value = value;
+            get => fiscalPrinterOperatorCode;
+            set => fiscalPrinterOperatorCode = value;
         }
 
         /// <summary>
@@ -112,8 +178,8 @@
         /// <date>17.03.2022.</date>
         public override string FiscalPrinterPassword
         {
-            get => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DevicePassword];
-            set => this.settings.FiscalPrinterSettings[Enums.ESettingKeys.DevicePassword].Value = value;
+            get => fiscalPrinterPassword;
+            set => fiscalPrinterPassword = value;
         }
 
         /// <summary>
@@ -122,8 +188,8 @@
         /// <date>17.03.2022.</date>
         public override string POSTerminalManufacturer
         {
-            get => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceManufacturer];
-            set => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceManufacturer].Value = value;
+            get => pOSTerminalManufacturer;
+            set => pOSTerminalManufacturer = value;
         }
 
         /// <summary>
@@ -132,8 +198,8 @@
         /// <date>17.03.2022.</date>
         public override string POSTerminalModel
         {
-            get => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceModel];
-            set => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceModel].Value = value;
+            get => pOSTerminalModel;
+            set => pOSTerminalModel = value;
         }
 
         /// <summary>
@@ -142,8 +208,8 @@
         /// <date>17.03.2022.</date>
         public override string POSTerminalProtocol
         {
-            get => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceProtocol];
-            set => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceProtocol].Value = value;
+            get => pOSTerminalProtocol;
+            set => pOSTerminalProtocol = value;
         }
 
         /// <summary>
@@ -152,8 +218,8 @@
         /// <date>17.03.2022.</date>
         public override string POSTerminalSerialPort
         {
-            get => this.settings.POSTerminalSettings[Enums.ESettingKeys.ComPort];
-            set => this.settings.POSTerminalSettings[Enums.ESettingKeys.ComPort].Value = value;
+            get => pOSTerminalSerialPort;
+            set => pOSTerminalSerialPort = value;
         }
 
         /// <summary>
@@ -162,8 +228,8 @@
         /// <date>17.03.2022.</date>
         public override string POSTerminalBaudRate
         {
-            get => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceBaudRate];
-            set => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceBaudRate].Value = value;
+            get => pOSTerminalBaudRate;
+            set => pOSTerminalBaudRate = value;
         }
 
         /// <summary>
@@ -172,8 +238,8 @@
         /// <date>17.03.2022.</date>
         public override string POSTerminalIPAddress
         {
-            get => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIPAddress];
-            set => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIPAddress].Value = value;
+            get => pOSTerminalIPAddress;
+            set => pOSTerminalIPAddress = value;
         }
 
         /// <summary>
@@ -182,8 +248,8 @@
         /// <date>17.03.2022.</date>
         public override string POSTerminalIPPort
         {
-            get => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIPPort];
-            set => this.settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIPPort].Value = value;
+            get => pOSTerminalIPPort;
+            set => pOSTerminalIPPort = value;
         }
     }
 }

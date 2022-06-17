@@ -8,7 +8,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of item.
     /// </summary>
-    public class ItemModel : ReactiveObject
+    public class ItemModel : BaseModel
     {
         private int id;
         private string code;

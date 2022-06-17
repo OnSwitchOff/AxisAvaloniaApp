@@ -6,8 +6,9 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data to set device settings.
     /// </summary>
-    public class DeviceSettingsModel : ReactiveObject
+    public class DeviceSettingsModel : BaseModel
     {
+        private bool isUsed;
         private ComboBoxItemModel manufacturer;
         private ComboBoxItemModel model;
         private ComboBoxItemModel protocol;
@@ -20,12 +21,22 @@ namespace AxisAvaloniaApp.Models
         private int operatorCode;
 
         /// <summary>
+        /// Gets or sets value indicating whether device is used.
+        /// </summary>
+        /// <date>14.06.2022.</date>
+        public bool IsUsed
+        {
+            get => this.isUsed;
+            set => this.RaiseAndSetIfChanged(ref this.isUsed, value);
+        }
+
+        /// <summary>
         /// Gets or sets manufacturer of device.
         /// </summary>
         /// <date>22.03.2022.</date>
         public ComboBoxItemModel Manufacturer
         {
-            get => this.manufacturer;
+            get => manufacturer == null ? manufacturer = new ComboBoxItemModel() : manufacturer;
             set => this.RaiseAndSetIfChanged(ref this.manufacturer, value);
         }
 
@@ -35,7 +46,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public ComboBoxItemModel Model
         {
-            get => this.model;
+            get => model == null ? model = new ComboBoxItemModel() : model;
             set => this.RaiseAndSetIfChanged(ref this.model, value);
         }
 
@@ -45,7 +56,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public ComboBoxItemModel Protocol
         {
-            get => this.protocol;
+            get => protocol == null ? protocol = new ComboBoxItemModel() : protocol;
             set => this.RaiseAndSetIfChanged(ref this.protocol, value);
         }
 
@@ -55,7 +66,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public string SerialPort
         {
-            get => this.serialPort;
+            get => serialPort;
             set => this.RaiseAndSetIfChanged(ref this.serialPort, value);
         }
 
@@ -65,7 +76,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public int BaudRate
         {
-            get => this.baudRate;
+            get => baudRate;
             set => this.RaiseAndSetIfChanged(ref this.baudRate, value);
         }
 
@@ -75,7 +86,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public string IPAddress
         {
-            get => this.iPAddress;
+            get => iPAddress;
             set => this.RaiseAndSetIfChanged(ref this.iPAddress, value);
         }
 
@@ -85,7 +96,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public int IPPort
         {
-            get => this.iPPort;
+            get => iPPort;
             set => this.RaiseAndSetIfChanged(ref this.iPPort, value);
         }
 
@@ -95,7 +106,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public string Login
         {
-            get => this.login;
+            get => login;
             set => this.RaiseAndSetIfChanged(ref this.login, value);
         }
 
@@ -105,7 +116,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public string Password
         {
-            get => this.password;
+            get => password;
             set => this.RaiseAndSetIfChanged(ref this.password, value);
         }
 
@@ -115,7 +126,7 @@ namespace AxisAvaloniaApp.Models
         /// <date>22.03.2022.</date>
         public int OperatorCode
         {
-            get => this.operatorCode;
+            get => operatorCode;
             set => this.RaiseAndSetIfChanged(ref this.operatorCode, value);
         }
     }

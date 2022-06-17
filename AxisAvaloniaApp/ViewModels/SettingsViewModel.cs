@@ -1,4 +1,7 @@
-﻿using AxisAvaloniaApp.UserControls.Models;
+﻿using AxisAvaloniaApp.Services.Logger;
+using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Validation;
+using AxisAvaloniaApp.UserControls.Models;
 using AxisAvaloniaApp.ViewModels.Settings;
 using ReactiveUI;
 using System;
@@ -10,8 +13,10 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : OperationViewModelBase
     {
+        private readonly ISettingsService settingsService;
+
         private ObservableCollection<ComboBoxItemModel> sections;
         private ComboBoxItemModel selectedSection;
 
@@ -49,9 +54,13 @@ namespace AxisAvaloniaApp.ViewModels
 
         public SettingsViewModel()
         {
+            this.settingsService = settingsService;
+
             LoadSettings();
             InitMenu();
             SelectSection();
+
+            //RegisterValidationData<ObjectSettingsViewModel, string>(ObjectSettings, nameof(ObjectSettings.IBAN), () => { return true; }, "strParter");
         }
 
         private void SelectSection()
@@ -79,13 +88,13 @@ namespace AxisAvaloniaApp.ViewModels
             DeviceSettings = LoadDeviceSettings();
             DocumentSettings = LoadDocumentSettings();
             MainSettings = LoadMainSettings();
-            ObjectSettings = LoadObjectSettings();
+            ObjectSettings = new ObjectSettingsViewModel();
         }
 
-        private ObjectSettingsViewModel LoadObjectSettings()
-        {
-            return new ObjectSettingsViewModel();
-        }
+        //private ObjectSettingsViewModel LoadObjectSettings()
+        //{
+        //    return new ObjectSettingsViewModel();
+        //}
 
         private MainSettingsViewModel LoadMainSettings()
         {

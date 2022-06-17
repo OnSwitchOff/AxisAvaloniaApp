@@ -3,6 +3,13 @@ using Microinvest.IntegrationService.Models.AxisCloud;
 using System;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Services.Settings;
+using DataBase.Repositories.Exchanges;
+using AxisAvaloniaApp.Helpers;
+using DataBase.Repositories.OperationHeader;
+using DataBase.Repositories.Partners;
+using System.Threading.Tasks;
+using Microinvest.CommonLibrary.Enums;
+using DataBase.Repositories.PartnersGroups;
 
 namespace AxisAvaloniaApp.Services.AxisCloud
 {
@@ -13,6 +20,10 @@ namespace AxisAvaloniaApp.Services.AxisCloud
     {
         private readonly string axisCloudAppName;
         private ISettingsService settingsService;
+        private readonly IExchangesRepository exchangesRepository;
+        private readonly IOperationHeaderRepository operationHeaderRepository;
+        private readonly IPartnerRepository partnerRepository;
+        private readonly IPartnersGroupsRepository partnersGroupsRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AxisCloudHelper"/> class.
@@ -21,7 +32,12 @@ namespace AxisAvaloniaApp.Services.AxisCloud
         public AxisCloudHelper(ISettingsService settingsService)
         {
             this.settingsService = settingsService;
-            this.axisCloudAppName = "AxisCloud";
+            axisCloudAppName = "AxisCloud";
+
+            exchangesRepository = Splat.Locator.Current.GetRequiredService<IExchangesRepository>();
+            operationHeaderRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+            partnerRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
+            partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<IPartnersGroupsRepository>();
         }
 
         /// <summary>
@@ -34,7 +50,11 @@ namespace AxisAvaloniaApp.Services.AxisCloud
         /// <date>22.03.2022.</date>
         public bool CheckTransactionNumber(string transactionNumber, out long recordId, out long acctNumber)
         {
-            throw new NotImplementedException();
+            var result = exchangesRepository.CheckRecordAsync(Microinvest.ExchangeDataService.Enums.EExchanges.ImportFromAxisCloud, axisCloudAppName, transactionNumber).GetAwaiter().GetResult();
+            recordId = result.id;
+            acctNumber = result.acct;
+
+            return result.isExist;
         }
 
         /// <summary>
@@ -46,7 +66,8 @@ namespace AxisAvaloniaApp.Services.AxisCloud
         /// <date>22.03.2022.</date>
         public bool CheckUserData(string login, string password)
         {
-            return this.settingsService.AxisCloudSettings[Enums.ESettingKeys.UserName] == login && this.settingsService.AxisCloudSettings[Enums.ESettingKeys.Password] == password;
+            return settingsService.AxisCloudSettings[ESettingKeys.UserName] == login && 
+                settingsService.AxisCloudSettings[ESettingKeys.Password] == password;
         }
 
         /// <summary>
@@ -99,7 +120,7 @@ namespace AxisAvaloniaApp.Services.AxisCloud
         /// <date>22.03.2022.</date>
         public long GetLastSaleNumber(string fiscalDeviceSerialNumber)
         {
-            throw new NotImplementedException();
+            return operationHeaderRepository.GetNextSaleNumberAsync(fiscalDeviceSerialNumber).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -128,7 +149,32 @@ namespace AxisAvaloniaApp.Services.AxisCloud
         /// <date>22.03.2022.</date>
         public PartnersModel GetPartnersData()
         {
-            throw new NotImplementedException();
+            return GetPartnersAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Prepare partners data for AxisCloud.
+        /// </summary>
+        /// <returns>PartnersModel.</returns>
+        /// <date>16.06.2022.</date>
+        private async Task<PartnersModel> GetPartnersAsync()
+        {
+            PartnersModel partners = new PartnersModel();
+            await foreach (var partner in partnerRepository.GetParnersAsync())
+            {
+                partners.Partners.Add(new PartnerFields()
+                {
+                    Id = partner.Id,
+                    Code = string.Empty,
+                    Name = partner.Company,
+                    CardNumber = partner.DiscountCard,
+                    Discount = (float)partner.Group.Discount,
+                    Type = EPartnerTypes.Universal,
+                    Deleted = partner.Status == ENomenclatureStatuses.Deleted || partner.Status == ENomenclatureStatuses.Hidden,
+                });
+            }
+
+            return partners;
         }
 
         /// <summary>

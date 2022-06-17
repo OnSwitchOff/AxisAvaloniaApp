@@ -27,45 +27,6 @@ namespace AxisAvaloniaApp.UserControls.Buttons
             explanationService = Splat.Locator.Current.GetRequiredService<IExplanationService>();
         }
 
-        public new static readonly StyledProperty<IBrush> ForegroundProperty =
-           AvaloniaProperty.Register<ExecutionButton, IBrush>(nameof(Foreground));
-
-        /// <summary>
-        /// Gets or sets a foreground of the text of button.
-        /// </summary>
-        /// <date>30.05.2022.</date>
-        public new IBrush Foreground
-        {
-            get => GetValue(ForegroundProperty);
-            set => SetValue(ForegroundProperty, value);
-        }
-
-        public new static readonly StyledProperty<IBrush> BackgroundProperty =
-           AvaloniaProperty.Register<ExecutionButton, IBrush>(nameof(Background));
-
-        /// <summary>
-        /// Gets or sets a foreground of the text of button.
-        /// </summary>
-        /// <date>30.05.2022.</date>
-        public new IBrush Background
-        {
-            get => GetValue(BackgroundProperty);
-            set => SetValue(BackgroundProperty, value);
-        }
-
-        public new static readonly StyledProperty<IBrush> BorderBrushProperty =
-           AvaloniaProperty.Register<ExecutionButton, IBrush>(nameof(BorderBrush));
-
-        /// <summary>
-        /// Gets or sets a border brush of button.
-        /// </summary>
-        /// <date>30.05.2022.</date>
-        public new IBrush BorderBrush
-        {
-            get => GetValue(BorderBrushProperty);
-            set => SetValue(BorderBrushProperty, value);
-        }
-
         public static readonly StyledProperty<ICommand> CommandProperty =
            AvaloniaProperty.Register<ExecutionButton, ICommand>(nameof(Command));
 

@@ -2,11 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:set="using:AxisAvaloniaApp.UserControls.Settings"
-			 xmlns:ucext="using:AxisAvaloniaApp.UserControls.Extensions"
+             xmlns:set="using:AxisAvaloniaApp.UserControls.Settings"
+             xmlns:ucext="using:AxisAvaloniaApp.UserControls.Extensions"
+             xmlns:buttons="using:AxisAvaloniaApp.UserControls.Buttons"
              mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="300" MinHeight="200" MinWidth="200"
              x:Class="AxisAvaloniaApp.UserControls.Settings.DocumentSettings"
-			 x:Name="UC">
+             x:Name="UC">
 	
 	<UserControl.Styles>
 		<Style Selector="Border">
@@ -18,59 +19,123 @@
 		<Style Selector="ComboBox">
 			<Setter	Property="BorderBrush" Value="DarkGray"/>
 		</Style>
+    <Style Selector="TextBox.Settings">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Margin" Value="10,5"/>
+      <Setter Property="Padding" Value="20,0"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="CornerRadius" Value="0"/>
+    </Style>
 	</UserControl.Styles>
 	<Grid RowDefinitions="50,*,Auto" Margin="0">
-		<Border Grid.Row="0" BorderThickness="0,0,0,1" Margin="20,5,0,5">
-			<ucext:AxisTextBlock  VerticalAlignment="Center"  LocalizeTextKey="strDocuments"  Background="Transparent" Padding="20,0" Foreground="Black"  FontSize="18"  TextAlignment="Left" />
+		<Border Grid.Row="0" 
+            BorderThickness="0,0,0,1" 
+            Margin="20,5,0,5">
+			<ucext:AxisTextBlock  VerticalAlignment="Center" 
+                            LocalizeTextKey="strDocuments"  
+                            Background="Transparent" Padding="20,0" 
+                            Foreground="Black"  
+                            FontSize="18"  
+                            TextAlignment="Left" />
 		</Border>
 
 
 		<Border Grid.Row="1"  BorderThickness="0">
 			<ScrollViewer Padding="20,0">
-				<Grid x:Name="AdaptiveSettingsGrid" RowDefinitions="Auto,Auto,Auto,Auto">
-
-
+				<Grid x:Name="AdaptiveSettingsGrid" 
+              RowDefinitions="Auto,Auto,Auto,Auto">
 					<!--Input for USN-->
-					<set:AdaptiveSettingsItemControl Grid.Row="0"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strUSN" >
+					<set:AdaptiveSettingsItemControl Grid.Row="0" 
+                                           TitleMinWidth="{Binding ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                           TitleKey="strUSN" >
 						<set:AdaptiveSettingsItemControl.Input>
-							<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.USN, Mode=TwoWay}" LocalizePlaceholderKey="strUSN" ExplanationKey="strUSN" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
+							<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.USN, Mode=TwoWay}" 
+                                 LocalizePlaceholderKey="strUSN" 
+                                 ExplanationKey="EnterNextUSN" 
+                                 InputDataChecker="OnlyDigits"
+                                 Classes="Settings"/>
 						</set:AdaptiveSettingsItemControl.Input>
 					</set:AdaptiveSettingsItemControl>
 
 					<!--Input for OperatorCode-->
-					<set:AdaptiveSettingsItemControl Grid.Row="1"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strOperatorCode" >
+					<set:AdaptiveSettingsItemControl Grid.Row="1" 
+                                           TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                           TitleKey="strOperatorCode" >
 						<set:AdaptiveSettingsItemControl.Input>
-							<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.OperatorCode, Mode=TwoWay}" LocalizePlaceholderKey="strOperatorCode" ExplanationKey="strOperatorCode" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
+							<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.OperatorCode, Mode=TwoWay}" 
+                                 LocalizePlaceholderKey="strOperatorCode" 
+                                 ExplanationKey="EnterOperatorCode" 
+                                 InputDataChecker="OnlyDigits"
+                                 Classes="Settings"/>
 						</set:AdaptiveSettingsItemControl.Input>
 					</set:AdaptiveSettingsItemControl>
 
 					<!--Input for UserName-->
-					<set:AdaptiveSettingsItemControl Grid.Row="2"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strUserName" >
+					<set:AdaptiveSettingsItemControl Grid.Row="2" 
+                                           TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                           TitleKey="strUserName" >
 						<set:AdaptiveSettingsItemControl.Input>
-							<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.UserName, Mode=TwoWay}" LocalizePlaceholderKey="strUserName" ExplanationKey="strUserName" FontSize="12"  Margin="10,5" Padding="20,0" VerticalContentAlignment="Center" CornerRadius="0"/>
+							<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.UserName, Mode=TwoWay}" 
+                                 LocalizePlaceholderKey="strUserName" 
+                                 ExplanationKey="EnterOperatorName"  
+                                 Classes="Settings"/>
 						</set:AdaptiveSettingsItemControl.Input>
 					</set:AdaptiveSettingsItemControl>
 
 					<!--Input for Language-->
-					<set:AdaptiveSettingsItemControl Grid.Row="3" TitleKey="strLanguage" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+					<set:AdaptiveSettingsItemControl Grid.Row="3" 
+                                           TitleKey="strLanguage" 
+                                           TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
 						<set:AdaptiveSettingsItemControl.Input>
-							<ComboBox Margin="10,5" HorizontalAlignment="Stretch" Height="30"  Items="{Binding	ElementName=UC, Path=ViewModel.Languages}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedLanguage, Mode=TwoWay}" CornerRadius="0">
+							<ucext:AxisComboBox Margin="10,5" 
+                                  HorizontalAlignment="Stretch"
+                                  Height="30"
+                                  Items="{Binding	ElementName=UC, Path=ViewModel.Languages}" 
+                                  SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedLanguage, Mode=TwoWay}"
+                                  ExplanationKey="SelectAppLanguage"
+                                  CornerRadius="0">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
-										<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"  TextAlignment="Left" Padding="0"  />
+										<ucext:AxisTextBlock Background="Transparent" 
+                                         Text="{Binding	Key, Mode=TwoWay}" 
+                                         FontSize="12" VerticalAlignment="Center" 
+                                         HorizontalAlignment="Left" 
+                                         Margin="10,0" 
+                                         TextAlignment="Left" 
+                                         Padding="0"  />
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
-							</ComboBox>
+							</ucext:AxisComboBox>
 						</set:AdaptiveSettingsItemControl.Input>
 					</set:AdaptiveSettingsItemControl>
 
 				</Grid>
 			</ScrollViewer>
-		</Border>
+		</Border>		
 		
-		
-		<Grid  RowDefinitions="Auto,Auto"  Grid.Row="2" Background="Transparent">
-			<Button Grid.Row="1" Background="Transparent" BorderThickness="2" BorderBrush="SteelBlue" Foreground="SteelBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">Export to log-file</Button>
+		<Grid RowDefinitions="Auto,Auto, auto"  
+          Grid.Row="2" 
+          Background="Transparent">
+      <buttons:ExecutionButton Grid.Row="1"
+                               LocalizeTextKey="strExportLogFile"
+                               Background="Transparent"
+                               BorderThickness="2"
+                               BorderBrush="SteelBlue"
+                               Foreground="SteelBlue"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Center"
+                               Margin="20,5"
+                               Command="{Binding $parent[UserControl].ViewModel.ExportLogFile}"/>
+      <buttons:ExecutionButton Grid.Row="2"
+                               LocalizeTextKey="strSave"
+                               Background="Transparent"
+                               BorderThickness="2"
+                               BorderBrush="SteelBlue"
+                               Foreground="SteelBlue"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Center"
+                               Margin="20,5"
+                               Command="{Binding $parent[UserControl].ViewModel.SaveDocumentSettings}"/>
 		</Grid>
 	</Grid>
 </UserControl>

@@ -6,7 +6,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of group.
     /// </summary>
-    public class GroupModel : ReactiveObject
+    public class GroupModel : BaseModel
     {
         private int id;
         private string name;

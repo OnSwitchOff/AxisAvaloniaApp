@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Explanation;
 using AxisAvaloniaApp.Services.Translation;
 using System;
 
@@ -12,6 +14,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
     {
         Type IStyleable.StyleKey => typeof(CheckBox);
         private ITranslationService translationService;
+        private IExplanationService explanationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AxisCheckBox"/> class.
@@ -23,6 +26,20 @@ namespace AxisAvaloniaApp.UserControls.Extensions
             this.Background = Avalonia.Media.Brushes.Transparent;
 
             this.translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            this.explanationService = Splat.Locator.Current.GetRequiredService<IExplanationService>();
+        }
+
+        public static readonly StyledProperty<string> ExplanationKeyProperty =
+            AvaloniaProperty.Register<AxisTextBlock, string>(nameof(ExplanationKey), string.Empty);
+
+        /// <summary>
+        /// Gets or sets key to search explanation for this TextBox in the dictionary.
+        /// </summary>
+        /// <date>14.06.2022.</date>
+        public string ExplanationKey
+        {
+            get => GetValue(ExplanationKeyProperty);
+            set => SetValue(ExplanationKeyProperty, value);
         }
 
         public static readonly StyledProperty<string> LocalizeTextKeyProperty =
@@ -89,6 +106,33 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         {
             base.OnInitialized();
             Localize();
+        }
+
+        /// <summary>
+        /// Set string with explanation of a purpose of a CheckBox during pointe enter to the CheckBox.
+        /// </summary>
+        /// <param name="e">PointerEventArgs.</param>
+        /// <date>14.06.2022.</date>
+        protected override void OnPointerEnter(PointerEventArgs e)
+        {
+            base.OnPointerEnter(e);
+
+            if (!string.IsNullOrEmpty(ExplanationKey))
+            {
+                explanationService.ExplanationStr = translationService.GetExplanation(this.ExplanationKey);
+            }
+        }
+
+        /// <summary>
+        /// Clear string with explanation of a purpose of a CheckBox during pointer leave from the CheckBox.
+        /// </summary>
+        /// <param name="e">PointerEventArgs.</param>
+        /// <date>14.06.2022.</date>
+        protected override void OnPointerLeave(PointerEventArgs e)
+        {
+            base.OnPointerLeave(e);
+
+            explanationService.ExplanationStr = string.Empty;
         }
 
         /// <summary>

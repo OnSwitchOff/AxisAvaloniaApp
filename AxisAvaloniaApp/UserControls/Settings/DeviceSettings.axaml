@@ -2,9 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:set="using:AxisAvaloniaApp.UserControls.Settings"
-			 xmlns:ucext="using:AxisAvaloniaApp.UserControls.Extensions"
-             mc:Ignorable="d"  d:DesignHeight="800" d:DesignWidth="320" MinHeight="200" MinWidth="200"
+             xmlns:set="using:AxisAvaloniaApp.UserControls.Settings"
+             xmlns:ucext="using:AxisAvaloniaApp.UserControls.Extensions"
+             xmlns:enums="using:Common.Enums"
+             xmlns:converters="using:AxisAvaloniaApp.Converters"
+             xmlns:buttons="using:AxisAvaloniaApp.UserControls.Buttons"
+             mc:Ignorable="d"  
+             d:DesignHeight="800" d:DesignWidth="320" MinHeight="200" MinWidth="200"
              x:Class="AxisAvaloniaApp.UserControls.Settings.DeviceSettings"
 			 x:Name="UC">
 	<UserControl.Styles>
@@ -17,10 +21,44 @@
 		<Style Selector="ComboBox">
 			<Setter	Property="BorderBrush" Value="DarkGray"/>
 		</Style>
+
+    <Style Selector="TextBlock.Settings">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="HorizontalAlignment" Value="Left"/>
+      <Setter Property="Margin" Value="10, 5"/>
+      <Setter Property="TextAlignment" Value="Left"/>
+      <Setter Property="Padding" Value="0"/>
+    </Style>
+
+    <Style Selector="TextBox.Settings">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Margin" Value="5"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="CornerRadius" Value="0"/>
+    </Style>
+
+    <Style Selector="ComboBox.Settings">
+      <Setter Property="Margin" Value="5"/>
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+      <Setter Property="CornerRadius" Value="0"/>
+    </Style>
+
+    <Style Selector="Image">
+      <Setter Property="Width" Value="50"/>
+      <Setter Property="Height" Value="50"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="0"/>
+    </Style>
 	</UserControl.Styles>
 	<UserControl.Resources>
 		<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="Transparent"/>
 		<SolidColorBrush x:Key="ExpanderDropDownBorderBrush" Color="Transparent"/>
+    
+    <converters:SupportedCommunicationEnumToBoolConverter x:Key="CommToBool"/>
+    <converters:IntToStringConverter x:Key="IntToString"/>
 	</UserControl.Resources>
 	<Grid RowDefinitions="50,*,Auto" Margin="0">
 		<Border Grid.Row="0" BorderThickness="0,0,0,1" Margin="20,5,0,5">
@@ -32,248 +70,494 @@
 				<Grid x:Name="AdaptiveSettingsGrid" RowDefinitions="Auto,Auto,Auto,Auto">
 		
 					<Grid Grid.Row="0" Background="Transparent">
-						<!--Input for SerialPort-->
-						<set:AdaptiveSettingsItemControl Grid.Row="0" TitleKey="strCOMPort" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth, Mode=TwoWay}" Margin="20,0,10,0">
+						<!--Input for COM scanner-->
+						<set:AdaptiveSettingsItemControl Grid.Row="0" 
+                                             TitleKey="strScanner" 
+                                             TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth, Mode=TwoWay}" 
+                                             Margin="0,0,0,1">
 							<set:AdaptiveSettingsItemControl.Input>
-								<ComboBox Margin="10,5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.SerialPortItems}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedSerialPortItem, Mode=TwoWay}" CornerRadius="0">
-									<ComboBox.ItemTemplate>
-										<DataTemplate>
-											<ucext:AxisTextBlock Background="Transparent" Text="{Binding Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
-										</DataTemplate>
-									</ComboBox.ItemTemplate>
-								</ComboBox>
+                <ComboBox Margin="10,5"
+                          HorizontalAlignment="Stretch"
+                          Items="{Binding	ElementName=UC, Path=ViewModel.COMScannerPorts}"
+                          SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedComScannerPort, Mode=TwoWay}"
+                          CornerRadius="0">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <ucext:AxisTextBlock LocalizeTextKey="{Binding}"
+                                           Classes="Settings"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
 							</set:AdaptiveSettingsItemControl.Input>
 						</set:AdaptiveSettingsItemControl>
 					</Grid>
 
-					<Expander Grid.Row="1"  CornerRadius="0" HorizontalContentAlignment="Stretch" BorderThickness="0,0,0,1" >
+          <!--Fiscal device-->
+					<Expander Grid.Row="1" 
+                    CornerRadius="0" 
+                    HorizontalContentAlignment="Stretch" 
+                    BorderThickness="0,0,0,1" >
 						<Expander.Header>
 							<Grid ColumnDefinitions="Auto,*">
-								<Image Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
-								  Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
+								<Image Grid.Column="0" 
+                       Source="/Assets/Icons/fiscalDeviceLogo.png"/>
 								<Border Grid.Column="1" >
-									<ucext:AxisTextBlock VerticalAlignment="Center"  LocalizeTextKey="strFiscalDevice"  Background="Transparent"  TextAlignment="Center" />
+									<ucext:AxisTextBlock VerticalAlignment="Center" 
+                                       LocalizeTextKey="strFiscalDevice"  
+                                       Background="Transparent" 
+                                       TextAlignment="Center" />
 								</Border>
 							</Grid>
 						</Expander.Header>
-						<Grid x:Name="FiscalDeviceGrid" Margin="0" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-							<!--Input for SerialPort-->
-							<CheckBox	IsChecked="{Binding	ElementName=UC, Path=ViewModel.IsCheckedFiscalDevice, Mode=TwoWay}"  FontSize="12">
-								<ucext:AxisTextBlock Background="Transparent" LocalizeTextKey="strUseFiscalPrinter"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
-							</CheckBox>
+						<Grid x:Name="FiscalDeviceGrid" 
+                  Margin="0" 
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,auto">
+							<!--Input for flag of using-->
+							<ucext:AxisCheckBox	IsChecked="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed, Mode=TwoWay}"
+                                  ExplanationKey="UseDevice"
+                                  FontSize="12">
+								<ucext:AxisTextBlock Background="Transparent" 
+                                     LocalizeTextKey="strUseFiscalPrinter" 
+                                     VerticalAlignment="Center" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="10,5" 
+                                     TextAlignment="Left" 
+                                     Padding="0"  />
+							</ucext:AxisCheckBox>
 
-							<!--Input for SelectedFiscalDeviceManufacturer-->
-							<set:AdaptiveSettingsItemControl Grid.Row="1" TitleKey="strManufacturer" TitleMinWidth="{Binding ElementName=UC, Path=ViewModel.TitleMinWidth, Mode=TwoWay}">
+							<!--Input for manufacturers-->
+							<set:AdaptiveSettingsItemControl Grid.Row="1" 
+                                               TitleKey="strManufacturer" 
+                                               TitleMinWidth="{Binding ElementName=UC, Path=ViewModel.TitleMinWidth, Mode=TwoWay}"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceManufacturers}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedFiscalDeviceManufacturer, Mode=TwoWay}" CornerRadius="0">
+									<ucext:AxisComboBox Margin="5" 
+                                      HorizontalAlignment="Stretch"
+                                      Items="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceManufacturers}"
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.Manufacturer, Mode=TwoWay}" 
+                                      ExplanationKey="SelectDeviceManufacturer"
+                                      CornerRadius="0">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding	Key, Mode=TwoWay}" 
+                                             Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for SelectedFiscalDeviceModel-->
-							<set:AdaptiveSettingsItemControl Grid.Row="2" TitleKey="strModel" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<!--Input for models-->
+							<set:AdaptiveSettingsItemControl Grid.Row="2" 
+                                               TitleKey="strModel" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceModels}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedFiscalDeviceModel, Mode=TwoWay}" CornerRadius="0">
+									<ucext:AxisComboBox Margin="5"
+                                      HorizontalAlignment="Stretch"
+                                      Items="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceModels}"
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.Model, Mode=TwoWay}" 
+                                      ExplanationKey="SelectDeviceModel"
+                                      CornerRadius="0">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding	Key, Mode=TwoWay}"
+                                             Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-
-							<!--Input for SelectedFiscalDeviceConnectionType-->
-							<set:AdaptiveSettingsItemControl Grid.Row="3" TitleKey="strProtocol" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<!--Input for types of connection-->
+							<set:AdaptiveSettingsItemControl Grid.Row="3" 
+                                               TitleKey="strProtocol" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceConnectionTypes}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedFiscalDeviceConnectionType, Mode=TwoWay}" CornerRadius="0">
+                  <ucext:AxisComboBox Margin="5" 
+                                      HorizontalAlignment="Stretch" 
+                                      Items="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceConnectionTypes}"
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.Protocol, Mode=TwoWay}"
+                                      ExplanationKey="SelectDeviceProtocol"
+                                      CornerRadius="0">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding	Key, Mode=TwoWay}" 
+                                             Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for FiscalDeviceIPAddress-->
-							<set:AdaptiveSettingsItemControl Grid.Row="4"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strIPAddress" >
+              <!--Input for serial ports-->
+              <set:AdaptiveSettingsItemControl Grid.Row="4"
+                                               TitleKey="strCOMPort"
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}"                                               
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.FiscalPrinter.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Serial}}">
+                <set:AdaptiveSettingsItemControl.Input>
+                  <ucext:AxisComboBox Margin="5"
+                                      HorizontalAlignment="Stretch"
+                                      Items="{Binding	ElementName=UC, Path=ViewModel.COMPorts}"
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.SerialPort, Mode=TwoWay}"
+                                      ExplanationKey="SelectCOMPort"
+                                      CornerRadius="0">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <ucext:AxisTextBlock Text="{Binding}"
+                                             Classes="Settings"/>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ucext:AxisComboBox>
+                </set:AdaptiveSettingsItemControl.Input>
+              </set:AdaptiveSettingsItemControl>
+
+              <!--Input for baud rates-->
+              <set:AdaptiveSettingsItemControl Grid.Row="5"
+                                               TitleKey="strBaudRate"
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}"
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.FiscalPrinter.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Serial}}">
+                <set:AdaptiveSettingsItemControl.Input>
+                  <ucext:AxisComboBox Margin="5"
+                                      HorizontalAlignment="Stretch"
+                                      Items="{Binding	ElementName=UC, Path=ViewModel.BaudRates}"
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.BaudRate, Mode=TwoWay}"
+                                      ExplanationKey="SelectBaudRate"
+                                      CornerRadius="0">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <ucext:AxisTextBlock Text="{Binding}"
+                                             Classes="Settings"/>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ucext:AxisComboBox>
+                </set:AdaptiveSettingsItemControl.Input>
+              </set:AdaptiveSettingsItemControl>
+
+              <!--Input for IP address-->
+							<set:AdaptiveSettingsItemControl Grid.Row="6" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strIPAddress"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}"
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.FiscalPrinter.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Lan}}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceIPAddress, Mode=TwoWay}" Watermark="Enter FiscalDeviceIPAddress" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IPAddress, Mode=TwoWay}" 
+                                     ExplanationKey="EnterIPAddress"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for FiscalDeviceIPPort-->
-							<set:AdaptiveSettingsItemControl Grid.Row="5"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strIPPort" >
+							<!--Input for IP port-->
+							<set:AdaptiveSettingsItemControl Grid.Row="7" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strIPPort"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}"
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.FiscalPrinter.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Lan}}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.FiscalDeviceIPPort, Mode=TwoWay}" Watermark="Enter FiscalDeviceIPPort" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IPPort, Mode=TwoWay, Converter={StaticResource IntToString}}"
+                                     ExplanationKey="EnterIPPort"
+                                     InputDataChecker="OnlyDigits"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for OperatorCode-->
-							<set:AdaptiveSettingsItemControl Grid.Row="6"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strOperatorCode" >
+							<!--Input for login-->
+							<set:AdaptiveSettingsItemControl Grid.Row="8" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               TitleKey="strOperatorCode"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.OperatorCode, Mode=TwoWay}" Watermark="Enter operator`s code" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.Login, Mode=TwoWay}"
+                                     ExplanationKey="EnterFiscalPrinterLogin"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for OperatorPassword-->
-							<set:AdaptiveSettingsItemControl Grid.Row="7"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strOperatorPassword" >
+							<!--Input for password-->
+							<set:AdaptiveSettingsItemControl Grid.Row="9" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strOperatorPassword"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.OperatorPassword, Mode=TwoWay}" Watermark="Enter Operator`s password" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.Password, Mode=TwoWay}"
+                                     ExplanationKey="EnterFiscalPrinterPassword"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
+
+              <buttons:ExecutionButton Grid.Row="10"
+                                       LocalizeTextKey="strCheckConnection"
+                                       Background="Transparent"
+                                       BorderThickness="2"
+                                       BorderBrush="SteelBlue"
+                                       Foreground="SteelBlue"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Center"
+                                       Margin="10"
+                                       IsEnabled="{Binding	ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}"
+                                       Command="{Binding $parent[UserControl].ViewModel.CheckFiscalPrinterConnection}"/>
 						</Grid>
 					</Expander>
 
-					<Expander Grid.Row="2"  CornerRadius="0" HorizontalContentAlignment="Stretch" BorderThickness="0,0,0,1">
+          <!--POS terminal-->
+					<Expander Grid.Row="2"  
+                    IsVisible="{Binding ElementName=UC, Path=ViewModel.FiscalPrinter.IsUsed}"
+                    CornerRadius="0" 
+                    HorizontalContentAlignment="Stretch" 
+                    BorderThickness="0,0,0,1">
 						<Expander.Header>
 							<Grid ColumnDefinitions="Auto,*">
-								<Image Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
-								  Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
+								<Image Grid.Column="0"
+                       Source="/Assets/Icons/pOSTerminalIcon.png"/>
 								<Border Grid.Column="1" >
-									<ucext:AxisTextBlock VerticalAlignment="Center"  LocalizeTextKey="strPOSTerminal"  Background="Transparent"  TextAlignment="Center" />
+									<ucext:AxisTextBlock VerticalAlignment="Center" 
+                                       LocalizeTextKey="strPOSTerminal" 
+                                       Background="Transparent" 
+                                       TextAlignment="Center" />
 								</Border>
 							</Grid>
 						</Expander.Header>
-						<Grid Margin="0" x:Name="POSTerminalGrid" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+						<Grid Margin="0" 
+                  x:Name="POSTerminalGrid" 
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto, auto">
+              <!--Input for flag of using-->
+							<ucext:AxisCheckBox	IsChecked="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}"
+                                  ExplanationKey="UseDevice"
+                                  FontSize="12">
+								<ucext:AxisTextBlock Background="Transparent" 
+                                     LocalizeTextKey="strUsePOSTerminal" 
+                                     VerticalAlignment="Center" 
+                                     HorizontalAlignment="Left" 
+                                     Margin="10,5"  
+                                     TextAlignment="Left" 
+                                     Padding="0"  />
+							</ucext:AxisCheckBox>
 
-							<!--Input for SerialPort-->
-							<CheckBox	IsChecked="{Binding	ElementName=UC, Path=ViewModel.IsCheckedPOSTerminal, Mode=TwoWay}"  FontSize="12">
-								<ucext:AxisTextBlock Background="Transparent" LocalizeTextKey="strPOSTerminal"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
-							</CheckBox>
-
-							<!--Input for SelectedPOSTerminalManufacturer-->
-							<set:AdaptiveSettingsItemControl Grid.Row="1" TitleKey="strManufacturer" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<!--Input for manufacturer-->
+							<set:AdaptiveSettingsItemControl Grid.Row="1" 
+                                               TitleKey="strManufacturer" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalManufacturers}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedPOSTerminalManufacturer, Mode=TwoWay}" CornerRadius="0">
+									<ucext:AxisComboBox Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalManufacturers}"
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.Manufacturer, Mode=TwoWay}"
+                                      ExplanationKey="SelectDeviceManufacturer"
+                                      Classes="Settings">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding	Key, Mode=TwoWay}"
+                                             Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for SelectedPOSTerminalModel-->
-							<set:AdaptiveSettingsItemControl Grid.Row="2" TitleKey="strModel" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<!--Input for models-->
+							<set:AdaptiveSettingsItemControl Grid.Row="2" 
+                                               TitleKey="strModel"                                                
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalModels}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedPOSTerminalModel, Mode=TwoWay}" CornerRadius="0">
+									<ucext:AxisComboBox Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalModels}" 
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.Model, Mode=TwoWay}"
+                                      ExplanationKey="SelectDeviceModel"
+                                      Classes="Settings">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding	Key, Mode=TwoWay}"
+                                             Classes="Settings" />
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-
-							<!--Input for SelectedPOSTerminalConnectionType-->
-							<set:AdaptiveSettingsItemControl Grid.Row="3" TitleKey="strProtocol" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<!--Input for types of connection-->
+							<set:AdaptiveSettingsItemControl Grid.Row="3" 
+                                               TitleKey="strProtocol"
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalConnectionTypes}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedPOSTerminalConnectionType, Mode=TwoWay}" CornerRadius="0">
+									<ucext:AxisComboBox Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalConnectionTypes}" 
+                                      SelectedItem="{Binding ElementName=UC, Path=ViewModel.POSTerminal.Protocol, Mode=TwoWay}" 
+                                      ExplanationKey="SelectDeviceProtocol"
+                                      Classes="Settings">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding	Key, Mode=TwoWay}"
+                                             Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for SelectedPOSTerminalSerialPort-->
-							<set:AdaptiveSettingsItemControl Grid.Row="4" TitleKey="strCOMPort" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<!--Input for serial port-->
+							<set:AdaptiveSettingsItemControl Grid.Row="4" 
+                                               TitleKey="strCOMPort" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}"
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.POSTerminal.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Serial}}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalSerialPorts}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedPOSTerminalSerialPort, Mode=TwoWay}" CornerRadius="0">
+                  <ucext:AxisComboBox Items="{Binding	ElementName=UC, Path=ViewModel.COMPorts}" 
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.SerialPort, Mode=TwoWay}" 
+                                      ExplanationKey="SelectCOMPort"
+                                      Classes="Settings">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding}"
+                                             Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for SelectedPOSTerminalSpeed-->
-							<set:AdaptiveSettingsItemControl Grid.Row="5" TitleKey="strBaudRate" TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}">
+							<!--Input for baud rates-->
+							<set:AdaptiveSettingsItemControl Grid.Row="5" 
+                                               TitleKey="strBaudRate" 
+                                               TitleMinWidth="{Binding ElementName=UC, Path=ViewModel.TitleMinWidth}"
+                                               IsEnabled="{Binding ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}"
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.POSTerminal.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Serial}}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<ComboBox Margin="5" HorizontalAlignment="Stretch"  Items="{Binding	ElementName=UC, Path=ViewModel.POSTerminalSpeeds}" SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedPOSTerminalSpeed, Mode=TwoWay}" CornerRadius="0">
+									<ucext:AxisComboBox Items="{Binding	ElementName=UC, Path=ViewModel.baudRates}" 
+                                      SelectedItem="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.BaudRate, Mode=TwoWay}"
+                                      ExplanationKey="SelectBaudRate"
+                                      Classes="Settings">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
+												<ucext:AxisTextBlock Text="{Binding}"
+                                             Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
-									</ComboBox>
+									</ucext:AxisComboBox>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for POSTerminalIPPort-->
-							<set:AdaptiveSettingsItemControl Grid.Row="6"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strIPAddress" >
+							<!--Input for IP address-->
+							<set:AdaptiveSettingsItemControl Grid.Row="6" 
+                                               TitleMinWidth="{Binding ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strIPAddress"
+                                               IsEnabled="{Binding ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}"
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.POSTerminal.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Lan}}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.POSTerminalIPAddress, Mode=TwoWay}" Watermark="Enter POSTerminalIPPort" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.IPAddress, Mode=TwoWay}" 
+                                     ExplanationKey="EnterIPAddress"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for POSTerminalIPPort-->
-							<set:AdaptiveSettingsItemControl Grid.Row="7"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strIPPort" >
+							<!--Input for IP Port-->
+							<set:AdaptiveSettingsItemControl Grid.Row="7" 
+                                               TitleMinWidth="{Binding ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strIPPort"
+                                               IsEnabled="{Binding ElementName=UC, Path=ViewModel.POSTerminal.IsUsed, Mode=TwoWay}"
+                                               IsVisible="{Binding ElementName=UC, Path=ViewModel.POSTerminal.Protocol, Converter={StaticResource CommToBool}, ConverterParameter={x:Static enums:SupportedCommunicationEnum.Lan}}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.POSTerminalIPPort, Mode=TwoWay}" Watermark="Enter POSTerminalIPPort" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.IPPort, Mode=TwoWay, Converter={StaticResource IntToString}}" 
+                                     ExplanationKey="EnterIPPort"
+                                     InputDataChecker="OnlyDigits"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
-							</set:AdaptiveSettingsItemControl>							
-
+							</set:AdaptiveSettingsItemControl>
+              
+              <buttons:ExecutionButton Grid.Row="8"
+                                       LocalizeTextKey="strCheckConnection"
+                                       Background="Transparent"
+                                       BorderThickness="2"
+                                       BorderBrush="SteelBlue"
+                                       Foreground="SteelBlue"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Center"
+                                       Margin="10"
+                                       IsEnabled="{Binding	ElementName=UC, Path=ViewModel.POSTerminal.IsUsed}"
+                                       Command="{Binding $parent[UserControl].ViewModel.CheckPOSTerminalConnection}"/>
 						</Grid>
 					</Expander>
 
-					<Expander Grid.Row="3"  CornerRadius="0" HorizontalContentAlignment="Stretch" BorderThickness="0,0,0,1">
+          <!--AxisCloud-->
+					<Expander Grid.Row="3" 
+                    CornerRadius="0" 
+                    HorizontalContentAlignment="Stretch" 
+                    BorderThickness="0,0,0,1">
 						<Expander.Header>
 							<Grid ColumnDefinitions="Auto,*">
-								<Image Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
-								  Source="avares://AxisAvaloniaApp/Assets/AxisIcon.ico"/>
+								<Image Grid.Column="0" 
+                       Source="/Assets/Icons/axisCloudLogo.png"/>
 								<Border Grid.Column="1" >
-									<ucext:AxisTextBlock VerticalAlignment="Center"  LocalizeTextKey="strAxisCloudIntegration"  Background="Transparent"  TextAlignment="Center" />
+									<ucext:AxisTextBlock VerticalAlignment="Center" 
+                                       LocalizeTextKey="strAxisCloudIntegration" 
+                                       Background="Transparent" 
+                                       TextAlignment="Center" />
 								</Border>
 							</Grid>
 						</Expander.Header>
-						<Grid Margin="0" x:Name="AxisCloudGrid" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+						<Grid Margin="0"
+                  Name="AxisCloudGrid" 
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto">
 
 							<!--Input for IsCheckedAxisCloud-->
-							<CheckBox	IsChecked="{Binding	ElementName=UC, Path=ViewModel.IsCheckedAxisCloud, Mode=TwoWay}"  FontSize="12">
-								<ucext:AxisTextBlock Background="Transparent" LocalizeTextKey="strAxisCloudIntegration"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5"  TextAlignment="Left" Padding="0"  />
-							</CheckBox>
+							<ucext:AxisCheckBox	IsChecked="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIsUsed, Mode=TwoWay}" 
+                                  ExplanationKey="OnIntegration"
+                                  FontSize="12">
+								<ucext:AxisTextBlock Background="Transparent" 
+                                     LocalizeTextKey="strAxisCloudIntegration" 
+                                     VerticalAlignment="Center" 
+                                     HorizontalAlignment="Left" Margin="10,5" 
+                                     TextAlignment="Left" 
+                                     Padding="0"  />
+							</ucext:AxisCheckBox>
 
-							<!--Input for AxisCloudIPAddress-->
-							<set:AdaptiveSettingsItemControl Grid.Row="1"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strIPAddress" >
+							<!--Input for IP address-->
+							<set:AdaptiveSettingsItemControl Grid.Row="1" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strLocalIPAddress"
+                                               IsEnabled="False">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIPAddress, Mode=TwoWay}" Watermark="Enter AxisCloudIPAddress" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIPAddress, Mode=TwoWay}" 
+                           Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for AxisCloudIPPort-->
-							<set:AdaptiveSettingsItemControl Grid.Row="2"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strIPPort" >
+							<!--Input for IP port-->
+							<set:AdaptiveSettingsItemControl Grid.Row="2" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strIPPort"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIsUsed, Mode=TwoWay}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIPPort, Mode=TwoWay}" Watermark="Enter AxisCloudIPPort" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIPPort, Mode=TwoWay, Converter={StaticResource IntToString}}"
+                                     ExplanationKey="EnterIPPort"
+                                     InputDataChecker="OnlyDigits"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
-							<!--Input for AxisCloudLogin-->
-							<set:AdaptiveSettingsItemControl Grid.Row="3"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strLogin" >
+							<!--Input for login-->
+							<set:AdaptiveSettingsItemControl Grid.Row="3" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strLogin"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIsUsed, Mode=TwoWay}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudLogin, Mode=TwoWay}" Watermark="Enter AxisCloudLogin" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudLogin, Mode=TwoWay}" 
+                                     ExplanationKey="EnterAxisCloudLogin"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 
 							<!--Input for AxisCloudPassword-->
-							<set:AdaptiveSettingsItemControl Grid.Row="4"  TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" TitleKey="strPassword" >
+							<set:AdaptiveSettingsItemControl Grid.Row="4" 
+                                               TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth}" 
+                                               TitleKey="strPassword"
+                                               IsEnabled="{Binding	ElementName=UC, Path=ViewModel.AxisCloudIsUsed, Mode=TwoWay}">
 								<set:AdaptiveSettingsItemControl.Input>
-									<TextBox PasswordChar="*" Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudPassword, Mode=TwoWay}" Watermark="Enter AxisCloudPassword" FontSize="12"  Margin="5" VerticalContentAlignment="Center" CornerRadius="0"/>
+									<ucext:AxisTextBox PasswordChar="*" 
+                                     Text="{Binding	ElementName=UC, Path=ViewModel.AxisCloudPassword, Mode=TwoWay}" 
+                                     ExplanationKey="EnterAxisCloudPassword"
+                                     Classes="Settings"/>
 								</set:AdaptiveSettingsItemControl.Input>
 							</set:AdaptiveSettingsItemControl>
 						</Grid>
@@ -283,8 +567,15 @@
 			</ScrollViewer>
 		</Border>
 
-		<Grid  RowDefinitions="Auto,Auto"  Grid.Row="2" Background="Transparent">
-			<Button Grid.Row="1" Background="Transparent" BorderThickness="2" BorderBrush="SteelBlue" Foreground="SteelBlue" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">Overwrite settings</Button>
-		</Grid>
+    <buttons:ExecutionButton Grid.Row="2"
+                               LocalizeTextKey="strSave"
+                               Background="Transparent"
+                               BorderThickness="2"
+                               BorderBrush="SteelBlue"
+                               Foreground="SteelBlue"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Center"
+                               Margin="20,5"
+                               Command="{Binding $parent[UserControl].ViewModel.SaveDeviceSettings}"/>
 	</Grid>
 </UserControl>

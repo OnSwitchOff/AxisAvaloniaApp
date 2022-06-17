@@ -52,15 +52,6 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         }
 
         /// <summary>
-        /// Initialize settings of device.
-        /// </summary>
-        /// <param name="settings">Application settings.</param>
-        /// <date>17.03.2022.</date>
-        public void InitializeDeviceSettings(ISettingsService settings)
-        {
-        }
-
-        /// <summary>
         /// Pay order by POS terminal (if it is used) and print fiscal receipt.
         /// </summary>
         /// <param name="products">Products list to sale.</param>
@@ -74,6 +65,8 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// <date>17.03.2022.</date>
         public Task<FiscalExecutionResult> PayOrderAsync(ObservableCollection<Models.OperationItemModel> products, Microinvest.CommonLibrary.Enums.EPaymentTypes paymentType, decimal receivedCash)
         {
+            this.settings.UniqueSaleNumber++;
+
             return Task.FromResult(new FiscalExecutionResult());
         }
     }

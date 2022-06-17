@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Logger;
 
 namespace AxisAvaloniaApp.Services.Payment.Device
 {
@@ -16,15 +17,34 @@ namespace AxisAvaloniaApp.Services.Payment.Device
     /// </summary>
     public class RealDevice : IDevice
     {
+        private readonly ILoggerService loggerService;
         private FiscalPrinterService fiscalPrinter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealDevice"/> class.
         /// </summary>
-        /// <param name="settings">Application settings.</param>
+        /// <param name="settings">Settings of the app.</param>
         public RealDevice(ISettingsService settings)
         {
-            this.InitializeDeviceSettings(settings);
+            loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
+            InitializeDeviceSettings(settings);
+        }
+
+        /// <summary>
+        /// Service to print receipts.
+        /// </summary>
+        /// <date>15.06.2022.</date>
+        private FiscalPrinterService FiscalPrinter
+        {
+            get
+            {
+                if (fiscalPrinter == null)
+                {
+                    throw new Exception("Fiscal printer service is not initialized!");
+                }
+
+                return fiscalPrinter;
+            }
         }
 
         /// <summary>
@@ -33,7 +53,7 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// <date>17.03.2022.</date>
         public string ReceiptNumber
         {
-            get => this.fiscalPrinter.ReceiptNumber;
+            get => this.FiscalPrinter.ReceiptNumber;
         }
 
         /// <summary>
@@ -42,7 +62,7 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// <date>17.03.2022.</date>
         public string FiscalPrinterSerialNumber
         {
-            get => this.fiscalPrinter.SerialNumber;
+            get => this.FiscalPrinter.SerialNumber;
         }
 
         /// <summary>
@@ -51,7 +71,7 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// <date>17.03.2022.</date>
         public string FiscalPrinterMemoryNumber
         {
-            get => this.fiscalPrinter.FiscalMemoryNumber;
+            get => this.FiscalPrinter.FiscalMemoryNumber;
         }
 
         /// <summary>
@@ -59,22 +79,25 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// </summary>
         /// <param name="settings">Application settings.</param>
         /// <date>17.03.2022.</date>
-        public void InitializeDeviceSettings(ISettingsService settings)
+        private void InitializeDeviceSettings(ISettingsService settings)
         {
             IDeviceSettings deviceSettings = new DeviceSettings(settings);
             try
             {
                 this.fiscalPrinter = FiscalPrinterService.Instance(deviceSettings, settings.AppLanguage.Convert());
+                this.fiscalPrinter.UniqueSaleNumber = settings.UniqueSaleNumber;
+
+                if ((bool)settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIsUsed])
+                {
+                    this.fiscalPrinter.POSTerminal = POSTerminalService.Instance(
+                        deviceSettings, 
+                        settings.AppLanguage.Convert(),
+                        settings.Country.Convert());
+                }
             }
             catch (Exception ex)
             {
-
-            }
-            this.fiscalPrinter.UniqueSaleNumber = 1;// settings.UniqueSaleNumber;
-
-            if (this.fiscalPrinter.POSTerminal == null && (bool)settings.POSTerminalSettings[Enums.ESettingKeys.DeviceIsUsed])
-            {
-                this.fiscalPrinter.POSTerminal = POSTerminalService.Instance(deviceSettings, settings.AppLanguage.Convert());
+                loggerService.RegisterError(this, ex, nameof(InitializeDeviceSettings));
             }
         }
 
@@ -109,6 +132,80 @@ namespace AxisAvaloniaApp.Services.Payment.Device
                         ResultException = new Exception("Unknown payment type!"),
                     };
             }
+        }
+
+        /// <summary>
+        /// Checks whether fiscal device is connected.
+        /// </summary>
+        /// <param name="device">Settings of the fiscal device.</param>
+        /// <param name="language">Language of the app.</param>
+        /// <param name="country">Country in which the app is used.</param>
+        /// <returns>Returns true if device is connected; otherwise returns false.</returns>
+        /// <date>16.06.2022.</date>
+        public static async Task<(bool IsConnected, string error)> FiscalDeviceIsConnectedAsync(Models.DeviceSettingsModel device, ELanguages language, ECountries country)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    var printer = FiscalPrinterService.Instance(new DeviceSettings(device, null), language.Convert(), country.Convert());
+                    if (!printer.IsConnected)
+                    {
+                        Translation.ITranslationService translationService = Splat.Locator.Current.GetRequiredService<Translation.ITranslationService>();
+
+                        return (false, translationService.Localize("msgUnSuccessfulConnection"));                        
+                    }
+                }
+                catch (NullReferenceException nre)
+                {
+                    Translation.ITranslationService translationService = Splat.Locator.Current.GetRequiredService<Translation.ITranslationService>();
+
+                    return (false, translationService.Localize("msgSomeDeviceSettingsAreNotFilled"));
+                }
+                catch (Exception e)
+                {
+                    return (false, e.Message);
+                }
+
+                return (true, string.Empty);
+            });
+        }
+
+        /// <summary>
+        /// Checks whether POS terminal is connected.
+        /// </summary>
+        /// <param name="device">Settings of the POS terminal.</param>
+        /// <param name="language">Language of the app.</param>
+        /// <param name="country">Country in which the app is used.</param>
+        /// <returns>Returns true if device is connected; otherwise returns false.</returns>
+        /// <date>16.06.2022.</date>
+        public static async Task<(bool IsConnected, string error)> POSTerminalIsConnectedAsync(Models.DeviceSettingsModel device, ELanguages language, ECountries country)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    var pOS = POSTerminalService.Instance(new DeviceSettings(null, device), language.Convert(), country.Convert());
+                    if (!pOS.IsConnected)
+                    {
+                        Translation.ITranslationService translationService = Splat.Locator.Current.GetRequiredService<Translation.ITranslationService>();
+
+                        return (false, translationService.Localize("msgUnSuccessfulConnection"));
+                    }
+                }
+                catch (NullReferenceException nre)
+                {
+                    Translation.ITranslationService translationService = Splat.Locator.Current.GetRequiredService<Translation.ITranslationService>();
+
+                    return (false, translationService.Localize("msgSomeDeviceSettingsAreNotFilled"));
+                }
+                catch (Exception e)
+                {
+                    return (false, e.Message);
+                }
+
+                return (true, string.Empty);
+            });
         }
     }
 }

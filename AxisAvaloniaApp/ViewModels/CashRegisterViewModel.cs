@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class CashRegisterViewModel : ViewModelBase
+    public class CashRegisterViewModel : OperationViewModelBase
     {
         #region Fields
         private Control content;

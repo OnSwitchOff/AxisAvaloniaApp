@@ -116,6 +116,11 @@
         Phone,
 
         /// <summary>
+        /// Company e-mail
+        /// </summary>
+        Email,
+
+        /// <summary>
         /// Company tax number
         /// </summary>
         TaxNumber,

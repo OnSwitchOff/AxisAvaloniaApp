@@ -9,7 +9,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of operation.
     /// </summary>
-    public class OperationItemModel : ReactiveObject
+    public class OperationItemModel : BaseModel
     {
         private ItemModel item;
         private int recordId;

@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
+using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.UserControls.Extensions;
 using AxisAvaloniaApp.ViewModels.Settings;
 using System.Diagnostics;
@@ -27,6 +28,8 @@ namespace AxisAvaloniaApp.UserControls.Settings
         public ObjectSettings()
         {
             InitializeComponent();
+            //this.DataContext = ViewModel;
+
             this.PropertyChanged += ObjectSettings_PropertyChanged;
         }
 

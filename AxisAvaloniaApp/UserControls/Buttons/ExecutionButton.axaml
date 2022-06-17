@@ -11,15 +11,16 @@
     <Setter Property="Template">
       <ControlTemplate>
         <Button HorizontalAlignment="Stretch"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="1"
+                Background="{Binding $parent.Background}"
+                BorderBrush="{Binding $parent.BorderBrush}"
+                BorderThickness="{Binding $parent.BorderThickness}"
                 CornerRadius="2"
                 Margin="2"
                 Command="{TemplateBinding Command}"
                 CommandParameter="{TemplateBinding CommandParameter}">
           <Button.Content>
-            <controlsEx:AxisTextBlock Foreground="{TemplateBinding Foreground}" 
+            <controlsEx:AxisTextBlock Foreground="{Binding $parent.Parent.Foreground}" 
+                                      FontSize="{Binding $parent.Parent.FontSize}"
                                       Text="{TemplateBinding Text}"
                                       HorizontalAlignment="Center"
                                       LocalizeTextKey="{TemplateBinding LocalizeTextKey}"/>

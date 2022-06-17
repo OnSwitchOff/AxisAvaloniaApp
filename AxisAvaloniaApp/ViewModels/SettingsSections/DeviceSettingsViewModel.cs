@@ -1,480 +1,532 @@
 ﻿using AxisAvaloniaApp.Helpers;
-using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Services.AxisCloud;
+using AxisAvaloniaApp.Services.Payment;
+using AxisAvaloniaApp.Services.Payment.Device;
+using AxisAvaloniaApp.Services.Scanning;
 using AxisAvaloniaApp.Services.Translation;
+using AxisAvaloniaApp.Services.Validation;
 using AxisAvaloniaApp.UserControls.Models;
-using Microinvest.CommonLibrary.Enums;
+using Common.Interfaces;
+using Microinvest.DeviceService.Helpers;
+using Microinvest.DeviceService.Models;
+using PinPadService.Interfaces;
+using PrinterService.Interfaces;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace AxisAvaloniaApp.ViewModels.Settings
 {
-    public class DeviceSettingsViewModel : ReactiveObject, IVisible
+    public class DeviceSettingsViewModel : SettingsViewModelBase
     {
-        private readonly ISettingsService settingsService;
+        private readonly IValidationService validationService;
+        private readonly IScanningData scanningService;
+        private readonly IPaymentService paymentService;
+        private readonly IAxisCloudService axisCloudService;
         private readonly ITranslationService translationService;
-
-
-        private bool isVisible;
-        public bool IsVisible
-        {
-            get => isVisible;
-            set => this.RaiseAndSetIfChanged(ref isVisible, value);
-        }
-
-
-        private double titleMinWidth;
-        public double TitleMinWidth
-        {
-            get => titleMinWidth;
-            set => this.RaiseAndSetIfChanged(ref titleMinWidth, value);
-        }
-
-        private ObservableCollection<ComboBoxItemModel> serialPortItems;
-        public ObservableCollection<ComboBoxItemModel> SerialPortItems
-        {
-            get => serialPortItems;
-            set => this.RaiseAndSetIfChanged(ref serialPortItems, value);
-        }
-
-        private ComboBoxItemModel selectedSerialPortItem;
-        public ComboBoxItemModel SelectedSerialPortItem
-        {
-            get => selectedSerialPortItem;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedSerialPortItem, value);
-            }
-        }
-
-        private bool isCheckedFiscalDevice;
-        public bool IsCheckedFiscalDevice
-        {
-            get => isCheckedFiscalDevice;
-            set => this.RaiseAndSetIfChanged(ref isCheckedFiscalDevice, value);
-        }
-
+        private readonly string noActivePortKey;
+        private ObservableCollection<string> cOMScannerPorts;
+        private string selectedComScannerPort;
         private ObservableCollection<ComboBoxItemModel> fiscalDeviceManufacturers;
+        private ObservableCollection<ComboBoxItemModel> fiscalDeviceModels;
+        private ObservableCollection<ComboBoxItemModel> fiscalDeviceConnectionTypes;
+        private ObservableCollection<string> cOMPorts;
+        private ObservableCollection<int> baudRates;
+        private DeviceSettingsModel fiscalPrinter;
+        private ObservableCollection<ComboBoxItemModel> posTerminalManufacturers;
+        private ObservableCollection<ComboBoxItemModel> posTerminalModels;
+        private ObservableCollection<ComboBoxItemModel> posTerminalConnectionTypes;
+        private DeviceSettingsModel pOSTerminal;
+        private bool axisCloudIsUsed;
+        private string axisCloudIPAddress;
+        private int axisCloudIPPort;
+        private string axisCloudLogin;
+        private string axisCloudPassword;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceSettingsViewModel"/> class.
+        /// </summary>
+        public DeviceSettingsViewModel()
+        {
+            validationService = Splat.Locator.Current.GetRequiredService<IValidationService>();
+            scanningService = Splat.Locator.Current.GetRequiredService<IScanningData>();
+            paymentService = Splat.Locator.Current.GetRequiredService<IPaymentService>();
+            axisCloudService = Splat.Locator.Current.GetRequiredService<IAxisCloudService>();
+            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            noActivePortKey = "strNotActive";
+
+            cOMScannerPorts = new ObservableCollection<string>();
+            cOMScannerPorts.Add(noActivePortKey);
+            if (settingsService.COMScannerSettings[Enums.ESettingKeys.ComPort].ToString().ToLower().Equals(noActivePortKey))
+            {
+                selectedComScannerPort = noActivePortKey;
+            }
+
+            fiscalPrinter = new DeviceSettingsModel();
+            fiscalPrinter.IsUsed = (bool)settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIsUsed];
+            fiscalPrinter.PropertyChanged += FiscalPrinter_PropertyChanged;
+            pOSTerminal = new DeviceSettingsModel();
+            pOSTerminal.IsUsed = (bool)settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceIsUsed];
+            pOSTerminal.PropertyChanged += POSTerminal_PropertyChanged;
+
+            fiscalDeviceManufacturers = new ObservableCollection<ComboBoxItemModel>();
+            foreach (IPrinterManufacturer manufacturer in FiscalPrinterModel.GetFiscalPrinterManufacturers(settingsService.Country.Convert()))
+            {
+                fiscalDeviceManufacturers.Add(new ComboBoxItemModel()
+                {
+                    Key = manufacturer.Name,
+                    Value = manufacturer.Manufacturer,
+                });
+
+                if (manufacturer.Manufacturer.ToString().Equals(settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceManufacturer]))
+                {
+                    fiscalPrinter.Manufacturer = fiscalDeviceManufacturers[fiscalDeviceManufacturers.Count - 1];
+                }
+            }
+
+            cOMPorts = new ObservableCollection<string>();
+            foreach (string port in DeviceHelper.GetSerialPorts())
+            {
+                cOMPorts.Add(port);
+                cOMScannerPorts.Add(port);
+                if (port.ToLower() == settingsService.FiscalPrinterSettings[Enums.ESettingKeys.ComPort].ToString().ToLower())
+                {
+                    fiscalPrinter.SerialPort = port;
+                }
+                if (port.ToLower() == settingsService.POSTerminalSettings[Enums.ESettingKeys.ComPort].ToString().ToLower())
+                {
+                    pOSTerminal.SerialPort = port;
+                }
+                if (port.ToLower() == settingsService.COMScannerSettings[Enums.ESettingKeys.ComPort].ToString().ToLower())
+                {
+                    selectedComScannerPort = port;
+                }
+            }
+
+            baudRates = new ObservableCollection<int>();
+            foreach (int speed in DeviceHelper.GetDefaulfBaudRates())
+            {
+                baudRates.Add(speed);
+                if (settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceBaudRate].ToString().Equals(speed.ToString()))
+                {
+                    fiscalPrinter.BaudRate = speed;
+                }
+            }
+
+            posTerminalManufacturers = new ObservableCollection<ComboBoxItemModel>();
+            foreach (IPinPadManufacturer manufacturer in POSTerminalModel.GetPOSTerminalManufacturers(settingsService.Country.Convert()))
+            {
+                posTerminalManufacturers.Add(new ComboBoxItemModel()
+                {
+                    Key = manufacturer.Name,
+                    Value = manufacturer.Manufacturer,
+                });
+
+                if (manufacturer.Manufacturer.ToString().Equals(settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceManufacturer]))
+                {
+                    pOSTerminal.Manufacturer = posTerminalManufacturers[posTerminalManufacturers.Count - 1];
+                }
+            }
+
+            axisCloudIsUsed = (bool)settingsService.AxisCloudSettings[Enums.ESettingKeys.DeviceIsUsed];
+            using (System.Net.Sockets.Socket socket = new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Dgram, 0))
+            {
+                socket.Connect("8.8.8.8", 65530);
+                System.Net.IPEndPoint endPoint = socket.LocalEndPoint as System.Net.IPEndPoint;
+                axisCloudIPAddress = endPoint.Address.ToString();
+            }
+            axisCloudIPPort = (int)settingsService.AxisCloudSettings[Enums.ESettingKeys.ComPort];
+            axisCloudLogin = settingsService.AxisCloudSettings[Enums.ESettingKeys.UserName];
+            axisCloudPassword = settingsService.AxisCloudSettings[Enums.ESettingKeys.Password];
+
+            FiscalPrinter.RegisterValidationData<DeviceSettingsModel, string>(
+                nameof(DeviceSettingsModel.IPAddress),
+                () =>
+                {
+                    return !string.IsNullOrEmpty(FiscalPrinter.IPAddress) && !validationService.IsValidIPAddress(FiscalPrinter.IPAddress);
+                },
+                "msgInvalidIPAddress");
+            FiscalPrinter.RegisterValidationData<DeviceSettingsModel, int>(
+                nameof(DeviceSettingsModel.IPPort),
+                () =>
+                {
+                    return !validationService.IsValidIPPort(FiscalPrinter.IPPort);
+                },
+                "msgInvalidIPPort");
+
+            POSTerminal.RegisterValidationData<DeviceSettingsModel, string>(
+                nameof(DeviceSettingsModel.IPAddress),
+                () =>
+                {
+                    return !string.IsNullOrEmpty(POSTerminal.IPAddress) && !validationService.IsValidIPAddress(POSTerminal.IPAddress);
+                },
+                "msgInvalidIPAddress");
+            POSTerminal.RegisterValidationData<DeviceSettingsModel, int>(
+                nameof(DeviceSettingsModel.IPPort),
+                () =>
+                {
+                    return !validationService.IsValidIPPort(POSTerminal.IPPort);
+                },
+                "msgInvalidIPPort");
+
+            RegisterValidationData<DeviceSettingsViewModel, int>(
+                this, 
+                nameof(AxisCloudIPPort), 
+                () =>
+                {
+                    return !validationService.IsValidIPPort(AxisCloudIPPort);
+                }, 
+                "msgInvalidIPPort");
+        }
+
+        public ObservableCollection<string> COMScannerPorts
+        {
+            get => cOMScannerPorts;
+            set => this.RaiseAndSetIfChanged(ref cOMScannerPorts, value);
+        }
+
+        
+        public string SelectedComScannerPort
+        {
+            get => selectedComScannerPort;
+            set => this.RaiseAndSetIfChanged(ref selectedComScannerPort, value);
+        }
+
         public ObservableCollection<ComboBoxItemModel> FiscalDeviceManufacturers
         {
             get => fiscalDeviceManufacturers;
             set => this.RaiseAndSetIfChanged(ref fiscalDeviceManufacturers, value);
         }
 
-        private ComboBoxItemModel selectedFiscalDeviceManufacturer;
-        public ComboBoxItemModel SelectedFiscalDeviceManufacturer
-        {
-            get => selectedFiscalDeviceManufacturer;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedFiscalDeviceManufacturer, value);
-            }
-        }
-
-        private ObservableCollection<ComboBoxItemModel> fiscalDeviceModels;
+        
         public ObservableCollection<ComboBoxItemModel> FiscalDeviceModels
         {
-            get => fiscalDeviceModels;
+            get => fiscalDeviceModels == null ? fiscalDeviceModels = new ObservableCollection<ComboBoxItemModel>() : fiscalDeviceModels;
             set => this.RaiseAndSetIfChanged(ref fiscalDeviceModels, value);
         }
 
-        private ComboBoxItemModel selectedFiscalDeviceModel;
-        public ComboBoxItemModel SelectedFiscalDeviceModel
-        {
-            get => selectedFiscalDeviceModel;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedFiscalDeviceModel, value);
-            }
-        }
-
-        private ObservableCollection<ComboBoxItemModel> fiscalDeviceConnectionTypes;
         public ObservableCollection<ComboBoxItemModel> FiscalDeviceConnectionTypes
         {
-            get => fiscalDeviceConnectionTypes;
+            get => fiscalDeviceConnectionTypes == null ? fiscalDeviceConnectionTypes = new ObservableCollection<ComboBoxItemModel>() : fiscalDeviceConnectionTypes;
             set => this.RaiseAndSetIfChanged(ref fiscalDeviceConnectionTypes, value);
         }
 
-        private ComboBoxItemModel selectedFiscalDeviceConnectionType;
-        public ComboBoxItemModel SelectedFiscalDeviceConnectionType
+        public ObservableCollection<string> COMPorts
         {
-            get => selectedFiscalDeviceConnectionType;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedFiscalDeviceConnectionType, value);
-            }
+            get => cOMPorts;
+            set => this.RaiseAndSetIfChanged(ref cOMPorts, value);
         }
 
-        private string fiscalDeviceIPAddress;
-        public string FiscalDeviceIPAddress
+        public ObservableCollection<int> BaudRates
         {
-            get => fiscalDeviceIPAddress;
-            set => this.RaiseAndSetIfChanged(ref fiscalDeviceIPAddress, value);
+            get => baudRates;
+            set => this.RaiseAndSetIfChanged(ref baudRates, value);
         }
 
-        private string fiscalDeviceIPPort;
-        public string FiscalDeviceIPPort
+        public DeviceSettingsModel FiscalPrinter
         {
-            get => fiscalDeviceIPPort;
-            set => this.RaiseAndSetIfChanged(ref fiscalDeviceIPPort, value);
+            get => fiscalPrinter;
+            set => this.RaiseAndSetIfChanged(ref fiscalPrinter, value);
         }
 
-        private string operatorCode;
-        public string OperatorCode
-        {
-            get => operatorCode;
-            set => this.RaiseAndSetIfChanged(ref operatorCode, value);
-        }
-
-        private string operatorPassword;
-        public string OperatorPassword
-        {
-            get => operatorPassword;
-            set => this.RaiseAndSetIfChanged(ref operatorPassword, value);
-        }
-
-
-
-        private bool isCheckedPOSTerminal;
-        public bool IsCheckedPOSTerminal
-        {
-            get => isCheckedPOSTerminal;
-            set => this.RaiseAndSetIfChanged(ref isCheckedPOSTerminal, value);
-        }
-
-
-        private ObservableCollection<ComboBoxItemModel> posTerminalManufacturers;
+        
         public ObservableCollection<ComboBoxItemModel> POSTerminalManufacturers
         {
             get => posTerminalManufacturers;
             set => this.RaiseAndSetIfChanged(ref posTerminalManufacturers, value);
         }
 
-        private ComboBoxItemModel selectedPOSTerminalManufacturer;
-        public ComboBoxItemModel SelectedPOSTerminalManufacturer
-        {
-            get => selectedPOSTerminalManufacturer;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedPOSTerminalManufacturer, value);
-            }
-        }
-
-        private ObservableCollection<ComboBoxItemModel> posTerminalModels;
+        
         public ObservableCollection<ComboBoxItemModel> POSTerminalModels
         {
-            get => posTerminalModels;
+            get => posTerminalModels == null ? posTerminalModels = new ObservableCollection<ComboBoxItemModel>() : posTerminalModels;
             set => this.RaiseAndSetIfChanged(ref posTerminalModels, value);
         }
 
-        private ComboBoxItemModel selectedPOSTerminalModel;
-        public ComboBoxItemModel SelectedPOSTerminalModel
-        {
-            get => selectedPOSTerminalModel;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedPOSTerminalModel, value);
-            }
-        }
-
-        private ObservableCollection<ComboBoxItemModel> posTerminalConnectionTypes;
+        
         public ObservableCollection<ComboBoxItemModel> POSTerminalConnectionTypes
         {
-            get => posTerminalConnectionTypes;
+            get => posTerminalConnectionTypes == null ? posTerminalConnectionTypes = new ObservableCollection<ComboBoxItemModel>() : posTerminalConnectionTypes;
             set => this.RaiseAndSetIfChanged(ref posTerminalConnectionTypes, value);
         }
 
-        private ComboBoxItemModel selectedPOSTerminalConnectionType;
-        public ComboBoxItemModel SelectedPOSTerminalConnectionType
+        public DeviceSettingsModel POSTerminal
         {
-            get => selectedPOSTerminalConnectionType;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedPOSTerminalConnectionType, value);
-            }
+            get => pOSTerminal;
+            set => this.RaiseAndSetIfChanged(ref pOSTerminal, value);
+        }
+       
+        public bool AxisCloudIsUsed
+        {
+            get => axisCloudIsUsed;
+            set => this.RaiseAndSetIfChanged(ref axisCloudIsUsed, value);
         }
 
-
-        private ObservableCollection<ComboBoxItemModel> posTerminalSerialPorts;
-        public ObservableCollection<ComboBoxItemModel> POSTerminalSerialPorts
-        {
-            get => posTerminalSerialPorts;
-            set => this.RaiseAndSetIfChanged(ref posTerminalSerialPorts, value);
-        }
-
-        private ComboBoxItemModel selectedPOSTerminalSerialPort;
-        public ComboBoxItemModel SelectedPOSTerminalSerialPort
-        {
-            get => selectedPOSTerminalSerialPort;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedPOSTerminalSerialPort, value);
-            }
-        }
-
-        private ObservableCollection<ComboBoxItemModel> posTerminalSpeeds;
-        public ObservableCollection<ComboBoxItemModel> POSTerminalSpeeds
-        {
-            get => posTerminalSpeeds;
-            set => this.RaiseAndSetIfChanged(ref posTerminalSpeeds, value);
-        }
-
-        private ComboBoxItemModel selectedPOSTerminalSpeed;
-        public ComboBoxItemModel SelectedPOSTerminalSpeed
-        {
-            get => selectedPOSTerminalSpeed;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref selectedPOSTerminalSpeed, value);
-            }
-        }
-
-        private string posTerminalIPAddress;
-        public string POSTerminalIPAddress
-        {
-            get => posTerminalIPAddress;
-            set => this.RaiseAndSetIfChanged(ref posTerminalIPAddress, value);
-        }
-
-        private string posTerminalIPPort;
-        public string POSTerminalIPPort
-        {
-            get => posTerminalIPPort;
-            set => this.RaiseAndSetIfChanged(ref posTerminalIPPort, value);
-        }
-
-
-
-        private bool isCheckedAxisCloud;
-        public bool IsCheckedAxisCloud
-        {
-            get => isCheckedAxisCloud;
-            set => this.RaiseAndSetIfChanged(ref isCheckedAxisCloud, value);
-        }
-
-        private string axisCloudIPAddress;
+        
         public string AxisCloudIPAddress
         {
             get => axisCloudIPAddress;
             set => this.RaiseAndSetIfChanged(ref axisCloudIPAddress, value);
         }
 
-        private string axisCloudIPPort;
-        public string AxisCloudIPPort
+        
+        public int AxisCloudIPPort
         {
             get => axisCloudIPPort;
             set => this.RaiseAndSetIfChanged(ref axisCloudIPPort, value);
         }
 
-        private string axisCloudLogin;
+        
         public string AxisCloudLogin
         {
             get => axisCloudLogin;
             set => this.RaiseAndSetIfChanged(ref axisCloudLogin, value);
         }
 
-        private string axisCloudPassword;
+        
         public string AxisCloudPassword
         {
             get => axisCloudPassword;
             set => this.RaiseAndSetIfChanged(ref axisCloudPassword, value);
         }
 
-
-        public DeviceSettingsViewModel()
+        public async void CheckFiscalPrinterConnection()
         {
-            settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
-            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
-
-            SerialPortItems = GetSerialPortItemsCollection();
-
-            FiscalDeviceManufacturers = GetFiscalDeviceManufaturersCollection();
-            FiscalDeviceModels = GetFiscalDeviceModelsCollection();
-            FiscalDeviceConnectionTypes = GetFiscalDeviceConnectionTypesCollection();
-
-            POSTerminalManufacturers = GetPOSTerminalManufaturersCollection();
-            POSTerminalModels = GetPOSTerminalModelsCollection();
-            POSTerminalConnectionTypes = GetPOSTerminalConnectionTypesCollection();
-            POSTerminalSerialPorts = GetPOSTerminalSerialPortsCollection();
-            POSTerminalSpeeds = GetPOSTerminalSpeedsCollection();
-        }
-
-        private ObservableCollection<ComboBoxItemModel> GetSerialPortItemsCollection()
-        {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            var result = await RealDevice.FiscalDeviceIsConnectedAsync(FiscalPrinter, settingsService.AppLanguage, settingsService.Country);
+            if (result.IsConnected)
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
-
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
+                _ = loggerService.ShowDialog("msgSuccessfulConnection", "", UserControls.MessageBox.EButtonIcons.Success);
             }
-            return result;
-        }
-
-        private ObservableCollection<ComboBoxItemModel> GetFiscalDeviceManufaturersCollection()
-        {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            else
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
-
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
+                _ = loggerService.ShowDialog1(result.error, translationService.Localize("strError"), UserControls.MessageBox.EButtonIcons.Error);
             }
-            return result;
         }
 
-
-        private ObservableCollection<ComboBoxItemModel> GetFiscalDeviceModelsCollection()
+        public async void CheckPOSTerminalConnection()
         {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            var result = await RealDevice.POSTerminalIsConnectedAsync(POSTerminal, settingsService.AppLanguage, settingsService.Country);
+            if (result.IsConnected)
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
-
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
+                _ = loggerService.ShowDialog("msgSuccessfulConnection", "", UserControls.MessageBox.EButtonIcons.Success);
             }
-            return result;
-        }
-
-        private ObservableCollection<ComboBoxItemModel> GetFiscalDeviceConnectionTypesCollection()
-        {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            else
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
-
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
+                _ = loggerService.ShowDialog1(result.error, translationService.Localize("strError"), UserControls.MessageBox.EButtonIcons.Error);
             }
-            return result;
         }
 
-
-        private ObservableCollection<ComboBoxItemModel> GetPOSTerminalManufaturersCollection()
+        public async void SaveDeviceSettings()
         {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            try
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
-
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
+                if (string.IsNullOrEmpty(SelectedComScannerPort) || SelectedComScannerPort.Equals(noActivePortKey))
                 {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
+                    scanningService.StopCOMScanner();
                 }
+                else
+                {
+                    scanningService.StartCOMScanner(SelectedComScannerPort);
+                }
+
+                if (FiscalPrinter.IsUsed)
+                {
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIsUsed].Value = FiscalPrinter.IsUsed.ToString();
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceManufacturer].Value = FiscalPrinter.Manufacturer.Value.ToString();
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceModel].Value = FiscalPrinter.Model.Value.ToString();
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceProtocol].Value = FiscalPrinter.Protocol.Value.ToString();
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.ComPort].Value = FiscalPrinter.SerialPort;
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceBaudRate].Value = FiscalPrinter.BaudRate.ToString();
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPAddress].Value = FiscalPrinter.IPAddress;
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPPort].Value = FiscalPrinter.IPPort.ToString();
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceLogin].Value = FiscalPrinter.Login;
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.OperatorCode].Value = FiscalPrinter.OperatorCode.ToString();
+                    settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DevicePassword].Value = FiscalPrinter.Password;
+
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceIsUsed].Value = POSTerminal.IsUsed.ToString();
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceManufacturer].Value = POSTerminal.Manufacturer.Value.ToString();
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceModel].Value = POSTerminal.Model.Value.ToString();
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceProtocol].Value = POSTerminal.Protocol.Value.ToString();
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.ComPort].Value = POSTerminal.SerialPort;
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceBaudRate].Value = POSTerminal.BaudRate.ToString();
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceIPAddress].Value = POSTerminal.IPAddress;
+                    settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceIPPort].Value = POSTerminal.IPPort.ToString();
+
+                    paymentService.SetPaymentTool(new RealDevice(settingsService));
+                }
+                else
+                {
+                    paymentService.SetPaymentTool(new NoDevice(settingsService));
+                }
+
+                if (AxisCloudIsUsed)
+                {
+                    axisCloudService.StartServiceAsync(AxisCloudIPPort, settingsService);
+                }
+                else
+                {
+                    axisCloudService.StopService();
+                }
+
+                settingsService.UpdateSettings(Enums.ESettingGroups.COMScanner);
+                settingsService.UpdateSettings(Enums.ESettingGroups.FiscalPrinter);
+                settingsService.UpdateSettings(Enums.ESettingGroups.POSTerminal);
+                settingsService.UpdateSettings(Enums.ESettingGroups.AxisCloud);
+
+                await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBox.EButtonIcons.Success);
             }
-            return result;
-        }
-
-        private ObservableCollection<ComboBoxItemModel> GetPOSTerminalModelsCollection()
-        {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            catch (Exception ex)
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
-
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
+                loggerService.RegisterError(this, ex, nameof(SaveDeviceSettings));
+                await loggerService.ShowDialog("msgErrorDuringConnectingToDeviceOrSavingSettings", "strError", UserControls.MessageBox.EButtonIcons.Error);
             }
-            return result;
         }
 
-        private ObservableCollection<ComboBoxItemModel> GetPOSTerminalConnectionTypesCollection()
+        private void POSTerminal_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            switch (e.PropertyName)
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
+                case nameof(DeviceSettingsModel.Manufacturer):
+                    POSTerminalModels.Clear();
 
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
+                    foreach (IDefaultPinPadConfiguration model in POSTerminalModel.GetPOSTerminalModels(POSTerminal.Manufacturer.Value.ToString(), settingsService.Country.Convert()))
+                    {
+                        POSTerminalModels.Add(new ComboBoxItemModel()
+                        {
+                            Key = model.Name,
+                            Value = model.PinPadType,
+                        });
+
+                        if (model.PinPadType.ToString().Equals(settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceModel]))
+                        {
+                            POSTerminal.Model = POSTerminalModels[POSTerminalModels.Count - 1];
+                        }
+                    }
+                    break;
+                case nameof(DeviceSettingsModel.Model):
+                    POSTerminalConnectionTypes.Clear();
+
+                    foreach (IConfiguration protocol in POSTerminalModel.GetSupportedProtocols(POSTerminal.Manufacturer.Value.ToString(), POSTerminal.Model.Value.ToString()))
+                    {
+                        POSTerminalConnectionTypes.Add(new ComboBoxItemModel()
+                        {
+                            Key = protocol.Name,
+                            Value = protocol.Type,
+                        });
+
+                        if (protocol.Type.ToString().Equals(settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceProtocol]))
+                        {
+                            POSTerminal.Protocol = POSTerminalConnectionTypes[POSTerminalConnectionTypes.Count - 1];
+                        }
+                    }
+
+                    if (POSTerminal.Protocol == null && POSTerminalConnectionTypes.Count == 1)
+                    {
+                        POSTerminal.Protocol = POSTerminalConnectionTypes[0];
+                    }
+                    break;
+                case nameof(DeviceSettingsModel.Protocol):
+                    if (POSTerminal.Protocol != null)
+                    {
+                        IPinPadManufacturer selectedManufacturer = POSTerminalModel.ParseToPOSTerminalManufacturer(POSTerminal.Manufacturer.Value.ToString());
+                        IDefaultPinPadConfiguration selectedModel = POSTerminalModel.ParseToPOSTerminalModel(selectedManufacturer, POSTerminal.Model.Value.ToString());
+
+                        switch ((Common.Enums.SupportedCommunicationEnum)POSTerminal.Protocol.Value)
+                        {
+                            case Common.Enums.SupportedCommunicationEnum.Serial:
+                                if (POSTerminal.BaudRate == 0)
+                                {
+                                    POSTerminal.BaudRate = POSTerminalModel.GetDefaultBaudRate(selectedModel);
+                                }
+                                break;
+                            case Common.Enums.SupportedCommunicationEnum.Lan:
+                                POSTerminal.IPAddress = settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceIPAddress];
+                                POSTerminal.IPPort = string.IsNullOrEmpty(settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceIPPort]) ?
+                                    POSTerminalModel.GetDefaultIPPort(selectedModel) :
+                                    int.Parse(settingsService.POSTerminalSettings[Enums.ESettingKeys.DeviceIPPort]);
+                                break;
+                        }
+                    }
+                    break;
             }
-            return result;
         }
 
-        private ObservableCollection<ComboBoxItemModel> GetPOSTerminalSerialPortsCollection()
+        private void FiscalPrinter_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
+            IPrinterManufacturer selectedManufacturer;
+            IDefaultPrinterConfiguration selectedPrinter;
+            switch (e.PropertyName)
             {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
+                case nameof(DeviceSettingsModel.Manufacturer):
+                    FiscalDeviceModels.Clear();
 
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
+                    foreach (IDefaultPrinterConfiguration model in FiscalPrinterModel.GetFiscalPrinterModels(fiscalPrinter.Manufacturer.Value.ToString(), settingsService.Country.Convert()))
+                    {
+                        FiscalDeviceModels.Add(new ComboBoxItemModel()
+                        {
+                            Key = model.Name,
+                            Value = model.PrinterType,
+                        });
+
+                        if (model.PrinterType.ToString().Equals(settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceModel]))
+                        {
+                            FiscalPrinter.Model = FiscalDeviceModels[FiscalDeviceConnectionTypes.Count - 1];
+                        }
+                    }
+                    break;
+                case nameof(DeviceSettingsModel.Model):
+                    FiscalDeviceConnectionTypes.Clear();
+
+                    selectedManufacturer = FiscalPrinterModel.ParseToPrinterManufacturer(fiscalPrinter.Manufacturer.Value.ToString());
+                    selectedPrinter = FiscalPrinterModel.ParseToPrinterModel(selectedManufacturer, fiscalPrinter.Model.Value.ToString());
+                    foreach (IConfiguration protocol in FiscalPrinterModel.GetSupportedProtocols(selectedPrinter))
+                    {
+                        FiscalDeviceConnectionTypes.Add(new ComboBoxItemModel
+                        {
+                            Key = protocol.Name,
+                            Value = protocol.Type,
+                        });
+
+                        if (protocol.Type.ToString().Equals(settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceProtocol]))
+                        {
+                            FiscalPrinter.Protocol = FiscalDeviceConnectionTypes[FiscalDeviceConnectionTypes.Count - 1];
+                        }
+                    }
+
+                    if (FiscalPrinter.Protocol == null && FiscalDeviceConnectionTypes.Count == 1)
+                    {
+                        FiscalPrinter.Protocol = FiscalDeviceConnectionTypes[0];
+                    }
+
+                    FiscalPrinter.Login = string.IsNullOrEmpty(settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceLogin]) ? selectedPrinter.UserCode : settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceLogin];
+                    FiscalPrinter.Password = string.IsNullOrEmpty(settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DevicePassword]) ? selectedPrinter.UserPassword : settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DevicePassword];
+                    break;
+                case nameof(DeviceSettingsModel.Protocol):
+                    if (FiscalPrinter.Protocol != null)
+                    {
+                        selectedManufacturer = FiscalPrinterModel.ParseToPrinterManufacturer(fiscalPrinter.Manufacturer.Value.ToString());
+                        selectedPrinter = FiscalPrinterModel.ParseToPrinterModel(selectedManufacturer, fiscalPrinter.Model.Value.ToString());
+
+                        switch ((Common.Enums.SupportedCommunicationEnum)FiscalPrinter.Protocol.Value)
+                        {
+                            case Common.Enums.SupportedCommunicationEnum.Serial:
+                                if (FiscalPrinter.BaudRate == 0)
+                                {
+                                    FiscalPrinter.BaudRate = FiscalPrinterModel.GetDefaultBaudRate(selectedPrinter);
+                                }
+                                break;
+                            case Common.Enums.SupportedCommunicationEnum.Lan:
+                                FiscalPrinter.IPAddress = settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPAddress];
+                                FiscalPrinter.IPPort = string.IsNullOrEmpty(settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPPort]) ?
+                                    FiscalPrinterModel.GetDefaultIPPort(selectedPrinter) :
+                                    int.Parse(settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIPPort]);
+                                break;
+                        }
+                    }
+                    break;
             }
-            return result;
-        }
-
-
-        private ObservableCollection<ComboBoxItemModel> GetPOSTerminalSpeedsCollection()
-        {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            foreach (ELanguages eLang in settingsService.SupportedLanguages)
-            {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = eLang;
-
-                if (translationService.SupportedLanguages.ContainsKey(eLang.CombineCode))
-                {
-                    item.Key = translationService.SupportedLanguages[eLang.CombineCode];
-                    result.Add(item);
-                }
-            }
-            return result;
-        }
-
-        public ReactiveCommand<Unit, Unit> ShowChoseIconCommand { get; }
-
-        async void ShowChoseIconDialog()
-        {
-
-
         }
     }
 }

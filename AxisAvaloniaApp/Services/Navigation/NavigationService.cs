@@ -45,7 +45,7 @@ namespace AxisAvaloniaApp.Services.Navigation
         {
             Type viewType = GetViewType(viewModel);
 
-            if (control != null && control.DataContext is ViewModelBase modelBase)
+            if (control != null && control.DataContext is OperationViewModelBase modelBase)
             {
                 // получаем ViewModel текущего контрола, который мы планируем кешировать
                 string key = control.DataContext.GetType().FullName ?? string.Empty;

@@ -370,7 +370,7 @@ namespace AxisAvaloniaApp.Services.Settings
                                 this.settingsRepository,
                                 ESettingKeys.ComPort,
                                 ESettingGroups.COMScanner,
-                                string.Empty)
+                                "strNotActive")
                         },
                     };
                 }
@@ -462,6 +462,14 @@ namespace AxisAvaloniaApp.Services.Settings
                             new SettingsItemModel(
                                 this.settingsRepository,
                                 ESettingKeys.Phone,
+                                ESettingGroups.App,
+                                string.Empty)
+                        },
+                        {
+                            ESettingKeys.Email,
+                            new SettingsItemModel(
+                                this.settingsRepository,
+                                ESettingKeys.Email,
                                 ESettingGroups.App,
                                 string.Empty)
                         },

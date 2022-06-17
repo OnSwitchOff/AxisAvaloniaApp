@@ -1,5 +1,5 @@
-﻿using DataBase.Enums;
-using Microinvest.CommonLibrary.Enums;
+﻿using Microinvest.CommonLibrary.Enums;
+using Microinvest.ExchangeDataService.Enums;
 
 namespace DataBase.Entities.Exchanges
 {
@@ -7,7 +7,7 @@ namespace DataBase.Entities.Exchanges
     {
         public int Id { get; set; }
         public OperationHeader.OperationHeader OperationHeader { get; set; }
-        public EExchangeDirections ExchangeType { get; set; }
+        public EExchanges ExchangeType { get; set; }
         public string AppName { get; set; } = null!;
         public string AppKey { get; set; } = null!;
         public int Acct { get; set; }
@@ -16,7 +16,7 @@ namespace DataBase.Entities.Exchanges
         /// <summary>
         /// Initializes a new instance of the <see cref="Exchange"/> class.
         /// </summary>
-        internal Exchange() : this(null, EExchangeDirections.Export, "", "", 0, EOperTypes.Sale)
+        internal Exchange() : this(null, EExchanges.ExportToWarehouseSkladPro, "", "", 0, EOperTypes.Sale)
         {
 
         }
@@ -30,7 +30,7 @@ namespace DataBase.Entities.Exchanges
         /// <param name="appKey">The unique key of the application to which the data was exported or from which the data was imported.</param>
         /// <param name="acct">The number of the operation that was imported or exported.</param>
         /// <param name="operType">The type of the operation that was imported or exported.</param>
-        private Exchange(OperationHeader.OperationHeader operHeader, EExchangeDirections exchangeType, string appName, string appKey, int acct, EOperTypes operType)
+        private Exchange(OperationHeader.OperationHeader operHeader, EExchanges exchangeType, string appName, string appKey, int acct, EOperTypes operType)
         {
             this.OperationHeader = operHeader;
             this.ExchangeType = exchangeType;
@@ -50,7 +50,7 @@ namespace DataBase.Entities.Exchanges
         /// <param name="acct">The number of the operation that was imported or exported.</param>
         /// <param name="operType">The type of the operation that was imported or exported.</param>
         /// <returns>Returns <see cref="Exchange"/> class if parameters are correct.</returns>
-        public static Exchange Create(OperationHeader.OperationHeader operHeader, EExchangeDirections exchangeType, string appName, string appKey, int acct, EOperTypes operType)
+        public static Exchange Create(OperationHeader.OperationHeader operHeader, EExchanges exchangeType, string appName, string appKey, int acct, EOperTypes operType)
         {
             // check rule
 

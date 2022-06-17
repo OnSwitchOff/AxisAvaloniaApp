@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class SaleViewModel : ViewModelBase
+    public class SaleViewModel : OperationViewModelBase
     {
         private readonly ISettingsService settingsService;
         

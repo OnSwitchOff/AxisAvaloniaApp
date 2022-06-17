@@ -5,7 +5,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of partner.
     /// </summary>
-    public partial class PartnerModel : ReactiveObject
+    public partial class PartnerModel : BaseModel
     {
         private int id;
         private string name;

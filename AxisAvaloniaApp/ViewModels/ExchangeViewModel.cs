@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class ExchangeViewModel : ViewModelBase
+    public class ExchangeViewModel : OperationViewModelBase
     {
         private bool isImportDirection;
         private ObservableCollection<ComboBoxItemModel> importFromItems;

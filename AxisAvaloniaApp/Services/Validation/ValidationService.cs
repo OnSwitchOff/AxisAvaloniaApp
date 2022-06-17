@@ -9,6 +9,8 @@ namespace AxisAvaloniaApp.Services.Validation
         private const string digits = @"[\d]";
         private const string letters = @"^[\p{L}]+$";
         private const string lettersAndSpaces = @"((^[\p{L}])|[\s])+$";
+        private const string iPAddress = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+        private const string iPPort = @"^[^!0](\d{1,5})$";
         private BaseValidator validator;
 
         /// <summary>
@@ -158,6 +160,28 @@ namespace AxisAvaloniaApp.Services.Validation
         public bool IsValidVATNumber(string vATNumber)
         {
             return validator.IsValidVATNumber(vATNumber);
+        }
+
+        /// <summary>
+        /// Check if a text is IP address.
+        /// </summary>
+        /// <param name="_iPAddress">Text to check.</param>
+        /// <returns>Returns true if text is IP address; otherwise returns false.</returns>
+        /// <date>15.06.2022.</date>
+        public bool IsValidIPAddress(string _iPAddress)
+        {
+            return Regex.IsMatch(_iPAddress, iPAddress);
+        }
+
+        /// <summary>
+        /// Check if a text is IP port.
+        /// </summary>
+        /// <param name="_iPPort">Text to check.</param>
+        /// <returns>Returns true if text is IP port; otherwise returns false.</returns>
+        /// <date>15.06.2022.</date>
+        public bool IsValidIPPort(int _iPPort)
+        {
+            return Regex.IsMatch(_iPPort.ToString(), iPPort);
         }
     }
 }

@@ -89,5 +89,21 @@
         /// <returns>Returns true if VAT number is valid; otherwise returns false.</returns>
         /// <date>13.06.2022.</date>
         bool IsValidVATNumber(string vATNumber);
+
+        /// <summary>
+        /// Check if a text is IP address.
+        /// </summary>
+        /// <param name="iPAddress">Text to check.</param>
+        /// <returns>Returns true if text is IP address; otherwise returns false.</returns>
+        /// <date>15.06.2022.</date>
+        bool IsValidIPAddress(string iPAddress);
+
+        /// <summary>
+        /// Check if a text is IP port.
+        /// </summary>
+        /// <param name="iPPort">Text to check.</param>
+        /// <returns>Returns true if text is IP port; otherwise returns false.</returns>
+        /// <date>15.06.2022.</date>
+        bool IsValidIPPort(int iPPort);
     }
 }

@@ -7,7 +7,7 @@ using AxisAvaloniaApp.Services.Serialization;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class ReportsViewModel : ViewModelBase
+    public class ReportsViewModel : OperationViewModelBase
     {
         private readonly IReportsService reportsService;
         private readonly ISerializationService serializationService;

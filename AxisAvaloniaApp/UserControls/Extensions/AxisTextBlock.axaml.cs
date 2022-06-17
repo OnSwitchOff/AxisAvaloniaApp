@@ -105,7 +105,14 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         {
             if (!string.IsNullOrEmpty(this.LocalizeTextKey))
             {
-                this.Text = translationService.Localize(this.LocalizeTextKey).TrimStart('\n');
+                if (this.LocalizeTextKey.StartsWith("COM"))
+                {
+                    this.Text = this.LocalizeTextKey;
+                }
+                else
+                {
+                    this.Text = translationService.Localize(this.LocalizeTextKey).TrimStart('\n');
+                }
             }
         }
     }

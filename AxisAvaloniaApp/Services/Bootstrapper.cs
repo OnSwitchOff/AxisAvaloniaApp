@@ -51,7 +51,11 @@ namespace AxisAvaloniaApp.Services
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.Register<IActivationService>(() => new ActivationService(
-                resolver.GetRequiredService<ISettingsService>(), resolver.GetRequiredService<IThemeSelectorService>()));
+                resolver.GetRequiredService<ISettingsService>(),
+                resolver.GetRequiredService<IScanningData>(),
+                resolver.GetRequiredService<IPaymentService>(),
+                resolver.GetRequiredService<IAxisCloudService>(),
+                resolver.GetRequiredService<ILoggerService>()));
 
             services.Register<INavigationService>(() => new NavigationService());
             services.RegisterLazySingleton<IThemeSelectorService>(() => new ThemeSelectorService());
@@ -108,7 +112,7 @@ namespace AxisAvaloniaApp.Services
 
         private static void RegisterRepositories(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton(() => new DatabaseContext(Configurations.DatabaseConfiguration.GetOptions()));
+            services.RegisterLazySingleton(() => new DatabaseContext(Configurations.AppConfiguration.GetDatabaseOptions()));
             services.Register<IApplicationLogRepository>(() => new ApplicationLogRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));
             services.Register<IDocumentsRepository>(() => new DocumentsRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));
             services.Register<IExchangesRepository>(() => new ExchangesRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));

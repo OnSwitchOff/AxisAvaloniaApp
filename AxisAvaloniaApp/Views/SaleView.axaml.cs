@@ -38,7 +38,7 @@ namespace AxisAvaloniaApp.Views
             InitializeComponent();
 
             this.DataContext = Splat.Locator.Current.GetRequiredService<ViewModels.SaleViewModel>();
-            (this.DataContext as ViewModels.ViewModelBase).ViewClosing += SerializeVisualData;
+            (this.DataContext as ViewModels.OperationViewModelBase).ViewClosing += SerializeVisualData;
 
             serializationSale = Splat.Locator.Current.GetRequiredService<ISerializationService>();
             serializationItems = Splat.Locator.Current.GetRequiredService<ISerializationService>();
@@ -215,7 +215,7 @@ namespace AxisAvaloniaApp.Views
 
         private void SerializeVisualData(string viewId)
         {
-            (this.DataContext as ViewModels.ViewModelBase).ViewClosing -= SerializeVisualData;
+            (this.DataContext as ViewModels.OperationViewModelBase).ViewClosing -= SerializeVisualData;
 
             EAdditionalSaleTableColumns tableColumns = 0;
 

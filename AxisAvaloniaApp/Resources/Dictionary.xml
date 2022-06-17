@@ -406,6 +406,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strBaseGoods">
+      <Value Lang="bg-BG">Основна стока</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Base item</Value>
+      <Value Lang="ro-RO">Marfă</Value>
+      <Value Lang="ru-RU">Базовый товар</Value>
+      <Value Lang="uk-UA">Базовий товар</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strMeasure">
       <Value Lang="bg-BG">Мярка</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -413,6 +423,46 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Ед. изм.</Value>
       <Value Lang="uk-UA">Од. вим.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strMeasureItem">
+      <Value Lang="bg-BG">бр.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">item</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">шт.</Value>
+      <Value Lang="uk-UA">шт.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strMeasureKilo">
+      <Value Lang="bg-BG">кг.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">kilo</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">кг</Value>
+      <Value Lang="uk-UA">кг</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strMeasureLiter">
+      <Value Lang="bg-BG">литър</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">liter</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">литр</Value>
+      <Value Lang="uk-UA">літр</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strMeasureBox">
+      <Value Lang="bg-BG">кашон</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">box</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">коробка</Value>
+      <Value Lang="uk-UA">коробка</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
@@ -593,6 +643,16 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Группы товаров</Value>
       <Value Lang="uk-UA">Групи товарів</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strBaseGroup">
+      <Value Lang="bg-BG">Основна група</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Base group</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Базовая группа</Value>
+      <Value Lang="uk-UA">Базова група</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
@@ -973,6 +1033,16 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strCheckConnection">
+      <Value Lang="bg-BG">Тест на връзката</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Test for connection</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Тест подключения</Value>
+      <Value Lang="uk-UA">Тест підключення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strUseFiscalPrinter">
 		  <Value Lang="bg-BG">Фискален принтер</Value>
 		  <Value Lang="el-GR">Not translated</Value>
@@ -983,6 +1053,16 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strUsePOSTerminal">
+      <Value Lang="bg-BG">Картов терминал</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Use a POS-terminal</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Использовать POS-терминал</Value>
+      <Value Lang="uk-UA">Використовувати POS-терминал</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strCOMPort">
 		  <Value Lang="bg-BG">Сериен порт</Value>
 		  <Value Lang="el-GR">Not translated</Value>
@@ -1063,6 +1143,15 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strLocalIPAddress">
+      <Value Lang="bg-BG">IP адрес на вашия компютър</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The IP address of your computer</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">IP адрес вашего компьютера</Value>
+      <Value Lang="uk-UA">IP адреса вашого комп'ютера</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+    </Data>
 	  <Data Key="strPOSTerminal">
 		  <Value Lang="bg-BG">Картов терминал</Value>
 		  <Value Lang="el-GR">Not translated</Value>
@@ -1339,7 +1428,47 @@
 		  <Value Lang="uk-UA">Швидкий пошук</Value>
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
-	  </Data>
+	  </Data>    
+      <Data Key="strYes">
+      <Value Lang="bg-BG">Да</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Yes</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Да</Value>
+      <Value Lang="uk-UA">Так</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+      <Data Key="strNo">
+      <Value Lang="bg-BG">Не</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">No</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Нет</Value>
+      <Value Lang="uk-UA">Ні</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strAbort">
+      <Value Lang="bg-BG">Прекъсване</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Abort</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Прервать</Value>
+      <Value Lang="uk-UA">Перервати</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strRetry">
+      <Value Lang="bg-BG">Отново</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Retry</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Повторить</Value>
+      <Value Lang="uk-UA">Повторити</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>      
     <Data Key="strSave">
       <Value Lang="bg-BG">Запис</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -1357,6 +1486,46 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Отменить</Value>
       <Value Lang="uk-UA">Відмінити</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strError">
+      <Value Lang="bg-BG">Грешка!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Error!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Ошибка!</Value>
+      <Value Lang="uk-UA">Помилка!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strAttention">
+      <Value Lang="bg-BG">Внимание!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Attention!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Внимание!</Value>
+      <Value Lang="uk-UA">Увага!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strWarning">
+      <Value Lang="bg-BG">Внимание!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Warning!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Предупреждение!</Value>
+      <Value Lang="uk-UA">Попередження!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strInformation">
+      <Value Lang="bg-BG">Информация!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Information!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Информация!</Value>
+      <Value Lang="uk-UA">Інформація!</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
@@ -1608,6 +1777,26 @@
 		  <Value Lang="uk-UA">Інтеграція з AxisCloud</Value>
 		  <Value Lang="hy-AM">Ինտեգրում AxisCloud- ի հետ</Value>
 	  </Data>
+    <Data Key="strScanner">
+      <Value Lang="bg-BG">Сканер</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Scanner</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Сканер</Value>
+      <Value Lang="uk-UA">Сканер</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strNotActive">
+      <Value Lang="bg-BG">Неактивен</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not active</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Не активно</Value>
+      <Value Lang="uk-UA">Не активно</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strFiscalDevice">
 		  <Value Lang="bg-BG">Фискално устройство</Value>
 		  <Value Lang="el-GR">Not translated</Value>
@@ -1628,6 +1817,16 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strExportLogFile">
+      <Value Lang="bg-BG">Експортиране на лог-файл</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Export log file</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Экспорт лог-файла</Value>
+      <Value Lang="uk-UA">Експорт лог-файлу</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     
     <!--Welcome view-->
     <Data Key="strThanksToChoice">
@@ -1824,7 +2023,130 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
- </Dictionary>
+    
+    <!--Errors-->
+    <Data Key="msgInvalidEmail">
+      <Value Lang="bg-BG">Въведеният e-mail адрес е невалиден!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid e-mail address!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введенный e-mail адрес недействителен!</Value>
+      <Value Lang="uk-UA">Введена e-mail адреса недійсна!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgInvalidTaxNumber">
+      <Value Lang="bg-BG">Невалиден ЕИК номер!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid tax number!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговый номер недействителен!</Value>
+      <Value Lang="uk-UA">Податковий номер недійсний!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgInvalidVATNumber">
+      <Value Lang="bg-BG">Невалиден ДДС номер!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid VAT number!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введенный e-mail адрес недействителен!</Value>
+      <Value Lang="uk-UA">Введена e-mail адреса недійсна!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
+    <Data Key="msgInvalidIBAN">
+      <Value Lang="bg-BG">Невалиден IBAN!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid IBAN!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Недействительный расчётный счёт!</Value>
+      <Value Lang="uk-UA">Недійсний розрахунковий рахунок!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgInvalidIPAddress">
+      <Value Lang="bg-BG">Невалиден IP адрес!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid IP address!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Недействительный IP адрес!</Value>
+      <Value Lang="uk-UA">Недійсна IP адреса!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgInvalidIPPort">
+      <Value Lang="bg-BG">Невалиден IP порт!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid IP port!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Недействительный IP порт!</Value>
+      <Value Lang="uk-UA">Недійсний IP порт!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
+    <Data Key="msgSettingsSuccessfullySaved">
+      <Value Lang="bg-BG">Настройките са записани успешно!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Settings are written down successfully!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Настройки успешно записаны!</Value>
+      <Value Lang="uk-UA">Налаштування успішно записані!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringSavingSettings">
+      <Value Lang="bg-BG">Възникнала е грешка при запис на настройки!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during saving of settings to the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время записи настроек в базу данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час збереження налаштувань у базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgSuccessfulConnection">
+      <Value Lang="bg-BG">Връзката с устройството е осъществена успешно!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Connection with the device was established successfully!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Связь с устройством осуществлена успешно!</Value>
+      <Value Lang="uk-UA">Зв'язок з пристроєм здійснено успішно!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgUnSuccessfulConnection">
+      <Value Lang="bg-BG">Не може да бъде осъществена връзка с устройството!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Connection with the device could not be established!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Не может быть осуществлена связь с устройством!</Value>
+      <Value Lang="uk-UA">Не може бути здійснений зв'язок з пристроєм!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgSomeDeviceSettingsAreNotFilled">
+      <Value Lang="bg-BG">Не всички полета, необходими за настройка на връзка с устройството, са попълнени!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not all fields required to set up a connection to the device are filled out!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Не все поля, необходимые для настройки подключения к устройству, заполнены!</Value>
+      <Value Lang="uk-UA">Не всі поля, необхідні для встановлення підключення до пристрою, заповнені!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringConnectingToDeviceOrSavingSettings">
+      <Value Lang="bg-BG">Възникна грешка при свързване към устройството и/или запис на настройки в базата данни!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred while connecting to the device and/or writing settings to the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время подключения к устройству и/или  записи настроек в базу данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час підключення до пристрою та/або запису установок до бази даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+ 
+  </Dictionary>
 
   <Dictionary Product="Axis My100R Help" Version="1">
     <Languages>
@@ -2186,6 +2508,318 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Введите имя партнера полностью или частично. Фильтр работает по коду, налогому номеру, номеру плательщика НДС, адресу и другим полям таблицы Партнеры. Чтобы подтвердить выбор партнера, вам нужно выбрать его справа или нажать Enter. Поле можно заблокировать, и все последующие операции будут выполняться с этим партнером.</Value>
       <Value Lang="uk-UA">Введіть ім'я партнера повністю або частково. Фільтр працює за кодом, податковим номером, номером платника ПДВ, адресою та іншими полями таблиці Партнери. Щоб підтвердити вибір партнера, вам необхідно вибрати його справа або натиснути Enter. Поле можна заблокувати, і всі наступні операції будуть виконуватися з цим партнером.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    
+    <!--Settings-->
+    <Data Key="EnterYourCompanyName">
+      <Value Lang="bg-BG">Въведете точното юридическо наименование на вашата фирма. Тази информация ще се отпечатва върху документите, фактурите и справките. Препоръчваме да не използвате кавички или други специални знаци. Изпишете данните правилно. Ако сте частно лице, въведете своето име.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the exact name of your company. This information will be printed on various documents such as invoices, reports, etc. If it is possible, avoid using quotation marks or other special characters. If you are private person you should enter your name.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите точное название вашей компании. Эта информация будет напечатана на различных документах, таких как счета-фактуры, отчеты и т.д. По возможности избегайте использования кавычек или других специальных символов. Если вы физическое лицо, вам следует указать свое имя.</Value>
+      <Value Lang="uk-UA">Введіть точну назву вашої компанії. Ця інформація буде надрукована на різних документах, таких як рахунки-фактури, звіти і т.д. По можливості уникайте використання лапок або інших спеціальних символів. Якщо ви фізична особа, вам слід вказати своє ім'я.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourPrincipal">
+      <Value Lang="bg-BG">Въведете материално отговорното лице на вашата фирма. Ако сте частно лице, въведете отново своето име, както в полето за име на фирмата. Полето ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter financial person in charge of your company. If you are a private person you should enter name like in the 'Name of company' field. This value will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите материально-ответственное лицо вашей компании. Если вы физическое лицо, введите имя, как в поле «Название компании». Это значение будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть матеріально-відповідальну особу вашої компанії. Якщо ви фізична особа, введіть ім'я, як в полі «Назва компанії». Це значення буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourRegisterData_City">
+      <Value Lang="bg-BG">Въведете града по адресна регистрация на вашата фирма или града, в който работи този продукт. Полето ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the city where your company is registered or the city where Axis My100R operates. This value will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите город, в котором зарегистрирована ваша компания, или город, в котором работает Axis My100R. Это значение будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть місто, в якому зареєстрована ваша компанія, або місто, в якому працює Axis My100R. Це значення буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourRegisterData_Address">
+      <Value Lang="bg-BG">Въведете адреса според регистрацията на вашата фирма или адреса на обекта, в който работи този продукт. Препоръчваме да не използвате кавички или други специални знаци. Полето ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the address where your company is registered or the address where Axis My100R operates. Avoid using quotes and other special characters whenever possible. This value will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите адрес, по которому зарегистрирована ваша компания, или адрес, по которому работает Axis My100R. По возможности избегайте использования кавычек и других специальных символов. Это значение будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть адресу, за якою зареєстрована ваша компанія, або адреса, за якою працює Axis My100R. По можливості уникайте використання лапок та інших спеціальних символів. Це значення буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourPhone">
+      <Value Lang="bg-BG">Въведете телефона, на който могат да ви намерят. Този телефон ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter your phone number to help locate you. This phone will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите свой номер телефона, чтобы помочь найти вас. Этот телефон будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть свій номер телефону, щоб допомогти знайти вас. Цей телефон буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourEmail">
+      <Value Lang="bg-BG">Въведете e-mail, на който могат да ви намерят. Този e-mail ще участва в данните на документите, които се издават чрез Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter your e-mail to help locate you. This e-mail will be used in documents prepared by Axis My100R.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите свой e-mail, чтобы помочь найти вас. Этот e-mail будет использоваться в документах, подготовленных Axis My100R.</Value>
+      <Value Lang="uk-UA">Введіть свій e-mail, щоб допомогти знайти вас. Цей e-mail буде використовуватися в документах, підготовлених Axis My100R.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>    
+    <Data Key="EnterYourTaxNumber">
+      <Value Lang="bg-BG">Въведете ЕИК на вашата фирма. Не използвайте интервали, въведете само цифри. Ако сте частно лице може да въведете своето ЕГН или да оставите полето празно. Тази информация се използва при издаването на фактури след Продажба на стоки. Ако полето е оцветено в червено, това означава, че имате грешка при въвеждане на данните.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter tax number of your company. If you are private person you can enter your tax number. This number will be used in documents prepared by Axis My100R. If field is colored by red it means you entered invalid tax number.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите налоговый номер вашей компании. Если вы частное лицо, вы можете ввести свой налоговый номер. Этот номер будет использоваться в документах, подготовленных Axis My100R. Если поле окрашено в красный цвет, значит, вы ввели неверный налоговый номер.</Value>
+      <Value Lang="uk-UA">Введіть податковий номер вашої компанії. Якщо ви приватна особа, ви можете ввести свій податковий номер. Цей номер буде використовуватися в документах, підготовлених Axis My100R. Якщо поле забарвлене в червоний колір, значить, ви ввели невірний податковий номер.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourVATNumber">
+      <Value Lang="bg-BG">Въведете ДДС номер на вашата фирма, ако имате активна ДДС регистрация. Не използвайте интервали, въведете префикс от 2 латински букви и след това само цифри. Ако сте частно лице оставете полето празно. Тази информация се използва при издаването на фактури след Продажба на стоки. Ако полето е оцветено в червено, това означава, че имате грешка при въвеждане на данните.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter VAT number of your company if you have registered as VAT payer. This number will be used in documents prepared by Axis My100R. If field is colored by red it means you entered invalid VAT number.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите номер плательщика НДС вашей компании, если вы зарегистрировались как плательщик НДС. Этот номер будет использоваться в документах, подготовленных Axis My100R. Если поле окрашено в красный цвет, значит, вы ввели неверный номер плательщика НДС.</Value>
+      <Value Lang="uk-UA">Введіть номер платника ПДВ вашої компанії, якщо ви зареєструвалися як платник ПДВ. Цей номер буде використовуватися в документах, підготовлених Axis My100R. Якщо поле забарвлене в червоний колір, значить, ви ввели невірний номер платника ПДВ.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourIBAN">
+      <Value Lang="bg-BG">Въведете IBAN на вашата банкова сметка. Тази информация се използва при издаването на фактури след Продажба на стоки. Ако полето е оцветено в червено, това означава, че имате грешка при въвеждане на данните.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter IBAN of your banc account. This value will be used in documents prepared by Axis My100R. If field is colored by red it means you entered invalid data.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите IBAN вашего банковского счета. Это значение будет использоваться в документах, подготовленных Axis My100R. Если поле окрашено в красный цвет, значит, вы ввели неверные данные.</Value>
+      <Value Lang="uk-UA">Введіть IBAN вашого банківського рахунку. Це значення буде використовуватися в документах, підготовлених Axis My100R. Якщо поле забарвлене в червоний колір, значить, ви ввели невірні дані.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourBankName">
+      <Value Lang="bg-BG">Въведете името на вашата банка.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the name of the bank serving you.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите название обслуживающего Вас банка.</Value>
+      <Value Lang="uk-UA">Введіть назву банку, що обслуговує Вас.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourBankBIC">
+      <Value Lang="bg-BG">Въведете BIC на вашата банка.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the BIC of the bank serving you.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите BIC обслуживающего Вас банка.</Value>
+      <Value Lang="uk-UA">Введіть BIC банку, що обслуговує Вас.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourOnlineShopNumber">
+      <Value Lang="bg-BG">Въведете уникалния номер на онлайн магазина, определен от Националната агенция за приходите (наричан по-нататък НАП). Този номер ще се използва при експортиране на данни към НАП.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the unique number of the online store assigned by the National Revenue Agency (hereinafter NRA). This number will be used when exporting data to NRA.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите уникальный номер интернет-магазина, присвоенный Национальным агентством по доходам (далее НАД). Данный номер будет использоваться при экспорте данных данных в НАД.</Value>
+      <Value Lang="uk-UA">Введіть унікальний номер інтернет-магазину, наданий Національним агентством з доходів (далі НАД). Цей номер використовуватиметься при експорті даних у НАД.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectYourOnlineShopType">
+      <Value Lang="bg-BG">Изберете вида на вашия онлайн магазин. Този тип ще се използва при експортиране на данни към НАП.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select the type of your online store. This type will be used when exporting data to NRA.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите тип вашего интернет-магазина. Данный тип будет использоваться при экспорте данных данных в НАД.</Value>
+      <Value Lang="uk-UA">Виберіть тип вашого інтернет-магазину. Цей тип використовуватиметься під час експорту даних у НАД.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterYourOnlineShopDomainName">
+      <Value Lang="bg-BG">Въведете името на домейна на вашия онлайн магазин. Това име ще се използва при експортиране на данни към НАП.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the domain name of your online store. This name will be used when exporting data to NRA.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите доменное имя вашего интернет-магазина. Данное имя будет использоваться при экспорте данных данных в НАД.</Value>
+      <Value Lang="uk-UA">Введіть ім'я домену вашого інтернет-магазину. Це ім'я буде використовуватися при експорті даних у НАД.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterNextUSN">
+      <Value Lang="bg-BG">Въведете поредния номер на следващия УНП. Това представляват последните 7 цифри от УНП и трябва да са в диапазона от 1 до 9999999. Желателно е да продължите съществуваща номерация и да няма прекъсване в поредността на номера, ако вече сте работили с този или друг софтуер. Ако работите за първи път със софтуер, въведете 1 като номер на УНП.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the number for the next sale. These are the last 7 digits of the unique sales number in the range from 1 to 9999999. If you have already worked with this or that application, it would be advisable to continue the existing numbering and not interrupt it. If this is your first time using this application, enter "1".</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите номер для следующей продажи. Это последние 7 цифр уникального торгового номера в диапазоне от 1 до 9999999. Если вы уже работали с этим или иным приложением, желательно продолжить существующую нумерацию и не прерывать её. Если вы впервые используете это приложение, введите «1».</Value>
+      <Value Lang="uk-UA">Введіть номер для наступного продажу. Це останні 7 цифр унікального номеру продажу в діапазоні від 1 до 9999999. Якщо ви вже працювали з цією чи іншою програмами, бажано продовжити існуючу нумерацію і не переривати її. Якщо ви вперше використовуєте цю програму, введіть «1».</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOperatorCode">
+      <Value Lang="bg-BG">Въведете код на оператора в системата, който ще бъде използван при създаване на УНП номер във фискалните бонове. Кодът на оператора трябва да съдържа само цифри и да е в диапазона от 1 до 9999.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter operator code that will be  used to create an unique sale number in the receipt. The code can only be digits and has range from 1 to 9999. </Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите код оператора, который будет использоваться для создания уникального номера продажи в квитанции. Код может быть только цифровым и имеет диапазон от 1 до 9999.</Value>
+      <Value Lang="uk-UA">Введіть код оператора, який буде використовуватися для створення унікального номера продажу в квитанції. Код може бути тільки цифровим і має діапазон від 1 до 9999.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterOperatorName">
+      <Value Lang="bg-BG">Въведете името на оператора, който ще работи на този компютър. В най-общия случай това е името на касиера или материално отговорното лице на фирмата. Това име ще излиза в справките, като данните няма да се предават към Националната агенция по приходите.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the name of the operator who works with this app. It can be name of a cashier or person in charge of your company. This name will be shown into the reports.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите имя оператора, который работает с этим приложением. Это может быть имя кассира или лица, отвечающего за вашу компанию. Это имя будет отображаться в отчетах.</Value>
+      <Value Lang="uk-UA">Введіть ім'я оператора, який працює з цією програмою. Це може бути ім'я касира або особи, яка відповідає за вашу компанію. Це ім'я буде відображатися в звітах.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectAppLanguage">
+      <Value Lang="bg-BG">Изберете език на програмата</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select language of app</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите язык приложения</Value>
+      <Value Lang="uk-UA">Виберіть мову програми</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="UseDevice">
+      <Value Lang="bg-BG">Настоящата опция определя дали да бъде използвано устройството при работа с програма Axis My100R.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">This option shows if the device will be used by app.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Эта опция показывает, будет ли устройство использоваться приложением.</Value>
+      <Value Lang="uk-UA">Ця опція показує, чи буде пристрій використовуватися програмою.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectDeviceManufacturer">
+      <Value Lang="bg-BG">Изберете производителя на устройството от падащия списък.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select manufacturer of device from a dropdown list.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите производителя устройства из раскрывающегося списка.</Value>
+      <Value Lang="uk-UA">Виберіть виробника пристрою зі списку.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectDeviceModel">
+      <Value Lang="bg-BG">Изберете модел на устройството. Ако не сте сигурни какъв е модела на устройството, прегледайте етикета под устройството и установете правилния модел. Обърнете внимание, че устройствата могат да имат букви и цифри в името си, потърсете модела, който отговаря на притежаваното от вас устройство.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select model of device from a dropdown list. If you don't know the model you can look for on a label at the bottom of the device.  Name of a model of device can contain also and letters so you need to be very attentive.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите модель устройства из раскрывающегося списка. Если вы не знаете модель, вы можете найти её на этикетке под устройством. Название модели устройства может содержать также и буквы, поэтому будьте очень внимательны.</Value>
+      <Value Lang="uk-UA">Виберіть модель пристрою із списку. Якщо ви не знаєте модель, ви можете знайти її на етикетці під пристроєм. Назва моделі пристрою може містити також і букви, тому будьте дуже уважні.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectDeviceProtocol">
+      <Value Lang="bg-BG">Изберете типа на връзка към устройството. В повечето случаи USB връзката представлява Serial връзка. Ако не сте сигурни за типа на връзката е необходимо да се консултирате със сервизната фирма, която обслужва устройството ви.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select serial port to connec to device from a dropdown list. The USB connection is often 'Serial'. If you not sure about connection type you should to turn to service company that supports the device.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">В раскрывающемся списке выберите последовательный порт для подключения к устройству. USB-соединение зачастую является «Последовательным». Если вы не уверены в типе подключения, вам следует обратиться в сервисную службу, обслуживающую данное устройство.</Value>
+      <Value Lang="uk-UA">У списку виберіть послідовний порт для підключення до пристрою. USB-з'єднання часто є «Послідовним». Якщо ви не впевнені в типі підключення, вам слід звернутися до сервісної служби, яка обслуговує даний пристрій.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectCOMPort">
+      <Value Lang="bg-BG">Изберете серийния порт, който е свързан с устройството.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select the COM port to connect to the device. </Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите COM-порт для подключения к устройству.</Value>
+      <Value Lang="uk-UA">Виберіть COM-порт для підключення до пристрою.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="SelectBaudRate">
+      <Value Lang="bg-BG">Изберете скоростта на комуникация между компютъра и апарата. В повечето случаи това е най-високата скорост на работа, но може да е била променена от сервизната фирма на устройството.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Select baud rate to communicate between PC and device. It often is the fastest baud rate but sometimes it can be changed by firm supported this device.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выберите скорость передачи данных для связи между ПК и устройством. Зачастую это самая высокая скорость передачи данных, но иногда она может быть изменена фирмой, обслуживающей это устройство.</Value>
+      <Value Lang="uk-UA">Виберіть швидкість передачі даних для зв'язку між ПК і пристроєм. Найчастіше це найвища швидкість передачі даних, але іноді вона може бути змінена фірмою, яка обслуговує цей пристрій.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterFiscalPrinterLogin">
+      <Value Lang="bg-BG">Въведете номера на оператора във фискалното устройство. Почти винаги номера на оператора е 1 и не следва да се променя, освен ако не е направена специална настройка от сервизната фирма на фискалното устройство.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the number of the operator of the fiscal device. Number of the operator often is '1' and it needn't to be changed with the exception of situation when  this number was changed by firm supported this device. </Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите номер оператора фискального устройства. Номер оператора зачастую равен «1» и его не стоит менять, за исключением ситуации, когда этот номер был изменен фирмой, занимающейся обслуживанием данного устройства.</Value>
+      <Value Lang="uk-UA">Введіть номер оператора фіскального пристрою. Номер оператора найчастіше дорівнює «1» і його не варто міняти, за винятком ситуації, коли цей номер був змінений фірмою, що займається обслуговуванням даного пристрою.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterFiscalPrinterPassword">
+      <Value Lang="bg-BG">Въведете паролата на оператора във фискалното устройство. В повечето случаи програмата автоматично поставя правилната парола, с изключение на изрично променена парола от сервизната фирма на фискалното устройство.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the password of the fiscal device. Password often is filled by app automatically and it needn't to be changed with the exception of situation when the password was changed by firm supported this device. </Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите пароль фискального устройства. Зачастую пароль заполняется приложением автоматически и его не нужно менять, за исключением случаев, когда пароль был изменен компанией, занимающейся обслуживанием данного фискального аппарата.</Value>
+      <Value Lang="uk-UA">Введіть пароль фіскального пристрою. Найчастіше пароль заповнюється додатком автоматично і його не потрібно змінювати, за винятком випадків, коли пароль був змінений компанією, що займається обслуговуванням даного фіскального апарату.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterIPAddress">
+      <Value Lang="bg-BG">Въведете IP адреса на устройството. В общия случая IP адреса изглежда във вида 192.168.0.1, група от 4 числа, разделени с точки и е индивидуален за всеки апарат.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the IP address of the device. It often looks something like 192.168.0.1 (the group consists of 4 numbers separated by a dot) and is unique for each device.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите IP-адрес устройства. Часто он выглядит примерно как 192.168.0.1 (группа состоит из 4 чисел, разделенных точкой) и является  уникальным для каждого устройства.</Value>
+      <Value Lang="uk-UA">Введіть IP-адресу пристрою. Часто вона виглядає приблизно як 192.168.0.1 (група складається з 4 чисел, між якими ставиться крапка) і є унікальною для кожного пристрою.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterIPPort">
+      <Value Lang="bg-BG">Въведете IP порта на устройството. Програмата поставя автоматично настройката на порта според документацията на производителя. Промяна на тази настройка е малко вероятна и може да се дължи единствено на преконфигурирано от сервизната фирма на устройството.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the IP port of the device. Port often is filled by app automatically in according to manufacturer settings. Necessity of Changing this parameter is unlikely and can be necessary only the the parameter was changed by firm supported this device.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите IP-порт устройства. Порт зачастую заполняется приложением автоматически в соответствии с настройками производителя. Необходимость изменения этого параметра маловероятна и может потребоваться только в том случае, если параметр был изменен фирмой, обслуживающей данное устройство.</Value>
+      <Value Lang="uk-UA">Введіть IP-порт пристрою. Порт часто заповнюється програмою автоматично відповідно до налаштувань виробника. Необхідність зміни цього параметра малоймовірна і може знадобитися тільки в тому випадку, якщо параметр був змінений фірмою, яка обслуговує даний пристрій.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="OnIntegration">
+      <Value Lang="bg-BG">Този параметър показва дали приложението ще комуникира с тази външна услуга.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">This option shows if the app will communicate to this service.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Этот параметр показывает, будет ли приложение обмениваться данными с этой внешней службой.</Value>
+      <Value Lang="uk-UA">Цей параметр показує, чи буде програма обмінюватися даними з цією зовнішньою службою.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterAxisCloudLogin">
+      <Value Lang="bg-BG">Въведете данните за вход, които AxisCloud ще използва за свързване с Axis MyStore.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the login that AxisCloud will use to connect to the Axis MyStore.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите логин, который будет использоваться AxisCloud для подключения к Axis MyStore.</Value>
+      <Value Lang="uk-UA">Введіть логін, який використовуватиметься AxisCloud для підключення до Axis MyStore.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="EnterAxisCloudPassword">
+      <Value Lang="bg-BG">Въведете парола, които AxisCloud ще използва за свързване с Axis MyStore.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Enter the password that AxisCloud will use to connect to the Axis MyStore.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введите пароль, который будет использоваться AxisCloud для подключения к Axis MyStore.</Value>
+      <Value Lang="uk-UA">Введіть пароль, який використовуватиметься AxisCloud для підключення до Axis MyStore.</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>

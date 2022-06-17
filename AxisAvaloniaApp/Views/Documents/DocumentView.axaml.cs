@@ -24,7 +24,7 @@ namespace AxisAvaloniaApp.Views
 
         }
 
-        public DocumentView(ESerializationGroups documentType, ViewModelBase viewModel) : this()
+        public DocumentView(ESerializationGroups documentType, OperationViewModelBase viewModel) : this()
         {
             serializationService = Splat.Locator.Current.GetRequiredService<ISerializationService>();
             serializationService.InitSerializationData(documentType);
@@ -56,7 +56,7 @@ namespace AxisAvaloniaApp.Views
 
         private void DocumentView_ViewClosing(string viewId)
         {
-            (this.DataContext as ViewModelBase).ViewClosing -= DocumentView_ViewClosing;
+            (this.DataContext as OperationViewModelBase).ViewClosing -= DocumentView_ViewClosing;
 
             DataGrid dg = this.FindControl<DataGrid>("dg");
 
