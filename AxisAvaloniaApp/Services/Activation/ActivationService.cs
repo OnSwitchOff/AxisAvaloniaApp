@@ -124,13 +124,13 @@ namespace AxisAvaloniaApp.Services.Activation
             DataBase.Repositories.VATGroups.IVATsRepository vATsRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.VATGroups.IVATsRepository>();
 
             DataBase.Repositories.Items.IItemRepository itemRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.Items.IItemRepository>();
-            DataBase.Entities.Items.Item item = DataBase.Entities.Items.Item.Create(
-                "1", 
-                translationService.Localize("strBaseGoods"), 
-                "", 
-                translationService.Localize("strMeasureItem"),
-                itemsGroup,);
-            itemRepository.AddItemAsync(item);
+            //DataBase.Entities.Items.Item item = DataBase.Entities.Items.Item.Create(
+            //    "1", 
+            //    translationService.Localize("strBaseGoods"), 
+            //    "", 
+            //    translationService.Localize("strMeasureItem"),
+            //    itemsGroup,);
+            //itemRepository.AddItemAsync(item);
         }
     }
 }
