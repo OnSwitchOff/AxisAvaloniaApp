@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Services.Payment.Device
@@ -6,7 +7,7 @@ namespace AxisAvaloniaApp.Services.Payment.Device
     /// <summary>
     /// Describes payment service.
     /// </summary>
-    public interface IDevice
+    public interface IDevice : IDisposable
     {
         /// <summary>
         /// Gets number of receipt.

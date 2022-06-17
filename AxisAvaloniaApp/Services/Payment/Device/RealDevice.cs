@@ -135,6 +135,18 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         }
 
         /// <summary>
+        /// Close included services.
+        /// </summary>
+        /// <date>17.06.2022.</date>
+        public void Dispose()
+        {
+            if (fiscalPrinter != null)
+            {
+                fiscalPrinter.Dispose();
+            }
+        }
+
+        /// <summary>
         /// Checks whether fiscal device is connected.
         /// </summary>
         /// <param name="device">Settings of the fiscal device.</param>

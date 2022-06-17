@@ -181,117 +181,180 @@ namespace AxisAvaloniaApp.ViewModels.Settings
                 "msgInvalidIPPort");
         }
 
+        /// <summary>
+        /// Gets or sets a list of existing COM ports (with mandatory item "Non active").
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<string> COMScannerPorts
         {
             get => cOMScannerPorts;
             set => this.RaiseAndSetIfChanged(ref cOMScannerPorts, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets COM port is selected for the scanner.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public string SelectedComScannerPort
         {
             get => selectedComScannerPort;
             set => this.RaiseAndSetIfChanged(ref selectedComScannerPort, value);
         }
 
+        /// <summary>
+        /// Gets or sets a list with manufacturers of fiscal printers.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<ComboBoxItemModel> FiscalDeviceManufacturers
         {
             get => fiscalDeviceManufacturers;
             set => this.RaiseAndSetIfChanged(ref fiscalDeviceManufacturers, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets a list with fiscal printers.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<ComboBoxItemModel> FiscalDeviceModels
         {
             get => fiscalDeviceModels == null ? fiscalDeviceModels = new ObservableCollection<ComboBoxItemModel>() : fiscalDeviceModels;
             set => this.RaiseAndSetIfChanged(ref fiscalDeviceModels, value);
         }
 
+        /// <summary>
+        /// Gets or sets a list with types of connection to fiscal printer.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<ComboBoxItemModel> FiscalDeviceConnectionTypes
         {
             get => fiscalDeviceConnectionTypes == null ? fiscalDeviceConnectionTypes = new ObservableCollection<ComboBoxItemModel>() : fiscalDeviceConnectionTypes;
             set => this.RaiseAndSetIfChanged(ref fiscalDeviceConnectionTypes, value);
         }
 
+        /// <summary>
+        /// Gets or sets a list of existing COM ports.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<string> COMPorts
         {
             get => cOMPorts;
             set => this.RaiseAndSetIfChanged(ref cOMPorts, value);
         }
 
+        /// <summary>
+        /// Gets or sets a list with baud rates.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<int> BaudRates
         {
             get => baudRates;
             set => this.RaiseAndSetIfChanged(ref baudRates, value);
         }
 
+        /// <summary>
+        /// Gets or sets settings of the fiscal printer.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public DeviceSettingsModel FiscalPrinter
         {
             get => fiscalPrinter;
             set => this.RaiseAndSetIfChanged(ref fiscalPrinter, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets a list with manufacturers of POS terminals.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<ComboBoxItemModel> POSTerminalManufacturers
         {
             get => posTerminalManufacturers;
             set => this.RaiseAndSetIfChanged(ref posTerminalManufacturers, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets a list with POS terminals.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<ComboBoxItemModel> POSTerminalModels
         {
             get => posTerminalModels == null ? posTerminalModels = new ObservableCollection<ComboBoxItemModel>() : posTerminalModels;
             set => this.RaiseAndSetIfChanged(ref posTerminalModels, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets a list with types of connerction to POS terminal.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public ObservableCollection<ComboBoxItemModel> POSTerminalConnectionTypes
         {
             get => posTerminalConnectionTypes == null ? posTerminalConnectionTypes = new ObservableCollection<ComboBoxItemModel>() : posTerminalConnectionTypes;
             set => this.RaiseAndSetIfChanged(ref posTerminalConnectionTypes, value);
         }
 
+        /// <summary>
+        /// Gets or sets settings of the POS terminal.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public DeviceSettingsModel POSTerminal
         {
             get => pOSTerminal;
             set => this.RaiseAndSetIfChanged(ref pOSTerminal, value);
         }
-       
+
+        /// <summary>
+        /// Gets or sets value indicating whether AxisCloud app is used.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public bool AxisCloudIsUsed
         {
             get => axisCloudIsUsed;
             set => this.RaiseAndSetIfChanged(ref axisCloudIsUsed, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets IP address to connect to AxisCloud.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public string AxisCloudIPAddress
         {
             get => axisCloudIPAddress;
             set => this.RaiseAndSetIfChanged(ref axisCloudIPAddress, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets IP port to connect to AxisCloud.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public int AxisCloudIPPort
         {
             get => axisCloudIPPort;
             set => this.RaiseAndSetIfChanged(ref axisCloudIPPort, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets login to connect to AxisCloud.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public string AxisCloudLogin
         {
             get => axisCloudLogin;
             set => this.RaiseAndSetIfChanged(ref axisCloudLogin, value);
         }
 
-        
+        /// <summary>
+        /// Gets or sets password to connect to AxisCloud.
+        /// </summary>
+        /// <date>13.06.2022.</date>
         public string AxisCloudPassword
         {
             get => axisCloudPassword;
             set => this.RaiseAndSetIfChanged(ref axisCloudPassword, value);
         }
 
+        /// <summary>
+        /// Checks whether fiscal printer is connected.
+        /// </summary>
+        /// <date>16.06.2022.</date>
         public async void CheckFiscalPrinterConnection()
         {
             var result = await RealDevice.FiscalDeviceIsConnectedAsync(FiscalPrinter, settingsService.AppLanguage, settingsService.Country);
@@ -305,6 +368,10 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             }
         }
 
+        /// <summary>
+        /// Checks whether POS terminal is connected.
+        /// </summary>
+        /// <date>16.06.2022.</date>
         public async void CheckPOSTerminalConnection()
         {
             var result = await RealDevice.POSTerminalIsConnectedAsync(POSTerminal, settingsService.AppLanguage, settingsService.Country);
@@ -318,10 +385,15 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             }
         }
 
+        /// <summary>
+        /// Sets new settings of devices and saves them to database.
+        /// </summary>
+        /// <date>16.06.2022.</date>
         public async void SaveDeviceSettings()
         {
             try
             {
+                settingsService.COMScannerSettings[Enums.ESettingKeys.ComPort].Value = SelectedComScannerPort;
                 if (string.IsNullOrEmpty(SelectedComScannerPort) || SelectedComScannerPort.Equals(noActivePortKey))
                 {
                     scanningService.StopCOMScanner();
@@ -330,6 +402,21 @@ namespace AxisAvaloniaApp.ViewModels.Settings
                 {
                     scanningService.StartCOMScanner(SelectedComScannerPort);
                 }
+                settingsService.UpdateSettings(Enums.ESettingGroups.COMScanner);
+
+                settingsService.AxisCloudSettings[Enums.ESettingKeys.DeviceIsUsed].Value = AxisCloudIsUsed.ToString();
+                settingsService.AxisCloudSettings[Enums.ESettingKeys.ComPort].Value = AxisCloudIPPort.ToString();
+                settingsService.AxisCloudSettings[Enums.ESettingKeys.UserName].Value = AxisCloudLogin;
+                settingsService.AxisCloudSettings[Enums.ESettingKeys.Password].Value = AxisCloudPassword;
+                if (AxisCloudIsUsed)
+                {
+                    axisCloudService.StartServiceAsync(AxisCloudIPPort, settingsService);
+                }
+                else
+                {
+                    axisCloudService.StopService();
+                }
+                settingsService.UpdateSettings(Enums.ESettingGroups.AxisCloud);
 
                 if (FiscalPrinter.IsUsed)
                 {
@@ -360,20 +447,8 @@ namespace AxisAvaloniaApp.ViewModels.Settings
                 {
                     paymentService.SetPaymentTool(new NoDevice(settingsService));
                 }
-
-                if (AxisCloudIsUsed)
-                {
-                    axisCloudService.StartServiceAsync(AxisCloudIPPort, settingsService);
-                }
-                else
-                {
-                    axisCloudService.StopService();
-                }
-
-                settingsService.UpdateSettings(Enums.ESettingGroups.COMScanner);
                 settingsService.UpdateSettings(Enums.ESettingGroups.FiscalPrinter);
-                settingsService.UpdateSettings(Enums.ESettingGroups.POSTerminal);
-                settingsService.UpdateSettings(Enums.ESettingGroups.AxisCloud);
+                settingsService.UpdateSettings(Enums.ESettingGroups.POSTerminal);                
 
                 await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBox.EButtonIcons.Success);
             }
@@ -384,6 +459,12 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             }
         }
 
+        /// <summary>
+        /// Updates dependent property when main property was changed.
+        /// </summary>
+        /// <param name="sender">DeviceSettingsModel</param>
+        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <date>15.06.2022.</date>
         private void POSTerminal_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -453,6 +534,12 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             }
         }
 
+        /// <summary>
+        /// Updates dependent property when main property was changed.
+        /// </summary>
+        /// <param name="sender">DeviceSettingsModel</param>
+        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <date>15.06.2022.</date>
         private void FiscalPrinter_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             IPrinterManufacturer selectedManufacturer;

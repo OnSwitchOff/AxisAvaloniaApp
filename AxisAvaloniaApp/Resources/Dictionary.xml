@@ -346,6 +346,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strBasePartner">
+      <Value Lang="bg-BG">Основен партньор</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Base partner</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Базовый партнёр</Value>
+      <Value Lang="uk-UA">Базовий партнер</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strUSNShort">
       <Value Lang="bg-BG">УНП: </Value>
       <Value Lang="el-GR">Not translated</Value>

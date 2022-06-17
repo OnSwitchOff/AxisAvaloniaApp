@@ -43,7 +43,10 @@ namespace AxisAvaloniaApp.Services.StartUp
 
         public async Task ActivateAsync()
         {
-            await InitializeAsync();
+            if (!Configurations.AppConfiguration.IsDatabaseExist)
+            {
+                await InitializeAsync();
+            }
 
             await StartupAsync();
         }
@@ -54,16 +57,12 @@ namespace AxisAvaloniaApp.Services.StartUp
             {
                 try
                 {
-                    if (!System.IO.File.Exists(Configurations.AppConfiguration.LogoPath))
-                    {
-                        Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico")));
-                        logo.Save(Configurations.AppConfiguration.LogoPath);
-                    }
-
-                    if (!System.IO.File.Exists(Configurations.AppConfiguration.LogFilePath))
-                    {
-                        System.IO.File.Create(Configurations.AppConfiguration.LogFilePath);
-                    }
+                    Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico")));
+                    logo.Save(Configurations.AppConfiguration.LogoPath);
+                    
+                    WriteDefaultValuesIntoDatabase();
+                    
+                    System.IO.File.Create(Configurations.AppConfiguration.LogFilePath);
                 }
                 catch (Exception ex)
                 {
@@ -116,7 +115,7 @@ namespace AxisAvaloniaApp.Services.StartUp
         /// Insert default values into the database.
         /// </summary>
         /// <date>17.06.2022.</date>
-        private void WriteDefaultValuesIntoDatabase()
+        private async void WriteDefaultValuesIntoDatabase()
         {
             Translation.ITranslationService translationService = Splat.Locator.Current.GetRequiredService<Translation.ITranslationService>();
 
@@ -125,7 +124,7 @@ namespace AxisAvaloniaApp.Services.StartUp
                 "-1",
                 translationService.Localize("strBaseGroup"),
                 0);
-            itemsGroupsRepository.AddGroupAsync(itemsGroup);
+            await itemsGroupsRepository.AddGroupAsync(itemsGroup);
 
             DataBase.Repositories.VATGroups.IVATsRepository vATsRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.VATGroups.IVATsRepository>();
             System.Collections.Generic.List<VATGroup> vATGroups = new System.Collections.Generic.List<VATGroup>();
@@ -152,7 +151,7 @@ namespace AxisAvaloniaApp.Services.StartUp
             {
                 vATGroups.Add(VATGroup.Create(translationService.Localize("strVATGroup1"), 18));
             }
-            vATsRepository.AddVATGroupsAsync(vATGroups);
+            await vATsRepository.AddVATGroupsAsync(vATGroups);
 
             DataBase.Repositories.Items.IItemRepository itemRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.Items.IItemRepository>();
             DataBase.Entities.Items.Item item = DataBase.Entities.Items.Item.Create(
@@ -163,12 +162,34 @@ namespace AxisAvaloniaApp.Services.StartUp
                 itemsGroup,
                 vATGroups[0], 
                 EItemTypes.Standard, 
-                null);
-            itemRepository.AddItemAsync(item);
+                new System.Collections.Generic.List<DataBase.Entities.ItemsCodes.ItemCode>());
+            item.Status = ENomenclatureStatuses.All;
+            await itemRepository.AddItemAsync(item);
 
             DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository>();
+            DataBase.Entities.PartnersGroups.PartnersGroup partnersGroup = DataBase.Entities.PartnersGroups.PartnersGroup.Create(
+                "-1",
+                translationService.Localize("strBaseGroup"), 
+                0);
+            await partnersGroupsRepository.AddGroupAsync(partnersGroup);
 
             DataBase.Repositories.Partners.IPartnerRepository partnerRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.Partners.IPartnerRepository>();
+            DataBase.Entities.Partners.Partner partner = DataBase.Entities.Partners.Partner.Create(
+                translationService.Localize("strBasePartner"), 
+                translationService.Localize("strBasePartner"), 
+                "", 
+                "", 
+                "", 
+                "", 
+                "", 
+                "", 
+                "", 
+                "", 
+                "", 
+                "", 
+                partnersGroup);
+            partner.Status = ENomenclatureStatuses.All;
+            await partnerRepository.AddPartnerAsync(partner);
         }
     }
 }

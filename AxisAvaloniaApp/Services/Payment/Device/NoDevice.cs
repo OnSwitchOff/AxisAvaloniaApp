@@ -50,6 +50,7 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         {
             get => string.Empty;
         }
+        
 
         /// <summary>
         /// Pay order by POS terminal (if it is used) and print fiscal receipt.
@@ -68,6 +69,14 @@ namespace AxisAvaloniaApp.Services.Payment.Device
             this.settings.UniqueSaleNumber++;
 
             return Task.FromResult(new FiscalExecutionResult());
+        }
+
+        /// <summary>
+        /// Close included services.
+        /// </summary>
+        /// <date>17.06.2022.</date>
+        public void Dispose()
+        {
         }
     }
 }

@@ -93,9 +93,6 @@ namespace AxisAvaloniaApp.Services.Serialization
                         ESerializationKeys.TbPartnerEnabled,
                         new SerializationItemModel(this.serialization, ESerializationKeys.TbPartnerEnabled, group, "false"));
                     this.serializationData.Add(
-                        ESerializationKeys.TbPartnerText,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.TbPartnerText, group, string.Empty));
-                    this.serializationData.Add(
                         ESerializationKeys.TbPartnerID,
                         new SerializationItemModel(this.serialization, ESerializationKeys.TbPartnerID, group, "-1"));
                     this.serializationData.Add(

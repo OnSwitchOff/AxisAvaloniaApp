@@ -16,11 +16,6 @@
         TbPartnerEnabled,
 
         /// <summary>
-        /// Selected partner name.
-        /// </summary>
-        TbPartnerText,
-
-        /// <summary>
         /// Selected partner Id.
         /// </summary>
         TbPartnerID,

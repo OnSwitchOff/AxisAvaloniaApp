@@ -50,5 +50,17 @@ namespace AxisAvaloniaApp.Services.Payment
         {
             this.fiscalDevice = fiscalDevice;
         }
+
+        /// <summary>
+        /// Closes device connection.
+        /// </summary>
+        /// <date>17.06.2022.</date>
+        public void Dispose()
+        {
+            if (fiscalDevice != null)
+            {
+                fiscalDevice.Dispose();
+            }
+        }
     }
 }

@@ -104,7 +104,7 @@
                                     BorderThickness="0"
                                     VerticalContentAlignment="Center"
                                     IsEnabled="{Binding IsChoiceOfPartnerEnabled, Mode=TwoWay}"
-                                    Text="{Binding SelectedPartnerString, Mode=TwoWay}"
+                                    Text="{Binding OperationPartnerString, Mode=TwoWay}"
                                     ExplanationKey = "EnterPartnerData" 
                                     PropertyChanged="TextBoxPartner_PropertyChanged"/>
             <Button Grid.Column="2"

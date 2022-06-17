@@ -20,13 +20,13 @@ namespace AxisAvaloniaApp.Views
 {
     public partial class SaleView : UserControl
     {
+        private ViewModels.SaleViewModel dataContext;
         private DataGrid saleGrid;
         private DataGrid itemsGrid;
         private DataGrid partnersGrid;
         ContextMenu saleContextMenu;
         TreeView itemsGroupsTreeView;
         TreeView partnersGroupsTreeView;
-        private readonly ISerializationService serializationSale;
         private readonly ISerializationService serializationItems;
         private readonly ISerializationService serializationPartners;
         private Dictionary<int, ESerializationKeys> saleDataGridColumns;
@@ -37,12 +37,11 @@ namespace AxisAvaloniaApp.Views
         {
             InitializeComponent();
 
-            this.DataContext = Splat.Locator.Current.GetRequiredService<ViewModels.SaleViewModel>();
-            (this.DataContext as ViewModels.OperationViewModelBase).ViewClosing += SerializeVisualData;
-
-            serializationSale = Splat.Locator.Current.GetRequiredService<ISerializationService>();
             serializationItems = Splat.Locator.Current.GetRequiredService<ISerializationService>();
-            serializationPartners = Splat.Locator.Current.GetRequiredService<ISerializationService>();            
+            serializationPartners = Splat.Locator.Current.GetRequiredService<ISerializationService>();
+            dataContext = Splat.Locator.Current.GetRequiredService<ViewModels.SaleViewModel>();
+            this.DataContext = dataContext;
+            dataContext.ViewClosing += SerializeVisualData;
 
             saleDataGridColumns = new Dictionary<int, ESerializationKeys>()
             {
@@ -135,13 +134,12 @@ namespace AxisAvaloniaApp.Views
 
         private void DeserializeVisualData()
         {
-            serializationSale.InitSerializationData(ESerializationGroups.Sale);
             saleGrid = this.FindControl<DataGrid>("SaleGrid");
             foreach (var column in saleGrid.Columns)
             {
                 if (saleDataGridColumns.ContainsKey(column.DisplayIndex))
                 {
-                    column.Width = new DataGridLength((double)serializationSale[saleDataGridColumns[column.DisplayIndex]]);
+                    column.Width = new DataGridLength((double)dataContext.SerializationService[saleDataGridColumns[column.DisplayIndex]]);
                 }
             }
             saleContextMenu = this.FindControl<ContextMenu>("SaleContextMenu");
@@ -151,7 +149,7 @@ namespace AxisAvaloniaApp.Views
                 {
                     if (item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
                     {
-                        item.IsChecked = ((EAdditionalSaleTableColumns)serializationSale[ESerializationKeys.AddColumns] & column) > 0;
+                        item.IsChecked = ((EAdditionalSaleTableColumns)dataContext.SerializationService[ESerializationKeys.AddColumns] & column) > 0;
                     }
                 }
             }
@@ -229,9 +227,9 @@ namespace AxisAvaloniaApp.Views
                     }
                 }
             }
-            serializationSale[ESerializationKeys.AddColumns].Value = ((int)tableColumns).ToString();
+            dataContext.SerializationService[ESerializationKeys.AddColumns].Value = ((int)tableColumns).ToString();
 
-            serializationSale.Update();
+            dataContext.SerializationService.Update();
 
         }
 

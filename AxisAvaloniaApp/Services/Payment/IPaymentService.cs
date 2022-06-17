@@ -1,11 +1,12 @@
 ﻿using AxisAvaloniaApp.Services.Payment.Device;
+using System;
 
 namespace AxisAvaloniaApp.Services.Payment
 {
     /// <summary>
     /// Describes payment modules.
     /// </summary>
-    public interface IPaymentService
+    public interface IPaymentService : IDisposable
     {
         /// <summary>
         /// Gets the class to make a payment.

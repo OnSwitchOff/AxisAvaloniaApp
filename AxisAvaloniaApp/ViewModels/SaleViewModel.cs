@@ -1,9 +1,12 @@
-﻿using AxisAvaloniaApp.Helpers;
+﻿using AxisAvaloniaApp.Enums;
+using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Serialization;
 using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.UserControls.Models;
 using DataBase.Repositories.ApplicationLog;
+using DataBase.Repositories.Partners;
 using Microinvest.CommonLibrary.Enums;
 using ReactiveUI;
 using System;
@@ -18,69 +21,94 @@ namespace AxisAvaloniaApp.ViewModels
     public class SaleViewModel : OperationViewModelBase
     {
         private readonly ISettingsService settingsService;
-        
+        private readonly ISerializationService serializationService;
+        private readonly IPaymentService paymentService;
+        private readonly IPartnerRepository partnerRepository;
+
+        private bool isMainContentVisible;
+        private bool isSaleTitleReadOnly;
+        private bool isChoiceOfPartnerEnabled;
+        private string operationPartnerString;
+        private PartnerModel operationPartner;
+        private string uSN;
+        private string totalAmount = null;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SaleViewModel"/> class.
+        /// </summary>
         public SaleViewModel()
         {
             settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
+            serializationService = Splat.Locator.Current.GetRequiredService<ISerializationService>();
+            serializationService.InitSerializationData(ESerializationGroups.Sale);
+            paymentService = Splat.Locator.Current.GetRequiredService<IPaymentService>();
+            partnerRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
 
             IsCached = false;
 
             IsMainContentVisible = true;
-            IsSaleTitleReadOnly = true;
-            IsChoiceOfPartnerEnabled = true;
+            IsSaleTitleReadOnly = true;            
             IsNomenclaturePanelVisible = true;
 
-            USN = "Test USN";
-            OperationItemModel operationItem = new OperationItemModel()
+            IsChoiceOfPartnerEnabled = (bool)serializationService[ESerializationKeys.TbPartnerEnabled];
+            if ((int)serializationService[ESerializationKeys.TbPartnerID] > 0)
             {
-                Code = "test",
-                Name = "test11",
-                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-                Measures = new ObservableCollection<ItemCodeModel> 
-                { 
-                    new ItemCodeModel() { Measure = "item" }, 
-                    new ItemCodeModel() { Measure = "box" }
-                },
-            };
+                OperationPartner = partnerRepository.GetPartnerByIdAsync((int)serializationService[ESerializationKeys.TbPartnerID]).GetAwaiter().GetResult();
+            }
 
-            Order = new ObservableCollection<OperationItemModel>();
-            Order.Add(operationItem);
-            operationItem = new OperationItemModel()
-            {
-                Code = "test",
-                Name = "test12",
-                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-                Measures = new ObservableCollection<ItemCodeModel>
-                {
-                    new ItemCodeModel() { Measure = "item" },
-                    new ItemCodeModel() { Measure = "box" }
-                },
-            };
-            Order.Add(operationItem);
-            operationItem = new OperationItemModel()
-            {
-                Code = "test",
-                Name = "test23",
-                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-                Measures = new ObservableCollection<ItemCodeModel>
-                {
-                    new ItemCodeModel() { Measure = "item" },
-                    new ItemCodeModel() { Measure = "box" }
-                },
-            };
-            Order.Add(operationItem);
-            operationItem = new OperationItemModel()
-            {
-                Code = "test",
-                Name = "test24",
-                SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-                Measures = new ObservableCollection<ItemCodeModel>
-                {
-                    new ItemCodeModel() { Measure = "item" },
-                    new ItemCodeModel() { Measure = "box" }
-                },
-            };
-            Order.Add(operationItem);
+            USN = paymentService.FiscalDevice.ReceiptNumber;
+            TotalAmount = 0.ToString(settingsService.PriceFormat);
+            Order.Add(new OperationItemModel());
+            //OperationItemModel operationItem = new OperationItemModel()
+            //{
+            //    Code = "test",
+            //    Name = "test11",
+            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+            //    Measures = new ObservableCollection<ItemCodeModel> 
+            //    { 
+            //        new ItemCodeModel() { Measure = "item" }, 
+            //        new ItemCodeModel() { Measure = "box" }
+            //    },
+            //};
+
+            //Order = new ObservableCollection<OperationItemModel>();
+            //Order.Add(operationItem);
+            //operationItem = new OperationItemModel()
+            //{
+            //    Code = "test",
+            //    Name = "test12",
+            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+            //    Measures = new ObservableCollection<ItemCodeModel>
+            //    {
+            //        new ItemCodeModel() { Measure = "item" },
+            //        new ItemCodeModel() { Measure = "box" }
+            //    },
+            //};
+            //Order.Add(operationItem);
+            //operationItem = new OperationItemModel()
+            //{
+            //    Code = "test",
+            //    Name = "test23",
+            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+            //    Measures = new ObservableCollection<ItemCodeModel>
+            //    {
+            //        new ItemCodeModel() { Measure = "item" },
+            //        new ItemCodeModel() { Measure = "box" }
+            //    },
+            //};
+            //Order.Add(operationItem);
+            //operationItem = new OperationItemModel()
+            //{
+            //    Code = "test",
+            //    Name = "test24",
+            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
+            //    Measures = new ObservableCollection<ItemCodeModel>
+            //    {
+            //        new ItemCodeModel() { Measure = "item" },
+            //        new ItemCodeModel() { Measure = "box" }
+            //    },
+            //};
+            //Order.Add(operationItem);
 
             ItemsGroups = new ObservableCollection<GroupModel>();
             PartnersGroups = new ObservableCollection<GroupModel>();
@@ -141,7 +169,7 @@ namespace AxisAvaloniaApp.ViewModels
                 City = "Burgas",
             };
             Partners.Add(partner);
-            OperationPartner = Partners[0];
+            //OperationPartner = Partners[0];
 
             Items = new ObservableCollection<ItemModel>();
             ItemModel item = new ItemModel()
@@ -221,10 +249,14 @@ namespace AxisAvaloniaApp.ViewModels
             Measures = new ObservableCollection<string>() { "item", "kg", "other", };
         }
 
-        private bool isMainContentVisible;
+        /// <summary>
+        /// Gets service t oserialize/deserialize visual data of the main content (work area).
+        /// </summary>
+        /// <date>17.06.2022.</date>
+        public ISerializationService SerializationService => serializationService;
 
         /// <summary>
-        /// 
+        /// Gets or sets value indicating whether main content (work area) is visible.
         /// </summary>
         /// <date>26.05.2022.</date>
         public bool IsMainContentVisible
@@ -233,10 +265,8 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref isMainContentVisible, value);
         }
 
-        private bool isSaleTitleReadOnly;
-
         /// <summary>
-        /// 
+        /// Gets or sets value indicating whether title is ReadOnly.
         /// </summary>
         /// <date>26.05.2022.</date>
         public bool IsSaleTitleReadOnly
@@ -244,8 +274,6 @@ namespace AxisAvaloniaApp.ViewModels
             get => isSaleTitleReadOnly;
             set => this.RaiseAndSetIfChanged(ref isSaleTitleReadOnly, value);
         }
-
-        private bool isChoiceOfPartnerEnabled;
 
         /// <summary>
         /// Gets or sets a value indicating whether field to select partner is enabled.
@@ -257,19 +285,15 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref isChoiceOfPartnerEnabled, value);
         }
 
-        private string selectedPartnerString;
-
         /// <summary>
         /// Gets or sets a value indicating whether field to select partner is enabled.
         /// </summary>
         /// <date>26.05.2022.</date>
-        public string SelectedPartnerString
+        public string OperationPartnerString
         {
-            get => selectedPartnerString;
-            set => this.RaiseAndSetIfChanged(ref selectedPartnerString, value);
-        }
-
-        private PartnerModel operationPartner;
+            get => operationPartnerString;
+            set => this.RaiseAndSetIfChanged(ref operationPartnerString, value);
+        }        
 
         /// <summary>
         /// Gets or sets partner that is used in the operation.
@@ -278,10 +302,20 @@ namespace AxisAvaloniaApp.ViewModels
         public PartnerModel OperationPartner
         {
             get => operationPartner;
-            set => this.RaiseAndSetIfChanged(ref operationPartner, value);
-        }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref operationPartner, value);
 
-        private string uSN;
+                if (operationPartner == null)
+                {
+                    OperationPartnerString = string.Empty;
+                }
+                else
+                {
+                    OperationPartnerString = operationPartner.Name;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets unique sale number.
@@ -293,23 +327,13 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref uSN, value);
         }
 
-        private string? totalAmount = null;
-
         /// <summary>
         /// Gets or sets amount to pay by document.
         /// </summary>
         /// <date>26.05.2022.</date>
         public string TotalAmount
         {
-            get
-            {
-                if (totalAmount == null)
-                {
-                    totalAmount = 0.ToString(settingsService.PriceFormat);
-                }
-
-                return totalAmount;
-            }
+            get => totalAmount;
             set => this.RaiseAndSetIfChanged(ref totalAmount, value);
         }
 
@@ -321,7 +345,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>26.05.2022.</date>
         public ObservableCollection<OperationItemModel> Order
         {
-            get => order;
+            get => order == null ? order = new ObservableCollection<OperationItemModel>() : order;
             set => this.RaiseAndSetIfChanged(ref order, value);
         }
 
@@ -364,7 +388,7 @@ namespace AxisAvaloniaApp.ViewModels
         private bool isNomenclaturePanelVisible;
 
         /// <summary>
-        /// 
+        /// Gets or sets value indicating whether panel to choose nomenclature is visible.
         /// </summary>
         /// <date>03.06.2022.</date>
         public bool IsNomenclaturePanelVisible
