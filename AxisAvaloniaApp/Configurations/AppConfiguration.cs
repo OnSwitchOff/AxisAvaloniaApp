@@ -25,7 +25,7 @@ namespace AxisAvaloniaApp.Configurations
         /// <summary>
         /// Gets value indicating whether database exists. 
         /// </summary>
-        public static bool IsDatabaseExist { get; private set; }
+        public static bool IsDatabaseExist { get; private set; } = true;
 
         /// <summary>
         /// Gets or sets path to logo.

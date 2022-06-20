@@ -139,6 +139,7 @@ namespace DataBase.Repositories.Partners
         {
             return Task.Run<int>(() =>
             {
+                partner.Group = databaseContext.PartnersGroups.Where(g => g.Id == partner.Group.Id).FirstOrDefault();
                 databaseContext.Partners.Add(partner);
                 databaseContext.SaveChanges();
 

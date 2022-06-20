@@ -26,9 +26,9 @@ namespace DataBase.Repositories.Items
         /// <param name="barcode">Barcode to search partner in the database.</param>
         /// <returns>Returns Item if data was searched; otherwise returns null.</returns>
         /// <date>30.03.2022.</date>
-        public Task<Item> GetItemByBarcodeAsync(string barcode)
+        public async Task<Item> GetItemByBarcodeAsync(string barcode)
         {
-            return databaseContext.Items.FirstOrDefaultAsync(i => i.Barcode.Equals(barcode));
+            return await databaseContext.Items.FirstOrDefaultAsync(i => i.Barcode.Equals(barcode));
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace DataBase.Repositories.Items
         /// <param name="id">Id to search item in the database.</param>
         /// <returns>Returns Item if data was searched; otherwise returns null.</returns>
         /// <date>30.03.2022.</date>
-        public Task<Item> GetItemByIdAsync(int id)
+        public async Task<Item> GetItemByIdAsync(int id)
         {
-            return databaseContext.Items.FirstOrDefaultAsync(i => i.Id == id);
+            return await databaseContext.Items.FirstOrDefaultAsync(i => i.Id == id);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace DataBase.Repositories.Items
         /// <param name="key">Key to search item in the database.</param>
         /// <returns>Returns Item if data was searched; otherwise returns null.</returns>
         /// <date>30.03.2022.</date>
-        public Task<Item> GetItemByKeyAsync(string key)
+        public async Task<Item> GetItemByKeyAsync(string key)
         {
-            return databaseContext.
+            return await databaseContext.
                     Items.
                     FirstOrDefaultAsync(i =>
                     i.Name.Equals(key) ||
@@ -130,12 +130,14 @@ namespace DataBase.Repositories.Items
         /// <param name="item">Item to add to table of items in the database.</param>
         /// <returns>Returns 0 if item wasn't added to database; otherwise returns real id of new record.</returns>
         /// <date>31.03.2022.</date>
-        public Task<int> AddItemAsync(Item item)
+        public async Task<int> AddItemAsync(Item item)
         {
-            return Task.Run<int>(() =>
+            return await Task.Run<int>(() =>
             {
-                databaseContext.Items.Add(item);
-                databaseContext.SaveChanges();
+                item.Group = databaseContext.ItemsGroups.Where(g => g.Id == item.Group.Id).FirstOrDefault();
+                item.Vatgroup = databaseContext.Vatgroups.Where(vg => vg.Id == item.Vatgroup.Id).FirstOrDefault();
+                databaseContext.Items.AddAsync(item);
+                databaseContext.SaveChangesAsync();
 
                 return item.Id;
             });
@@ -147,9 +149,9 @@ namespace DataBase.Repositories.Items
         /// <param name="item">Item to update in the table of items in the database.</param>
         /// <returns>Returns true if item was updated; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        public Task<bool> UpdateItemAsync(Item item)
+        public async Task<bool> UpdateItemAsync(Item item)
         {
-            return Task.Run<bool>(() =>
+            return await Task.Run<bool>(() =>
             {
                 databaseContext.Items.Update(item);
                 return databaseContext.SaveChanges() > 0;
@@ -162,9 +164,9 @@ namespace DataBase.Repositories.Items
         /// <param name="itemId">Id of item to delete.</param>
         /// <returns>Returns true if item was deleted; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        public Task<bool> DeleteItemAsync(int itemId)
+        public async Task<bool> DeleteItemAsync(int itemId)
         {
-            return Task.Run<bool>(() =>
+            return await Task.Run<bool>(() =>
             {
                 Item item = databaseContext.Items.FirstOrDefault(i => i.Id == itemId);
                 if (item == null)

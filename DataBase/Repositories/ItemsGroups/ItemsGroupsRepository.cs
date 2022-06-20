@@ -25,9 +25,9 @@ namespace DataBase.Repositories.ItemsGroups
         /// <param name="groupId">Id of group.</param>
         /// <returns>Returns "-2" if group is absent; otherwise returns path of group.</returns>
         /// <date>31.03.2022.</date>
-        public Task<string> GetPathByIdAsync(int groupId)
+        public async Task<string> GetPathByIdAsync(int groupId)
         {
-            return Task.Run<string>(() =>
+            return await Task.Run<string>(() =>
             {
 
                 ItemsGroup res = databaseContext.ItemsGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
@@ -46,12 +46,12 @@ namespace DataBase.Repositories.ItemsGroups
         /// <param name="itemsGroup">Group of items.</param>
         /// <returns>Returns 0 if group of items wasn't added to database; otherwise returns real id of new record.</returns>
         /// <date>31.03.2022.</date>
-        public Task<int> AddGroupAsync(ItemsGroup itemsGroup)
+        public async Task<int> AddGroupAsync(ItemsGroup itemsGroup)
         {
-            databaseContext.ItemsGroups.Add(itemsGroup);
-            databaseContext.SaveChangesAsync();
+            await databaseContext.ItemsGroups.AddAsync(itemsGroup);
+            await databaseContext.SaveChangesAsync();
 
-            return Task.FromResult(itemsGroup.Id);
+            return itemsGroup.Id;
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace DataBase.Repositories.ItemsGroups
         /// <param name="itemsGroup">Group of items.</param>
         /// <returns>Returns true if group of items was updated; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        public Task<bool> UpdateGroupAsync(ItemsGroup itemsGroup)
+        public async Task<bool> UpdateGroupAsync(ItemsGroup itemsGroup)
         {
-            return Task.Run<bool>(() =>
+            return await Task.Run<bool>(() =>
             {
                 databaseContext.ItemsGroups.Update(itemsGroup);
                 return databaseContext.SaveChanges() > 0;
@@ -75,9 +75,9 @@ namespace DataBase.Repositories.ItemsGroups
         /// <param name="groupId">Id of group of item.</param>
         /// <returns>Returns true if group of items was deleted; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        public Task<bool> DeleteGroupAsync(int groupId)
+        public async Task<bool> DeleteGroupAsync(int groupId)
         {
-            return Task.Run<bool>(() =>
+            return await Task.Run<bool>(() =>
             {
                 ItemsGroup itemsGroup = databaseContext.ItemsGroups.FirstOrDefault(i => i.Id == groupId);
                 if (itemsGroup == null)
@@ -97,9 +97,9 @@ namespace DataBase.Repositories.ItemsGroups
         /// </summary>
         /// <returns>Returns list with groups of items.</returns>
         /// <date>01.04.2022.</date>
-        public async Task<List<ItemsGroup>> GetItemsGroupsAsync()
+        public Task<List<ItemsGroup>> GetItemsGroupsAsync()
         {
-            return await databaseContext.ItemsGroups.ToListAsync();
+            return databaseContext.ItemsGroups.ToListAsync();
         }
     }
 }
