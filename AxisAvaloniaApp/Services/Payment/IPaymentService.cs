@@ -26,5 +26,7 @@ namespace AxisAvaloniaApp.Services.Payment
         /// <param name="fiscalDevice">Class to make a payment.</param>
         /// <date>15/03/2022.</date>
         void SetPaymentTool(IDevice fiscalDevice);
+
+        IObservable<bool> ObservableFiscalDeviceInitializedState { get; }
     }
 }

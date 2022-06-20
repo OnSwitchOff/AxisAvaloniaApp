@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Subjects;
 using AxisAvaloniaApp.Services.Payment.Device;
 
 namespace AxisAvaloniaApp.Services.Payment
@@ -9,6 +10,13 @@ namespace AxisAvaloniaApp.Services.Payment
     public class PaymentService : IPaymentService
     {
         private IDevice? fiscalDevice;
+        private readonly BehaviorSubject<bool> _fiscalDeviceInitializedSubject = new BehaviorSubject<bool>(false);
+        public bool FiscalDeviceInitializedState
+        {
+            get => _fiscalDeviceInitializedSubject.Value;
+            set => _fiscalDeviceInitializedSubject.OnNext(value);
+        }
+        public IObservable<bool> ObservableFiscalDeviceInitializedState => _fiscalDeviceInitializedSubject;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentService"/> class.
@@ -39,7 +47,7 @@ namespace AxisAvaloniaApp.Services.Payment
         /// Gets a value indicating whether the class to make a payment is initialized.
         /// </summary>
         /// <date>19/04/2022.</date>
-        public bool FiscalDeviceInitialized => this.fiscalDevice != null;
+        public bool FiscalDeviceInitialized => this.fiscalDevice != null && this.FiscalDevice.GetType() != typeof(NoDevice);
 
         /// <summary>
         /// Gets number of receipt.
@@ -49,6 +57,7 @@ namespace AxisAvaloniaApp.Services.Payment
         public void SetPaymentTool(IDevice fiscalDevice)
         {
             this.fiscalDevice = fiscalDevice;
+            FiscalDeviceInitializedState = FiscalDeviceInitialized;
         }
 
         /// <summary>
