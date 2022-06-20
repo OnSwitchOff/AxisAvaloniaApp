@@ -126,10 +126,7 @@ namespace AxisAvaloniaApp.Views
                     saleGrid.BeginEdit();
 
                     //var focused = FocusManager.Instance.Current;
-                    var currentRow = saleGrid.FindDescendantOfType<DataGridRowsPresenter>()
-                        .Children.OfType<DataGridRow>()
-                        .FirstOrDefault(r => r.FindDescendantOfType<DataGridCellsPresenter>()
-                            .Children.Any(p => p.Classes.Contains(":current")));
+                    var currentRow = saleGrid.GetCurrentRow();
                     var item = currentRow?.DataContext;
 
                     
@@ -139,58 +136,75 @@ namespace AxisAvaloniaApp.Views
 
                     //var presenter = saleGrid.Columns[4].GetCellContent(currentRow);
 
-                    var currentCell = currentRow?.FindDescendantOfType<DataGridCellsPresenter>().Children
-                        .OfType<DataGridCell>().FirstOrDefault(p => p.Classes.Contains(":current"));
+                    var currentCell = saleGrid.GetCurrentCell();
 
                     IEnumerable<DataGridCell> currentCellList = currentRow?.FindDescendantOfType<DataGridCellsPresenter>().Children
                         .OfType<DataGridCell>();
                     var cell = currentCellList.ElementAt(3);
-                    cell.Focus();
-
-                    var keyboard = KeyboardDevice.Instance;
-                    var inputManager = InputManager.Instance;
-                    MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
-                    inputManager.ProcessInput(new RawInputEventArgs(mouseDevice, (ulong)DateTime.Now.Ticks, null));
-                    //inputManager.ProcessInput(new RawKeyEventArgs(keyboard, (ulong)DateTime.Now.Ticks, null, RawKeyEventType.KeyDown, Key.Enter, RawInputModifiers.None));
+                    var cellMethod = cell.GetType().GetMethod("DataGridCell_PointerPressed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    //FocusManager.Instance.Focus(cell);
+                    Window root = cell.GetVisualRoot() as Window;
 
 
-                    //var method = saleGrid.Columns[3].GetType().GetMethod("GenerateEditingElementDirect", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                    //var textBox = el.GetValue(saleGrid.Columns[3]);
-                    //var tb = method.Invoke(saleGrid.Columns[3], new object[] { cell, string.Empty });
-                    //(tb as TextBox).Background = Brushes.Red; //.Focus();
+                    PointerPressedEventArgs pointerPressed = new PointerPressedEventArgs(
+                        cell,
+                        new Pointer(0, PointerType.Mouse, true),
+                        cell.GetVisualRoot(),
+                        new Point(root.Position.X, root.Position.Y),
+                        (ulong)DateTime.Now.Ticks,
+                        new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
+                        KeyModifiers.Control);
 
-                    //FocusableDataGridTextColumn focusableData = saleGrid.Columns[3] as FocusableDataGridTextColumn;
-                    //if (saleGrid.Columns[3] is FocusableDataGridTextColumn textColumn)
-                    //{
-                    //    textColumn.Test(cell, "");
-                    //}
+                    cellMethod.Invoke(cell, new object[] { pointerPressed });
+                    //cell.Focus();
 
-                    //Keyboard.ClearFocus();
+                    //saleGrid.Focus();
+                    //saleGrid.BeginEdit();
 
-                    //FocusManager.SetFocusedElement(cell, cell);
-                    //Keyboard.Focus(cell);
+                    //var keyboard = KeyboardDevice.Instance;
+                    //var inputManager = InputManager.Instance;
+                    //MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
+                    //inputManager.ProcessInput(new RawInputEventArgs(mouseDevice, (ulong)DateTime.Now.Ticks, null));
+                    ////inputManager.ProcessInput(new RawKeyEventArgs(keyboard, (ulong)DateTime.Now.Ticks, null, RawKeyEventType.KeyDown, Key.Enter, RawInputModifiers.None));
 
-                    //var EditingColumnIndex = saleGrid.GetType().GetProperty("EditingColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    //EditingColumnIndex.SetValue(saleGrid, 3);
-                    //var CurrentSlot = saleGrid.GetType().GetProperty("CurrentSlot", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    //CurrentSlot.SetValue(saleGrid, 3);
 
-                    //var CurrentColumnIndex = saleGrid.GetType().GetProperty("CurrentColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    //CurrentColumnIndex.SetValue(saleGrid, 3);
+                    ////var method = saleGrid.Columns[3].GetType().GetMethod("GenerateEditingElementDirect", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    ////var textBox = el.GetValue(saleGrid.Columns[3]);
+                    ////var tb = method.Invoke(saleGrid.Columns[3], new object[] { cell, string.Empty });
+                    ////(tb as TextBox).Background = Brushes.Red; //.Focus();
 
-                    //var EditingRow = saleGrid.GetType().GetProperty("EditingRow", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    //EditingRow.SetValue(saleGrid, currentRow);
+                    ////FocusableDataGridTextColumn focusableData = saleGrid.Columns[3] as FocusableDataGridTextColumn;
+                    ////if (saleGrid.Columns[3] is FocusableDataGridTextColumn textColumn)
+                    ////{
+                    ////    textColumn.Test(cell, "");
+                    ////}
+
+                    ////Keyboard.ClearFocus();
+
+                    ////FocusManager.SetFocusedElement(cell, cell);
+                    ////Keyboard.Focus(cell);
+
+                    ////var EditingColumnIndex = saleGrid.GetType().GetProperty("EditingColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    ////EditingColumnIndex.SetValue(saleGrid, 3);
+                    ////var CurrentSlot = saleGrid.GetType().GetProperty("CurrentSlot", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    ////CurrentSlot.SetValue(saleGrid, 3);
+
+                    ////var CurrentColumnIndex = saleGrid.GetType().GetProperty("CurrentColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    ////CurrentColumnIndex.SetValue(saleGrid, 3);
+
+                    ////var EditingRow = saleGrid.GetType().GetProperty("EditingRow", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    ////EditingRow.SetValue(saleGrid, currentRow);
 
 
                     
-                    FocusManager.Instance.Focus(cell, NavigationMethod.Unspecified);
-                    //MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
-                    mouseDevice.Capture(cell);
-                    mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs(mouseDevice, 0, null));
-                    //mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs())
-                    cell.Focus();
+                    //FocusManager.Instance.Focus(cell, NavigationMethod.Unspecified);
+                    ////MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
+                    //mouseDevice.Capture(cell);
+                    //mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs(mouseDevice, 0, null));
+                    ////mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs())
+                    //cell.Focus();
 
-                    //FocusManager.Instance.Focus(cell);
+                    ////FocusManager.Instance.Focus(cell);
                     break;
             }
         }

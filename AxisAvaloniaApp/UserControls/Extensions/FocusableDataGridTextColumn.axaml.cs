@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 
 namespace AxisAvaloniaApp.UserControls.Extensions
 {
@@ -35,16 +36,17 @@ namespace AxisAvaloniaApp.UserControls.Extensions
 
         protected override object PrepareCellForEdit(IControl editingElement, RoutedEventArgs editingEventArgs)
         {
-            Avalonia.Input.MouseDevice mouseDevice = new Avalonia.Input.MouseDevice();
-            EventRoute eventRoute = new EventRoute(new RoutedEvent("", RoutingStrategies.Direct, typeof(string), typeof(DataGridCell)));
-            DataGridCell cell = new DataGridCell();
-            //eventRoute.RaiseEvent(cell, new RoutedEventArgs(new PointerPressedEventArgs()));
+            //Avalonia.Input.MouseDevice mouseDevice = new Avalonia.Input.MouseDevice();
+            //EventRoute eventRoute = new EventRoute(new RoutedEvent("", RoutingStrategies.Direct, typeof(string), typeof(DataGridCell)));
+            //DataGridCell cell = new DataGridCell();
+            ////eventRoute.RaiseEvent(cell, new RoutedEventArgs(new PointerPressedEventArgs(cell, cell.)));
             return base.PrepareCellForEdit(editingElement, editingEventArgs);
         }
 
         protected override IControl GenerateEditingElementDirect(DataGridCell cell, object dataItem)
         {
             editingItem = base.GenerateEditingElementDirect(cell, dataItem);
+            //(editingItem as TextBox).Background = Brushes.Red;
             return editingItem;
         }
     }

@@ -165,13 +165,16 @@ namespace AxisAvaloniaApp.Services.StartUp
                 new System.Collections.Generic.List<DataBase.Entities.ItemsCodes.ItemCode>());
             item.Status = ENomenclatureStatuses.All;
             await itemRepository.AddItemAsync(item);
+            //res = await vATsRepository.AddVATGroupsAsync(vATGroups);
+            //await itemsGroupsRepository.AddGroupAsync(itemsGroup);
+            
 
             DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository>();
             DataBase.Entities.PartnersGroups.PartnersGroup partnersGroup = DataBase.Entities.PartnersGroups.PartnersGroup.Create(
                 "-1",
                 translationService.Localize("strBaseGroup"), 
                 0);
-            await partnersGroupsRepository.AddGroupAsync(partnersGroup);
+            //await partnersGroupsRepository.AddGroupAsync(partnersGroup);
 
             DataBase.Repositories.Partners.IPartnerRepository partnerRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.Partners.IPartnerRepository>();
             DataBase.Entities.Partners.Partner partner = DataBase.Entities.Partners.Partner.Create(
@@ -190,6 +193,7 @@ namespace AxisAvaloniaApp.Services.StartUp
                 partnersGroup);
             partner.Status = ENomenclatureStatuses.All;
             await partnerRepository.AddPartnerAsync(partner);
+            await partnersGroupsRepository.AddGroupAsync(partnersGroup);
         }
     }
 }
