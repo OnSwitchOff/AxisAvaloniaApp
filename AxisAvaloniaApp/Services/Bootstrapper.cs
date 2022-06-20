@@ -115,7 +115,7 @@ namespace AxisAvaloniaApp.Services
 
         private static void RegisterRepositories(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.Register(() => new DatabaseContext(Configurations.AppConfiguration.GetDatabaseOptions()));
+            services.RegisterLazySingleton(() => new DatabaseContext(Configurations.AppConfiguration.GetDatabaseOptions()));
             services.Register<IApplicationLogRepository>(() => new ApplicationLogRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));
             services.Register<IDocumentsRepository>(() => new DocumentsRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));
             services.Register<IExchangesRepository>(() => new ExchangesRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));

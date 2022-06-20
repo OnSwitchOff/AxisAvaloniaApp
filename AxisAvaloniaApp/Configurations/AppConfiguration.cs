@@ -109,8 +109,9 @@ namespace AxisAvaloniaApp.Configurations
                         "Axis",
                         "Uno");
 
-                    if (!(IsDatabaseExist = Directory.Exists(dataBasePath)))
+                    if (!Directory.Exists(dataBasePath))
                     {
+                        IsDatabaseExist = false;
                         Directory.CreateDirectory(dataBasePath);
                     }
                 }
