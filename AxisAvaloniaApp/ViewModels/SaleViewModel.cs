@@ -1,12 +1,22 @@
 ﻿using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Serialization;
 using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Translation;
 using AxisAvaloniaApp.UserControls.Models;
+using DataBase.Entities.Interfaces;
+using DataBase.Entities.Items;
+using DataBase.Entities.ItemsGroups;
+using DataBase.Entities.PartnersGroups;
 using DataBase.Repositories.ApplicationLog;
+using DataBase.Repositories.Items;
+using DataBase.Repositories.ItemsGroups;
 using DataBase.Repositories.Partners;
+using DataBase.Repositories.PartnersGroups;
+using DataBase.Repositories.VATGroups;
 using Microinvest.CommonLibrary.Enums;
 using ReactiveUI;
 using System;
@@ -23,7 +33,13 @@ namespace AxisAvaloniaApp.ViewModels
         private readonly ISettingsService settingsService;
         private readonly ISerializationService serializationService;
         private readonly IPaymentService paymentService;
+        private readonly ITranslationService translationService;
+        private readonly ILoggerService loggerService;
         private readonly IPartnerRepository partnerRepository;
+        private readonly IItemsGroupsRepository itemsGroupsRepository;
+        private readonly IItemRepository itemRepository;
+        private readonly IPartnersGroupsRepository partnersGroupsRepository;
+        private readonly IVATsRepository vATsRepository;        
 
         private bool isMainContentVisible;
         private bool isSaleTitleReadOnly;
@@ -31,7 +47,24 @@ namespace AxisAvaloniaApp.ViewModels
         private string operationPartnerString;
         private PartnerModel operationPartner;
         private string uSN;
-        private string totalAmount = null;
+        private string totalAmount;
+        private ObservableCollection<OperationItemModel> order;
+        private ObservableCollection<OperationItemModel> selectedOrderRecord;
+        private double amountToPay;
+        private double change;
+
+        private bool isNomenclaturePanelVisible;
+        private ObservableCollection<GroupModel> itemsGroups;
+        private GroupModel selectedItemsGroup;
+        private ObservableCollection<ItemModel> items;
+        private ItemModel selectedItem;
+        private ObservableCollection<VATGroupModel> vATGroups;
+        private ObservableCollection<ComboBoxItemModel> itemsTypes;
+        private ObservableCollection<string> measures;
+        private ObservableCollection<PartnerModel> partners;
+        private PartnerModel selectedPartner;
+        private ObservableCollection<GroupModel> partnersGroups;
+        private GroupModel selectedPartnersGroup;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SaleViewModel"/> class.
@@ -42,12 +75,20 @@ namespace AxisAvaloniaApp.ViewModels
             serializationService = Splat.Locator.Current.GetRequiredService<ISerializationService>();
             serializationService.InitSerializationData(ESerializationGroups.Sale);
             paymentService = Splat.Locator.Current.GetRequiredService<IPaymentService>();
+            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            translationService.LanguageChanged += Application_PropertyChanged;
+            loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
+
+            itemsGroupsRepository = Splat.Locator.Current.GetRequiredService<IItemsGroupsRepository>();
+            itemRepository = Splat.Locator.Current.GetRequiredService<IItemRepository>();
+            partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<IPartnersGroupsRepository>();
             partnerRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
+            vATsRepository = Splat.Locator.Current.GetRequiredService<IVATsRepository>();
 
             IsCached = false;
 
             IsMainContentVisible = true;
-            IsSaleTitleReadOnly = true;            
+            IsSaleTitleReadOnly = true;
             IsNomenclaturePanelVisible = true;
 
             IsChoiceOfPartnerEnabled = (bool)serializationService[ESerializationKeys.TbPartnerEnabled];
@@ -59,194 +100,91 @@ namespace AxisAvaloniaApp.ViewModels
             USN = paymentService.FiscalDevice.ReceiptNumber;
             TotalAmount = 0.ToString(settingsService.PriceFormat);
             Order.Add(new OperationItemModel());
-            //OperationItemModel operationItem = new OperationItemModel()
-            //{
-            //    Code = "test",
-            //    Name = "test11",
-            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-            //    Measures = new ObservableCollection<ItemCodeModel> 
-            //    { 
-            //        new ItemCodeModel() { Measure = "item" }, 
-            //        new ItemCodeModel() { Measure = "box" }
-            //    },
-            //};
 
-            //Order = new ObservableCollection<OperationItemModel>();
-            //Order.Add(operationItem);
-            //operationItem = new OperationItemModel()
-            //{
-            //    Code = "test",
-            //    Name = "test12",
-            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-            //    Measures = new ObservableCollection<ItemCodeModel>
-            //    {
-            //        new ItemCodeModel() { Measure = "item" },
-            //        new ItemCodeModel() { Measure = "box" }
-            //    },
-            //};
-            //Order.Add(operationItem);
-            //operationItem = new OperationItemModel()
-            //{
-            //    Code = "test",
-            //    Name = "test23",
-            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-            //    Measures = new ObservableCollection<ItemCodeModel>
-            //    {
-            //        new ItemCodeModel() { Measure = "item" },
-            //        new ItemCodeModel() { Measure = "box" }
-            //    },
-            //};
-            //Order.Add(operationItem);
-            //operationItem = new OperationItemModel()
-            //{
-            //    Code = "test",
-            //    Name = "test24",
-            //    SelectedMeasure = new ItemCodeModel() { Measure = "item" },
-            //    Measures = new ObservableCollection<ItemCodeModel>
-            //    {
-            //        new ItemCodeModel() { Measure = "item" },
-            //        new ItemCodeModel() { Measure = "box" }
-            //    },
-            //};
-            //Order.Add(operationItem);
+            ItemsGroups = GetGroups(itemsGroupsRepository.GetItemsGroupsAsync().GetAwaiter().GetResult());
+            FillItems();
+            FillMeasures();
+            PartnersGroups = GetGroups<PartnersGroup>(partnersGroupsRepository.GetPartnersGroupsAsync().GetAwaiter().GetResult());
+            FillPartners();
 
-            ItemsGroups = new ObservableCollection<GroupModel>();
-            PartnersGroups = new ObservableCollection<GroupModel>();
-            GroupModel itemGroup = new GroupModel()
-            {
-                Name = "Group 1",
-                SubGroups = new ObservableCollection<GroupModel>() { new GroupModel() { Name = "Sub 1"} },
-            };
-            GroupModel partnerGroup = new GroupModel()
-            {
-                Name = "Group 1",
-                SubGroups = new ObservableCollection<GroupModel>() { new GroupModel() { Name = "Sub 1" } },
-            };
-            ItemsGroups.Add(itemGroup);
-            PartnersGroups.Add(partnerGroup);
-            itemGroup = new GroupModel()
-            {
-                Name = "Group 2",
-                SubGroups = new ObservableCollection<GroupModel>() { new GroupModel() { Name = "Sub 1" }, new GroupModel() { Name = "Sub 2" } },
-            };
-            partnerGroup = new GroupModel()
-            {
-                Name = "Group 2",
-                SubGroups = new ObservableCollection<GroupModel>() { new GroupModel() { Name = "Sub 1" }, new GroupModel() { Name = "Sub 2" } },
-            };
-            ItemsGroups.Add(itemGroup);
-            PartnersGroups.Add(partnerGroup);
+            FillVATs();
+        }
 
-            SelectedItemsGroup = ItemsGroups[1].SubGroups[0];
-            //ItemsGroups[1].IsSelected = true;
-            //ItemsGroups[1].IsExpanded = true;
-            //SelectedItemsGroup.IsSelected = true;
-            //SelectedItemsGroup.IsExpanded = true;
-            SelectedPartnersGroup = PartnersGroups[0].SubGroups[0];
-            //PartnersGroups[0].IsSelected = true;
-            //PartnersGroups[0].IsExpanded = true;
-            //SelectedPartnersGroup.IsSelected = true;
-            //SelectedPartnersGroup.IsExpanded = true;
-
-
-            Partners = new ObservableCollection<PartnerModel>();
-            PartnerModel partner = new PartnerModel()
+        private async void FillMeasures()
+        {
+            foreach (string measure in await itemRepository.GetMeasuresAsync())
             {
-                Name = "Partner 1",
-                City = "Sofia",
-            };
-            Partners.Add(partner);
-            partner = new PartnerModel()
-            {
-                Name = "Partner 2",
-                City = "Sofia",
-                Address = "123",
-            };
-            Partners.Add(partner);
-            partner = new PartnerModel()
-            {
-                Name = "Partner 3",
-                City = "Burgas",
-            };
-            Partners.Add(partner);
-            //OperationPartner = Partners[0];
-
-            Items = new ObservableCollection<ItemModel>();
-            ItemModel item = new ItemModel()
-            {
-                Name = "Item 1",
-                Code = "1",
-                Price = 13.3M,
-                Measure = "kg",
-            };
-            Items.Add(item);
-            item = new ItemModel()
-            {
-                Name = "Item 2",
-                Code = "2",
-                Measure = "kg",
-                Price = 13.3M,
-                VATGroup = new VATGroupModel()
+                if (!Measures.Contains(measure))
                 {
-                    Name = "VAT 1",
-                },
-            };
-            Items.Add(item);
+                    Measures.Add(measure);
+                }
+            }
+        }
 
-            SelectedItem = new ItemModel();
+        private async void FillVATs()
+        {
+            await foreach (var vAT in vATsRepository.GetVATGroupsAsync())
+            {
+                VATGroups.Add(vAT);
+            }
+        }
 
-            VATGroups = new ObservableCollection<VATGroupModel>();
-            VATGroups.Add(new VATGroupModel()
-            {
-                Name = "VAT 1",
-            });
-            VATGroups.Add(new VATGroupModel()
-            {
-                Name = "VAT 2",
-            });
-            VATGroups.Add(new VATGroupModel()
-            {
-                Name = "VAT 3",
-            });
+        protected override void CloseView()
+        {
+            translationService.LanguageChanged -= Application_PropertyChanged;
 
-            ItemsTypes = new ObservableCollection<ComboBoxItemModel>();
-            ItemsTypes.Add(new ComboBoxItemModel()
-            {
-                Key = "strItemType_Standard",
-                Value = EItemTypes.Standard,
-            });
-            ItemsTypes.Add(new ComboBoxItemModel()
-            {
-                Key = "strItemType_Excise",
-                Value = EItemTypes.Excise,
-            });
-            ItemsTypes.Add(new ComboBoxItemModel()
-            {
-                Key = "strItemType_Work",
-                Value = EItemTypes.Work,
-            });
-            ItemsTypes.Add(new ComboBoxItemModel()
-            {
-                Key = "strItemType_Service",
-                Value = EItemTypes.Service,
-            });
-            ItemsTypes.Add(new ComboBoxItemModel()
-            {
-                Key = "strItemType_LottaryTicket",
-                Value = EItemTypes.LottaryTicket,
-            });
-            ItemsTypes.Add(new ComboBoxItemModel()
-            {
-                Key = "strItemType_Payment",
-                Value = EItemTypes.Payment,
-            });
-            ItemsTypes.Add(new ComboBoxItemModel()
-            {
-                Key = "strItemType_Other",
-                Value = EItemTypes.Other,
-            });
+            base.CloseView();
+        }
 
-            Measures = new ObservableCollection<string>() { "item", "kg", "other", };
+        private void Application_PropertyChanged()
+        {
+            Measures[0] = translationService.Localize("strMeasureItem");
+            Measures[1] = translationService.Localize("strMeasureKilo");
+            Measures[2] = translationService.Localize("strMeasureLiter");
+            Measures[3] = translationService.Localize("strMeasureBox");
+        }
+
+        private async void FillItems()
+        {
+            await foreach (var item in itemRepository.GetItemsAsync())
+            {
+                Items.Add((ItemModel)item);
+            }
+        }
+
+        private async void FillPartners()
+        {
+            await foreach (var partner in partnerRepository.GetParnersAsync())
+            {
+                Partners.Add(partner);
+            }
+        }
+
+        private ObservableCollection<GroupModel> GetGroups<T>(List<T> groups, GroupModel parentGroup = null, int pathLenght = 3, int startIndex = 0, string parentGroupPath = "")
+            where T : INomenclaturesGroup
+        {
+            ObservableCollection<GroupModel> groupsList = new ObservableCollection<GroupModel>();
+            GroupModel group;
+
+            for (; startIndex < groups.Count; startIndex++)
+            {
+                if ((groups[startIndex].Path.Length == pathLenght || groups[startIndex].Path.Equals("-1")) && (string.IsNullOrEmpty(parentGroupPath) || groups[startIndex].Path.StartsWith(parentGroupPath)))
+                {
+                    group = new GroupModel()
+                    { 
+                        Id = groups[startIndex].Id,
+                        Name = groups[startIndex].Name,
+                        Path = groups[startIndex].Path,
+                        ParentGroup = parentGroup,
+                    };
+
+                    groupsList.Add(group);
+
+                    group.SubGroups = GetGroups(groups, group, pathLenght + 3, startIndex + 1, group.Path);
+                }
+            }
+
+            return groupsList;
         }
 
         /// <summary>
@@ -282,7 +220,15 @@ namespace AxisAvaloniaApp.ViewModels
         public bool IsChoiceOfPartnerEnabled
         {
             get => isChoiceOfPartnerEnabled;
-            set => this.RaiseAndSetIfChanged(ref isChoiceOfPartnerEnabled, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isChoiceOfPartnerEnabled, value);
+
+                if (!value && OperationPartner == null)
+                {
+                    OperationPartner = partnerRepository.GetPartnerByIdAsync(1).GetAwaiter().GetResult();
+                }
+            }
         }
 
         /// <summary>
@@ -337,8 +283,6 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref totalAmount, value);
         }
 
-        private ObservableCollection<OperationItemModel> order;
-
         /// <summary>
         /// Gets or sets list with items to buy.
         /// </summary>
@@ -348,8 +292,6 @@ namespace AxisAvaloniaApp.ViewModels
             get => order == null ? order = new ObservableCollection<OperationItemModel>() : order;
             set => this.RaiseAndSetIfChanged(ref order, value);
         }
-
-        private ObservableCollection<OperationItemModel> selectedOrderRecord;
 
         /// <summary>
         /// Gets or sets item that is selected by user.
@@ -361,8 +303,6 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedOrderRecord, value);
         }
 
-        private double amountToPay;
-
         /// <summary>
         /// Gets or sets amount to payment.
         /// </summary>
@@ -372,8 +312,6 @@ namespace AxisAvaloniaApp.ViewModels
             get => amountToPay;
             set => this.RaiseAndSetIfChanged(ref amountToPay, value);
         }
-
-        private double change;
 
         /// <summary>
         /// Gets or sets amount to payment.
@@ -385,8 +323,6 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref change, value);
         }
 
-        private bool isNomenclaturePanelVisible;
-
         /// <summary>
         /// Gets or sets value indicating whether panel to choose nomenclature is visible.
         /// </summary>
@@ -397,19 +333,15 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref isNomenclaturePanelVisible, value);
         }
 
-        private ObservableCollection<GroupModel> itemsGroups;
-
         /// <summary>
         /// Gets or sets list with groups of items.
         /// </summary>
         /// <date>31.05.2022.</date>
         public ObservableCollection<GroupModel> ItemsGroups
         {
-            get => itemsGroups;
+            get => itemsGroups == null ? itemsGroups = new ObservableCollection<GroupModel>() : itemsGroups;
             set => this.RaiseAndSetIfChanged(ref itemsGroups, value);
         }
-
-        private GroupModel selectedItemsGroup;
 
         /// <summary>
         /// Gets or sets group of items that is selected by user.
@@ -420,8 +352,7 @@ namespace AxisAvaloniaApp.ViewModels
             get => selectedItemsGroup;
             set => this.RaiseAndSetIfChanged(ref selectedItemsGroup, value);
         }
-
-        private ObservableCollection<ItemModel> items;
+        
 
         /// <summary>
         /// Gets or sets list with items.
@@ -429,11 +360,9 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>01.07.2022.</date>
         public ObservableCollection<ItemModel> Items
         {
-            get => items;
+            get => items == null ? items = new ObservableCollection<ItemModel>() : items;
             set => this.RaiseAndSetIfChanged(ref items, value);
         }
-
-        private ItemModel selectedItem;
 
         /// <summary>
         /// Gets or sets item that is selected by user.
@@ -445,15 +374,13 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedItem, value);
         }
 
-        private ObservableCollection<VATGroupModel> vATGroups;
-
         /// <summary>
         /// Gets or sets list with VAT groups.
         /// </summary>
         /// <date>02.07.2022.</date>
         public ObservableCollection<VATGroupModel> VATGroups
         {
-            get => vATGroups;
+            get => vATGroups == null ? vATGroups = new ObservableCollection<VATGroupModel>() : vATGroups;
             set => this.RaiseAndSetIfChanged(ref vATGroups, value);
         }
 
@@ -461,9 +388,55 @@ namespace AxisAvaloniaApp.ViewModels
         /// Gets or sets list with types of items.
         /// </summary>
         /// <date>02.07.2022.</date>
-        public ObservableCollection<ComboBoxItemModel> ItemsTypes { get; }
+        public ObservableCollection<ComboBoxItemModel> ItemsTypes
+        {
+            get
+            {
+                if (itemsTypes == null)
+                {
+                    itemsTypes = new ObservableCollection<ComboBoxItemModel>()
+                    {
+                        new ComboBoxItemModel()
+                        {
+                            Key = "strItemType_Standard",
+                            Value = EItemTypes.Standard,
+                        },
+                        new ComboBoxItemModel()
+                        {
+                            Key = "strItemType_Excise",
+                            Value = EItemTypes.Excise,
+                        },
+                        new ComboBoxItemModel()
+                        {
+                            Key = "strItemType_Work",
+                            Value = EItemTypes.Work,
+                        },
+                        new ComboBoxItemModel()
+                        {
+                            Key = "strItemType_Service",
+                            Value = EItemTypes.Service,
+                        },
+                        new ComboBoxItemModel()
+                        {
+                            Key = "strItemType_LottaryTicket",
+                            Value = EItemTypes.LottaryTicket,
+                        },
+                        new ComboBoxItemModel()
+                        {
+                            Key = "strItemType_Payment",
+                            Value = EItemTypes.Payment,
+                        },
+                        new ComboBoxItemModel()
+                        {
+                            Key = "strItemType_Other",
+                            Value = EItemTypes.Other,
+                        },
+                    };
+                }
 
-        private ObservableCollection<string> measures;
+                return itemsTypes;
+            }
+        }
 
         /// <summary>
         /// Gets or sets list with measures.
@@ -471,11 +444,23 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>03.07.2022.</date>
         public ObservableCollection<string> Measures
         {
-            get => measures;
+            get
+            {
+                if (measures == null)
+                {
+                    measures = new ObservableCollection<string>()
+                    {
+                        translationService.Localize("strMeasureItem"),
+                        translationService.Localize("strMeasureKilo"),
+                        translationService.Localize("strMeasureLiter"),
+                        translationService.Localize("strMeasureBox"),
+                    };
+                }
+                
+                return measures;
+            }
             set => this.RaiseAndSetIfChanged(ref measures, value);
         }
-
-        private ObservableCollection<GroupModel> partnersGroups;
 
         /// <summary>
         /// Gets or sets list with groups of partners.
@@ -483,11 +468,9 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public ObservableCollection<GroupModel> PartnersGroups
         {
-            get => partnersGroups;
+            get => partnersGroups == null ? partnersGroups = new ObservableCollection<GroupModel>() : partnersGroups;
             set => this.RaiseAndSetIfChanged(ref partnersGroups, value);
         }
-
-        private GroupModel selectedPartnersGroup;
 
         /// <summary>
         /// Gets or sets group of partners that is selected by user.
@@ -499,19 +482,15 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedPartnersGroup, value);
         }
 
-        private ObservableCollection<PartnerModel> partners;
-
         /// <summary>
         /// Gets or sets list with partners.
         /// </summary>
         /// <date>01.07.2022.</date>
         public ObservableCollection<PartnerModel> Partners
         {
-            get => partners;
+            get => partners == null ? partners = new ObservableCollection<PartnerModel>() : partners;
             set => this.RaiseAndSetIfChanged(ref partners, value);
         }
-
-        private PartnerModel selectedPartner;
 
         /// <summary>
         /// Gets or sets partner that is selected by user.
@@ -558,7 +537,10 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>03.06.2022.</date>
         public void DeleteItems(System.Collections.IList items)
         {
-            // TODO: initialize method
+            Task.Run(() =>
+            {
+                Items.Clear();
+            });
         }
 
         /// <summary>
@@ -572,13 +554,13 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// Sets partner of the operation when partner is selected by user.
         /// </summary>
         /// <param name="partner"></param>
         /// <date>03.06.2022.</date>
         public void AddPartner(PartnerModel partner)
         {
-            // TODO: initialize method
+            OperationPartner = partner;
         }
 
         /// <summary>

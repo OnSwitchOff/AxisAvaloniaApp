@@ -56,7 +56,7 @@ namespace AxisAvaloniaApp.Models
         /// </summary>
         /// <param name="vATGroup">Data of VAT group.</param>
         /// <date>25.03.2022.</date>
-        public static explicit operator DataBase.Entities.VATGroups.VATGroup(VATGroupModel vATGroup)
+        public static implicit operator DataBase.Entities.VATGroups.VATGroup(VATGroupModel vATGroup)
         {
             DataBase.Entities.VATGroups.VATGroup vatgroup = DataBase.Entities.VATGroups.VATGroup.Create(vATGroup.Name, (decimal)vATGroup.Value);
             vatgroup.Id = vATGroup.Id;
@@ -69,7 +69,7 @@ namespace AxisAvaloniaApp.Models
         /// </summary>
         /// <param name="vATGroup">Data of VAT group from database.</param>
         /// <date>25.03.2022.</date>
-        public static explicit operator VATGroupModel(DataBase.Entities.VATGroups.VATGroup vATGroup)
+        public static implicit operator VATGroupModel(DataBase.Entities.VATGroups.VATGroup vATGroup)
         {
             VATGroupModel vatgroup = new VATGroupModel()
             {

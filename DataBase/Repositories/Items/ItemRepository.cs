@@ -1,4 +1,5 @@
 ﻿using DataBase.Entities.Items;
+using Microinvest.CommonLibrary.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,6 +111,17 @@ namespace DataBase.Repositories.Items
                     Items.
                     Where(i => i.Group.Id == groupId).
                     AsAsyncEnumerable();
+        }
+
+        /// <summary>
+        /// Gets list of items in according to status of item.
+        /// </summary>
+        /// <param name="status">Status of item.</param>
+        /// <returns>List of items.</returns>
+        /// <date>17.06.2022.</date>
+        public IAsyncEnumerable<Item> GetItemsAsync(ENomenclatureStatuses status = ENomenclatureStatuses.Active)
+        {
+            return databaseContext.Items.Where(i => (i.Status == ENomenclatureStatuses.All || i.Status == status)).Include(i => i.Group).Include(i => i.Vatgroup).AsAsyncEnumerable();
         }
 
         /// <summary>

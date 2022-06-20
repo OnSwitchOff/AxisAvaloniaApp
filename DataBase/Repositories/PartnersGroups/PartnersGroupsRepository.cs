@@ -1,4 +1,5 @@
 ﻿using DataBase.Entities.PartnersGroups;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -100,10 +101,7 @@ namespace DataBase.Repositories.PartnersGroups
         /// <date>01.04.2022.</date>
         public async Task<List<PartnersGroup>> GetPartnersGroupsAsync()
         {
-            return await Task.Run(() =>
-            {
-                return databaseContext.PartnersGroups.ToList();
-            });
+            return await databaseContext.PartnersGroups.ToListAsync();
         }
     }
 }

@@ -72,7 +72,7 @@ namespace DataBase.Repositories.Partners
         /// <date>28.03.2022.</date>
         public IAsyncEnumerable<Partner> GetParnersAsync(ENomenclatureStatuses status)
         {
-            return databaseContext.Partners.Where(x => x.Status == status).Include(p => p.Group).AsAsyncEnumerable();
+            return databaseContext.Partners.Where(x => (x.Status == ENomenclatureStatuses.All || x.Status == status)).Include(p => p.Group).AsAsyncEnumerable();
         }
 
         /// <summary>

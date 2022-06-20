@@ -1,4 +1,5 @@
 ﻿using DataBase.Entities.Items;
+using Microinvest.CommonLibrary.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -54,6 +55,14 @@ namespace DataBase.Repositories.Items
         /// <returns>List of items.</returns>
         /// <date>30.03.2022.</date>
         IAsyncEnumerable<Item> GetItemsByGroupIdAsync(int groupId);
+
+        /// <summary>
+        /// Gets list of items in according to status of item.
+        /// </summary>
+        /// <param name="status">Status of item.</param>
+        /// <returns>List of items.</returns>
+        /// <date>17.06.2022.</date>
+        IAsyncEnumerable<Item> GetItemsAsync(ENomenclatureStatuses status = ENomenclatureStatuses.Active);
 
         /// <summary>
         /// Adds new item to table of items.

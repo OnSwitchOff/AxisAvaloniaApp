@@ -97,9 +97,9 @@ namespace DataBase.Repositories.ItemsGroups
         /// </summary>
         /// <returns>Returns list with groups of items.</returns>
         /// <date>01.04.2022.</date>
-        public Task<List<ItemsGroup>> GetItemsGroupsAsync()
+        public async Task<List<ItemsGroup>> GetItemsGroupsAsync()
         {
-            return databaseContext.ItemsGroups.ToListAsync();
+            return await databaseContext.ItemsGroups.ToListAsync();
         }
     }
 }

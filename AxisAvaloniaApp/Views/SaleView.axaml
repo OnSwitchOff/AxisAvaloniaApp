@@ -51,7 +51,7 @@
     </Style>
     
     <Style Selector="TreeViewItem">
-      <Setter Property="IsExpanded" Value="True" />
+      <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
     </Style>
   </UserControl.Styles>
   
@@ -106,7 +106,7 @@
                                     Text="{Binding OperationPartnerString, Mode=TwoWay}"
                                     ExplanationKey = "EnterPartnerData" 
                                     PropertyChanged="TextBoxPartner_PropertyChanged"
-									MinWidth="200"/>
+                                    MinWidth="200"/>
             <Button Grid.Column="2"
                     Name="buttonLockPartner"
                     CornerRadius="0, 3, 3, 0"
@@ -215,14 +215,14 @@
                 <controlsEx:AxisTextBlock LocalizeTextKey="strBarcode"/>
               </DataGridTextColumn.Header>
             </DataGridTextColumn>
-            <DataGridTextColumn Binding="{Binding Name}" 
+            <controlsEx:FocusableDataGridTextColumn Binding="{Binding Name}" 
                                 Width="*"
                                 MinWidth="200"
                                 DisplayIndex="3">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strGoods"/>
               </DataGridTextColumn.Header>
-            </DataGridTextColumn>
+            </controlsEx:FocusableDataGridTextColumn>
             <DataGridTemplateColumn DisplayIndex="4">
               <DataGridTemplateColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strMeasure"/>

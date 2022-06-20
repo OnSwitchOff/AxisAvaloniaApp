@@ -22,8 +22,6 @@ namespace AxisAvaloniaApp.Models
         private EItemTypes itemType;
         private ENomenclatureStatuses status;
 
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemModel"/> class.
         /// </summary>
@@ -153,9 +151,6 @@ namespace AxisAvaloniaApp.Models
             get => this.status;
             set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
-
-
-
 
         /// <summary>
         /// Casts SearchService.Models.ProductModel object to ItemModel.

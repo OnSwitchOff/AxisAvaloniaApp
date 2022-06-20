@@ -30,6 +30,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
             Background = Avalonia.Media.Brushes.White;
 
             this.translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            this.translationService.LanguageChanged += Localize;
             this.explanationService = Splat.Locator.Current.GetRequiredService<IExplanationService>();
             this.validationService = Splat.Locator.Current.GetRequiredService<IValidationService>();
         }
@@ -106,7 +107,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         /// <date>09.06.2022.</date>
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
-            this.translationService.LanguageChanged += Localize;
+            //this.translationService.LanguageChanged += Localize;
             base.OnAttachedToVisualTree(e);
         }
 
@@ -117,7 +118,7 @@ namespace AxisAvaloniaApp.UserControls.Extensions
         /// <date>09.06.2022.</date>
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {
-            this.translationService.LanguageChanged -= Localize;
+            //this.translationService.LanguageChanged -= Localize;
             base.OnDetachedFromVisualTree(e);
         }
 

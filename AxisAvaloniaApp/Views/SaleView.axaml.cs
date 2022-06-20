@@ -3,18 +3,24 @@ using Avalonia.Controls;
 using Avalonia.Controls.Generators;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Services.Serialization;
 using AxisAvaloniaApp.UserControls.Extensions;
+using AxisAvaloniaApp.ViewModels;
+using DynamicData;
 using Microinvest.CommonLibrary.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace AxisAvaloniaApp.Views
 {
@@ -42,6 +48,7 @@ namespace AxisAvaloniaApp.Views
             dataContext = Splat.Locator.Current.GetRequiredService<ViewModels.SaleViewModel>();
             this.DataContext = dataContext;
             dataContext.ViewClosing += SerializeVisualData;
+            dataContext.PropertyChanged += DataContext_PropertyChanged;
 
             saleDataGridColumns = new Dictionary<int, ESerializationKeys>()
             {
@@ -110,6 +117,84 @@ namespace AxisAvaloniaApp.Views
             }
         }
 
+        private void DataContext_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(SaleViewModel.OperationPartner):
+                    saleGrid.Focus();
+                    saleGrid.BeginEdit();
+
+                    //var focused = FocusManager.Instance.Current;
+                    var currentRow = saleGrid.FindDescendantOfType<DataGridRowsPresenter>()
+                        .Children.OfType<DataGridRow>()
+                        .FirstOrDefault(r => r.FindDescendantOfType<DataGridCellsPresenter>()
+                            .Children.Any(p => p.Classes.Contains(":current")));
+                    var item = currentRow?.DataContext;
+
+                    
+
+                    //var el = typeof(DataGridColumn).GetField("_editingElement", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    
+
+                    //var presenter = saleGrid.Columns[4].GetCellContent(currentRow);
+
+                    var currentCell = currentRow?.FindDescendantOfType<DataGridCellsPresenter>().Children
+                        .OfType<DataGridCell>().FirstOrDefault(p => p.Classes.Contains(":current"));
+
+                    IEnumerable<DataGridCell> currentCellList = currentRow?.FindDescendantOfType<DataGridCellsPresenter>().Children
+                        .OfType<DataGridCell>();
+                    var cell = currentCellList.ElementAt(3);
+                    cell.Focus();
+
+                    var keyboard = KeyboardDevice.Instance;
+                    var inputManager = InputManager.Instance;
+                    MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
+                    inputManager.ProcessInput(new RawInputEventArgs(mouseDevice, (ulong)DateTime.Now.Ticks, null));
+                    //inputManager.ProcessInput(new RawKeyEventArgs(keyboard, (ulong)DateTime.Now.Ticks, null, RawKeyEventType.KeyDown, Key.Enter, RawInputModifiers.None));
+
+
+                    //var method = saleGrid.Columns[3].GetType().GetMethod("GenerateEditingElementDirect", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    //var textBox = el.GetValue(saleGrid.Columns[3]);
+                    //var tb = method.Invoke(saleGrid.Columns[3], new object[] { cell, string.Empty });
+                    //(tb as TextBox).Background = Brushes.Red; //.Focus();
+
+                    //FocusableDataGridTextColumn focusableData = saleGrid.Columns[3] as FocusableDataGridTextColumn;
+                    //if (saleGrid.Columns[3] is FocusableDataGridTextColumn textColumn)
+                    //{
+                    //    textColumn.Test(cell, "");
+                    //}
+
+                    //Keyboard.ClearFocus();
+
+                    //FocusManager.SetFocusedElement(cell, cell);
+                    //Keyboard.Focus(cell);
+
+                    //var EditingColumnIndex = saleGrid.GetType().GetProperty("EditingColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    //EditingColumnIndex.SetValue(saleGrid, 3);
+                    //var CurrentSlot = saleGrid.GetType().GetProperty("CurrentSlot", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    //CurrentSlot.SetValue(saleGrid, 3);
+
+                    //var CurrentColumnIndex = saleGrid.GetType().GetProperty("CurrentColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    //CurrentColumnIndex.SetValue(saleGrid, 3);
+
+                    //var EditingRow = saleGrid.GetType().GetProperty("EditingRow", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    //EditingRow.SetValue(saleGrid, currentRow);
+
+
+                    
+                    FocusManager.Instance.Focus(cell, NavigationMethod.Unspecified);
+                    //MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
+                    mouseDevice.Capture(cell);
+                    mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs(mouseDevice, 0, null));
+                    //mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs())
+                    cell.Focus();
+
+                    //FocusManager.Instance.Focus(cell);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Subscribes to LanguageChanged event when the PaymentButton is added to a rooted visual tree.
         /// </summary>
@@ -135,6 +220,7 @@ namespace AxisAvaloniaApp.Views
         private void DeserializeVisualData()
         {
             saleGrid = this.FindControl<DataGrid>("SaleGrid");
+            saleGrid.BeginningEdit += fdfsdf;
             foreach (var column in saleGrid.Columns)
             {
                 if (saleDataGridColumns.ContainsKey(column.DisplayIndex))
@@ -172,6 +258,11 @@ namespace AxisAvaloniaApp.Views
             partnersGroupsTreeView.ItemContainerGenerator.Materialized += fsdf1;
             partnersGroupsTreeView.ItemContainerGenerator.Recycled += fsdf2;
             //partnersGroupsTreeView.AttachedToVisualTree += trerfsd;
+        }
+
+        private void fdfsdf(object? sender, DataGridBeginningEditEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         private void dsadsa(object? sender, SelectionChangedEventArgs e)
@@ -213,7 +304,8 @@ namespace AxisAvaloniaApp.Views
 
         private void SerializeVisualData(string viewId)
         {
-            (this.DataContext as ViewModels.OperationViewModelBase).ViewClosing -= SerializeVisualData;
+            dataContext.ViewClosing -= SerializeVisualData;
+            dataContext.PropertyChanged -= DataContext_PropertyChanged;
 
             EAdditionalSaleTableColumns tableColumns = 0;
 

@@ -1,12 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using DataBase.Entities.Interfaces;
+using System.Collections.Generic;
 
 namespace DataBase.Entities.ItemsGroups
 {
-    public class ItemsGroup : Entity
+    public class ItemsGroup : Entity, INomenclaturesGroup
     {
+        /// <summary>
+        /// Gets or sers Id of group.
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets path of group.
+        /// </summary>
         public string Path { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets name of group.
+        /// </summary>
         public string Name { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets discount of group.
+        /// </summary>
         public int Discount { get; set; }
 
         public List<Items.Item> Items { get; set; } = new List<Items.Item>();
