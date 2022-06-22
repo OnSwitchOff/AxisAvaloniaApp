@@ -6,12 +6,10 @@ using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Serialization;
 using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.Services.Translation;
+using AxisAvaloniaApp.Services.Validation;
 using AxisAvaloniaApp.UserControls.Models;
 using DataBase.Entities.Interfaces;
-using DataBase.Entities.Items;
-using DataBase.Entities.ItemsGroups;
 using DataBase.Entities.PartnersGroups;
-using DataBase.Repositories.ApplicationLog;
 using DataBase.Repositories.Items;
 using DataBase.Repositories.ItemsGroups;
 using DataBase.Repositories.Partners;
@@ -22,9 +20,9 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -32,9 +30,13 @@ namespace AxisAvaloniaApp.ViewModels
     {
         private readonly ISettingsService settingsService;
         private readonly ISerializationService serializationService;
+        private readonly ISerializationService serializationItems;
+        private readonly ISerializationService serializationPartners;
         private readonly IPaymentService paymentService;
         private readonly ITranslationService translationService;
         private readonly ILoggerService loggerService;
+        private readonly IValidationService validationService;
+
         private readonly IPartnerRepository partnerRepository;
         private readonly IItemsGroupsRepository itemsGroupsRepository;
         private readonly IItemRepository itemRepository;
@@ -49,7 +51,7 @@ namespace AxisAvaloniaApp.ViewModels
         private string uSN;
         private string totalAmount;
         private ObservableCollection<OperationItemModel> order;
-        private ObservableCollection<OperationItemModel> selectedOrderRecord;
+        private OperationItemModel selectedOrderRecord;
         private double amountToPay;
         private double change;
 
@@ -58,6 +60,7 @@ namespace AxisAvaloniaApp.ViewModels
         private GroupModel selectedItemsGroup;
         private ObservableCollection<ItemModel> items;
         private ItemModel selectedItem;
+        private string itemString;
         private ObservableCollection<VATGroupModel> vATGroups;
         private ObservableCollection<ComboBoxItemModel> itemsTypes;
         private ObservableCollection<string> measures;
@@ -66,18 +69,28 @@ namespace AxisAvaloniaApp.ViewModels
         private ObservableCollection<GroupModel> partnersGroups;
         private GroupModel selectedPartnersGroup;
 
+        private Avalonia.Threading.DispatcherTimer searchPartnerTimer;
+        private Avalonia.Threading.DispatcherTimer searchItemsTimer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SaleViewModel"/> class.
         /// </summary>
         public SaleViewModel()
         {
             settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
+
             serializationService = Splat.Locator.Current.GetRequiredService<ISerializationService>();
             serializationService.InitSerializationData(ESerializationGroups.Sale);
+            serializationItems = Splat.Locator.Current.GetRequiredService<ISerializationService>();
+            serializationItems.InitSerializationData(ESerializationGroups.ItemsNomenclature);
+            serializationPartners = Splat.Locator.Current.GetRequiredService<ISerializationService>();
+            serializationPartners.InitSerializationData(ESerializationGroups.PartnersNomenclature);
+
             paymentService = Splat.Locator.Current.GetRequiredService<IPaymentService>();
             translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
             translationService.LanguageChanged += Application_PropertyChanged;
             loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
+            validationService = Splat.Locator.Current.GetRequiredService<IValidationService>();
 
             itemsGroupsRepository = Splat.Locator.Current.GetRequiredService<IItemsGroupsRepository>();
             itemRepository = Splat.Locator.Current.GetRequiredService<IItemRepository>();
@@ -91,107 +104,36 @@ namespace AxisAvaloniaApp.ViewModels
             IsSaleTitleReadOnly = true;
             IsNomenclaturePanelVisible = true;
 
-            IsChoiceOfPartnerEnabled = (bool)serializationService[ESerializationKeys.TbPartnerEnabled];
-            if ((int)serializationService[ESerializationKeys.TbPartnerID] > 0)
-            {
-                OperationPartner = partnerRepository.GetPartnerByIdAsync((int)serializationService[ESerializationKeys.TbPartnerID]).GetAwaiter().GetResult();
-            }
+            DeserializeData();
 
-            USN = paymentService.FiscalDevice.ReceiptNumber;
-            TotalAmount = 0.ToString(settingsService.PriceFormat);
-            Order.Add(new OperationItemModel());
+            searchPartnerTimer = new Avalonia.Threading.DispatcherTimer();
+            searchPartnerTimer.Interval = TimeSpan.FromSeconds(1.5);
+            searchPartnerTimer.Tick += FilteredPartners;
 
-            ItemsGroups = GetGroups(itemsGroupsRepository.GetItemsGroupsAsync().GetAwaiter().GetResult());
-            FillItems();
-            FillMeasures();
-            PartnersGroups = GetGroups<PartnersGroup>(partnersGroupsRepository.GetPartnersGroupsAsync().GetAwaiter().GetResult());
-            FillPartners();
+            searchItemsTimer = new Avalonia.Threading.DispatcherTimer();
+            searchItemsTimer.Interval = TimeSpan.FromSeconds(1.5);
+            searchItemsTimer.Tick += FilteredItems;
 
-            FillVATs();
+            this.PropertyChanged += SaleViewModel_PropertyChanged;
         }
-
-        private async void FillMeasures()
-        {
-            foreach (string measure in await itemRepository.GetMeasuresAsync())
-            {
-                if (!Measures.Contains(measure))
-                {
-                    Measures.Add(measure);
-                }
-            }
-        }
-
-        private async void FillVATs()
-        {
-            await foreach (var vAT in vATsRepository.GetVATGroupsAsync())
-            {
-                VATGroups.Add(vAT);
-            }
-        }
-
-        protected override void CloseView()
-        {
-            translationService.LanguageChanged -= Application_PropertyChanged;
-
-            base.CloseView();
-        }
-
-        private void Application_PropertyChanged()
-        {
-            Measures[0] = translationService.Localize("strMeasureItem");
-            Measures[1] = translationService.Localize("strMeasureKilo");
-            Measures[2] = translationService.Localize("strMeasureLiter");
-            Measures[3] = translationService.Localize("strMeasureBox");
-        }
-
-        private async void FillItems()
-        {
-            await foreach (var item in itemRepository.GetItemsAsync())
-            {
-                Items.Add((ItemModel)item);
-            }
-        }
-
-        private async void FillPartners()
-        {
-            await foreach (var partner in partnerRepository.GetParnersAsync())
-            {
-                Partners.Add(partner);
-            }
-        }
-
-        private ObservableCollection<GroupModel> GetGroups<T>(List<T> groups, GroupModel parentGroup = null, int pathLenght = 3, int startIndex = 0, string parentGroupPath = "")
-            where T : INomenclaturesGroup
-        {
-            ObservableCollection<GroupModel> groupsList = new ObservableCollection<GroupModel>();
-            GroupModel group;
-
-            for (; startIndex < groups.Count; startIndex++)
-            {
-                if ((groups[startIndex].Path.Length == pathLenght || groups[startIndex].Path.Equals("-1")) && (string.IsNullOrEmpty(parentGroupPath) || groups[startIndex].Path.StartsWith(parentGroupPath)))
-                {
-                    group = new GroupModel()
-                    { 
-                        Id = groups[startIndex].Id,
-                        Name = groups[startIndex].Name,
-                        Path = groups[startIndex].Path,
-                        ParentGroup = parentGroup,
-                    };
-
-                    groupsList.Add(group);
-
-                    group.SubGroups = GetGroups(groups, group, pathLenght + 3, startIndex + 1, group.Path);
-                }
-            }
-
-            return groupsList;
-        }
-
+        
         /// <summary>
-        /// Gets service t oserialize/deserialize visual data of the main content (work area).
+        /// Gets service to serialize/deserialize visual data of the main content (work area).
         /// </summary>
         /// <date>17.06.2022.</date>
         public ISerializationService SerializationService => serializationService;
+
+        /// <summary>
+        /// Gets service to serialize/deserialize visual data of the panel with items.
+        /// </summary>
+        /// <date>20.06.2022.</date>
+        public ISerializationService SerializationItems => serializationItems;
+
+        /// <summary>
+        /// Gets service to serialize/deserialize visual data of the panel with partners.
+        /// </summary>
+        /// <date>20.06.2022.</date>
+        public ISerializationService SerializationPartners => serializationPartners;
 
         /// <summary>
         /// Gets or sets value indicating whether main content (work area) is visible.
@@ -220,15 +162,7 @@ namespace AxisAvaloniaApp.ViewModels
         public bool IsChoiceOfPartnerEnabled
         {
             get => isChoiceOfPartnerEnabled;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref isChoiceOfPartnerEnabled, value);
-
-                if (!value && OperationPartner == null)
-                {
-                    OperationPartner = partnerRepository.GetPartnerByIdAsync(1).GetAwaiter().GetResult();
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref isChoiceOfPartnerEnabled, value);
         }
 
         /// <summary>
@@ -239,7 +173,7 @@ namespace AxisAvaloniaApp.ViewModels
         {
             get => operationPartnerString;
             set => this.RaiseAndSetIfChanged(ref operationPartnerString, value);
-        }        
+        }
 
         /// <summary>
         /// Gets or sets partner that is used in the operation.
@@ -248,19 +182,7 @@ namespace AxisAvaloniaApp.ViewModels
         public PartnerModel OperationPartner
         {
             get => operationPartner;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref operationPartner, value);
-
-                if (operationPartner == null)
-                {
-                    OperationPartnerString = string.Empty;
-                }
-                else
-                {
-                    OperationPartnerString = operationPartner.Name;
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref operationPartner, value);
         }
 
         /// <summary>
@@ -289,7 +211,16 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>26.05.2022.</date>
         public ObservableCollection<OperationItemModel> Order
         {
-            get => order == null ? order = new ObservableCollection<OperationItemModel>() : order;
+            get
+            {
+                if (order == null)
+                {
+                    order = new ObservableCollection<OperationItemModel>();
+                    order.CollectionChanged += OrderList_CollectionChanged;
+                }
+
+                return order;
+            }
             set => this.RaiseAndSetIfChanged(ref order, value);
         }
 
@@ -297,11 +228,17 @@ namespace AxisAvaloniaApp.ViewModels
         /// Gets or sets item that is selected by user.
         /// </summary>
         /// <date>27.05.2022.</date>
-        public ObservableCollection<OperationItemModel> SelectedOrderRecord
+        public OperationItemModel SelectedOrderRecord
         {
             get => selectedOrderRecord;
             set => this.RaiseAndSetIfChanged(ref selectedOrderRecord, value);
         }
+
+        /// <summary>
+        /// Occurs when property of item in order list was changed.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        public event Action OrderChanged;
 
         /// <summary>
         /// Gets or sets amount to payment.
@@ -339,7 +276,17 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public ObservableCollection<GroupModel> ItemsGroups
         {
-            get => itemsGroups == null ? itemsGroups = new ObservableCollection<GroupModel>() : itemsGroups;
+            get => itemsGroups == null ?
+                itemsGroups = new ObservableCollection<GroupModel>()
+                {
+                    new GroupModel()
+                    {
+                        Name = translationService.Localize("strAll"),
+                        Path = "-2",
+                        IsExpanded = true,
+                    },
+                } :
+                itemsGroups;
             set => this.RaiseAndSetIfChanged(ref itemsGroups, value);
         }
 
@@ -349,10 +296,10 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public GroupModel SelectedItemsGroup
         {
-            get => selectedItemsGroup;
+            get => selectedItemsGroup == null ? selectedItemsGroup = ItemsGroups[0] : selectedItemsGroup;
             set => this.RaiseAndSetIfChanged(ref selectedItemsGroup, value);
         }
-        
+
 
         /// <summary>
         /// Gets or sets list with items.
@@ -372,6 +319,16 @@ namespace AxisAvaloniaApp.ViewModels
         {
             get => selectedItem;
             set => this.RaiseAndSetIfChanged(ref selectedItem, value);
+        }
+
+        /// <summary>
+        /// Gets or sets key to filter items.
+        /// </summary>
+        /// <date>21.06.2022.</date>
+        public string ItemString
+        {
+            get => itemString;
+            set => this.RaiseAndSetIfChanged(ref itemString, value);
         }
 
         /// <summary>
@@ -456,7 +413,7 @@ namespace AxisAvaloniaApp.ViewModels
                         translationService.Localize("strMeasureBox"),
                     };
                 }
-                
+
                 return measures;
             }
             set => this.RaiseAndSetIfChanged(ref measures, value);
@@ -468,7 +425,17 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public ObservableCollection<GroupModel> PartnersGroups
         {
-            get => partnersGroups == null ? partnersGroups = new ObservableCollection<GroupModel>() : partnersGroups;
+            get => partnersGroups == null ?
+                partnersGroups = new ObservableCollection<GroupModel>()
+                {
+                    new GroupModel()
+                    {
+                        Name = translationService.Localize("strAll"),
+                        Path = "-2",
+                        IsExpanded = true,
+                    },
+                } :
+                partnersGroups;
             set => this.RaiseAndSetIfChanged(ref partnersGroups, value);
         }
 
@@ -478,7 +445,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public GroupModel SelectedPartnersGroup
         {
-            get => selectedPartnersGroup;
+            get => selectedPartnersGroup == null ? selectedPartnersGroup = PartnersGroups[0] : selectedPartnersGroup;
             set => this.RaiseAndSetIfChanged(ref selectedPartnersGroup, value);
         }
 
@@ -503,6 +470,287 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
         /// <summary>
+        /// Downloads data from the database.
+        /// </summary>
+        /// <date>20.06.2022.</date>
+        private async void DeserializeData()
+        {
+            IsChoiceOfPartnerEnabled = (bool)serializationService[ESerializationKeys.TbPartnerEnabled];
+            if ((int)serializationService[ESerializationKeys.TbPartnerID] > 0)
+            {
+                //OperationPartner = partnerRepository.GetPartnerByIdAsync((int)serializationService[ESerializationKeys.TbPartnerID]).GetAwaiter().GetResult();
+                //OperationPartnerString = OperationPartner.Name;
+            }
+
+            USN = paymentService.FiscalDevice.ReceiptNumber;
+            TotalAmount = 0.ToString(settingsService.PriceFormat);
+            Order.Add(new OperationItemModel());
+
+            SelectedItemsGroup = GetGroups(
+                ItemsGroups[0].SubGroups,
+                itemsGroupsRepository.GetItemsGroupsAsync().GetAwaiter().GetResult(),
+                (GroupModel)itemsGroupsRepository.GetGroupByIdAsync((int)serializationItems[ESerializationKeys.SelectedGroupId]).GetAwaiter().GetResult(),
+                ItemsGroups[0]);
+
+            await foreach (var item in itemRepository.GetItemsAsync())
+            {
+                Items.Add((ItemModel)item);
+            }
+
+            foreach (string measure in await itemRepository.GetMeasuresAsync())
+            {
+                if (!Measures.Contains(measure))
+                {
+                    Measures.Add(measure);
+                }
+            }
+
+            SelectedPartnersGroup = GetGroups<PartnersGroup>(
+                PartnersGroups[0].SubGroups,
+                partnersGroupsRepository.GetPartnersGroupsAsync().GetAwaiter().GetResult(),
+                (GroupModel)partnersGroupsRepository.GetGroupByIdAsync((int)serializationPartners[ESerializationKeys.SelectedGroupId]).GetAwaiter().GetResult(),
+                PartnersGroups[0]);
+
+            await foreach (var partner in partnerRepository.GetParnersAsync())
+            {
+                Partners.Add(partner);
+            }
+
+            await foreach (var vAT in vATsRepository.GetVATGroupsAsync())
+            {
+                VATGroups.Add(vAT);
+            }
+        }
+
+        /// <summary>
+        /// Fills list with groups.
+        /// </summary>
+        /// <typeparam name="T">Type of collection.</typeparam>
+        /// <param name="groupsList">List of groups to fill.</param>
+        /// <param name="groups">List with groups from the database.</param>
+        /// <param name="selectedGroup">Group selected by user last time.</param>
+        /// <param name="parentGroup">Parent group.</param>
+        /// <param name="pathLength">Lenght of inserted group.</param>
+        /// <param name="startIndex">Index to start iterate of list with groups from the database.</param>
+        /// <param name="parentGroupPath">Path of the parent group.</param>
+        /// <returns>Returns selected group if it exists; otherwise returns null.</returns>
+        /// <date>20.06.2022.</date>
+        private GroupModel GetGroups<T>(ObservableCollection<GroupModel> groupsList, List<T> groups, GroupModel selectedGroup, GroupModel parentGroup = null, int pathLength = 3, int startIndex = 0, string parentGroupPath = "")
+            where T : INomenclaturesGroup
+        {
+            GroupModel group = null;
+
+            for (; startIndex < groups.Count; startIndex++)
+            {
+                if ((groups[startIndex].Path.Length == pathLength || groups[startIndex].Path.Equals("-1")) && (string.IsNullOrEmpty(parentGroupPath) || groups[startIndex].Path.StartsWith(parentGroupPath)))
+                {
+                    group = new GroupModel()
+                    {
+                        Id = groups[startIndex].Id,
+                        Name = groups[startIndex].Name,
+                        Path = groups[startIndex].Path,
+                        ParentGroup = parentGroup,
+                        IsExpanded = selectedGroup != null && selectedGroup.Path.StartsWith(groups[startIndex].Path),
+                    };
+
+                    groupsList.Add(group);
+
+                    GroupModel tmpGroup = GetGroups(group.SubGroups, groups, selectedGroup, group, pathLength + 3, startIndex + 1, group.Path);
+                    if (tmpGroup != null)
+                    {
+                        group = tmpGroup;
+                    }
+                }
+            }
+
+            return (group != null && selectedGroup != null && group.Id == selectedGroup.Id) ? group : null;
+        }
+
+        /// <summary>
+        /// Localizes some fields when language of property is changed.
+        /// </summary>
+        /// <date>30.05.2022.</date>
+        private void Application_PropertyChanged()
+        {
+            Measures[0] = translationService.Localize("strMeasureItem");
+            Measures[1] = translationService.Localize("strMeasureKilo");
+            Measures[2] = translationService.Localize("strMeasureLiter");
+            Measures[3] = translationService.Localize("strMeasureBox");
+
+            ItemsGroups[0].Name = translationService.Localize("strAll");
+            PartnersGroups[0].Name = translationService.Localize("strAll");
+        }
+
+        /// <summary>
+        /// Updates dependent property when main property was changed.
+        /// </summary>
+        /// <param name="sender">SaleViewModel</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        /// <date>21.06.2022.</date>
+        private void SaleViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(IsChoiceOfPartnerEnabled):
+                    if (!IsChoiceOfPartnerEnabled && OperationPartner == null)
+                    {
+                        OperationPartner = partnerRepository.GetPartnerByIdAsync(1).GetAwaiter().GetResult();
+                    }
+                    break;
+                case nameof(OperationPartner):
+                    if (OperationPartner == null)
+                    {
+                        OperationPartnerString = string.Empty;
+                    }
+                    else
+                    {
+                        OperationPartnerString = operationPartner.Name;
+                        OrderChanged?.Invoke();
+                    }
+
+                    if (searchPartnerTimer != null && searchPartnerTimer.IsEnabled)
+                    {
+                        searchPartnerTimer.Stop();
+                    }
+                    break;
+                case nameof(OperationPartnerString):
+                    if (searchPartnerTimer != null &&
+                        !searchPartnerTimer.IsEnabled &&
+                        (OperationPartner == null || !OperationPartner.Name.Equals(operationPartnerString)))
+                    {
+                        searchPartnerTimer.Start();
+                    }
+                    break;
+                case nameof(ItemString):
+                    if (searchItemsTimer != null &&
+                        !searchItemsTimer.IsEnabled &&
+                        !string.IsNullOrEmpty(ItemString) &&
+                        (SelectedOrderRecord == null || !SelectedOrderRecord.Name.Equals(ItemString)))
+                    {
+                        searchItemsTimer.Start();
+                    }
+                    break;
+                case nameof(SelectedItemsGroup):
+                    // TODO
+                    break;
+                case nameof(SelectedPartnersGroup):
+                    // TODO
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets number of row when order list is changing.
+        /// </summary>
+        /// <param name="sender">ObservableCollection<OperationItemModel></param>
+        /// <param name="e">NotifyCollectionChangedEventArgs.</param>
+        /// <date>21.06.2022.</date>
+        private void OrderList_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (OperationItemModel itemModel in e.NewItems)
+                    {
+                        itemModel.RecordId = Order.Count;
+
+                        itemModel.PropertyChanged -= OrderItem_PropertyChanged;
+                        itemModel.PropertyChanged += OrderItem_PropertyChanged;
+                    }
+
+                    TotalAmount = Order.Sum(i => i.Amount).ToString(settingsService.PriceFormat);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (OperationItemModel itemModel in e.OldItems)
+                    {
+                        itemModel.PropertyChanged -= OrderItem_PropertyChanged;
+                    }
+
+
+                    for (int i = e.OldStartingIndex; i < Order.Count; i++)
+                    {
+                        Order[i].RecordId = i + 1;
+                    }
+
+                    TotalAmount = Order.Sum(i => i.Amount).ToString(settingsService.PriceFormat);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets total amount when amount by record is changed.
+        /// </summary>
+        /// <param name="sender">OperationItemModel.</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        /// <date>22.06.2022.</date>
+        private void OrderItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(OperationItemModel.Amount):
+                    TotalAmount = Order.Sum(i => i.Amount).ToString(settingsService.PriceFormat);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Filters list with partners in according to key.
+        /// </summary>
+        /// <param name="sender">DispatcherTimer.</param>
+        /// <param name="e">EventArgs</param>
+        /// <date>21.06.2022.</date>
+        private async void FilteredPartners(object? sender, EventArgs e)
+        {
+            Partners.Clear();
+
+            await foreach (var partner in partnerRepository.GetParnersAsync(OperationPartnerString))
+            {
+                Partners.Add(partner);
+            }
+        }
+
+        /// <summary>
+        /// Filters list with items in according to key.
+        /// </summary>
+        /// <param name="sender">DispatcherTimer.</param>
+        /// <param name="e">EventArgs</param>
+        /// <date>21.06.2022.</date>
+        private async void FilteredItems(object? sender, EventArgs e)
+        {
+            Items.Clear();
+
+            await foreach (var item in itemRepository.GetItemsAsync(ItemString))
+            {
+                Items.Add((ItemModel)item);
+            }
+        }
+
+        /// <summary>
+        /// Serializes visual data.
+        /// </summary>
+        /// <date>30.05.2022.</date>
+        protected override void CloseView()
+        {
+            translationService.LanguageChanged -= Application_PropertyChanged;
+            this.PropertyChanged -= SaleViewModel_PropertyChanged;
+
+            serializationService[ESerializationKeys.TbPartnerEnabled].Value = IsChoiceOfPartnerEnabled.ToString();
+            if (OperationPartner != null)
+            {
+                serializationService[ESerializationKeys.TbPartnerID].Value = OperationPartner.Id.ToString();
+            }
+            serializationService.Update();
+
+            serializationItems[ESerializationKeys.SelectedGroupId].Value = SelectedItemsGroup.Id.ToString();
+            serializationItems.Update();
+
+            serializationPartners[ESerializationKeys.SelectedGroupId].Value = SelectedPartnersGroup.Id.ToString();
+            serializationPartners.Update();
+
+            base.CloseView();
+        }
+
+        /// <summary>
         /// Enables field to change title of the view.
         /// </summary>
         /// <date>26.05.2022.</date>
@@ -521,36 +769,58 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
         /// <summary>
-        /// Pay the order.
-        /// </summary>
-        /// <param name="paymentType">Type of payment.</param>
-        /// <date>30.05.2022.</date>
-        public void PaymentSale(EPaymentTypes paymentType)
-        {
-            // TODO: initialize method
-        }
-
-        /// <summary>
-        /// 
+        /// Deletes selected items from order list.
         /// </summary>
         /// <param name="items">List of items.</param>
         /// <date>03.06.2022.</date>
-        public void DeleteItems(System.Collections.IList items)
+        public void DeleteItemsFromOrder(System.Collections.IList items)
         {
-            Task.Run(() =>
+            for (int i = items.Count - 1; i >= 0; i--)
             {
-                Items.Clear();
-            });
+                if (items[i] is OperationItemModel operationItem && operationItem.Item.Id > 0)
+                {
+                    Order.Remove(operationItem);
+                }
+            }
         }
 
         /// <summary>
-        /// 
+        /// Adds items to order list.
         /// </summary>
         /// <param name="items">List of items.</param>
         /// <date>03.06.2022.</date>
         public void AddItems(System.Collections.IList items)
         {
-            // TODO: initialize method
+            foreach(ItemModel item in items)
+            {
+                OperationItemModel? tmpItem = Order.Contains(item);
+                if (tmpItem != null)
+                {
+                    tmpItem.Qty++;
+                    OrderChanged?.Invoke();
+                }
+                else
+                {
+                    if (SelectedOrderRecord != null)
+                    {
+                        SelectedOrderRecord.Item = item;
+                    }
+                    else
+                    {
+                        Order[Order.Count - 1].Item = item;                        
+                    }
+
+                    if (Order[Order.Count - 1].Item.Id != 0)
+                    {
+                        Order.Add(new OperationItemModel());
+                    }
+                }
+            }
+
+            if (searchItemsTimer != null && searchItemsTimer.IsEnabled)
+            {
+                searchItemsTimer.Stop();
+            }
         }
 
         /// <summary>
@@ -558,9 +828,60 @@ namespace AxisAvaloniaApp.ViewModels
         /// </summary>
         /// <param name="partner"></param>
         /// <date>03.06.2022.</date>
-        public void AddPartner(PartnerModel partner)
+        public void AddPartner(PartnerModel? partner)
         {
-            OperationPartner = partner;
+            if (partner == null || partner.Id == 0)
+            {
+                InitPartnerCreation(partner);
+            }
+            else
+            {
+                OperationPartner = partner;
+            }
+        }
+        private Avalonia.Threading.DispatcherTimer partnerTimer = new Avalonia.Threading.DispatcherTimer();
+
+        /// <summary>
+        /// Cancel edit of nomenclature and restore base state.
+        /// </summary>
+        /// <param name="key">Key to search partner.</param>
+        /// <date>03.06.2022.</date>
+        public void FindPartner(string key)
+        {
+            // TODO: initialize method
+
+            System.Diagnostics.Debug.WriteLine("FindPartner");
+        }
+
+        /// <summary>
+        /// Finds partner by number of card.
+        /// </summary>
+        /// <param name="cardNumber">Number of a card of partner.</param>
+        /// <date>21.06.2022.</date>
+        public async void FindPartnerByCardNumber(string cardNumber)
+        {
+            PartnerModel partner = await partnerRepository.GetPartnerByDiscountCardAsync(cardNumber);
+            if (partner == null)
+            {
+                partner = new PartnerModel();
+            }
+
+            if (partner.Id == 0)
+            {
+                partner.DiscountCardNumber = cardNumber;
+            }
+            
+            AddPartner(partner);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newPartner"></param>
+        /// <date>21.06.2022.</date>
+        private void InitPartnerCreation(PartnerModel newPartner)
+        {
+            
         }
 
         /// <summary>
@@ -615,13 +936,14 @@ namespace AxisAvaloniaApp.ViewModels
             SelectedItem.Codes.Remove(itemCode);
             // TODO: initialize method
         }
+        
 
         /// <summary>
-        /// Cancel edit of nomenclature and restore base state.
+        /// Pay the order.
         /// </summary>
-        /// <param name="key">Key to search partner.</param>
-        /// <date>03.06.2022.</date>
-        public void FindPartner(string key)
+        /// <param name="paymentType">Type of payment.</param>
+        /// <date>30.05.2022.</date>
+        public void PaymentSale(EPaymentTypes paymentType)
         {
             // TODO: initialize method
         }

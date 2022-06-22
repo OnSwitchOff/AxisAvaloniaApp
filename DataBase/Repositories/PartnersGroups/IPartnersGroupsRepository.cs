@@ -15,6 +15,14 @@ namespace DataBase.Repositories.PartnersGroups
         Task<string> GetPathByIdAsync(int groupId);
 
         /// <summary>
+        /// Gets group of partners by Id.
+        /// </summary>
+        /// <param name="id">Id to find group of partners.</param>
+        /// <returns>Returns group of items if partners exists; otherwise returns null.</returns>
+        /// <date>20.06.2022.</date>
+        Task<PartnersGroup> GetGroupByIdAsync(int id);
+
+        /// <summary>
         /// Adds new group of partners to table with groups of partners.
         /// </summary>
         /// <param name="partnersGroup">Group of partners.</param>

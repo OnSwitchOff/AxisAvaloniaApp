@@ -40,6 +40,17 @@ namespace DataBase.Repositories.PartnersGroups
         }
 
         /// <summary>
+        /// Gets group of partners by Id.
+        /// </summary>
+        /// <param name="id">Id to find group of partners.</param>
+        /// <returns>Returns group of partners if group exists; otherwise returns null.</returns>
+        /// <date>20.06.2022.</date>
+        public Task<PartnersGroup> GetGroupByIdAsync(int id)
+        {
+            return databaseContext.PartnersGroups.Where(g => g.Id == id).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
         /// Adds new group of partners to table with groups of partners.
         /// </summary>
         /// <param name="partnersGroup">Group of partners.</param>

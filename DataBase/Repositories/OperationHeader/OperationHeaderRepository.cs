@@ -24,9 +24,9 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="operType">Operation type for which is needed to find next account number.</param>
         /// <returns>Next acc.</returns>
         /// <date>13.04.2022.</date>
-        public Task<int> GetNextAcctAsync(EOperTypes operType)
+        public async Task<int> GetNextAcctAsync(EOperTypes operType)
         {
-            return Task.Run(() =>
+            return await Task.Run(() =>
             {
                 List<Entities.OperationHeader.OperationHeader> listItems = databaseContext.
                      OperationHeaders.
@@ -51,9 +51,9 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="fiscalDeviceNumber">Number of a fiscal device for which is needed to find next unique sale number.</param>
         /// <returns>Next unique sale number.</returns>
         /// <date>13.04.2022.</date>
-        public Task<int> GetNextSaleNumberAsync(string fiscalDeviceNumber)
+        public async Task<int> GetNextSaleNumberAsync(string fiscalDeviceNumber)
         {
-            return Task.Run(() =>
+            return await Task.Run(() =>
             {
                 List<Entities.OperationHeader.OperationHeader> listItems = databaseContext.
                     OperationHeaders.

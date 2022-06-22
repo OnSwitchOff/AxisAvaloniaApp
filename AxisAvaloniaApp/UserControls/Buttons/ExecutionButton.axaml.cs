@@ -22,6 +22,7 @@ namespace AxisAvaloniaApp.UserControls.Buttons
             Foreground = Brushes.White;
             Background = Brushes.Transparent;
             BorderBrush = Brushes.White;
+            BorderThickness = new Thickness(1.5);
 
             translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
             explanationService = Splat.Locator.Current.GetRequiredService<IExplanationService>();

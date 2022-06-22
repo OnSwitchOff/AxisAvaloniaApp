@@ -1,54 +1,49 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Generators;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.VisualTree;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
-using AxisAvaloniaApp.Services.Serialization;
+using AxisAvaloniaApp.Services.Scanning;
 using AxisAvaloniaApp.UserControls.Extensions;
 using AxisAvaloniaApp.ViewModels;
-using DynamicData;
 using Microinvest.CommonLibrary.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 namespace AxisAvaloniaApp.Views
 {
     public partial class SaleView : UserControl
     {
-        private ViewModels.SaleViewModel dataContext;
+        private SaleViewModel dataContext;
+        private TextBox textBoxPartner;
         private DataGrid saleGrid;
+        private ContextMenu saleContextMenu;
         private DataGrid itemsGrid;
+        private ContextMenu itemsContextMenu;
         private DataGrid partnersGrid;
-        ContextMenu saleContextMenu;
-        TreeView itemsGroupsTreeView;
-        TreeView partnersGroupsTreeView;
-        private readonly ISerializationService serializationItems;
-        private readonly ISerializationService serializationPartners;
+        private ContextMenu partnersContextMenu;
         private Dictionary<int, ESerializationKeys> saleDataGridColumns;
         private Dictionary<int, ESerializationKeys> itemsDataGridColumns;
-        private Dictionary<int, ESerializationKeys> partnersDataGridColumns;
+        private Dictionary<int, ESerializationKeys> partnersDataGridColumns;       
+        private readonly IScanningData scanningService;
+        private IControl? inputControl;
 
         public SaleView()
         {
             InitializeComponent();
-
-            serializationItems = Splat.Locator.Current.GetRequiredService<ISerializationService>();
-            serializationPartners = Splat.Locator.Current.GetRequiredService<ISerializationService>();
-            dataContext = Splat.Locator.Current.GetRequiredService<ViewModels.SaleViewModel>();
+            
+            dataContext = Splat.Locator.Current.GetRequiredService<SaleViewModel>();
             this.DataContext = dataContext;
             dataContext.ViewClosing += SerializeVisualData;
-            dataContext.PropertyChanged += DataContext_PropertyChanged;
+            dataContext.OrderChanged += DataContext_OrderChanged;
+
+            scanningService = Splat.Locator.Current.GetRequiredService<IScanningData>();
+            InputControl = null;
 
             saleDataGridColumns = new Dictionary<int, ESerializationKeys>()
             {
@@ -61,7 +56,6 @@ namespace AxisAvaloniaApp.Views
                 {8, ESerializationKeys.ColTotalSumWidth },
                 {9, ESerializationKeys.ColNoteWidth },
             };
-
             itemsDataGridColumns = new Dictionary<int, ESerializationKeys>()
             {
                 {1, ESerializationKeys.ColCodeWidth},
@@ -70,7 +64,6 @@ namespace AxisAvaloniaApp.Views
                 {4, ESerializationKeys.ColPriceWidth },
                 {5, ESerializationKeys.ColVATGroupWidth },
             };
-
             partnersDataGridColumns = new Dictionary<int, ESerializationKeys>()
             {
                 {1, ESerializationKeys.ColPrincipalWidth},
@@ -88,255 +81,6 @@ namespace AxisAvaloniaApp.Views
             IsEditPanelVisible = false;
 
             DeserializeVisualData();
-
-
-
-
-
-
-
-
-            
-
-            TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
-            if (textBox != null)
-            {
-                textBox.AttachedToVisualTree += (s, e) => textBox.Focus();
-            }
-
-            TextBox textBoxTaxNumber = this.FindControl<TextBox>("TextBoxTaxNumber");
-            if (textBoxTaxNumber != null)
-            {
-                textBoxTaxNumber.KeyDown += TextBoxFindPartner_KeyDown;
-            }
-
-            TextBox textBoxVATNumber = this.FindControl<TextBox>("TextBoxVATNumber");
-            if (textBoxVATNumber != null)
-            {
-                textBoxVATNumber.KeyDown += TextBoxFindPartner_KeyDown;
-            }
-        }
-
-        private void DataContext_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(SaleViewModel.OperationPartner):
-                    saleGrid.Focus();
-                    saleGrid.BeginEdit();
-
-                    //var focused = FocusManager.Instance.Current;
-                    var currentRow = saleGrid.GetCurrentRow();
-                    var item = currentRow?.DataContext;
-
-                    
-
-                    //var el = typeof(DataGridColumn).GetField("_editingElement", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    
-
-                    //var presenter = saleGrid.Columns[4].GetCellContent(currentRow);
-
-                    var currentCell = saleGrid.GetCurrentCell();
-
-                    IEnumerable<DataGridCell> currentCellList = currentRow?.FindDescendantOfType<DataGridCellsPresenter>().Children
-                        .OfType<DataGridCell>();
-                    var cell = currentCellList.ElementAt(3);
-                    var cellMethod = cell.GetType().GetMethod("DataGridCell_PointerPressed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                    //FocusManager.Instance.Focus(cell);
-                    Window root = cell.GetVisualRoot() as Window;
-
-
-                    PointerPressedEventArgs pointerPressed = new PointerPressedEventArgs(
-                        cell,
-                        new Pointer(0, PointerType.Mouse, true),
-                        cell.GetVisualRoot(),
-                        new Point(root.Position.X, root.Position.Y),
-                        (ulong)DateTime.Now.Ticks,
-                        new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
-                        KeyModifiers.Control);
-
-                    cellMethod.Invoke(cell, new object[] { pointerPressed });
-                    //cell.Focus();
-
-                    //saleGrid.Focus();
-                    //saleGrid.BeginEdit();
-
-                    //var keyboard = KeyboardDevice.Instance;
-                    //var inputManager = InputManager.Instance;
-                    //MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
-                    //inputManager.ProcessInput(new RawInputEventArgs(mouseDevice, (ulong)DateTime.Now.Ticks, null));
-                    ////inputManager.ProcessInput(new RawKeyEventArgs(keyboard, (ulong)DateTime.Now.Ticks, null, RawKeyEventType.KeyDown, Key.Enter, RawInputModifiers.None));
-
-
-                    ////var method = saleGrid.Columns[3].GetType().GetMethod("GenerateEditingElementDirect", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                    ////var textBox = el.GetValue(saleGrid.Columns[3]);
-                    ////var tb = method.Invoke(saleGrid.Columns[3], new object[] { cell, string.Empty });
-                    ////(tb as TextBox).Background = Brushes.Red; //.Focus();
-
-                    ////FocusableDataGridTextColumn focusableData = saleGrid.Columns[3] as FocusableDataGridTextColumn;
-                    ////if (saleGrid.Columns[3] is FocusableDataGridTextColumn textColumn)
-                    ////{
-                    ////    textColumn.Test(cell, "");
-                    ////}
-
-                    ////Keyboard.ClearFocus();
-
-                    ////FocusManager.SetFocusedElement(cell, cell);
-                    ////Keyboard.Focus(cell);
-
-                    ////var EditingColumnIndex = saleGrid.GetType().GetProperty("EditingColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    ////EditingColumnIndex.SetValue(saleGrid, 3);
-                    ////var CurrentSlot = saleGrid.GetType().GetProperty("CurrentSlot", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    ////CurrentSlot.SetValue(saleGrid, 3);
-
-                    ////var CurrentColumnIndex = saleGrid.GetType().GetProperty("CurrentColumnIndex", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    ////CurrentColumnIndex.SetValue(saleGrid, 3);
-
-                    ////var EditingRow = saleGrid.GetType().GetProperty("EditingRow", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    ////EditingRow.SetValue(saleGrid, currentRow);
-
-
-                    
-                    //FocusManager.Instance.Focus(cell, NavigationMethod.Unspecified);
-                    ////MouseDevice mouseDevice = new MouseDevice(new Pointer(0, PointerType.Mouse, true));
-                    //mouseDevice.Capture(cell);
-                    //mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs(mouseDevice, 0, null));
-                    ////mouseDevice.ProcessRawEvent(new Avalonia.Input.Raw.RawInputEventArgs())
-                    //cell.Focus();
-
-                    ////FocusManager.Instance.Focus(cell);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Subscribes to LanguageChanged event when the PaymentButton is added to a rooted visual tree.
-        /// </summary>
-        /// <param name="e">VisualTreeAttachmentEventArgs</param>
-        /// <date>09.06.2022.</date>
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            //this.translationService.LanguageChanged += Localize;
-            base.OnAttachedToVisualTree(e);
-        }
-
-        /// <summary>
-        /// Unsubscribes for LanguageChanged event when the PaymentButton is removed from a rooted visual tree.
-        /// </summary>
-        /// <param name="e">VisualTreeAttachmentEventArgs</param>
-        /// <date>09.06.2022.</date>
-        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-        {
-            //this.translationService.LanguageChanged -= Localize;
-            base.OnDetachedFromVisualTree(e);
-        }
-
-        private void DeserializeVisualData()
-        {
-            saleGrid = this.FindControl<DataGrid>("SaleGrid");
-            saleGrid.BeginningEdit += fdfsdf;
-            foreach (var column in saleGrid.Columns)
-            {
-                if (saleDataGridColumns.ContainsKey(column.DisplayIndex))
-                {
-                    column.Width = new DataGridLength((double)dataContext.SerializationService[saleDataGridColumns[column.DisplayIndex]]);
-                }
-            }
-            saleContextMenu = this.FindControl<ContextMenu>("SaleContextMenu");
-            if (saleContextMenu != null)
-            {
-                foreach (CheckedMenuItem item in saleContextMenu.Items)
-                {
-                    if (item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
-                    {
-                        item.IsChecked = ((EAdditionalSaleTableColumns)dataContext.SerializationService[ESerializationKeys.AddColumns] & column) > 0;
-                    }
-                }
-            }
-
-            serializationItems.InitSerializationData(ESerializationGroups.ItemsNomenclature);
-            itemsGroupsTreeView = this.FindControl<TreeView>("ItemsGroupsTreeView");
-            itemsGrid = this.FindControl<DataGrid>("ItemsGrid");
-            foreach (var column in itemsGrid.Columns)
-            {
-                if (itemsDataGridColumns.ContainsKey(column.DisplayIndex))
-                {
-                    column.Width = new DataGridLength((double)serializationItems[itemsDataGridColumns[column.DisplayIndex]]);
-                }
-            }
-
-            serializationPartners.InitSerializationData(ESerializationGroups.PartnersNomenclature);
-            partnersGroupsTreeView = this.FindControl<TreeView>("PartnersGroupsTreeView");
-            partnersGroupsTreeView.SelectionChanged += dsadsa;
-            partnersGroupsTreeView.ItemContainerGenerator.Dematerialized += fsdf;
-            partnersGroupsTreeView.ItemContainerGenerator.Materialized += fsdf1;
-            partnersGroupsTreeView.ItemContainerGenerator.Recycled += fsdf2;
-            //partnersGroupsTreeView.AttachedToVisualTree += trerfsd;
-        }
-
-        private void fdfsdf(object? sender, DataGridBeginningEditEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void dsadsa(object? sender, SelectionChangedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void fsdf2(object? sender, ItemContainerEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void fsdf1(object? sender, ItemContainerEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void fsdf(object? sender, ItemContainerEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void ItemsGroupsTreeView_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void PartnersGroupsTreeView_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        protected override void OnMeasureInvalidated()
-        {
-            base.OnMeasureInvalidated();
-
-           // if (partnersGroupsTreeView.ItemContainerGenerator.Index = .Containers.)
-        }
-
-        private void SerializeVisualData(string viewId)
-        {
-            dataContext.ViewClosing -= SerializeVisualData;
-            dataContext.PropertyChanged -= DataContext_PropertyChanged;
-
-            EAdditionalSaleTableColumns tableColumns = 0;
-
-            if (saleContextMenu != null)
-            {
-                foreach (CheckedMenuItem item in saleContextMenu.Items)
-                {
-                    if (item.IsChecked && item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
-                    {
-                        tableColumns = tableColumns | column;
-                    }
-                }
-            }
-            dataContext.SerializationService[ESerializationKeys.AddColumns].Value = ((int)tableColumns).ToString();
-
-            dataContext.SerializationService.Update();
-
         }
 
         public static readonly StyledProperty<bool> IsPaymentPanelVisibleProperty =
@@ -382,7 +126,7 @@ namespace AxisAvaloniaApp.Views
            AvaloniaProperty.Register<SaleView, bool>(nameof(IsEditPanelVisible));
 
         /// <summary>
-        /// Gets or sets a value indicating whether panel with buttons to edit nomenclaturs is visible.
+        /// Gets or sets a value indicating whether panel with buttons to edit nomenclatures is visible.
         /// </summary>
         /// <date>31.05.2022.</date>
         public bool IsEditPanelVisible
@@ -408,7 +152,7 @@ namespace AxisAvaloniaApp.Views
            AvaloniaProperty.Register<SaleView, bool>(nameof(IsEditNomenclaturePanelVisible));
 
         /// <summary>
-        /// Gets or sets a value indicating whether panel to edit nomenclaturs is visible.
+        /// Gets or sets a value indicating whether panel to edit nomenclatures is visible.
         /// </summary>
         /// <date>31.05.2022.</date>
         public bool IsEditNomenclaturePanelVisible
@@ -417,6 +161,613 @@ namespace AxisAvaloniaApp.Views
             set => SetValue(IsEditNomenclaturePanelVisibleProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets control to set scanned data.
+        /// </summary>
+        /// <date>21.06.2022.</date>
+        private IControl? InputControl
+        {
+            get => inputControl;
+            set
+            {
+                inputControl = value;
+
+                if (inputControl != null)
+                {
+                    scanningService.SendScannedDataEvent += SetScannedData;
+                }
+                else
+                {
+                    scanningService.SendScannedDataEvent -= SetScannedData;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Restores visual data.
+        /// </summary>
+        /// <date>31.05.2022.</date>
+        private void DeserializeVisualData()
+        {
+            textBoxPartner = this.FindControl<TextBox>("TextBoxPartner");
+
+            // восстанавливаем данные основного раздела
+            saleGrid = this.FindControl<DataGrid>("SaleGrid");
+            foreach (var column in saleGrid.Columns)
+            {
+                if (saleDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    column.Width = new DataGridLength((double)dataContext.SerializationService[saleDataGridColumns[column.DisplayIndex]]);
+                }
+            }
+            saleContextMenu = this.FindControl<ContextMenu>("SaleContextMenu");
+            if (saleContextMenu != null)
+            {
+                foreach (CheckedMenuItem item in saleContextMenu.Items)
+                {
+                    if (item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
+                    {
+                        item.IsChecked = ((EAdditionalSaleTableColumns)dataContext.SerializationService[ESerializationKeys.AddColumns] & column) > 0;
+                    }
+                }
+            }
+
+            // восстанавливаем данные раздела с товарами
+            itemsGrid = this.FindControl<DataGrid>("ItemsGrid");
+            foreach (var column in itemsGrid.Columns)
+            {
+                if (itemsDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    column.Width = new DataGridLength((double)dataContext.SerializationItems[itemsDataGridColumns[column.DisplayIndex]]);
+                }
+            }
+            itemsContextMenu = this.FindControl<ContextMenu>("ItemsContextMenu");
+            if (itemsContextMenu != null)
+            {
+                foreach (CheckedMenuItem item in itemsContextMenu.Items)
+                {
+                    if (item.Tag != null && item.Tag is EAdditionalItemsTableColumns column)
+                    {
+                        item.IsChecked = ((EAdditionalItemsTableColumns)dataContext.SerializationItems[ESerializationKeys.AddColumns] & column) > 0;
+                    }
+                }
+            }
+
+            // восстанавливаем данные раздела с партнёрами
+            partnersGrid = this.FindControl<DataGrid>("PartnersGrid");
+            foreach (var column in partnersGrid.Columns)
+            {
+                if (itemsDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    column.Width = new DataGridLength((double)dataContext.SerializationPartners[partnersDataGridColumns[column.DisplayIndex]]);
+                }
+            }
+            partnersContextMenu = this.FindControl<ContextMenu>("PartnersContextMenu");
+            if (partnersContextMenu != null)
+            {
+                foreach (CheckedMenuItem item in partnersContextMenu.Items)
+                {
+                    if (item.Tag != null && item.Tag is EAdditionalPartnersTableColumns column)
+                    {
+                        item.IsChecked = ((EAdditionalPartnersTableColumns)dataContext.SerializationPartners[ESerializationKeys.AddColumns] & column) > 0;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves visual data to database.
+        /// </summary>
+        /// <param name="viewId">Id of a ViewModel.</param>
+        /// <date>31.05.2022.</date>
+        private void SerializeVisualData(string viewId)
+        {
+            dataContext.ViewClosing -= SerializeVisualData;
+            dataContext.OrderChanged -= DataContext_OrderChanged;
+
+            // сохраняем данные основного раздела
+            foreach (var column in saleGrid.Columns)
+            {
+                if (saleDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    dataContext.SerializationService[saleDataGridColumns[column.DisplayIndex]].Value = column.ActualWidth.ToString();
+                }
+            }
+            EAdditionalSaleTableColumns tableColumns = 0;
+            if (saleContextMenu != null)
+            {
+                foreach (CheckedMenuItem item in saleContextMenu.Items)
+                {
+                    if (item.IsChecked && item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
+                    {
+                        tableColumns = tableColumns | column;
+                    }
+                }
+            }
+            dataContext.SerializationService[ESerializationKeys.AddColumns].Value = ((int)tableColumns).ToString();
+            dataContext.SerializationService.Update();
+
+            // сохраняем данные раздела с товарами 
+            foreach (var column in itemsGrid.Columns)
+            {
+                if (itemsDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    dataContext.SerializationItems[itemsDataGridColumns[column.DisplayIndex]].Value = column.ActualWidth.ToString();
+                }
+            }
+            EAdditionalItemsTableColumns itemsColumns = 0;
+            if (itemsContextMenu != null)
+            {
+                foreach (CheckedMenuItem item in itemsContextMenu.Items)
+                {
+                    if (item.IsChecked && item.Tag != null && item.Tag is EAdditionalItemsTableColumns column)
+                    {
+                        itemsColumns = itemsColumns | column;
+                    }
+                }
+            }
+            dataContext.SerializationItems[ESerializationKeys.AddColumns].Value = ((int)itemsColumns).ToString();
+            dataContext.SerializationItems.Update();
+
+            // сохраняем данные раздела с партнёрами
+            foreach (var column in partnersGrid.Columns)
+            {
+                if (partnersDataGridColumns.ContainsKey(column.DisplayIndex))
+                {
+                    dataContext.SerializationPartners[partnersDataGridColumns[column.DisplayIndex]].Value = column.ActualWidth.ToString();
+                }
+            }
+            EAdditionalPartnersTableColumns partnersColumns = 0;
+            if (partnersContextMenu != null)
+            {
+                foreach (CheckedMenuItem item in partnersContextMenu.Items)
+                {
+                    if (item.IsChecked && item.Tag != null && item.Tag is EAdditionalPartnersTableColumns column)
+                    {
+                        partnersColumns = partnersColumns | column;
+                    }
+                }
+            }
+            dataContext.SerializationPartners[ESerializationKeys.AddColumns].Value = ((int)partnersColumns).ToString();
+            dataContext.SerializationPartners.Update();
+        }
+
+        /// <summary>
+        /// Sets focus to start control when TextBox with partner data is attached to visual tree. 
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">VisualTreeAttachmentEventArgs.</param>
+        /// <date>07.06.2022.</date>
+        private void TextBoxPartner_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            if (dataContext.IsChoiceOfPartnerEnabled && dataContext.OperationPartner == null)
+            {
+                if (sender is TextBox textBox)
+                {
+                    textBox.Focus();
+                }
+            }
+            else
+            {
+                saleGrid.Focus();
+                saleGrid.BeginEdit();
+            }
+        }
+
+        /// <summary>
+        /// Sets scanned data to input control.
+        /// </summary>
+        /// <param name="barcode">Data is sent from scanner.</param>
+        /// <date>21.06.2022.</date>
+        private void SetScannedData(string barcode)
+        {
+            Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => 
+            {
+                if (textBoxPartner.IsFocused)
+                {
+                    dataContext.FindPartnerByCardNumber(barcode);
+                }
+                else
+                {
+                    switch (inputControl)
+                    {
+                        case TextBox textBox:
+                            textBox.Text = barcode;
+                            break;
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Subscribes to TemplateApplied event when row is loading
+        /// </summary>
+        /// <param name="sender">DataGrid.</param>
+        /// <param name="e">DataGridRowEventArgs</param>
+        /// <date>20.06.2022.</date>
+        private void DataGrid_LoadingRow(object? sender, DataGridRowEventArgs e)
+        {
+            //if (dataContext.Order.Count == 1 && dataContext.Order[0].Item.Id == 0)
+            //{
+            //    e.Row.TemplateApplied += DataGridRow_TemplateApplied;
+            //}
+
+            e.Row.TemplateApplied += DataGridRow_TemplateApplied;
+        }
+
+        /// <summary>
+        /// Sets focus to start control when template for DataGridRow is applied. 
+        /// </summary>
+        /// <param name="sender">DataGridRow.</param>
+        /// <param name="e">TemplateAppliedEventArgs.</param>
+        /// <date>21.06.2022.</date>
+        private void DataGridRow_TemplateApplied(object? sender, TemplateAppliedEventArgs e)
+        {
+            if (sender is DataGridRow gridRow)
+            {
+                gridRow.TemplateApplied -= DataGridRow_TemplateApplied;
+            }
+
+            if (!dataContext.IsChoiceOfPartnerEnabled || dataContext.OperationPartner != null)
+            {
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    System.Threading.Thread.Sleep(100);
+                    Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        SetFocusToDataGrid();
+                    });
+                });
+            }
+        }
+        
+        /// <summary>
+        /// Activates DataGridCell to edit.
+        /// </summary>
+        /// <date>20.06.2022.</date>
+        private void SetFocusToDataGrid()
+        {
+            if (dataContext.Order.Count > 1)
+            {
+                saleGrid.SelectedItems.Clear();
+                saleGrid.SelectedItems.Add(dataContext.Order[dataContext.Order.Count - 1]);
+            }
+
+            if (!saleGrid.IsFocused)
+            {
+                saleGrid.Focus();
+                saleGrid.BeginEdit();
+            }
+
+            DataGridRow? lastRow = saleGrid.GetLastRow();
+            if (lastRow != null)
+            {
+                DataGridCell? itemNameCell = saleGrid.GetCell(lastRow, 3);
+
+                if (itemNameCell != null)
+                {
+                    itemNameCell.Focus();
+                    itemNameCell.BeginCellEdit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Activates DataGridCell to edit when partner was selected or qty of item was changed programmatic.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        private void DataContext_OrderChanged()
+        {
+            SetFocusToDataGrid();
+        }
+
+        /// <summary>
+        /// Sets InputControl when cell began edit.
+        /// </summary>
+        /// <param name="sender">IControl.</param>
+        /// <param name="e">DataGridBeginningEditEventArgs</param>
+        /// <date>21.06.2022.</date>
+        private void DataGridColumn_CellEditBegan(object? sender, DataGridBeginningEditEventArgs e)
+        {
+            if (sender != null && sender is IControl control)
+            {
+                InputControl = control;
+            }
+        }
+
+        /// <summary>
+        /// Clears InputControl when cell ended edit.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">DataGridCellEditEndedEventArgs.</param>
+        /// <date>21.06.2022</date>
+        private void DataGrid_CellEditEnded(object? sender, DataGridCellEditEndedEventArgs e)
+        {
+            InputControl = null;
+        }
+
+        /// <summary>
+        /// Changes the visibility property of the panel to pay.
+        /// </summary>
+        /// <date>27.05.2022.</date>
+        private void ChangeIsPaymentPanelVisible()
+        {
+            IsPaymentPanelVisible = !IsPaymentPanelVisible;
+        }
+
+        /// <summary>
+        /// Changes the visibility property of the panel to pay in cash.
+        /// </summary>
+        /// <date>27.05.2022.</date>
+        private void ChangeIsPayInCashPanelVisible()
+        {
+            IsPayInCashPanelVisible = !IsPayInCashPanelVisible;
+        }
+
+        /// <summary>
+        /// Changes the visibility property of the panel with item editing buttons.
+        /// </summary>
+        /// <param name="sender">Button.</param>
+        /// <param name="e">RoutedEventArgs</param>
+        /// <date>27.05.2022.</date>
+        private void ButtonEditNomenclature_Click(object? sender, RoutedEventArgs e)
+        {
+            IsEditPanelVisible = !IsEditPanelVisible;
+        }
+
+        /// <summary>
+        /// Causes the TextBox for entering a view title to lose focus  when Enter is pressed in this TextBox.
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">KeyEventArgs</param>
+        /// <date>27.05.2022.</date>
+        private void TextBoxTitle_KeyDown(object? sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    this.Focus();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Update dependents properties if main property of TextBox to input title of the view was changed.
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">AvaloniaPropertyChangedEventArgs</param>
+        /// <date>27.05.2022.</date>
+        private void TextBoxTitle_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            switch (e.Property.Name)
+            {
+                case nameof(TextBox.IsVisible):
+                    if (sender is TextBox textBox && textBox.IsVisible)
+                    {
+                        textBox.Focus();
+                        textBox.CaretIndex = textBox.Text.Length;
+                    }
+                    break;
+                case nameof(TextBox.IsFocused):
+                    if (sender is TextBox tb && !tb.IsFocused)
+                    {
+                        dataContext.IsSaleTitleReadOnly = true;
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets Partners to ActiveNomenclature and InputControl when TextBox to input parter data got focus; otherwise clears InputControl.
+        /// </summary>
+        /// <param name="sender">TreeView.</param>
+        /// <param name="e">GotFocusEventArgs</param>
+        /// <date>30.05.2022.</date>
+        private void TextBoxPartner_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            switch (e.Property.Name)
+            {
+                case (nameof(TextBox.IsFocused)):
+                    if (sender is TextBox textBox)
+                    {
+                        if (textBox.IsFocused)
+                        {
+                            ActiveNomenclature = ENomenclatures.Partners;
+                            InputControl = textBox;
+                        }
+                        else
+                        {
+                            InputControl = null;
+
+                            if (dataContext.OperationPartner != null && !textBox.Text.Equals(dataContext.OperationPartner.Name))
+                            {
+                                textBox.Text = dataContext.OperationPartner.Name;
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Finds and sets item to Order (property of SaleViewModel).
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">KeyEventArgs</param>
+        /// <date>21.06.2022.</date>
+        private void CellTextBox_KeyDown(object? sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    IList<DataGridRow> rows = itemsGrid.GetRows();
+
+                    switch (rows.Count)
+                    {
+                        case 0:
+                            dataContext.AddItems(null);
+                            break;
+                        case 1:
+                            dataContext.AddItems(new List<ItemModel>()
+                            {
+                                rows[0].DataContext as ItemModel,
+                            });
+                            break;
+                        default:
+                            itemsGrid.Focus();
+                            itemsGrid.SelectedIndex = 0;
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Finds and sets partner to OperationPartner (property of SaleViewModel).
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">KeyEventArgs</param>
+        /// <date>21.06.2022.</date>
+        private void TextBoxPartner_KeyDown(object? sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    IList<DataGridRow> rows = partnersGrid.GetRows();
+
+                    switch (rows.Count)
+                    {
+                        case 0:
+                            dataContext.AddPartner(null);
+                            break;
+                        case 1:
+                            dataContext.AddPartner(rows[0].DataContext as PartnerModel);
+                            break;
+                        default:
+                            partnersGrid.Focus();
+                            partnersGrid.SelectedIndex = 0;
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets Items to ActiveNomenclature when DataGrid with items or to order got focus.
+        /// </summary>
+        /// <param name="sender">TreeView.</param>
+        /// <param name="e">GotFocusEventArgs</param>
+        /// <date>30.05.2022.</date>
+        private void DataGridItems_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            ActiveNomenclature = ENomenclatures.Items;
+        }
+
+        /// <summary>
+        /// Sets Partners to ActiveNomenclature when DataGrid with partners got focus.
+        /// </summary>
+        /// <param name="sender">TreeView.</param>
+        /// <param name="e">GotFocusEventArgs</param>
+        /// <date>30.05.2022.</date>
+        private void DataGridPartners_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            ActiveNomenclature = ENomenclatures.Partners;
+        }
+
+        /// <summary>
+        /// Sets ItemsGroups to ActiveNomenclature when TreeView with groups of items got focus.
+        /// </summary>
+        /// <param name="sender">TreeView.</param>
+        /// <param name="e">GotFocusEventArgs</param>
+        /// <date>30.05.2022.</date>
+        private void ItemsGroupsTreeView_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            ActiveNomenclature = ENomenclatures.ItemsGroups;
+        }
+
+        /// <summary>
+        /// Sets PartnersGroups to ActiveNomenclature when TreeView with groups of partners got focus.
+        /// </summary>
+        /// <param name="sender">TreeView.</param>
+        /// <param name="e">GotFocusEventArgs</param>
+        /// <date>30.05.2022.</date>
+        private void PartnersGroupsTreeView_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            ActiveNomenclature = ENomenclatures.PartnersGroups;
+        }
+
+        /// <summary>
+        /// Shows panel to edit nomenclatures.
+        /// </summary>
+        /// <param name="sender">Button</param>
+        /// <param name="e">RoutedEventArgs</param>
+        /// <date>27.05.2022.</date>
+        private void EditNomenclatureButton_Click(object? sender, RoutedEventArgs e)
+        {
+            IsEditNomenclaturePanelVisible = true;
+        }
+
+        /// <summary>
+        /// Finds partner by tax or VAT number when Enter was pressed in accordinally TextBox.
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">AvaloniaPropertyChangedEventArgs.</param>
+        /// <date>27.05.2022.</date>
+        private void TextBoxFindPartner_KeyDown(object? sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    if (sender is TextBox textBox)
+                    {
+                        dataContext.FindPartner(textBox.Text);
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets InputControl when TextBox for number of card is focused; otherwise clears InputControl.
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">AvaloniaPropertyChangedEventArgs.</param>
+        /// <date>27.05.2022.</date>
+        private void TextBoxDiscountCardNumber_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            switch (e.Property.Name)
+            {
+                case nameof(TextBox.IsFocused):
+                    if (sender is TextBox tb)
+                    {
+                        switch (tb.IsFocused)
+                        {
+                            case true:
+                                InputControl = tb;
+                                break;
+                            case false:
+                                InputControl = null;
+                                break;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Initialize components.
+        /// </summary>
+        /// <date>27.05.2022.</date>
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        /// <summary>
+        /// Update dependents properties if main property was changed.
+        /// </summary>
+        /// <typeparam name="T">Type of property.</typeparam>
+        /// <param name="change">History of changing of property.</param>
+        /// <date>31.05.2022.</date>
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
             switch (change.Property.Name)
@@ -436,163 +787,8 @@ namespace AxisAvaloniaApp.Views
                     }
                     break;
             }
+
             base.OnPropertyChanged(change);
-        }
-
-        //protected override void OnInitialized()
-        //{
-        //    base.OnInitialized();
-
-        //    TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
-        //    if (textBox != null)
-        //    {
-        //        textBox.Focus();
-        //    }
-        //}
-
-        //public override void EndInit()
-        //{
-        //    base.EndInit();
-
-        //    //TextBox textBox = this.FindControl<TextBox>("TextBoxPartner");
-        //    //if (textBox != null)
-        //    //{
-        //    //    textBox.Focus();
-        //    //}
-        //}
-
-        private void ChangeIsPaymentPanelVisible()
-        {
-            IsPaymentPanelVisible = !IsPaymentPanelVisible;
-        }
-
-        private void ChangeIsPayInCashPanelVisible()
-        {
-            IsPayInCashPanelVisible = !IsPayInCashPanelVisible;
-        }
-
-        private void ButtonEditNomenclature_Click(object? sender, RoutedEventArgs e)
-        {
-            IsEditPanelVisible = !IsEditPanelVisible;
-        }
-        //private void ChangeIsEditPanelVisible()
-        //{
-        //    IsEditPanelVisible = !IsEditPanelVisible;
-        //}
-
-        //private void TextBoxPartner_GotFocus(object? sender, GotFocusEventArgs e)
-        //{
-        //    //throw new NotImplementedException();
-        //}
-
-        private void TextBoxTitle_KeyDown(object? sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    this.Focus();
-                    break;
-            }
-        }
-
-        private void TextBoxTitle_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-        {
-            switch (e.Property.Name)
-            {
-                case nameof(TextBox.IsVisible):
-                    if (sender is TextBox textBox && textBox.IsVisible)
-                    {
-                        textBox.Focus();
-                        textBox.CaretIndex = textBox.Text.Length;
-                    }
-                    break;
-                case nameof(TextBox.IsFocused):
-                    if (sender is TextBox tb && !tb.IsFocused)
-                    {
-                        (DataContext as ViewModels.SaleViewModel).IsSaleTitleReadOnly = true;
-                    }
-                    break;
-            }
-        }
-
-        private void TextBoxPartner_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-        {
-            switch (e.Property.Name)
-            {
-                case (nameof(TextBox.IsFocused)):
-                    if (sender is TextBox textBox && textBox.IsFocused)
-                    {
-                        ActiveNomenclature = ENomenclatures.Partners;
-                    }
-                    break;
-            }
-        }
-
-        private void DataGridSale_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-        {
-            switch (e.Property.Name)
-            {
-                case (nameof(DataGrid.IsFocused)):
-                    if (sender is DataGrid dataGrid && dataGrid.IsFocused)
-                    {
-                        ActiveNomenclature = ENomenclatures.Items;
-                    }
-                    break;
-            }
-        }
-
-        private void ItemsGroupsTreeView_GotFocus(object? sender, GotFocusEventArgs e)
-        {
-            ActiveNomenclature = ENomenclatures.ItemsGroups;
-        }
-
-        private void PartnersGroupsTreeView_GotFocus(object? sender, GotFocusEventArgs e)
-        {
-            ActiveNomenclature = ENomenclatures.PartnersGroups;
-        }
-
-        private void EditNomenclatureButton_Click(object? sender, RoutedEventArgs e)
-        {
-            IsEditNomenclaturePanelVisible = true;
-        }
-
-        private void TextBoxFindPartner_KeyDown(object? sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    if (sender is TextBox textBox)
-                    {
-                        (DataContext as ViewModels.SaleViewModel).FindPartner(textBox.Text);
-                    }
-                    break;
-            }
-        }
-
-        private void TextBoxDiscountCardNumber_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-        {
-            switch (e.Property.Name)
-            {
-                case nameof(TextBox.IsFocused):
-                    if (sender is TextBox tb)
-                    {
-                        switch (tb.IsFocused)
-                        {
-                            case true:
-                                // подписаться на сканер
-                                break;
-                            case false:
-                                // отписаться от сканера
-                                break;
-                        }
-                    }
-                    break;
-            }
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

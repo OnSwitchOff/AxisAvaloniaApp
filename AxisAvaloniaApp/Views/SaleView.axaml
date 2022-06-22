@@ -105,7 +105,9 @@
                                     IsEnabled="{Binding IsChoiceOfPartnerEnabled, Mode=TwoWay}"
                                     Text="{Binding OperationPartnerString, Mode=TwoWay}"
                                     ExplanationKey = "EnterPartnerData" 
-                                    PropertyChanged="TextBoxPartner_PropertyChanged"
+                                    PropertyChanged="TextBoxPartner_PropertyChanged" 
+                                    AttachedToVisualTree="TextBoxPartner_AttachedToVisualTree" 
+                                    KeyDown="TextBoxPartner_KeyDown"
                                     MinWidth="200"/>
             <Button Grid.Column="2"
                     Name="buttonLockPartner"
@@ -113,7 +115,8 @@
                     Margin="0"
                     Padding="2"
                     Background="{Binding ElementName=TextBoxPartner, Path=Background}"
-                    BorderThickness="0"
+                    BorderThickness="{Binding ElementName=TextBoxPartner, Path=BorderThickness}"
+                    BorderBrush="{Binding ElementName=TextBoxPartner, Path=BorderBrush}"
                     Command="{Binding ChangeSelectedPartnerLocked}">
               <i:Interaction.Behaviors>
                 <ia:DataTriggerBehavior Binding="{Binding IsChoiceOfPartnerEnabled}" ComparisonCondition="Equal" Value="true">
@@ -127,11 +130,11 @@
                 <StackPanel>
                   <Image Source="/Assets/Icons/unlock.png" 
                          IsVisible="{Binding IsChoiceOfPartnerEnabled, Mode=TwoWay}" 
-                         Height="30" 
+                         Height="33" 
                          Stretch="UniformToFill"/>
                   <Image Source="/Assets/Icons/lock.png" 
                          IsVisible="{Binding !IsChoiceOfPartnerEnabled, Mode=TwoWay}" 
-                         Height="30" 
+                         Height="33" 
                          Stretch="UniformToFill"/>
                 </StackPanel>
               </Button.Content>
@@ -175,10 +178,12 @@
                   IsEnabled="{Binding OperationPartner, Converter={StaticResource ObjectToBool}}"
                   Items="{Binding Order}"
                   SelectionMode="Extended"
-                  SelectedItem="{Binding selectedOrderRecord, Mode=TwoWay}"
-                  PropertyChanged="DataGridSale_PropertyChanged">
+                  SelectedItem="{Binding SelectedOrderRecord, Mode=TwoWay}" 
+                  GotFocus="DataGridItems_GotFocus"
+                  LoadingRow="DataGrid_LoadingRow" 
+                  CellEditEnded="DataGrid_CellEditEnded">
           <DataGrid.KeyBindings>
-            <KeyBinding Gesture="Delete" Command="{Binding DeleteItems}" CommandParameter="{Binding $self.SelectedItems}"/>
+            <KeyBinding Gesture="Delete" Command="{Binding DeleteItemsFromOrder}" CommandParameter="{Binding $self.SelectedItems}"/>
           </DataGrid.KeyBindings>
           <DataGrid.Styles>
             <Style Selector="DataGridColumnHeader">
@@ -215,14 +220,17 @@
                 <controlsEx:AxisTextBlock LocalizeTextKey="strBarcode"/>
               </DataGridTextColumn.Header>
             </DataGridTextColumn>
-            <controlsEx:FocusableDataGridTextColumn Binding="{Binding Name}" 
-                                Width="*"
-                                MinWidth="200"
-                                DisplayIndex="3">
+            <controlsEx:AxisDataGridTextColumn Binding="{Binding Name}" 
+                                               Width="*"
+                                               MinWidth="200"
+                                               DisplayIndex="3"
+                                               CellText="{Binding ItemString, Mode=TwoWay}"
+                                               CellKeyDown="CellTextBox_KeyDown"
+                                               CellEditBegan="DataGridColumn_CellEditBegan">
               <DataGridTextColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strGoods"/>
               </DataGridTextColumn.Header>
-            </controlsEx:FocusableDataGridTextColumn>
+            </controlsEx:AxisDataGridTextColumn>
             <DataGridTemplateColumn DisplayIndex="4">
               <DataGridTemplateColumn.Header>
                 <controlsEx:AxisTextBlock LocalizeTextKey="strMeasure"/>
@@ -401,7 +409,6 @@
           <buttons:ExecutionButton Grid.Column="3"
                                    Width="150"
                                    Foreground="White"
-                                   BorderBrush="White"
                                    LocalizeTextKey="strPayment"
                                    Command="{Binding $parent[UserControl].ChangeIsPaymentPanelVisible}"/>
         </Grid>
@@ -623,6 +630,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditPrincipal"
+                                    InputDataChecker="OnlyLettersAndSpaces"
                                     Text="{Binding SelectedPartner.Principal, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="2"
                                       Grid.Column="0"
@@ -632,6 +640,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditRegisterData_City"
+                                    InputDataChecker="OnlyLettersAndSpaces"
                                     Text="{Binding SelectedPartner.City, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="3"
                                       Grid.Column="0"
@@ -665,7 +674,9 @@
                                       Background="White"
                                       BorderThickness="0"
                                       ExplanationKey="EnterOrEditTaxNumber"
-                                      Text="{Binding SelectedPartner.TaxNumber, Mode=TwoWay}"/>
+                                      InputDataChecker="OnlyDigits"
+                                      Text="{Binding SelectedPartner.TaxNumber, Mode=TwoWay}" 
+                                      KeyDown="TextBoxFindPartner_KeyDown"/>
               <Button Grid.Column="1"
                       CornerRadius="0, 3, 3, 0"
                       Margin="0"
@@ -695,7 +706,9 @@
                                       Background="White"
                                       BorderThickness="0"
                                       ExplanationKey="EnterOrEditVATNumber"
-                                      Text="{Binding SelectedPartner.VATNumber, Mode=TwoWay}"/>
+                                      Text="{Binding SelectedPartner.VATNumber, Mode=TwoWay}"
+                                      InputDataChecker="OnlyDigitsAndLetters"
+                                      KeyDown="TextBoxFindPartner_KeyDown"/>
               <Button Grid.Column="1"
                       CornerRadius="0, 3, 3, 0"
                       Margin="0"
@@ -737,6 +750,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditCompanyIBAN"
+                                    InputDataChecker="OnlyDigitsAndLetters"
                                     Text="{Binding SelectedPartner.IBAN, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="10"
                                       Grid.Column="0"
@@ -912,7 +926,8 @@
                         IsReadOnly="True"
                         Items="{Binding Items, Mode=TwoWay}"
                         SelectedItem="{Binding SelectedItem}"
-                        SelectionMode="Extended">
+                        SelectionMode="Extended" 
+                        GotFocus="DataGridItems_GotFocus">
                 <DataGrid.KeyBindings>
                   <KeyBinding Gesture="Enter" Command="{Binding AddItems}" CommandParameter="{Binding $self.SelectedItems}"/>
                 </DataGrid.KeyBindings>
@@ -1017,7 +1032,8 @@
                         IsReadOnly="True"
                         Items="{Binding Partners, Mode=TwoWay}"
                         SelectedItem="{Binding SelectedPartner}"
-                        SelectionMode="Single">
+                        SelectionMode="Single" 
+                        GotFocus="DataGridPartners_GotFocus">
                 <DataGrid.KeyBindings>
                   <KeyBinding Gesture="Enter" Command="{Binding AddPartner}" CommandParameter="{Binding $self.SelectedItem}"/>
                 </DataGrid.KeyBindings>

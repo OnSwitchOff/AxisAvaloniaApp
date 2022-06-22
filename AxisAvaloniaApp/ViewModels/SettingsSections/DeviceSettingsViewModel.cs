@@ -59,7 +59,7 @@ namespace AxisAvaloniaApp.ViewModels.Settings
 
             cOMScannerPorts = new ObservableCollection<string>();
             cOMScannerPorts.Add(noActivePortKey);
-            if (settingsService.COMScannerSettings[Enums.ESettingKeys.ComPort].ToString().ToLower().Equals(noActivePortKey))
+            if (settingsService.COMScannerSettings[Enums.ESettingKeys.ComPort].ToString().ToLower().Equals(noActivePortKey.ToLower()))
             {
                 selectedComScannerPort = noActivePortKey;
             }

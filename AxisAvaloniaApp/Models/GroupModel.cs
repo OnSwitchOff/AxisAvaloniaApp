@@ -153,15 +153,20 @@ namespace AxisAvaloniaApp.Models
         /// <date>25.03.2022.</date>
         public static explicit operator GroupModel(DataBase.Entities.ItemsGroups.ItemsGroup itemGroup)
         {
-            GroupModel group = new GroupModel()
+            if (itemGroup != null)
             {
-                Id = itemGroup.Id,
-                Path = itemGroup.Path,
-                Name = itemGroup.Name,
-                Discount = itemGroup.Discount,
-            };
+                GroupModel group = new GroupModel()
+                {
+                    Id = itemGroup.Id,
+                    Path = itemGroup.Path,
+                    Name = itemGroup.Name,
+                    Discount = itemGroup.Discount,
+                };
 
-            return group;
+                return group;
+            }
+
+            return null;
         }
     }
 }

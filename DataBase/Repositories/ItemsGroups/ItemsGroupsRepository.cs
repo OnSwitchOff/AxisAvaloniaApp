@@ -41,6 +41,17 @@ namespace DataBase.Repositories.ItemsGroups
         }
 
         /// <summary>
+        /// Gets group of items by Id.
+        /// </summary>
+        /// <param name="id">Id to find group of items.</param>
+        /// <returns>Returns group of items if group exists; otherwise returns null.</returns>
+        /// <date>20.06.2022.</date>
+        public Task<ItemsGroup> GetGroupByIdAsync(int id)
+        {
+            return databaseContext.ItemsGroups.Where(g => g.Id == id).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
         /// Adds new group of items to table with groups of items.
         /// </summary>
         /// <param name="itemsGroup">Group of items.</param>

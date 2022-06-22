@@ -148,7 +148,7 @@
         /// <summary>
         /// Selected group of goods / partners.
         /// </summary>
-        SelectedGroupNodeTag,
+        SelectedGroupId,
 
         /// <summary>
         /// Selected period to filter data.

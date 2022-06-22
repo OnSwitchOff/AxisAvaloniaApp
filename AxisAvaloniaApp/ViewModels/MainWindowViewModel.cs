@@ -165,7 +165,6 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>26.05.2022.</date>
         private void MainWindowViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(e.PropertyName);
             switch (e.PropertyName)
             {
                 case nameof(SelectedItem):
