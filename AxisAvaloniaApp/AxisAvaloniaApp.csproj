@@ -12,6 +12,15 @@
     <None Remove=".gitignore" />
     <None Remove="Assets\Application.png" />
     <None Remove="Assets\AxisIcon.ico" />
+    <None Remove="Assets\blue-world-map.jpg" />
+    <None Remove="Assets\Flags\bg.png" />
+    <None Remove="Assets\Flags\eng.png" />
+    <None Remove="Assets\Flags\ge.png" />
+    <None Remove="Assets\Flags\ru.png" />
+    <None Remove="Assets\Flags\ua.png" />
+    <None Remove="Assets\Flags\uk.png" />
+    <None Remove="Assets\Flags\unknown_flag.png" />
+    <None Remove="Assets\Flags\usa.png" />
     <None Remove="Assets\Icons\arrow_back.png" />
     <None Remove="Assets\Icons\axisCloudLogo.png" />
     <None Remove="Assets\Icons\calendar.png" />
