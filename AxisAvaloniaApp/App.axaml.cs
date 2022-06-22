@@ -25,27 +25,24 @@ namespace AxisAvaloniaApp
             // регистрируем зависимости (сервисы)
             Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
-
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
 
+                MainWindow mw = null;
                 if (!Configurations.AppConfiguration.IsDatabaseExist)
                 {
                     desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
                     LocalizationView dialog = new LocalizationView();
-                    await ShowDialog(dialog);
-                }
-
-                IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
+                    mw = await dialog.MyShowDialog();
+                }   
                 startUpService.ActivateAsync();
-
-                desktop.MainWindow = new MainWindow();
+                desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
                 MainWindow.Closing += MainWindow_Closing;
             }
 
             base.OnFrameworkInitializationCompleted();
-
         }
 
 
@@ -70,21 +67,5 @@ namespace AxisAvaloniaApp
             Services.AxisCloud.IAxisCloudService axisCloudService = Locator.Current.GetRequiredService<Services.AxisCloud.IAxisCloudService>();
             axisCloudService.StopService();
         }
-
-
-
-        private TaskCompletionSource<bool?> taskSource;
-        public async Task<bool?> ShowDialog(AbstractResultableWindow window)
-        {
-            taskSource = new TaskCompletionSource<bool?>();
-            window.Closed += delegate
-            {
-                taskSource.TrySetResult(window.DialogResult);
-            };
-            window.Show();
-
-            return await taskSource.Task;
-        }
-
     }
 }
