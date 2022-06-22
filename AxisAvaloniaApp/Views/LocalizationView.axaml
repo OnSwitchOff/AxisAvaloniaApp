@@ -10,8 +10,9 @@
 		ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
         Title="LocalizationView"
-	    Width="600"
-	    Height="350"
+	    Width="600" MaxWidth="600" MinWidth="600"
+	    Height="350" MaxHeight="350" MinHeight="350"
+		WindowStartupLocation="CenterScreen"
 		x:Name="window">
 	<Window.Background>
 		<ImageBrush Source="/Assets/blue-world-map.jpg" Stretch="Fill"/>
