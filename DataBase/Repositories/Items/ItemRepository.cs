@@ -65,17 +65,19 @@ namespace DataBase.Repositories.Items
         /// <param name="searchKey">Key to search data.</param>
         /// <returns>List of items.</returns>
         /// <date>30.03.2022.</date>
-        public IAsyncEnumerable<Item> GetItemsAsync(string searchKey)
+        public async IAsyncEnumerable<Item> GetItemsAsync(string searchKey)
         {
-            return databaseContext.
-                     Items.
-                     Where(i =>
-                     string.IsNullOrEmpty(searchKey) ? 1 == 1 :
-                     (i.Name.ToLower().Contains(searchKey.ToLower()) ||
-                     i.Code.Contains(searchKey) ||
-                     i.Barcode.Contains(searchKey) ||
-                     i.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null)).
-                     AsAsyncEnumerable();
+            foreach (var item in databaseContext.Items)
+            {
+                if (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
+                     (item.Name.ToLower().Contains(searchKey.ToLower()) ||
+                     item.Code.Contains(searchKey) ||
+                     item.Barcode.Contains(searchKey) ||
+                     item.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null))
+                {
+                    yield return item;
+                }
+            }
         }
 
         /// <summary>
@@ -85,18 +87,20 @@ namespace DataBase.Repositories.Items
         /// <param name="searchKey">Key to search by other fields.</param>
         /// <returns>List of items.</returns>
         /// <date>30.03.2022.</date>
-        public IAsyncEnumerable<Item> GetItemsAsync(string groupPath, string searchKey)
+        public async IAsyncEnumerable<Item> GetItemsAsync(string groupPath, string searchKey)
         {
-            return databaseContext.
-                    Items.
-                    Where(i =>
-                    (groupPath.Equals("-2") ? 1 == 1 : i.Group.Path.StartsWith(groupPath)) &&
+            foreach (var item in databaseContext.Items)
+            {
+                if ((groupPath.Equals("-2") ? 1 == 1 : item.Group.Path.StartsWith(groupPath)) &&
                     (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
-                    (i.Name.ToLower().Contains(searchKey.ToLower()) ||
-                    i.Code.Contains(searchKey) ||
-                    i.Barcode.Contains(searchKey) ||
-                    i.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null))).
-                    AsAsyncEnumerable();
+                    (item.Name.ToLower().Contains(searchKey.ToLower()) ||
+                    item.Code.Contains(searchKey) ||
+                    item.Barcode.Contains(searchKey) ||
+                    item.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null)))
+                {
+                    yield return item;
+                }
+            }
         }
 
         /// <summary>

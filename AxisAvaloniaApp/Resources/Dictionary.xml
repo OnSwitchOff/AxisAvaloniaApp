@@ -636,6 +636,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strAll">
+      <Value Lang="bg-BG">Всички</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">All</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Все</Value>
+      <Value Lang="uk-UA">Всі</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strItemGroup">
       <Value Lang="bg-BG">Група на стоките</Value>
       <Value Lang="el-GR">Not translated</Value>

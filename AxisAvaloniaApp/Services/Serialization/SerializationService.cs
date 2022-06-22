@@ -169,16 +169,16 @@ namespace AxisAvaloniaApp.Services.Serialization
                     break;
                 case ESerializationGroups.Report:
                     this.serializationData.Add(
-                        ESerializationKeys.SelectedGroupNodeTag,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupNodeTag, group, "-1"));
+                        ESerializationKeys.SelectedGroupId,
+                        new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupId, group, "0"));
                     break;
                 case ESerializationGroups.ItemsNomenclature:
                     this.serializationData.Add(
                         ESerializationKeys.AddColumns,
                         new SerializationItemModel(this.serialization, ESerializationKeys.AddColumns, group, "0"));
                     this.serializationData.Add(
-                        ESerializationKeys.SelectedGroupNodeTag,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupNodeTag, group, "-2"));
+                        ESerializationKeys.SelectedGroupId,
+                        new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupId, group, "0"));
                     this.serializationData.Add(
                         ESerializationKeys.ColCodeWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColCodeWidth, group, "35"));
@@ -200,8 +200,8 @@ namespace AxisAvaloniaApp.Services.Serialization
                         ESerializationKeys.AddColumns,
                         new SerializationItemModel(this.serialization, ESerializationKeys.AddColumns, group, "0"));
                     this.serializationData.Add(
-                        ESerializationKeys.SelectedGroupNodeTag,
-                        new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupNodeTag, group, "-2"));
+                        ESerializationKeys.SelectedGroupId,
+                        new SerializationItemModel(this.serialization, ESerializationKeys.SelectedGroupId, group, "0"));
                     this.serializationData.Add(
                         ESerializationKeys.ColPrincipalWidth,
                         new SerializationItemModel(this.serialization, ESerializationKeys.ColPrincipalWidth, group, "90"));

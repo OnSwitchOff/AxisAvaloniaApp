@@ -15,6 +15,14 @@ namespace DataBase.Repositories.ItemsGroups
         Task<string> GetPathByIdAsync(int groupId);
 
         /// <summary>
+        /// Gets group of items by Id.
+        /// </summary>
+        /// <param name="id">Id to find group of items.</param>
+        /// <returns>Returns group of items if group exists; otherwise returns null.</returns>
+        /// <date>20.06.2022.</date>
+        Task<ItemsGroup> GetGroupByIdAsync(int id);
+
+        /// <summary>
         /// Adds new group of items to table with groups of items.
         /// </summary>
         /// <param name="itemsGroup">Group of items.</param>

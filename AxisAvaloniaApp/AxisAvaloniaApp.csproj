@@ -157,9 +157,6 @@
     <Compile Update="UserControls\Extensions\CheckedMenuItem.axaml.cs">
       <DependentUpon>CheckedMenuItem.axaml</DependentUpon>
     </Compile>
-    <Compile Update="UserControls\Extensions\FocusableDataGridTextColumn.axaml.cs">
-      <DependentUpon>FocusableDataGridTextColumn.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources.resx">

@@ -633,13 +633,7 @@ namespace AxisAvaloniaApp.Services.Settings
         /// <date>16/03/2022.</date>
         public Microinvest.DeviceService.CustomTypes.UniqueSaleNumber UniqueSaleNumber
         {
-            get =>
-                this.uniqueSaleNumber == null ?
-                this.uniqueSaleNumber =
-                Math.Max(
-                    (int)this.AppSettings[ESettingKeys.UniqueSaleNumber],
-                    this.headerRepository.GetNextSaleNumberAsync(this.paymentService.FiscalDevice.FiscalPrinterSerialNumber).GetAwaiter().GetResult()) :
-                this.uniqueSaleNumber;
+            get => uniqueSaleNumber;
             set => this.uniqueSaleNumber = value;
         }
 

@@ -12,8 +12,8 @@
       <ControlTemplate>
         <Button HorizontalAlignment="Stretch"
                 Background="{Binding $parent.Background}"
-                BorderBrush="{Binding $parent.BorderBrush}"
-                BorderThickness="{Binding $parent.BorderThickness}"
+                BorderBrush="{Binding $parent.BorderBrush, Mode=TwoWay}"
+                BorderThickness="{Binding $parent.BorderThickness, Mode=TwoWay}"
                 CornerRadius="2"
                 Margin="2"
                 Command="{TemplateBinding Command}"

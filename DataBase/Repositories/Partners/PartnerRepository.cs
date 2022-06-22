@@ -82,21 +82,21 @@ namespace DataBase.Repositories.Partners
         /// <param name="searchKey">Key to search by other fields.</param>
         /// <returns>List of partners.</returns>
         /// <date>30.03.2022.</date>
-        public IAsyncEnumerable<Partner> GetParnersAsync(string groupPath, string searchKey)
+        public async IAsyncEnumerable<Partner> GetParnersAsync(string groupPath, string searchKey)
         {
-            return databaseContext.
-                        Partners.
-                        Where(p =>
-                        (groupPath.Equals("-2") ? 1 == 1 : p.Group.Path.StartsWith(groupPath))
-                        &&
-                        (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
-                        (p.Company.ToLower().Contains(searchKey) ||
-                        p.TaxNumber.Contains(searchKey) ||
-                        p.VATNumber.Contains(searchKey) ||
-                        p.Email.Contains(searchKey) ||
-                        p.DiscountCard.Equals(searchKey)
-                        ))).
-                        AsAsyncEnumerable();
+            foreach (var partner in databaseContext.Partners)
+            {
+                if ((groupPath.Equals("-2") ? 1 == 1 : partner.Group.Path.StartsWith(groupPath)) &&
+                    (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
+                        (partner.Company.ToLower().Contains(searchKey) ||
+                        partner.TaxNumber.Contains(searchKey) ||
+                        partner.VATNumber.Contains(searchKey) ||
+                        partner.Email.Contains(searchKey) ||
+                        partner.DiscountCard.Equals(searchKey))))
+                {
+                    yield return partner;
+                }
+            }
         }
 
         /// <summary>
@@ -105,17 +105,19 @@ namespace DataBase.Repositories.Partners
         /// <param name="searchKey">Key to search data.</param>
         /// <returns>List of partners.</returns>
         /// <date>30.03.2022.</date>
-        public IAsyncEnumerable<Partner> GetParnersAsync(string searchKey)
+        public async IAsyncEnumerable<Partner> GetParnersAsync(string searchKey)
         {
-            return databaseContext.
-                    Partners.
-                    Where(p =>
-                    p.Company.ToLower().Contains(searchKey.ToLower()) ||
-                    p.TaxNumber.Contains(searchKey) ||
-                    p.VATNumber.Contains(searchKey) ||
-                    p.Email.Contains(searchKey) ||
-                    p.DiscountCard.Equals(searchKey)).
-                    AsAsyncEnumerable();
+            foreach(var partner in databaseContext.Partners)
+            {
+                if (partner.Company.ToLower().Contains(searchKey.ToLower()) ||
+                    partner.TaxNumber.Contains(searchKey) ||
+                    partner.VATNumber.Contains(searchKey) ||
+                    partner.Email.Contains(searchKey) ||
+                    partner.DiscountCard.Equals(searchKey))
+                {
+                    yield return partner;
+                }
+            }
         }
 
         /// <summary>

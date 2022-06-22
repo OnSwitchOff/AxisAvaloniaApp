@@ -9,7 +9,7 @@ namespace AxisAvaloniaApp.Models
     /// <summary>
     /// Describes data of operation.
     /// </summary>
-    public class OperationItemModel : BaseModel
+    public class OperationItemModel : BaseModel, IDisposable
     {
         private ItemModel item;
         private int recordId;
@@ -19,10 +19,12 @@ namespace AxisAvaloniaApp.Models
         private double qty;
         private ObservableCollection<ItemCodeModel> measures;
         private ItemCodeModel selectedMeasure;
+        private decimal multiplier;
         private double partnerDiscount;
         private double itemDiscount;
         private double discount;
         private double price;
+        private double vATValue;
         private double amount;
         private string note;
 
@@ -131,6 +133,16 @@ namespace AxisAvaloniaApp.Models
         }
 
         /// <summary>
+        /// Gets or sets price rate.
+        /// </summary>
+        /// <date>21.06.2022.</date>
+        private decimal Multiplier
+        {
+            get => multiplier;
+            set => this.RaiseAndSetIfChanged(ref multiplier, value);
+        }
+
+        /// <summary>
         /// Gets or sets discount of group of partners.
         /// </summary>
         /// <date>15.03.2022.</date>
@@ -168,6 +180,16 @@ namespace AxisAvaloniaApp.Models
         {
             get => price;
             set => this.RaiseAndSetIfChanged(ref price, value);
+        }
+
+        /// <summary>
+        /// Gets or sets value of VAT.
+        /// </summary>
+        /// <date>15.03.2022.</date>
+        public double VATValue
+        {
+            get => vATValue;
+            set => this.RaiseAndSetIfChanged(ref vATValue, value);
         }
 
         /// <summary>
@@ -217,39 +239,71 @@ namespace AxisAvaloniaApp.Models
         /// <date>29.03.2022.</date>
         private void OperationItemModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            double priceWithDiscount;
             switch (e.PropertyName)
             {
-                case nameof(this.Item):
-                    this.Code = this.Item.Code;
-                    this.Barcode = this.Item.Barcode;
-                    this.Name = this.Item.Name;
-                    this.Measures.Clear();
-                    this.Measures.Add(new ItemCodeModel()
+                case nameof(Item):
+                    Code = Item.Code;
+                    Barcode = Item.Barcode;
+                    Name = Item.Name;
+                    Measures.Clear();
+                    Measures.Add(new ItemCodeModel()
                     {
-                        Code = this.Code,
-                        Measure = this.Item.Measure,
+                        Code = Code,
+                        Measure = Item.Measure,
                     });
-                    foreach (ItemCodeModel itemCode in this.Item.Codes)
+                    foreach (ItemCodeModel itemCode in Item.Codes)
                     {
-                        this.Measures.Add(itemCode);
+                        Measures.Add(itemCode);
                     }
 
-                    this.SelectedMeasure = this.Measures[0];
-                    this.Qty = 1;
-                    this.Price = (double)this.Item.Price;
-                    this.ItemDiscount = this.Item.Group.Discount;
+                    SelectedMeasure = Measures[0];
+                    Qty = 1;
+                    Price = (double)(Item.Price * Multiplier);
+                    ItemDiscount = this.Item.Group.Discount;
 
                     break;
+                case nameof(SelectedMeasure):
+                    // сменить коэффициент, применяемый к цене
+                    foreach (ItemCodeModel productCode in Item.Codes)
+                    {
+                        if (productCode.Measure.Equals(SelectedMeasure))
+                        {
+                            Multiplier = (decimal)productCode.Multiplier;
+                            return;
+                        }
+                    }
+
+                    // если новая единица измерения не из списка дополнительных кодов - ставим коэффициент трансформации равным "1"
+                    Multiplier = 1;
+                    break;
+                case nameof(Multiplier):
+                    Price = (double)(Item.Price * Multiplier);
+                    break;
                 case nameof(this.Qty):
+                    priceWithDiscount = Price * (1 - Discount / 100);
+                    Amount = priceWithDiscount * Qty;
                     break;
                 case nameof(this.Price):
-                    break;
                 case nameof(this.Discount):
+                    priceWithDiscount = Price * (1 - Discount / 100);
+                    VATValue = priceWithDiscount - (priceWithDiscount / (1 + Item.VATGroup.Value / 100));
+                    Amount = priceWithDiscount * Qty;
                     break;
                 case nameof(this.ItemDiscount):
                 case nameof(this.PartnerDiscount):
+                    Discount = (1 - (1 - PartnerDiscount / 100) * (1 - ItemDiscount / 100)) * 100;
                     break;
             }
+        }
+
+        /// <summary>
+        /// Unsubscribes from PropertyChanged event when object is disposing.
+        /// </summary>
+        /// <date>21.06.2022.</date>
+        public void Dispose()
+        {
+            this.PropertyChanged -= OperationItemModel_PropertyChanged;
         }
     }
 }

@@ -10,6 +10,7 @@ using AxisAvaloniaApp.Services.Payment.Device;
 using AxisAvaloniaApp.Services.Scanning;
 using AxisAvaloniaApp.Services.Settings;
 using DataBase.Entities.VATGroups;
+using DataBase.Repositories.OperationHeader;
 using Microinvest.CommonLibrary.Enums;
 
 namespace AxisAvaloniaApp.Services.StartUp
@@ -21,6 +22,7 @@ namespace AxisAvaloniaApp.Services.StartUp
         private readonly IPaymentService paymentService;
         private readonly IAxisCloudService axisCloudService;
         private readonly ILoggerService loggerService;
+        private readonly IOperationHeaderRepository headerRepository;
 
         //private UIElement shell = null;
 
@@ -39,6 +41,8 @@ namespace AxisAvaloniaApp.Services.StartUp
             this.paymentService = paymentService;
             this.axisCloudService = axisCloudService;
             this.loggerService = loggerService;
+
+            headerRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
         }
 
         public async Task ActivateAsync()
@@ -73,7 +77,7 @@ namespace AxisAvaloniaApp.Services.StartUp
 
         private async Task StartupAsync()
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 try
                 {
@@ -103,6 +107,9 @@ namespace AxisAvaloniaApp.Services.StartUp
                     {
                         paymentService.SetPaymentTool(new NoDevice(settings));
                     }
+
+                    int uSNFromDatabase = await headerRepository.GetNextSaleNumberAsync(paymentService.FiscalDevice.FiscalPrinterSerialNumber);
+                    settings.UniqueSaleNumber = Math.Max((int)settings.AppSettings[Enums.ESettingKeys.UniqueSaleNumber], uSNFromDatabase);
                 }
                 catch (Exception e)
                 {
@@ -165,8 +172,6 @@ namespace AxisAvaloniaApp.Services.StartUp
                 new System.Collections.Generic.List<DataBase.Entities.ItemsCodes.ItemCode>());
             item.Status = ENomenclatureStatuses.All;
             await itemRepository.AddItemAsync(item);
-            //res = await vATsRepository.AddVATGroupsAsync(vATGroups);
-            //await itemsGroupsRepository.AddGroupAsync(itemsGroup);
             
 
             DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository>();
@@ -174,7 +179,7 @@ namespace AxisAvaloniaApp.Services.StartUp
                 "-1",
                 translationService.Localize("strBaseGroup"), 
                 0);
-            //await partnersGroupsRepository.AddGroupAsync(partnersGroup);
+            await partnersGroupsRepository.AddGroupAsync(partnersGroup);
 
             DataBase.Repositories.Partners.IPartnerRepository partnerRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.Partners.IPartnerRepository>();
             DataBase.Entities.Partners.Partner partner = DataBase.Entities.Partners.Partner.Create(
@@ -193,7 +198,6 @@ namespace AxisAvaloniaApp.Services.StartUp
                 partnersGroup);
             partner.Status = ENomenclatureStatuses.All;
             await partnerRepository.AddPartnerAsync(partner);
-            await partnersGroupsRepository.AddGroupAsync(partnersGroup);
         }
     }
 }
