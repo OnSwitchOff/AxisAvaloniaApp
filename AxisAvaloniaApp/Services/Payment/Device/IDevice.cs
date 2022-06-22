@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microinvest.DeviceService.Helpers;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -39,6 +40,23 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// - initialized ResultException and AdditionalData (DialogResult.Abort/DialogResult.Ignore) properties if the print receipt has been unsuccess.
         /// </returns>
         /// <date>16.03.2022.</date>
-        Task<Microinvest.DeviceService.Helpers.FiscalExecutionResult> PayOrderAsync(ObservableCollection<Models.OperationItemModel> products, Microinvest.CommonLibrary.Enums.EPaymentTypes paymentType, decimal receivedCash);
+        Task<FiscalExecutionResult> PayOrderAsync(ObservableCollection<Models.OperationItemModel> products, Microinvest.CommonLibrary.Enums.EPaymentTypes paymentType, decimal receivedCash);
+
+        Task<FiscalExecutionResult> PrintDailyReportZ();
+
+        Task<FiscalExecutionResult> PrintDailyReportX();
+
+        Task<FiscalExecutionResult> PrintDuplicateCheque();
+
+        Task<FiscalExecutionResult> DepositeCash(decimal sum);
+
+        Task<FiscalExecutionResult> WithdrawCash(decimal sum);
+
+        Task<FiscalExecutionResult> CurrentMonthReport();
+
+        Task<FiscalExecutionResult> LastMonthReport();
+
+        Task<PinPadService.Interfaces.IBaseTransaction[]> ResetPOSterminal();
+
     }
 }

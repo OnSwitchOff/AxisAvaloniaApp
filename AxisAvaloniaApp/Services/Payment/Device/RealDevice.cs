@@ -27,8 +27,9 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         public RealDevice(ISettingsService settings)
         {
             loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
-            InitializeDeviceSettings(settings);
+            InitializeDeviceSettings(settings);      
         }
+
 
         /// <summary>
         /// Service to print receipts.
@@ -218,6 +219,46 @@ namespace AxisAvaloniaApp.Services.Payment.Device
 
                 return (true, string.Empty);
             });
+        }
+
+        public async Task<FiscalExecutionResult> PrintDailyReportZ()
+        {
+            return await fiscalPrinter.PrintDailyReportZAsync();
+        }
+
+        public async Task<FiscalExecutionResult> PrintDailyReportX()
+        {
+            return await fiscalPrinter.PrintDailyReportXAsync();
+        }
+
+        public async Task<FiscalExecutionResult> PrintDuplicateCheque()
+        {
+            return await fiscalPrinter.PrintDuplicateAsync();
+        }
+
+        public async Task<FiscalExecutionResult> DepositeCash(decimal sum)
+        {
+            return await fiscalPrinter.InputMoneyAsync(sum);
+        }
+
+        public async Task<FiscalExecutionResult> WithdrawCash(decimal sum)
+        {
+            return await fiscalPrinter.OutputMoneyAsync(sum);
+        }
+
+        public async Task<FiscalExecutionResult> CurrentMonthReport()
+        {
+            return await fiscalPrinter.CurrentMonthReportAsync();
+        }
+
+        public async Task<FiscalExecutionResult> LastMonthReport()
+        {
+            return await fiscalPrinter.PreviousMonthReportAsync();
+        }
+
+        public async Task<PinPadService.Interfaces.IBaseTransaction[]> ResetPOSterminal()
+        {
+            return await fiscalPrinter.POSTerminal.EndDayPOSTerminalAsync();
         }
     }
 }

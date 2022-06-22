@@ -3,6 +3,7 @@ using Microinvest.DeviceService.Helpers;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using AxisAvaloniaApp.Services.Settings;
+using PinPadService.Interfaces;
 
 namespace AxisAvaloniaApp.Services.Payment.Device
 {
@@ -77,6 +78,46 @@ namespace AxisAvaloniaApp.Services.Payment.Device
         /// <date>17.06.2022.</date>
         public void Dispose()
         {
+        }
+
+        public Task<FiscalExecutionResult> PrintDailyReportZ()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<FiscalExecutionResult> PrintDailyReportX()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<FiscalExecutionResult> PrintDuplicateCheque()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<FiscalExecutionResult> DepositeCash(decimal sum)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<FiscalExecutionResult> WithdrawCash(decimal sum)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<FiscalExecutionResult> CurrentMonthReport()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<FiscalExecutionResult> LastMonthReport()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IBaseTransaction[]> ResetPOSterminal()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
