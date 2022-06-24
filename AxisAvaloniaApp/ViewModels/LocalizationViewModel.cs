@@ -151,7 +151,7 @@ namespace AxisAvaloniaApp.ViewModels
             }
             if (lang == ELanguages.Arabic)
             {
-                image = "/Assets/Flags/arabic.png";
+                image = "/Assets/Flags/sasaudiarabia.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Armenian)
@@ -171,42 +171,42 @@ namespace AxisAvaloniaApp.ViewModels
             }
             if (lang == ELanguages.Finnish)
             {
-                image = "/Assets/Flags/finnish.png";
+                image = "/Assets/Flags/finland.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.French)
             {
-                image = "/Assets/Flags/french.png";
+                image = "/Assets/Flags/france.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Georgian)
             {
-                image = "/Assets/Flags/georgian.png";
+                image = "/Assets/Flags/ge.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.German)
             {
-                image = "/Assets/Flags/german.png";
+                image = "/Assets/Flags/germany.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Greek)
             {
-                image = "/Assets/Flags/greek.png";
+                image = "/Assets/Flags/greece.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Latvian)
             {
-                image = "/Assets/Flags/latvian.png";
+                image = "/Assets/Flags/latvia.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Polish)
             {
-                image = "/Assets/Flags/polish.png";
+                image = "/Assets/Flags/poland.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Romanian)
             {
-                image = "/Assets/Flags/romanian.png";
+                image = "/Assets/Flags/romania.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Russian)
@@ -216,22 +216,22 @@ namespace AxisAvaloniaApp.ViewModels
             }
             if (lang == ELanguages.Serbian)
             {
-                image = "/Assets/Flags/serbian.png";
+                image = "/Assets/Flags/serbia.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Spanish)
             {
-                image = "/Assets/Flags/spanish.png";
+                image = "/Assets/Flags/spain.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Turkish)
             {
-                image = "/Assets/Flags/turkish.png";
+                image = "/Assets/Flags/turkey.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Turkmen)
             {
-                image = "/Assets/Flags/turkmen.png";
+                image = "/Assets/Flags/turkmenistan.png";
                 langName = lang.EnglishName;
             }
             if (lang == ELanguages.Ukrainian)

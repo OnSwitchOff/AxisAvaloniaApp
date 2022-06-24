@@ -1,4 +1,5 @@
 ﻿using Microinvest.CommonLibrary.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -70,6 +71,17 @@ namespace DataBase.Repositories.OperationHeader
                 }
 
             });
+        }
+
+        /// <summary>
+        /// Gets OperationHeader from the database by id.
+        /// </summary>
+        /// <param name="id">Id to search OperationHeader in the database.</param>
+        /// <returns>OperationHeader</returns>
+        /// <date>24.06.2022.</date>
+        public Task<Entities.OperationHeader.OperationHeader> GetOperationHeaderByIdAsync(int id)
+        {
+            return databaseContext.OperationHeaders.FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

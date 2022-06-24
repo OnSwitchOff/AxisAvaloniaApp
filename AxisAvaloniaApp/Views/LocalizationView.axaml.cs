@@ -23,7 +23,7 @@ namespace AxisAvaloniaApp.Views
             }
         }
 
-        private MainWindow mainWindow = new MainWindow();
+        //private MainWindow mainWindow = null;
 
         public LocalizationView()
         {
@@ -34,12 +34,12 @@ namespace AxisAvaloniaApp.Views
             this.AttachDevTools();
 #endif
             DataContext = new LocalizationViewModel();
-            this.Closed += LocalizationView_Closed;
+            //this.Closed += LocalizationView_Closed;
         }
 
         private void LocalizationView_Closed(object? sender, System.EventArgs e)
         {
-            mainWindow.Show();
+
         }
 
         private void InitializeComponent()
@@ -53,11 +53,19 @@ namespace AxisAvaloniaApp.Views
         {
             taskSource = new TaskCompletionSource<MainWindow>();
             this.Closed += delegate
-            {         
-                taskSource.TrySetResult(mainWindow);            
+            {
+                if (DialogResult != null)
+                {
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    taskSource.TrySetResult(mainWindow);
+                }
+                else
+                {
+                    System.Environment.Exit(0);
+                }                         
             };
             this.Show();
-
             return await taskSource.Task;
         }
     }

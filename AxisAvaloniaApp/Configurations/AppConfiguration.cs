@@ -25,7 +25,7 @@ namespace AxisAvaloniaApp.Configurations
         /// <summary>
         /// Gets value indicating whether database exists. 
         /// </summary>
-        public static bool IsDatabaseExist { get; private set; } = true;
+        public static bool IsDatabaseExist => Directory.Exists(Path.Combine(Path.GetPathRoot(System.Environment.SystemDirectory), "ProgramData", "Axis", "Uno"));
 
         /// <summary>
         /// Gets or sets path to logo.
@@ -111,7 +111,6 @@ namespace AxisAvaloniaApp.Configurations
 
                     if (!Directory.Exists(dataBasePath))
                     {
-                        IsDatabaseExist = false;
                         Directory.CreateDirectory(dataBasePath);
                     }
                 }

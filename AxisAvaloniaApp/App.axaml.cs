@@ -27,7 +27,7 @@ namespace AxisAvaloniaApp
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
+               
 
                 MainWindow mw = null;
                 if (!Configurations.AppConfiguration.IsDatabaseExist)
@@ -35,7 +35,8 @@ namespace AxisAvaloniaApp
                     desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
                     LocalizationView dialog = new LocalizationView();
                     mw = await dialog.MyShowDialog();
-                }   
+                }
+                IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
                 startUpService.ActivateAsync();
                 desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
