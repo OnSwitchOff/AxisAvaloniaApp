@@ -8,6 +8,7 @@
         Abort,
         Retry,
         Cancel,
+        Ignore,
         None,
     }
 }

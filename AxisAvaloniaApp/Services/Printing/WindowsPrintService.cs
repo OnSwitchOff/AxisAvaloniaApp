@@ -84,7 +84,7 @@ namespace AxisAvaloniaApp.Services.Printing
         {
             // Create image.
             //Image newImage = Image.FromFile("SampImag.jpg");
-            Image newImage = Images[0];
+            Image newImage = resizeImage(Images[0], new Size(ev.PageSettings.PaperSize.Width, ev.PageSettings.PaperSize.Height));
 
             // Create coordinates for upper-left corner of image.
             float x = 0.0F;
@@ -92,12 +92,39 @@ namespace AxisAvaloniaApp.Services.Printing
 
             // Create rectangle for source image.
             RectangleF srcRect = new RectangleF(0.0F, 0.0F, newImage.Width, newImage.Height);
-            GraphicsUnit units = GraphicsUnit.Pixel;
+            GraphicsUnit units = GraphicsUnit.Point;
 
             // Draw image to screen.
             ev.Graphics.DrawImage(newImage, x, y, srcRect, units);
             Images.Remove(Images[0]);
             ev.HasMorePages = Images.Count > 0;
+        }
+
+        private static System.Drawing.Image resizeImage(System.Drawing.Image imgToResize, System.Drawing.Size size)
+        {
+            int sourceWidth = imgToResize.Width;
+            int sourceHeight = imgToResize.Height;
+            float nPercent = 0;
+            float nPercentW = 0;
+            float nPercentH = 0;
+            nPercentW = ((float)size.Width / (float)sourceWidth);
+
+            nPercentH = ((float)size.Height / (float)sourceHeight);
+            if (nPercentH < nPercentW)
+                nPercent = nPercentH;
+            else
+                nPercent = nPercentW;
+
+            int destWidth = (int)(sourceWidth * nPercent);
+
+            int destHeight = (int)(sourceHeight * nPercent);
+
+            System.Drawing.Bitmap b = new Bitmap(destWidth, destHeight);
+            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
+            g.Dispose();
+            return (System.Drawing.Image)b;
         }
     }
 }

@@ -136,7 +136,7 @@ namespace AxisAvaloniaApp.Models
         /// Gets or sets price rate.
         /// </summary>
         /// <date>21.06.2022.</date>
-        private decimal Multiplier
+        public decimal Multiplier
         {
             get => multiplier;
             set => this.RaiseAndSetIfChanged(ref multiplier, value);

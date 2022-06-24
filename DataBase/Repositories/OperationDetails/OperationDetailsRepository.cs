@@ -1,4 +1,6 @@
-﻿namespace DataBase.Repositories.OperationDetails
+﻿using System.Threading.Tasks;
+
+namespace DataBase.Repositories.OperationDetails
 {
     public class OperationDetailsRepository : IOperationDetailsRepository
     {
@@ -11,6 +13,23 @@
         public OperationDetailsRepository(DatabaseContext databaseContext)
         {
             this.databaseContext = databaseContext;
+        }
+
+        /// <summary>
+        /// Adds new record to OperationDetail table.
+        /// </summary>
+        /// <param name="record">Data to add.</param>
+        /// <returns>Returns 0 if record wasn't added to database; otherwise returns real id of new record.</returns>
+        /// <date>23.06.2022.</date>
+        public async Task<int> AddNewRecord(Entities.OperationDetails.OperationDetail record)
+        {
+            return await Task.Run(() =>
+            {
+                databaseContext.OperationDetails.Add(record);
+                databaseContext.SaveChanges();
+
+                return record.Id;
+            });
         }
     }
 }

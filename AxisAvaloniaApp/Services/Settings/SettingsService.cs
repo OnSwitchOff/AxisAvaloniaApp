@@ -75,12 +75,6 @@ namespace AxisAvaloniaApp.Services.Settings
         }
 
         /// <summary>
-        /// Gets or sets path to company logo image.
-        /// </summary>
-        /// <date>18/03/2022.</date>
-        public string LogoPath { get; set; }
-
-        /// <summary>
         /// Gets or sets language of the application.
         /// </summary>
         /// <date>16/03/2022.</date>

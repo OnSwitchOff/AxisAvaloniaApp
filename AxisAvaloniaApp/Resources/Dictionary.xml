@@ -124,6 +124,26 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strStockReceipt">
+      <Value Lang="bg-BG">Стокова разписка</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Stock receipt</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Товарная накладная</Value>
+      <Value Lang="uk-UA">Товарна накладна</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strForSale">
+      <Value Lang="bg-BG">за продажба на стоки</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">sale</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">для продажи товаров</Value>
+      <Value Lang="uk-UA">для продажу товарів</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strInvoice">
       <Value Lang="bg-BG">Фактура</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -523,6 +543,26 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Общая стоимость</Value>
       <Value Lang="uk-UA">Загальна вартість</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strAmount">
+      <Value Lang="bg-BG">Стойност</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Amount</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Стоимость</Value>
+      <Value Lang="uk-UA">Вартість</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strAmount_Short">
+      <Value Lang="bg-BG">Ст-ст</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Amount</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Ст-сть</Value>
+      <Value Lang="uk-UA">Вар-сть</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
@@ -1558,7 +1598,17 @@
       <Value Lang="uk-UA">Повторити</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
-    </Data>      
+    </Data>
+    <Data Key="strIgnore">
+      <Value Lang="bg-BG">Игнориране</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Ignore</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Игнорировать</Value>
+      <Value Lang="uk-UA">Ігнорувати</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strSave">
       <Value Lang="bg-BG">Запис</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -2306,7 +2356,217 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
- 
+    <Data Key="msgPartnerNotFound">
+      <Value Lang="bg-BG">Партньорът не е намерен! Желаете ли да създадете нов?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Partner is not found! Do you want to create new one?</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Партнёр не найден! Желаете создать нового?</Value>
+      <Value Lang="uk-UA">Партнера не знайдено! Бажаєте створити нового?</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgItemNotFound">
+      <Value Lang="bg-BG">Стоката не е намерена! Желаете ли да създадете нова?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Item is not found! Do you want to create new one?</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Товар не найден! Желаете создать новый?</Value>
+      <Value Lang="uk-UA">Товар не знайдено! Бажаєте створити новий?</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgPartnerToEditNotChoosen">
+      <Value Lang="bg-BG">Няма избран партньор за редактиране! Моля, изберете партньор.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Partner to edit isn't selected! Please, select a partner.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Партнёр для редактирования не выбран! Пожалуйста, выберите партнёра.</Value>
+      <Value Lang="uk-UA">Партнердля редагування не вибраний! Будь-ласка, оберіть партнера.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgItemToEditNotChoosen">
+      <Value Lang="bg-BG">Няма избрана стока за редактиране! Моля, изберете стока.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Item to edit isn't selected! Please, select a partner.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Товар для редактирования не выбран! Пожалуйста, выберите товар.</Value>
+      <Value Lang="uk-UA">Товар для редагування не вибраний! Будь-ласка, оберіть товар.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgGroupToEditNotChoosen">
+      <Value Lang="bg-BG">Няма избрана група за редактиране! Моля, изберете група.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Group to edit isn't selected! Please, select a group.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Группа для редактирования не выбрана! Пожалуйста, выберите группу.</Value>
+      <Value Lang="uk-UA">Група для редагування не вибрана! Будь-ласка, оберіть групу.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDoYouWantDeleteItem">
+      <Value Lang="bg-BG">Желаете ли да изтриете стоката?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Are you sure you want to delete the item?</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Вы действительно хотите удалить товар?</Value>
+      <Value Lang="uk-UA">Ви дійсно хочете видалити товар?</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgBaseItemCanNotBeDeleted">
+      <Value Lang="bg-BG">Основна стока не може да бъде изтрита!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The base item cannot be deleted!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Базовый товар не может быть удалён!</Value>
+      <Value Lang="uk-UA">Базовий товар не може бути видалений!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringDeletingItem">
+      <Value Lang="bg-BG">Възникнала е грешка при изтриване на стока!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during deleting of item from the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время удаления товара из базу данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час видалення товару із бази даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDoYouWantDeletePartner">
+      <Value Lang="bg-BG">Желаете ли да изтриете партньора?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Are you sure you want to delete the partner?</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Вы действительно хотите удалить партнёра?</Value>
+      <Value Lang="uk-UA">Ви дійсно хочете видалити партнера?</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgBasePartnerCanNotBeDeleted">
+      <Value Lang="bg-BG">Основен партньор не може да бъде изтрит!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The base partner cannot be deleted!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Базовый партнёр не может быть удалён!</Value>
+      <Value Lang="uk-UA">Базовий партнер не може бути видалений!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringDeletingPartner">
+      <Value Lang="bg-BG">Възникнала е грешка при изтриване на партньора!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during deleting of partner from the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время удаления партнёра из базы данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час видалення партнера із бази даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDoYouWantDeleteItemGroup">
+      <Value Lang="bg-BG">Желаете ли да изтриете групата от стоки?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Are you sure you want to delete the group of items?</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Вы действительно хотите удалить группу товаров?</Value>
+      <Value Lang="uk-UA">Ви дійсно хочете видалити групу товарів?</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgBaseItemGroupCanNotBeDeleted">
+      <Value Lang="bg-BG">Основната група на стоки не може да бъде изтрита!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The base group of items cannot be deleted!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Базовая группа товаров не может быть удалена!</Value>
+      <Value Lang="uk-UA">Базова група товарів не може бути видалена!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDoYouWantDeletePartnerGroup">
+      <Value Lang="bg-BG">Желаете ли да изтриете групата на партньорите?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Are you sure you want to delete the group of partners?</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Вы действительно хотите удалить группу партнёров?</Value>
+      <Value Lang="uk-UA">Ви дійсно хочете видалити групу партнерів?</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgBasePartnerGroupCanNotBeDeleted">
+      <Value Lang="bg-BG">Основната група на партньорите не може да бъде изтрита!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The base group of partners cannot be deleted!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Базовая группа партнёров не может быть удалена!</Value>
+      <Value Lang="uk-UA">Базова група партнерів не може бути видалена!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringDeletingGroup">
+      <Value Lang="bg-BG">Възникнала е грешка при изтриване на група!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during deleting of group from the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время удаления группы из базы данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час видалення групи із бази даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgEmptyTable">
+      <Value Lang="bg-BG">Таблицата е празна! Моля, въведете данни.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Table is empty! Please, enter data.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Таблица пуста! Пожалуйста, введите данные.</Value>
+      <Value Lang="uk-UA">Таблиця не заповнена! Будь-ласка, внесіть дані.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgEmptyPrice">
+      <Value Lang="bg-BG">Цената не може да бъде празна или равна на "0"!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The price can't be empty or equal to "0"!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Цена не может быть пустой или равной "0"!</Value>
+      <Value Lang="uk-UA">Ціна не може бути порожньою або рівнятися "0"!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgEmptyQtty">
+      <Value Lang="bg-BG">Количеството не може да бъде празно или равно на "0"!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The qty can't be empty or equal to "0"!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Количество не может быть пустым или равным "0"!</Value>
+      <Value Lang="uk-UA">Кількість не може бути порожньою або рівнятися "0"!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgNotEnoughMoney">
+      <Value Lang="bg-BG">Въведената сума не е достатъчна!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The entered amount is not enough!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Введенной суммы недостаточно!</Value>
+      <Value Lang="uk-UA">Введеної суми недостатньо!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringSavingOperation">
+      <Value Lang="bg-BG">Възникнала е грешка при запис на операция!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during saving of operation data to the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время записи данных операции в базу данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час збереження даних операції у базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    
   </Dictionary>
 
   <Dictionary Product="Axis My100R Help" Version="1">

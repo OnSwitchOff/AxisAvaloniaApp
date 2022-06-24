@@ -254,6 +254,8 @@ namespace AxisAvaloniaApp.Models
                 partner.DiscountCardNumber,
                 partner.Email,
                 (DataBase.Entities.PartnersGroups.PartnersGroup)partner.Group);
+            entityPartner.Id = partner.id;
+            entityPartner.Status = partner.status;
 
             return entityPartner;
         }

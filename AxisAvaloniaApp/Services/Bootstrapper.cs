@@ -56,7 +56,9 @@ namespace AxisAvaloniaApp.Services
                 resolver.GetRequiredService<IScanningData>(),
                 resolver.GetRequiredService<IPaymentService>(),
                 resolver.GetRequiredService<IAxisCloudService>(),
-                resolver.GetRequiredService<ILoggerService>()));
+                resolver.GetRequiredService<ILoggerService>(),
+                resolver.GetRequiredService<ISearchData>(),
+                resolver.GetRequiredService<IOperationHeaderRepository>()));
 
             services.Register<IActivationService>(() => new ActivationService("https://axis.sx/"));
 
@@ -78,7 +80,7 @@ namespace AxisAvaloniaApp.Services
             services.RegisterLazySingleton<IValidationService>(() => new ValidationService(resolver.GetRequiredService<ISettingsService>()));
             services.Register<IReportsService>(() => new BulgarianReportsService());
 
-            switch (AvaloniaLocator.Current.GetService<IRuntimePlatform>().GetRuntimeInfo().OperatingSystem)
+            switch (AvaloniaLocator.Current?.GetService<IRuntimePlatform>()?.GetRuntimeInfo().OperatingSystem)
             {
                 case OperatingSystemType.WinNT:
                     services.Register<IPrintService>(() => new WindowsPrintService());

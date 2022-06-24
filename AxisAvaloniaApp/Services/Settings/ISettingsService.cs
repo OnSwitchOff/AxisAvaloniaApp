@@ -36,12 +36,6 @@ namespace AxisAvaloniaApp.Services.Settings
         string QtyFormat { get; }
 
         /// <summary>
-        /// Path to company logo image.
-        /// </summary>
-        /// <date>18/03/2022.</date>
-        string LogoPath { get; set; }
-
-        /// <summary>
         /// Gets or sets language of the application.
         /// </summary>
         /// <date>16/03/2022.</date>

@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using AxisAvaloniaApp.Helpers;
+using ReactiveUI;
 
 namespace AxisAvaloniaApp.Models
 {
@@ -98,6 +99,19 @@ namespace AxisAvaloniaApp.Models
             productCode.Id = itemCode.Id;
 
             return productCode;
+        }
+
+        /// <summary>
+        /// Creates clone of ItemCodeModel object.
+        /// </summary>
+        /// <returns>New ItemCodeModel object.</returns>
+        /// <date>23.06.2022.</date>
+        public ItemCodeModel Clone()
+        {
+            ItemCodeModel newItemCode = new ItemCodeModel();
+            newItemCode.Clone(this);
+
+            return newItemCode;
         }
     }
 }

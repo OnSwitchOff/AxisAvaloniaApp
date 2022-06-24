@@ -117,6 +117,12 @@
                                   Classes="ButtonContent"/>
       </Button>
       <Button Command="{Binding ButtonClick}"
+              CommandParameter="{x:Static enums:EButtonResults.Ignore}"
+              IsVisible="{Binding IsIgnoreShowed}">
+        <controlsEx:AxisTextBlock LocalizeTextKey="strIgnore"
+                                  Classes="ButtonContent"/>
+      </Button>
+      <Button Command="{Binding ButtonClick}"
               CommandParameter="{x:Static enums:EButtonResults.Cancel}"
               IsVisible="{Binding IsCancelShowed}">
         <controlsEx:AxisTextBlock LocalizeTextKey="strCancel"

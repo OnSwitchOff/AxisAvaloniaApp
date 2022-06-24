@@ -8,6 +8,6 @@
         OkAbort,
         YesNoCancel,
         YesNoAbort,
-        AbortRetryCancel,
+        AbortRetryIgnore,
     }
 }

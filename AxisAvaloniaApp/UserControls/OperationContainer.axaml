@@ -203,7 +203,7 @@
                   </ComboBox.ItemTemplate>
                 </ComboBox>
                 <ComboBox Items="{TemplateBinding Orientations}"
-                          SelectedItem="{TemplateBinding SelectedOrientation}"
+                          SelectedItem="{TemplateBinding SelectedOrientation, Mode=TwoWay}"
                           HorizontalAlignment="Stretch">
                   <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -269,8 +269,8 @@
                               Padding="30"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto">
                   <ItemsRepeater Name="ListPages" 
-                                 Items="{TemplateBinding Pages, Mode=TwoWay}"
-                                Width="{TemplateBinding PageWidth, Mode=TwoWay}">
+                                 Items="{TemplateBinding AvaloniaPages, Mode=TwoWay}"
+                                 Width="{TemplateBinding PageWidth, Mode=TwoWay}">
                     <ItemsRepeater.Styles>
                     </ItemsRepeater.Styles>
                     <ItemsRepeater.ItemTemplate>

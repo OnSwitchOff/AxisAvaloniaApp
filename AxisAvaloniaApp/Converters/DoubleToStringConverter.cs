@@ -16,7 +16,6 @@ namespace AxisAvaloniaApp.Converters
             settingsService = Locator.Current.GetService<ISettingsService>();
         }
 
-
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (parameter != null)
@@ -56,9 +55,40 @@ namespace AxisAvaloniaApp.Converters
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             double parsedValue;
-            if (double.TryParse(value.ToString(), out parsedValue))
+            if (parameter != null)
             {
-                return parsedValue;
+                EDoubleTypes doubleType;
+                if (Enum.TryParse<EDoubleTypes>(parameter.ToString(), out doubleType))
+                {
+                    if (value == null)
+                    {
+                        throw new Exception("Value is not initialized!");
+                    }
+
+                    if (string.IsNullOrEmpty(value.ToString()))
+                    {
+                        return 0;
+                    }
+                    
+                    char separator = '.';
+                    switch (doubleType)
+                    {
+                        case EDoubleTypes.Qty:
+                            separator = settingsService.Culture.NumberFormat.NumberDecimalSeparator[0];
+                            break;
+                        case EDoubleTypes.Price:
+                            separator = settingsService.Culture.NumberFormat.CurrencyDecimalSeparator[0];
+                            break;
+                        case EDoubleTypes.F0_Percent:
+                            separator = settingsService.Culture.NumberFormat.PercentDecimalSeparator[0];
+                            break;
+                    }
+
+                    if (double.TryParse(value.ToString().Replace(',', separator).Replace('.', separator).TrimEnd(separator), out parsedValue))
+                    {
+                        return parsedValue;
+                    }
+                }
             }
 
             throw new ArgumentException();

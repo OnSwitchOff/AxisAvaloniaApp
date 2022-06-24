@@ -28,7 +28,7 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async Task<Item> GetItemByBarcodeAsync(string barcode)
         {
-            return await databaseContext.Items.FirstOrDefaultAsync(i => i.Barcode.Equals(barcode));
+            return await databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup).FirstOrDefaultAsync(i => i.Barcode.Equals(barcode));
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async Task<Item> GetItemByIdAsync(int id)
         {
-            return await databaseContext.Items.FirstOrDefaultAsync(i => i.Id == id);
+            return await databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup).FirstOrDefaultAsync(i => i.Id == id);
         }
 
         /// <summary>
@@ -52,6 +52,8 @@ namespace DataBase.Repositories.Items
         {
             return await databaseContext.
                     Items.
+                    Include(i => i.Group).
+                    Include(i => i.Vatgroup).
                     FirstOrDefaultAsync(i =>
                     i.Name.Equals(key) ||
                     i.Code.Equals(key) ||
@@ -67,7 +69,7 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Item> GetItemsAsync(string searchKey)
         {
-            foreach (var item in databaseContext.Items)
+            foreach (var item in databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup))
             {
                 if (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
                      (item.Name.ToLower().Contains(searchKey.ToLower()) ||
@@ -89,7 +91,7 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Item> GetItemsAsync(string groupPath, string searchKey)
         {
-            foreach (var item in databaseContext.Items)
+            foreach (var item in databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup))
             {
                 if ((groupPath.Equals("-2") ? 1 == 1 : item.Group.Path.StartsWith(groupPath)) &&
                     (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
@@ -114,6 +116,8 @@ namespace DataBase.Repositories.Items
             return databaseContext.
                     Items.
                     Where(i => i.Group.Id == groupId).
+                    Include(i => i.Group).
+                    Include(i => i.Vatgroup).
                     AsAsyncEnumerable();
         }
 
@@ -125,7 +129,12 @@ namespace DataBase.Repositories.Items
         /// <date>17.06.2022.</date>
         public IAsyncEnumerable<Item> GetItemsAsync(ENomenclatureStatuses status = ENomenclatureStatuses.Active)
         {
-            return databaseContext.Items.Where(i => (i.Status == ENomenclatureStatuses.All || i.Status == status)).Include(i => i.Group).Include(i => i.Vatgroup).AsAsyncEnumerable();
+            return databaseContext.
+                Items.
+                Where(i => (i.Status == ENomenclatureStatuses.All || i.Status == status)).
+                Include(i => i.Group).
+                Include(i => i.Vatgroup).
+                AsAsyncEnumerable();
         }
 
         /// <summary>

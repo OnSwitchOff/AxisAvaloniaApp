@@ -39,6 +39,7 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         Task<Partner> GetPartnerByNameAsync(string name);
 
+
         /// <summary>
         /// Gets list of partners in according to status of partner.
         /// </summary>
@@ -70,7 +71,7 @@ namespace DataBase.Repositories.Partners
         /// <param name="GroupID">Id of partner group to search data.</param>
         /// <returns>List of partners.</returns>
         /// <date>30.03.2022.</date>
-        IAsyncEnumerable<Partner> GetParnersAsync(int GroupID);
+        IAsyncEnumerable<Partner> GetParnersByGroupIdAsync(int GroupID);
 
         /// <summary>
         /// Adds new partner to table with partners.

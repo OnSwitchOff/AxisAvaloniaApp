@@ -39,5 +39,28 @@ namespace AxisAvaloniaApp.Helpers
 
             throw new Exception(string.Format("{0} is not supported by Fisco dll!", country));
         }
+
+        /// <summary>
+        /// Converts EECCheckTypes enum to EECRReceiptType enum.
+        /// </summary>
+        /// <param name="receiptType">Type of receipt to convert.</param>
+        /// <returns>EECRReceiptType.</returns>
+        /// <date>23.06.2022.</date>
+        public static Microinvest.CommonLibrary.Enums.EECCheckTypes Convert(this Microinvest.DeviceService.Enums.EECRReceiptType receiptType)
+        {
+            switch (receiptType)
+            {
+                case Microinvest.DeviceService.Enums.EECRReceiptType.FiscalReceipt:
+                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.FiscalCheck;
+                case Microinvest.DeviceService.Enums.EECRReceiptType.NonFiscalReceipt:
+                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.NonFiscalCheck;
+                case Microinvest.DeviceService.Enums.EECRReceiptType.ReturnReceipt:
+                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.ReturnCheck;
+                case Microinvest.DeviceService.Enums.EECRReceiptType.DuplicateReceipt:
+                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.DuplicateCheck;
+                default:
+                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.Unknown;
+            }
+        }
     }
 }

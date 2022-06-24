@@ -55,7 +55,10 @@
     </Style>
   </UserControl.Styles>
   
-  <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}">
+  <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" 
+                                PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}" 
+                                Pages="{Binding Pages, Mode=TwoWay}" 
+                                DocumentService="{Binding DocumentService}">
     <container:OperationContainer.TitleContent>
       <Grid Margin="5, 0" ColumnDefinitions="auto, auto, *">
         <TextBlock Grid.Column="0"
@@ -296,7 +299,7 @@
         </DataGrid>
 
         <Grid Grid.Row="2"
-              IsVisible="{Binding $parent[UserControl].IsPaymentPanelVisible, Mode=TwoWay}"
+              IsVisible="{Binding IsPaymentPanelVisible, Mode=TwoWay}"
               ColumnDefinitions="*, *, *"
               RowDefinitions="*, *">
           <buttons:PaymentButton Grid.Row="0"
@@ -360,10 +363,11 @@
                 </Button.Content>
               </Button>
             </Grid>
-            <TextBox Grid.Row="1" 
-                     Margin="5, 0, 5, 0"
-                     HorizontalContentAlignment="Center"
-                     Text="{Binding AmountToPay, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}, Mode=TwoWay}"/>
+            <controlsEx:AxisTextBox Grid.Row="1"
+                                    Margin="5, 0, 5, 0"
+                                    HorizontalContentAlignment="Center"
+                                    InputDataChecker="OnlyDigitsAndPoint"
+                                    Text="{Binding AmountToPay, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price}, Mode=TwoWay}"/>
             <Grid Grid.Row="2" ColumnDefinitions="*, auto, *">
               <controlsEx:AxisTextBlock Grid.Column="0" 
                                         LocalizeTextKey="strChange" 
@@ -410,7 +414,7 @@
                                    Width="150"
                                    Foreground="White"
                                    LocalizeTextKey="strPayment"
-                                   Command="{Binding $parent[UserControl].ChangeIsPaymentPanelVisible}"/>
+                                   Command="{Binding ChangeIsPaymentPanelVisible}"/>
         </Grid>
       </Grid>
     </container:OperationContainer.WorkContent>
@@ -430,7 +434,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditItemCode"
-                                    Text="{Binding SelectedItem.Code, Mode=TwoWay}"/>
+                                    Text="{Binding EditableItem.Code, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="1"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -439,7 +443,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditItemName"
-                                    Text="{Binding SelectedItem.Name, Mode=TwoWay}"/>
+                                    Text="{Binding EditableItem.Name, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="2"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -448,7 +452,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditItemBarcode"
-                                    Text="{Binding SelectedItem.Barcode, Mode=TwoWay}"/>
+                                    Text="{Binding EditableItem.Barcode, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="3"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -458,7 +462,7 @@
                                              Margin="0, 0, 5, 0"
                                              KeyText="Name"
                                              Items="{Binding ItemsGroups, Mode=TwoWay}"
-                                             SelectedItem="{Binding SelectedItem.Group, Mode=TwoWay}"
+                                             SelectedItem="{Binding EditableItem.Group, Mode=TwoWay}"
                                              ExplanationKey="ChooseItemGroup">
               <comboBoxes:ComboBoxWithTreeView.ItemTemplate>
                 <TreeDataTemplate ItemsSource="{Binding SubGroups}">
@@ -475,7 +479,7 @@
                                      Classes="RightMargin"
                                      ExplanationKey="SelectItemVATGroup"
                                      Items="{Binding VATGroups, Mode=TwoWay}"
-                                     SelectedItem="{Binding SelectedItem.VATGroup, Mode=TwoWay}">
+                                     SelectedItem="{Binding EditableItem.VATGroup, Mode=TwoWay}">
               <controlsEx:AxisComboBox.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Text="{Binding Name}"/>
@@ -492,7 +496,7 @@
                                      Classes="RightMargin"
                                      ExplanationKey="SelectItemType"
                                      Items="{Binding ItemsTypes}"
-                                     SelectedItem="{Binding SelectedItem.ItemType, Converter={StaticResource ItemTypesToComboBoxItem}, ConverterParameter={Binding $self.Items}, Mode=TwoWay}">
+                                     SelectedItem="{Binding EditableItem.ItemType, Converter={StaticResource ItemTypesToComboBoxItem}, ConverterParameter={Binding $self.Items}, Mode=TwoWay}">
               <controlsEx:AxisComboBox.ItemTemplate>
                 <DataTemplate>
                   <controlsEx:AxisTextBlock LocalizeTextKey="{Binding Key}"/>
@@ -508,7 +512,7 @@
                                      IsInputText="True"
                                      Classes="RightMargin"
                                      Items="{Binding Measures}"
-                                     SelectedItem="{Binding SelectedItem.Measure, Mode=TwoWay}"/>
+                                     SelectedItem="{Binding EditableItem.Measure, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="7"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -518,7 +522,7 @@
                                     Classes="RightMargin"
                                     HorizontalContentAlignment="Right"
                                     ExplanationKey="EnterOrEditItemSalePrice"
-                                    Text="{Binding SelectedItem.Price, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price} Mode=TwoWay}"/>
+                                    Text="{Binding EditableItem.Price, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price} Mode=TwoWay}"/>
             <StackPanel Grid.Row="8"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
@@ -621,7 +625,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditCompanyName"
-                                    Text="{Binding SelectedPartner.Name, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.Name, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="1"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -631,7 +635,7 @@
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditPrincipal"
                                     InputDataChecker="OnlyLettersAndSpaces"
-                                    Text="{Binding SelectedPartner.Principal, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.Principal, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="2"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -641,7 +645,7 @@
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditRegisterData_City"
                                     InputDataChecker="OnlyLettersAndSpaces"
-                                    Text="{Binding SelectedPartner.City, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.City, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="3"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -650,7 +654,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditRegisterData_Address"
-                                    Text="{Binding SelectedPartner.Address, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.Address, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="4"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -659,7 +663,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditPhone"
-                                    Text="{Binding SelectedPartner.Phone, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.Phone, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="5"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -675,7 +679,7 @@
                                       BorderThickness="0"
                                       ExplanationKey="EnterOrEditTaxNumber"
                                       InputDataChecker="OnlyDigits"
-                                      Text="{Binding SelectedPartner.TaxNumber, Mode=TwoWay}" 
+                                      Text="{Binding EditablePartner.TaxNumber, Mode=TwoWay}" 
                                       KeyDown="TextBoxFindPartner_KeyDown"/>
               <Button Grid.Column="1"
                       CornerRadius="0, 3, 3, 0"
@@ -706,7 +710,7 @@
                                       Background="White"
                                       BorderThickness="0"
                                       ExplanationKey="EnterOrEditVATNumber"
-                                      Text="{Binding SelectedPartner.VATNumber, Mode=TwoWay}"
+                                      Text="{Binding EditablePartner.VATNumber, Mode=TwoWay}"
                                       InputDataChecker="OnlyDigitsAndLetters"
                                       KeyDown="TextBoxFindPartner_KeyDown"/>
               <Button Grid.Column="1"
@@ -732,7 +736,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditCompanyBankName"
-                                    Text="{Binding SelectedPartner.BankName, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.BankName, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="8"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -741,7 +745,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditCompanyBankBIC"
-                                    Text="{Binding SelectedPartner.BankBIC, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.BankBIC, Mode=TwoWay}"/>
             <TextBlock Grid.Row="9"
                        Grid.Column="0"
                        Text="IBAN"
@@ -751,7 +755,7 @@
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditCompanyIBAN"
                                     InputDataChecker="OnlyDigitsAndLetters"
-                                    Text="{Binding SelectedPartner.IBAN, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.IBAN, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="10"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -760,7 +764,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditPartnerDiscountCard"
-                                    Text="{Binding SelectedPartner.DiscountCardNumber, Mode=TwoWay}"
+                                    Text="{Binding EditablePartner.DiscountCardNumber, Mode=TwoWay}"
                                     PropertyChanged="TextBoxDiscountCardNumber_PropertyChanged"/>
             <controlsEx:AxisTextBlock Grid.Row="11"
                                       Grid.Column="0"
@@ -770,7 +774,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditPartnerEmail"
-                                    Text="{Binding SelectedPartner.Email, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartner.Email, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="12"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -780,7 +784,7 @@
                                              Margin="0, 0, 5, 0"
                                              KeyText="Name"
                                              Items="{Binding PartnersGroups, Mode=TwoWay}"
-                                             SelectedItem="{Binding SelectedPartner.Group, Mode=TwoWay}"
+                                             SelectedItem="{Binding EditablePartner.Group, Mode=TwoWay}"
                                              ExplanationKey="SelectPartnerGroup">
               <comboBoxes:ComboBoxWithTreeView.ItemTemplate>
                 <TreeDataTemplate ItemsSource="{Binding SubGroups}">
@@ -817,7 +821,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditGroupName"
-                                    Text="{Binding SelectedItemsGroup.Name, Mode=TwoWay}"/>
+                                    Text="{Binding EditableItemsGroup.Name, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="1"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -826,7 +830,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditGroupDiscount"
-                                    Text="{Binding SelectedItemsGroup.Discount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Qty} Mode=TwoWay}"/>
+                                    Text="{Binding EditableItemsGroup.Discount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Qty} Mode=TwoWay}"/>
             <Grid Grid.Row="3"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
@@ -856,7 +860,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditGroupName"
-                                    Text="{Binding SelectedPartnersGroup.Name, Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartnersGroup.Name, Mode=TwoWay}"/>
             <controlsEx:AxisTextBlock Grid.Row="1"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -865,7 +869,7 @@
                                     Grid.Column="1"
                                     Classes="RightMargin"
                                     ExplanationKey="EnterOrEditGroupDiscount"
-                                    Text="{Binding SelectedPartnersGroup.Discount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Qty} Mode=TwoWay}"/>
+                                    Text="{Binding EditablePartnersGroup.Discount, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Qty} Mode=TwoWay}"/>
             <Grid Grid.Row="3"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
@@ -1181,7 +1185,9 @@
                     </Button.Content>
                   </Button>
                   <Button Background="Transparent"
-                          Click="ButtonEditNomenclature_Click">
+                          Click="ButtonEditNomenclature_Click"
+                          Command="{Binding DeleteNomenclature}"
+                          CommandParameter="{x:Static miEnums:ENomenclatures.Partners}">
                     <Button.Content>
                       <Image Source="/Assets/Icons/partners_delete.png" Width="32"/>
                     </Button.Content>
@@ -1206,7 +1212,9 @@
                     </Button.Content>
                   </Button>
                   <Button Background="Transparent" 
-                          Click="ButtonEditNomenclature_Click">
+                          Click="ButtonEditNomenclature_Click"
+                          Command="{Binding DeleteNomenclature}"
+                          CommandParameter="{x:Static miEnums:ENomenclatures.Items}">
                     <Button.Content>
                       <Image Source="/Assets/Icons/goods_delete.png" Width="32"/>
                     </Button.Content>
@@ -1231,7 +1239,9 @@
                     </Button.Content>
                   </Button>
                   <Button Background="Transparent" 
-                          Click="ButtonEditNomenclature_Click">
+                          Click="ButtonEditNomenclature_Click"
+                          Command="{Binding DeleteNomenclature}"
+                          CommandParameter="{x:Static miEnums:ENomenclatures.ItemsGroups}">
                     <Button.Content>
                       <Image Source="/Assets/Icons/groups_delete.png" Width="32"/>
                     </Button.Content>

@@ -85,5 +85,21 @@
 
             return new OperationDetail(operationHeader, goods, qtty, sign, 0, salePrice, 0, saleVat, 0, note);
         }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="OperationDetail"/> class.
+        /// </summary>
+        /// <param name="goods">Goods included in the operation.</param>
+        /// <param name="qtty">Quantity of goods included in the operation.</param>
+        /// <param name="salePrice">Sale price.</param>
+        /// <param name="saleVat">Vat value by the sale price.</param>
+        /// <param name="note">Note of the record.</param>
+        /// <returns>Returns <see cref="OperationDetail"/> class if parameters are correct.</returns>
+        public static OperationDetail Create(Items.Item goods, decimal qtty, decimal salePrice, decimal saleVat, string note = "")
+        {
+            // check number
+
+            return new OperationDetail(null, goods, qtty, -1, 0, salePrice, 0, saleVat, 0, note);
+        }
     }
 }

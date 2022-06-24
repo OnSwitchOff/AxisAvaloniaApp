@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Platform;
@@ -8,6 +9,7 @@ using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Payment.Device;
 using AxisAvaloniaApp.Services.Scanning;
+using AxisAvaloniaApp.Services.SearchNomenclatureData;
 using AxisAvaloniaApp.Services.Settings;
 using DataBase.Entities.VATGroups;
 using DataBase.Repositories.OperationHeader;
@@ -22,6 +24,7 @@ namespace AxisAvaloniaApp.Services.StartUp
         private readonly IPaymentService paymentService;
         private readonly IAxisCloudService axisCloudService;
         private readonly ILoggerService loggerService;
+        private readonly ISearchData searchService;
         private readonly IOperationHeaderRepository headerRepository;
 
         //private UIElement shell = null;
@@ -34,15 +37,22 @@ namespace AxisAvaloniaApp.Services.StartUp
         /// <param name="paymentService">Service to print receipt.</param>
         /// <param name="axisCloudService">Service to connect with AxicCloud app.</param>
         /// <param name="loggerService">Service to log errors.</param>
-        public StartUpService(ISettingsService settings, IScanningData scanningService, IPaymentService paymentService, IAxisCloudService axisCloudService, ILoggerService loggerService)
+        public StartUpService(
+            ISettingsService settings, 
+            IScanningData scanningService, 
+            IPaymentService paymentService, 
+            IAxisCloudService axisCloudService, 
+            ILoggerService loggerService,
+            ISearchData searchService,
+            IOperationHeaderRepository headerRepository)
         {
             this.settings = settings;
             this.scanningService = scanningService;
             this.paymentService = paymentService;
             this.axisCloudService = axisCloudService;
             this.loggerService = loggerService;
-
-            headerRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+            this.searchService = searchService;
+            this.headerRepository = headerRepository;
         }
 
         public async Task ActivateAsync()
@@ -61,8 +71,10 @@ namespace AxisAvaloniaApp.Services.StartUp
             {
                 try
                 {
-                    Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico")));
-                    logo.Save(Configurations.AppConfiguration.LogoPath);
+                    using (Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico"))))
+                    {
+                        logo.Save(Configurations.AppConfiguration.LogoPath);
+                    }
                     
                     WriteDefaultValuesIntoDatabase();
                     
@@ -81,6 +93,8 @@ namespace AxisAvaloniaApp.Services.StartUp
             {
                 try
                 {
+                    searchService.InitializeSearchDataTool(settings.AppLanguage);
+
                     if (!string.IsNullOrEmpty(settings.COMScannerSettings[Enums.ESettingKeys.ComPort]) &&
                     !settings.COMScannerSettings[Enums.ESettingKeys.ComPort].ToString().Equals("strNotActive"))
                     {
@@ -134,7 +148,7 @@ namespace AxisAvaloniaApp.Services.StartUp
             await itemsGroupsRepository.AddGroupAsync(itemsGroup);
 
             DataBase.Repositories.VATGroups.IVATsRepository vATsRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.VATGroups.IVATsRepository>();
-            System.Collections.Generic.List<VATGroup> vATGroups = new System.Collections.Generic.List<VATGroup>();
+            List<VATGroup> vATGroups = new List<VATGroup>();
             if (settings.Country == ECountries.Bulgaria)
             {
                 vATGroups.Add(VATGroup.Create(translationService.Localize("strVATGroupA"), 0));
@@ -167,37 +181,52 @@ namespace AxisAvaloniaApp.Services.StartUp
                 "",
                 translationService.Localize("strMeasureItem"),
                 itemsGroup,
-                vATGroups[0], 
-                EItemTypes.Standard, 
-                new System.Collections.Generic.List<DataBase.Entities.ItemsCodes.ItemCode>());
+                vATGroups[0],
+                EItemTypes.Standard,
+                new List<DataBase.Entities.ItemsCodes.ItemCode>());
             item.Status = ENomenclatureStatuses.All;
             await itemRepository.AddItemAsync(item);
-            
+
 
             DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.PartnersGroups.IPartnersGroupsRepository>();
             DataBase.Entities.PartnersGroups.PartnersGroup partnersGroup = DataBase.Entities.PartnersGroups.PartnersGroup.Create(
                 "-1",
-                translationService.Localize("strBaseGroup"), 
+                translationService.Localize("strBaseGroup"),
                 0);
             await partnersGroupsRepository.AddGroupAsync(partnersGroup);
 
             DataBase.Repositories.Partners.IPartnerRepository partnerRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.Partners.IPartnerRepository>();
             DataBase.Entities.Partners.Partner partner = DataBase.Entities.Partners.Partner.Create(
-                translationService.Localize("strBasePartner"), 
-                translationService.Localize("strBasePartner"), 
-                "", 
-                "", 
-                "", 
-                "", 
-                "", 
-                "", 
-                "", 
-                "", 
-                "", 
-                "", 
+                translationService.Localize("strBasePartner"),
+                translationService.Localize("strBasePartner"),
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
                 partnersGroup);
             partner.Status = ENomenclatureStatuses.All;
             await partnerRepository.AddPartnerAsync(partner);
+
+            DataBase.Repositories.PaymentTypes.IPaymentTypesRepository paymentTypesRepository = Splat.Locator.Current.GetRequiredService<DataBase.Repositories.PaymentTypes.IPaymentTypesRepository>();
+            List<DataBase.Entities.PaymentTypes.PaymentType> payments = new List<DataBase.Entities.PaymentTypes.PaymentType>()
+            {
+                DataBase.Entities.PaymentTypes.PaymentType.Create(translationService.Localize("strInCash"), EPaymentTypes.Cash),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(translationService.Localize("strByAccount"), EPaymentTypes.Bank),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(translationService.Localize("strCard"), EPaymentTypes.Card),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(translationService.Localize("strVoucher"), EPaymentTypes.Voucher),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(translationService.Localize("strPoints"), EPaymentTypes.ElectronicPoints),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(string.Format("{0} {1}", translationService.Localize("strOtherPaymentType"), 1), EPaymentTypes.Other1),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(string.Format("{0} {1}", translationService.Localize("strOtherPaymentType"), 2), EPaymentTypes.Other2),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(string.Format("{0} {1}", translationService.Localize("strOtherPaymentType"), 3), EPaymentTypes.Other3),
+                DataBase.Entities.PaymentTypes.PaymentType.Create(string.Format("{0} {1}", translationService.Localize("strOtherPaymentType"), 4), EPaymentTypes.Other4),
+            };
+            await paymentTypesRepository.AddPaymentTypesAsync(payments);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace DataBase.Entities.Partners
         public string IBAN { get; set; } = null!;
         public string DiscountCard { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public PartnersGroups.PartnersGroup Group { get; set; }
+        public PartnersGroups.PartnersGroup Group { get; set; } = null!;
         public ENomenclatureStatuses Status { get; set; }
 
         /// <summary>

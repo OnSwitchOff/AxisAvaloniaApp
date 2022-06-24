@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using AxisAvaloniaApp.Enums;
+using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using System.IO;
 
 namespace AxisAvaloniaApp.Services.Document
 {
@@ -20,9 +22,8 @@ namespace AxisAvaloniaApp.Services.Document
         private MicroinvestPdfDocument pdfDocument;
         private DocumentPageModel pageParameters;
         private double firstPageHeaderHeight;
-        private string logoPath;
+        private MemoryStream imageStream;
         private Image logo;
-        private string signaturePath;
         private Image signature;
         private double[] tableColumnsWidth;
 
@@ -49,21 +50,14 @@ namespace AxisAvaloniaApp.Services.Document
             // запоминаем высоту верхнего колонтитула первой страницы, чтобы иметь возможность восстановить её в дальнейшем
             this.firstPageHeaderHeight = this.pdfDocument.FirstPageHeaderHeight;
 
-            // устанавливаем путь к изображению с логотипом фирмы
-            this.logoPath = this.settings.LogoPath;
-
-            // устанавливаем логотип компании по умолчанию
-            this.logo = this.pdfDocument.DefaultHeaderImage;
-
-            // устанавливаем путь к изображению с реквизитами фирмы
-            this.signaturePath = string.Empty;
-
             // устанавливаем изображение с реквизитами компании по умолчанию
-            this.signature = this.pdfDocument.DefaultFooterImage;
+            this.signature = this.pdfDocument.DefaultFooterImage;            
 
             this.pageParameters = new DocumentPageModel();
             this.pageParameters.PropertyChanged += this.PageParameters_PropertyChanged;
 
+            pdfDocument.VATs = new List<VATModel>();
+            
             // устанавливаем данные по нашей компании
             this.pdfDocument.Saler.Name = this.settings.AppSettings[ESettingKeys.Company];
             this.pdfDocument.Saler.Address =
@@ -78,11 +72,32 @@ namespace AxisAvaloniaApp.Services.Document
             this.pdfDocument.Saler.BIC = this.settings.AppSettings[ESettingKeys.BankBIC];
             this.pdfDocument.Saler.IBAN = this.settings.AppSettings[ESettingKeys.IBAN];
             this.pdfDocument.Saler.StoreName = string.Empty;
+        }
 
-            // устанавливаем данные по группам НДС !!!! грузим данные из базы !!!!!!!!!!!!!!!
-            this.pdfDocument.VATs.Add(new VATModel() { VATRate = 20, VATBase = 86.19, VATSum = 17.24 });
-            this.pdfDocument.VATs.Add(new VATModel() { VATRate = 9, VATBase = 86.19, VATSum = 17.24 });
-            this.pdfDocument.VATs.Add(new VATModel() { VATRate = 10, VATBase = 86.19, VATSum = 17.24 });
+        /// <summary>
+        /// Gets logo of our company.
+        /// </summary>
+        /// <date>24.06.2022.</date>
+        private Image Logo
+        {
+            get
+            {
+                if (logo == null)
+                {
+                    if (!string.IsNullOrEmpty(Configurations.AppConfiguration.LogoPath))
+                    {
+                        byte[] imageBytes = File.ReadAllBytes(Configurations.AppConfiguration.LogoPath);
+                        imageStream = new MemoryStream(imageBytes);
+                        logo = Image.FromStream(imageStream);
+                    }
+                    else
+                    {
+                        logo = this.pdfDocument.DefaultHeaderImage;
+                    }
+                }
+
+                return logo;
+            }
         }
 
         /// <summary>
@@ -96,7 +111,7 @@ namespace AxisAvaloniaApp.Services.Document
         }
 
         /// <summary>
-        /// Gets or sets width of the columns of the utem data table.
+        /// Gets or sets width of the columns of the item data table.
         /// </summary>
         /// <date>18.03.2022.</date>
         public double[] ItemsTableColumnsWidth
@@ -117,26 +132,6 @@ namespace AxisAvaloniaApp.Services.Document
                 return this.tableColumnsWidth;
             }
             set => this.tableColumnsWidth = value;
-        }
-
-        /// <summary>
-        /// Gets or sets path with logo of company.
-        /// </summary>
-        /// <date>18.03.2022.</date>
-        public string CompanyLogoPath
-        {
-            get => this.logoPath;
-            set => this.SetImageValues(ref this.logoPath, value, ref this.logo);
-        }
-
-        /// <summary>
-        /// Gets or sets path with signature of company.
-        /// </summary>
-        /// <date>18.03.2022.</date>
-        public string CompanySignaturePath
-        {
-            get => this.signaturePath;
-            set => this.SetImageValues(ref this.signaturePath, value, ref this.signature);
         }
 
         /// <summary>
@@ -181,6 +176,37 @@ namespace AxisAvaloniaApp.Services.Document
         }
 
         /// <summary>
+        /// Gets type of the document.
+        /// </summary>
+        /// <date>24.06.2022.</date>
+        public EDocumentTypes DocumentType { get; private set; }
+
+        /// <summary>
+        /// Gets type of payment.
+        /// </summary>
+        /// <date>24.06.2022.</date>
+        public EPaymentTypes PaymentType { get; private set; }
+
+        /// <summary>
+        /// Adds new VAT data to list to show user.
+        /// </summary>
+        /// <param name="vAT">VAT data to add.</param>
+        /// <date>24.06.2022.</date>
+        public void AddNewVATRecord(VATModel vAT)
+        {
+            VATModel? tmpVAT = pdfDocument.VATs.Contains(vAT.VATRate);
+            if (tmpVAT != null)
+            {
+                tmpVAT.VATSum += vAT.VATSum;
+                tmpVAT.VATBase += vAT.VATBase;
+            }
+            else
+            {
+                pdfDocument.VATs.Add(vAT);
+            }
+        }
+
+        /// <summary>
         /// Generates report.
         /// </summary>
         /// <returns>Returns true if a report was generated successfully; otherwise returns false.</returns>
@@ -188,6 +214,8 @@ namespace AxisAvaloniaApp.Services.Document
         [Obsolete]
         public bool GenerateReport()
         {
+            DocumentType = EDocumentTypes.Report;
+
             // устанавливаем флаг, что верхний и нижний колонтитулы первой страницы не будут отличными от остальных страниц
             this.pdfDocument.DifferentFirstPageHeaderFooter = false;
 
@@ -361,45 +389,6 @@ namespace AxisAvaloniaApp.Services.Document
         }
 
         /// <summary>
-        /// Sets image to component of a pdf document.
-        /// </summary>
-        /// <param name="property">Name of pdf document field.</param>
-        /// <param name="imagePath">Path of image.</param>
-        /// <param name="image">Image to add to pdf document.</param>
-        /// <date>18.03.2022.</date>
-        private void SetImageValues(ref string property, string imagePath, ref Image image)
-        {
-            // если файл существует
-            if (System.IO.File.Exists(imagePath))
-            {
-                // получаем разрешение файла
-                int lastPointIndex = imagePath.LastIndexOf('.');
-                string fileFormat = string.Empty;
-                if (lastPointIndex > 0)
-                {
-                    fileFormat = imagePath.Substring(lastPointIndex + 1, imagePath.Length - lastPointIndex).ToLower();
-                }
-
-                // если данный файл является изображением - сохраняем параметры в соответствующих полях
-                if (!string.IsNullOrEmpty(fileFormat) && (fileFormat.Equals("png") || fileFormat.Equals("jpg") || fileFormat.Equals("jpeg") || fileFormat.Equals("bmp")))
-                {
-                    property = imagePath;
-                    image = Image.FromFile(property);
-                }
-                else
-                {
-                    // иначе "бросаем исключение" для информирования о некорректном формате файла
-                    throw new Exception("Incorrect image format!!!");
-                }
-            }
-            else
-            {
-                // иначе "бросаем исключение" для информирования об отсутствии файла по указанному пути
-                throw new Exception("File not exist!!!");
-            }
-        }
-
-        /// <summary>
         /// Generates document.
         /// </summary>
         /// <param name="documentType">Type of a document.</param>
@@ -408,8 +397,11 @@ namespace AxisAvaloniaApp.Services.Document
         /// <returns>Returns true if a header and footer of document was generated successfully; otherwise returns false.</returns>
         /// <date>18.03.2022.</date>
         [Obsolete]
-        private bool GenerateDocument(EDocumentTypes documentType, EDocumentVersionsPrinting versionPrinting, EPaymentTypes paymentTypes)
+        public bool GenerateDocument(EDocumentTypes documentType, EDocumentVersionsPrinting versionPrinting, EPaymentTypes paymentTypes)
         {
+            DocumentType = documentType;
+            PaymentType = paymentTypes;
+
             // очищаем предыдущую разметку (если таковая осталась с предыдущего раза)
             this.pdfDocument.Clear();
 
@@ -423,14 +415,14 @@ namespace AxisAvaloniaApp.Services.Document
 
                 // добавляем в ячейку 0Х0 верхнего колонтитула первой страницы изображение с логотипом нашей фирмы
                 this.pdfDocument.AddNewItemToFirsPageHeaderFooterGrid(
-                    EDocumentAreas.Header,
-                    this.pdfDocument.CreateImageObject(
-                        this.logo,
-                        this.pdfDocument.GetColumnWidth(this.pdfDocument.FirstPageHeaderGrid, 0),
-                        EHorizontalAlignments.Left,
-                        this.pdfDocument.FirstPageHeaderHeight),
-                    0,
-                    0);
+                        EDocumentAreas.Header,
+                        this.pdfDocument.CreateImageObject(
+                            this.Logo,
+                            this.pdfDocument.GetColumnWidth(this.pdfDocument.FirstPageHeaderGrid, 0),
+                            EHorizontalAlignments.Left,
+                            this.pdfDocument.FirstPageHeaderHeight),
+                        0,
+                        0);
 
                 // добавляем в ячейку 0х1 верхнего колонтитула первой страницы реквизиты нашей фирмы
                 this.pdfDocument.AddNewItemToFirsPageHeaderFooterGrid(
@@ -540,12 +532,6 @@ namespace AxisAvaloniaApp.Services.Document
             // добавляем в тело документа информацию о том, кто составил данный документ и кто его получит
             this.pdfDocument.AddNewItemToContent(this.pdfDocument.PrepareSignatureData());
 
-            this.pdfDocument.Document.DocumentName = documentType.ToString(); // взять со словаря!!!
-            this.pdfDocument.Document.DocumentDate = DateTime.Now;
-            this.pdfDocument.Document.DocumentAuthenticity = documentAuthenticity;
-            this.pdfDocument.Document.PaymentType = paymentType.ToString(); // взять со словаря!!!
-            this.pdfDocument.Document.DealReason = "Продажба"; // взять со словаря!!!
-
             switch (documentType)
             {
                 case EDocumentTypes.Invoice:
@@ -563,7 +549,6 @@ namespace AxisAvaloniaApp.Services.Document
                     this.pdfDocument.Document.SourceDocumentDate = DateTime.Now;
                     break;
                 case EDocumentTypes.Receipt:
-                    this.pdfDocument.Document.DocumentDescription = "за продажба на стоки"; // взять со словаря в зависимости от типа операции!!!
                     this.pdfDocument.Document.SourceDocumentNumber = string.Empty;
                     this.pdfDocument.Document.SourceDocumentDate = DateTime.Now;
 
@@ -627,5 +612,22 @@ namespace AxisAvaloniaApp.Services.Document
             }
         }
 
+        /// <summary>
+        /// Disposes unmanaged resources.
+        /// </summary>
+        /// <date>24.06.2022.</date>
+        public void Dispose()
+        {
+            if (logo != null)
+            {
+                logo.Dispose();
+            }
+
+            if (imageStream != null)
+            {
+                imageStream.Close();
+                imageStream.Dispose();
+            }
+        }
     }
 }

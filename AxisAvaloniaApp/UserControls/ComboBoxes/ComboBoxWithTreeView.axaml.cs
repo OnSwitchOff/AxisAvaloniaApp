@@ -9,14 +9,14 @@ namespace AxisAvaloniaApp.UserControls.ComboBoxes
 {
     public class ComboBoxWithTreeView : TemplatedControl
     {
-        public static readonly StyledProperty<string> PlaceholderTextProperty =
-            AvaloniaProperty.Register<ComboBoxWithTreeView, string>(nameof(PlaceholderText), string.Empty);
+        public static readonly StyledProperty<string?> PlaceholderTextProperty =
+            AvaloniaProperty.Register<ComboBoxWithTreeView, string?>(nameof(PlaceholderText), string.Empty);
 
         /// <summary>
         /// Gets or sets placeholder text of the ComboBox.
         /// </summary>
         /// <date>02.06.2022.</date>
-        private string PlaceholderText
+        private string? PlaceholderText
         {
             get => GetValue(PlaceholderTextProperty);
             set => SetValue(PlaceholderTextProperty, value);
@@ -120,19 +120,16 @@ namespace AxisAvaloniaApp.UserControls.ComboBoxes
             TreeView treeView = e.NameScope.Find<TreeView>("treeView");
             if (treeView != null)
             {
+                if (treeView.SelectedItem != null)
+                {
+                    PlaceholderText = GetText();
+                }
+
                 treeView.DoubleTapped += (tv, e) =>
                 {
                     if (SelectedItem != null)
                     {
-                        var property = SelectedItem.GetType().GetProperty(KeyText);
-                        if (property != null)
-                        {
-                            PlaceholderText = (string?)property.GetValue(SelectedItem, null);
-                        }
-                        else
-                        {
-                            throw new System.Exception("\"KeyText\" is not initialized or has an invalid value!");
-                        }
+                        PlaceholderText = GetText();
                     }
 
                     if (tv is TreeView tree && tree.Parent != null && tree.Parent is Popup popup)
@@ -148,6 +145,25 @@ namespace AxisAvaloniaApp.UserControls.ComboBoxes
                         popup.IsOpen = false;
                     }
                 };
+            }
+        }
+
+        /// <summary>
+        /// Gets text of SelectedItem to show user.
+        /// </summary>
+        /// <returns>Returns text to show user</returns>
+        /// <exception cref="System.Exception">Throws exception if key to get text is absent.</exception>
+        /// <date>23.06.2022.</date>
+        private string? GetText()
+        {
+            var property = SelectedItem.GetType().GetProperty(KeyText);
+            if (property != null)
+            {
+                return property.GetValue(SelectedItem, null)?.ToString();
+            }
+            else
+            {
+                throw new System.Exception("\"KeyText\" is not initialized or has an invalid value!");
             }
         }
     }

@@ -1,8 +1,11 @@
-﻿using AxisAvaloniaApp.Enums;
+﻿using Avalonia.Media.Imaging;
+using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Services.Document;
 using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Payment;
+using AxisAvaloniaApp.Services.SearchNomenclatureData;
 using AxisAvaloniaApp.Services.Serialization;
 using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.Services.Translation;
@@ -12,6 +15,8 @@ using DataBase.Entities.Interfaces;
 using DataBase.Entities.PartnersGroups;
 using DataBase.Repositories.Items;
 using DataBase.Repositories.ItemsGroups;
+using DataBase.Repositories.OperationDetails;
+using DataBase.Repositories.OperationHeader;
 using DataBase.Repositories.Partners;
 using DataBase.Repositories.PartnersGroups;
 using DataBase.Repositories.VATGroups;
@@ -23,9 +28,18 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
+    /// <summary>
+    /// Describes structure of InvalidOrderRecord event.
+    /// </summary>
+    /// <param name="invalidColumn">Index of invalid column.</param>
+    /// <param name="invalidRow">Index of invalid row.</param>
+    /// <date>23.06.2022.</date>
+    public delegate void InvalidOrderRecordDelegate(int invalidColumn, int invalidRow);
+
     public class SaleViewModel : OperationViewModelBase
     {
         private readonly ISettingsService settingsService;
@@ -36,16 +50,21 @@ namespace AxisAvaloniaApp.ViewModels
         private readonly ITranslationService translationService;
         private readonly ILoggerService loggerService;
         private readonly IValidationService validationService;
+        private readonly ISearchData searchService;
+        public IDocumentService DocumentService { get; private set; }
 
         private readonly IPartnerRepository partnerRepository;
         private readonly IItemsGroupsRepository itemsGroupsRepository;
         private readonly IItemRepository itemRepository;
         private readonly IPartnersGroupsRepository partnersGroupsRepository;
-        private readonly IVATsRepository vATsRepository;        
+        private readonly IVATsRepository vATsRepository;
+        private readonly IOperationHeaderRepository headerRepository;
+        private readonly IOperationDetailsRepository detailsRepository;
 
         private bool isMainContentVisible;
         private bool isSaleTitleReadOnly;
         private bool isChoiceOfPartnerEnabled;
+        private bool isPaymentPanelVisible;
         private string operationPartnerString;
         private PartnerModel operationPartner;
         private string uSN;
@@ -58,16 +77,20 @@ namespace AxisAvaloniaApp.ViewModels
         private bool isNomenclaturePanelVisible;
         private ObservableCollection<GroupModel> itemsGroups;
         private GroupModel selectedItemsGroup;
+        private GroupModel? editableItemsGroup;
         private ObservableCollection<ItemModel> items;
         private ItemModel selectedItem;
+        private ItemModel? editableItem;
         private string itemString;
         private ObservableCollection<VATGroupModel> vATGroups;
         private ObservableCollection<ComboBoxItemModel> itemsTypes;
         private ObservableCollection<string> measures;
         private ObservableCollection<PartnerModel> partners;
         private PartnerModel selectedPartner;
+        private PartnerModel? editablePartner;
         private ObservableCollection<GroupModel> partnersGroups;
         private GroupModel selectedPartnersGroup;
+        private GroupModel? editablePartnersGroup;
 
         private Avalonia.Threading.DispatcherTimer searchPartnerTimer;
         private Avalonia.Threading.DispatcherTimer searchItemsTimer;
@@ -91,30 +114,42 @@ namespace AxisAvaloniaApp.ViewModels
             translationService.LanguageChanged += Application_PropertyChanged;
             loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
             validationService = Splat.Locator.Current.GetRequiredService<IValidationService>();
+            searchService = Splat.Locator.Current.GetRequiredService<ISearchData>();
+            DocumentService = Splat.Locator.Current.GetRequiredService<IDocumentService>();
 
             itemsGroupsRepository = Splat.Locator.Current.GetRequiredService<IItemsGroupsRepository>();
             itemRepository = Splat.Locator.Current.GetRequiredService<IItemRepository>();
             partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<IPartnersGroupsRepository>();
             partnerRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
             vATsRepository = Splat.Locator.Current.GetRequiredService<IVATsRepository>();
+            headerRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+            detailsRepository = Splat.Locator.Current.GetRequiredService<IOperationDetailsRepository>();
 
             IsCached = false;
 
             IsMainContentVisible = true;
             IsSaleTitleReadOnly = true;
             IsNomenclaturePanelVisible = true;
+            IsPaymentPanelVisible = false;
 
             DeserializeData();
 
             searchPartnerTimer = new Avalonia.Threading.DispatcherTimer();
-            searchPartnerTimer.Interval = TimeSpan.FromSeconds(1.5);
+            searchPartnerTimer.Interval = TimeSpan.FromSeconds(1);
             searchPartnerTimer.Tick += FilteredPartners;
 
             searchItemsTimer = new Avalonia.Threading.DispatcherTimer();
-            searchItemsTimer.Interval = TimeSpan.FromSeconds(1.5);
+            searchItemsTimer.Interval = TimeSpan.FromSeconds(1);
             searchItemsTimer.Tick += FilteredItems;
 
-            this.PropertyChanged += SaleViewModel_PropertyChanged;
+            RegisterValidationData<SaleViewModel, double>(
+                this,
+                nameof(AmountToPay),
+                () =>
+                {
+                    return Math.Round(double.Parse(TotalAmount), 3) > Math.Round(AmountToPay, 3);
+                },
+                "msgNotEnoughMoney");
         }
         
         /// <summary>
@@ -164,6 +199,22 @@ namespace AxisAvaloniaApp.ViewModels
             get => isChoiceOfPartnerEnabled;
             set => this.RaiseAndSetIfChanged(ref isChoiceOfPartnerEnabled, value);
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether panel to pay is visible.
+        /// </summary>
+        /// <date>30.05.2022.</date>
+        public bool IsPaymentPanelVisible
+        {
+            get => isPaymentPanelVisible;
+            set => this.RaiseAndSetIfChanged(ref isPaymentPanelVisible, value);
+        }
+
+        /// <summary>
+        /// Occurs when button Payment is pressed and order list has invalid records. 
+        /// </summary>
+        /// <date>23.06.2022.</date>
+        public event InvalidOrderRecordDelegate InvalidOrderRecord;
 
         /// <summary>
         /// Gets or sets a value indicating whether field to select partner is enabled.
@@ -300,6 +351,15 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref selectedItemsGroup, value);
         }
 
+        /// <summary>
+        /// Gets or sets group of items to edit or create.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        public GroupModel? EditableItemsGroup
+        {
+            get => editableItemsGroup == null ? editableItemsGroup = new GroupModel() : editableItemsGroup;
+            set => this.RaiseAndSetIfChanged(ref editableItemsGroup, value);
+        }
 
         /// <summary>
         /// Gets or sets list with items.
@@ -319,6 +379,16 @@ namespace AxisAvaloniaApp.ViewModels
         {
             get => selectedItem;
             set => this.RaiseAndSetIfChanged(ref selectedItem, value);
+        }
+
+        /// <summary>
+        /// Gets or sets item to edit or create is selected by user.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        public ItemModel? EditableItem
+        {
+            get => editableItem == null ? editableItem = new ItemModel() : editableItem;
+            set => this.RaiseAndSetIfChanged(ref editableItem, value);
         }
 
         /// <summary>
@@ -450,9 +520,21 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets group of partners to edit or create.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        public GroupModel? EditablePartnersGroup
+        {
+            get => editablePartnersGroup == null ? editablePartnersGroup = new GroupModel() : editablePartnersGroup;
+            set => this.RaiseAndSetIfChanged(ref editablePartnersGroup, value);
+        }
+
+        
+
+        /// <summary>
         /// Gets or sets list with partners.
         /// </summary>
-        /// <date>01.07.2022.</date>
+        /// <date>01.06.2022.</date>
         public ObservableCollection<PartnerModel> Partners
         {
             get => partners == null ? partners = new ObservableCollection<PartnerModel>() : partners;
@@ -462,11 +544,21 @@ namespace AxisAvaloniaApp.ViewModels
         /// <summary>
         /// Gets or sets partner that is selected by user.
         /// </summary>
-        /// <date>01.07.2022.</date>
+        /// <date>01.06.2022.</date>
         public PartnerModel SelectedPartner
         {
             get => selectedPartner;
             set => this.RaiseAndSetIfChanged(ref selectedPartner, value);
+        }
+
+        /// <summary>
+        /// Gets or sets partner to edit or create is selected by user.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        public PartnerModel? EditablePartner
+        {
+            get => editablePartner == null ? editablePartner = new PartnerModel() : editablePartner;
+            set => this.RaiseAndSetIfChanged(ref editablePartner, value);
         }
 
         /// <summary>
@@ -478,8 +570,8 @@ namespace AxisAvaloniaApp.ViewModels
             IsChoiceOfPartnerEnabled = (bool)serializationService[ESerializationKeys.TbPartnerEnabled];
             if ((int)serializationService[ESerializationKeys.TbPartnerID] > 0)
             {
-                //OperationPartner = partnerRepository.GetPartnerByIdAsync((int)serializationService[ESerializationKeys.TbPartnerID]).GetAwaiter().GetResult();
-                //OperationPartnerString = OperationPartner.Name;
+                OperationPartner = partnerRepository.GetPartnerByIdAsync((int)serializationService[ESerializationKeys.TbPartnerID]).GetAwaiter().GetResult();
+                OperationPartnerString = OperationPartner.Name;
             }
 
             USN = paymentService.FiscalDevice.ReceiptNumber;
@@ -511,7 +603,7 @@ namespace AxisAvaloniaApp.ViewModels
                 (GroupModel)partnersGroupsRepository.GetGroupByIdAsync((int)serializationPartners[ESerializationKeys.SelectedGroupId]).GetAwaiter().GetResult(),
                 PartnersGroups[0]);
 
-            await foreach (var partner in partnerRepository.GetParnersAsync())
+            await foreach (var partner in partnerRepository.GetParnersAsync(SelectedPartnersGroup.Path, string.Empty))
             {
                 Partners.Add(partner);
             }
@@ -520,6 +612,9 @@ namespace AxisAvaloniaApp.ViewModels
             {
                 VATGroups.Add(vAT);
             }
+
+            // !!! данная строка размещена здесь, чтобы уменьшить кол-во обращений к базе при изменении свойств модели 
+            this.PropertyChanged += SaleViewModel_PropertyChanged;
         }
 
         /// <summary>
@@ -587,7 +682,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <param name="sender">SaleViewModel</param>
         /// <param name="e">PropertyChangedEventArgs</param>
         /// <date>21.06.2022.</date>
-        private void SaleViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private async void SaleViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -631,10 +726,30 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     break;
                 case nameof(SelectedItemsGroup):
-                    // TODO
+                    if (SelectedItemsGroup != null)
+                    {
+                        Items.Clear();
+
+                        await foreach (ItemModel item in itemRepository.GetItemsAsync(SelectedItemsGroup.Path, string.Empty))
+                        {
+                            Items.Add(item);
+                        }
+                    }
                     break;
                 case nameof(SelectedPartnersGroup):
-                    // TODO
+                    if (SelectedPartnersGroup != null)
+                    {
+                        Partners.Clear();
+
+                        await foreach (PartnerModel partner in partnerRepository.GetParnersAsync(SelectedPartnersGroup.Path, string.Empty))
+                        {
+                            Partners.Add(partner);
+                        }
+                    }
+                    break;
+                case nameof(TotalAmount):
+                case nameof(AmountToPay):
+                    Change = AmountToPay - double.Parse(TotalAmount);
                     break;
             }
         }
@@ -747,6 +862,8 @@ namespace AxisAvaloniaApp.ViewModels
             serializationPartners[ESerializationKeys.SelectedGroupId].Value = SelectedPartnersGroup.Id.ToString();
             serializationPartners.Update();
 
+            DocumentService.Dispose();
+
             base.CloseView();
         }
 
@@ -839,18 +956,18 @@ namespace AxisAvaloniaApp.ViewModels
                 OperationPartner = partner;
             }
         }
-        private Avalonia.Threading.DispatcherTimer partnerTimer = new Avalonia.Threading.DispatcherTimer();
 
         /// <summary>
-        /// Cancel edit of nomenclature and restore base state.
+        /// Finds partner data on the Microinvest club by tax or VAT number.
         /// </summary>
         /// <param name="key">Key to search partner.</param>
         /// <date>03.06.2022.</date>
-        public void FindPartner(string key)
+        public async void FindPartner(string key)
         {
-            // TODO: initialize method
-
-            System.Diagnostics.Debug.WriteLine("FindPartner");
+            if (!string.IsNullOrEmpty(key) && (SelectedPartner == null || SelectedPartner.Id == 0))
+            {
+                EditablePartner = await searchService.GetPartnerData(key);
+            }
         }
 
         /// <summary>
@@ -875,13 +992,71 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// Creates a new partner if the user agrees. 
         /// </summary>
-        /// <param name="newPartner"></param>
+        /// <param name="newPartner">Data of new partner.</param>
         /// <date>21.06.2022.</date>
-        private void InitPartnerCreation(PartnerModel newPartner)
+        private async void InitPartnerCreation(PartnerModel newPartner)
         {
-            
+            if (await loggerService.ShowDialog("msgPartnerNotFound", "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
+            {
+                if (newPartner == null)
+                {
+                    newPartner = new PartnerModel();
+                }
+                
+                EditablePartner = newPartner;
+                IsNomenclaturePanelVisible = false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes the nomenclature if all conditions are met.
+        /// </summary>
+        /// <param name="nomenclature">Nomenclature to delete.</param>
+        /// <param name="agreeMessage">Key for localize message to confirm whether user agrees to delete nomenclature</param>
+        /// <param name="warningCondition">Condition if nomenclature can't be deleted</param>
+        /// <param name="warningMessage">Key for localize message</param>
+        /// <param name="databaseAction">
+        /// Method to delete nomenclature from the database. 
+        /// The method returns true if nomenclature was deleted; otherwise returns false. 
+        /// </param>
+        /// <param name="viewModelAction">Method to update ViewModel data.</param>
+        /// <param name="logEvents">Error sign when deleting an item.</param>
+        /// <param name="deleteErrorMessage">Key for localized message if deleting an item is unsuccess.</param>
+        /// <date>22.06.2022.</date>
+        private async void DeleteNomenclatureAsync(
+            object nomenclature,
+            string agreeMessage,
+            Func<bool> warningCondition,
+            string warningMessage,
+            Func<Task<bool>> databaseAction,
+            Action viewModelAction,
+            DataBase.Enums.EApplicationLogEvents logEvents,
+            string deleteErrorMessage)
+        {
+            if (await loggerService.ShowDialog(agreeMessage, "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
+            {
+                if (nomenclature != null)
+                {
+                    if (warningCondition.Invoke())
+                    {
+                        await loggerService.ShowDialog(warningMessage, "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
+                    }
+                    else
+                    {
+                        if (await databaseAction.Invoke())
+                        {
+                            viewModelAction.Invoke();
+                        }
+                        else
+                        {
+                            loggerService.RegisterError(logEvents, translationService.Localize(deleteErrorMessage));
+                            await loggerService.ShowDialog(deleteErrorMessage, "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -891,8 +1066,25 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public void AddNewNomenclature(ENomenclatures nomenclature)
         {
+            switch (nomenclature)
+            {
+                case ENomenclatures.Items:
+                    EditableItem = new ItemModel();
+                    EditableItem.Group.Clone(SelectedItemsGroup);
+                    break;
+                case ENomenclatures.Partners:
+                    EditablePartner = new PartnerModel();
+                    EditablePartner.Group.Clone(SelectedPartnersGroup);
+                    break;
+                case ENomenclatures.ItemsGroups:
+                    EditableItemsGroup = new GroupModel();
+                    break;
+                case ENomenclatures.PartnersGroups:
+                    EditablePartnersGroup = new GroupModel();
+                    break;
+            }
+
             IsNomenclaturePanelVisible = false;
-            // TODO: initialize method
         }
 
         /// <summary>
@@ -902,8 +1094,53 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public void UpdateNomenclature(ENomenclatures nomenclature)
         {
-            IsNomenclaturePanelVisible = false;
-            // TODO: initialize method
+            switch (nomenclature)
+            {
+                case ENomenclatures.Items:
+                    if (SelectedItem == null)
+                    {
+                        loggerService.ShowDialog("msgItemToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                    }
+                    else
+                    {
+                        EditableItem?.Clone(SelectedItem);
+                        IsNomenclaturePanelVisible = false;
+                    }
+                    break;
+                case ENomenclatures.Partners:
+                    if (SelectedPartner == null)
+                    {
+                        loggerService.ShowDialog("msgPartnerToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                    }
+                    else
+                    {
+                        EditablePartner?.Clone(SelectedPartner);
+                        IsNomenclaturePanelVisible = false;
+                    }
+                    break;
+                case ENomenclatures.ItemsGroups:
+                    if (SelectedItemsGroup == null)
+                    {
+                        loggerService.ShowDialog("msgGroupToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                    }
+                    else
+                    {
+                        EditableItemsGroup?.Clone(SelectedItemsGroup);
+                        IsNomenclaturePanelVisible = false;
+                    }
+                    break;
+                case ENomenclatures.PartnersGroups:
+                    if (SelectedPartnersGroup == null)
+                    {
+                        loggerService.ShowDialog("msgGroupToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                    }
+                    else
+                    {
+                        EditablePartnersGroup?.Clone(SelectedPartnersGroup);
+                        IsNomenclaturePanelVisible = false;
+                    }
+                    break;
+            }
         }
 
         /// <summary>
@@ -913,7 +1150,93 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public void DeleteNomenclature(ENomenclatures nomenclature)
         {
-            // TODO: initialize method
+            switch (nomenclature)
+            {
+                case ENomenclatures.Items:
+                    DeleteNomenclatureAsync(
+                        SelectedItem,
+                        "msgDoYouWantDeleteItem",
+                        () =>
+                        {
+                            return SelectedItem.Id == 1;
+                        },
+                        "msgBaseItemCanNotBeDeleted",
+                        async () =>
+                        {
+                            return await itemRepository.DeleteItemAsync(SelectedItem.Id);
+                        },
+                        () =>
+                        {
+                            Items.Remove(SelectedItem);
+                            SelectedItem = null;
+                        },
+                        DataBase.Enums.EApplicationLogEvents.DeleteItem,
+                        "msgErrorDuringDeletingItem");
+                    break;
+                case ENomenclatures.Partners:
+                    DeleteNomenclatureAsync(
+                        SelectedPartner,
+                        "msgDoYouWantDeletePartner",
+                        () =>
+                        {
+                            return SelectedPartner.Id == 1;
+                        },
+                        "msgBasePartnerCanNotBeDeleted",
+                        async () =>
+                        {
+                            return await partnerRepository.DeletePartnerAsync(SelectedPartner.Id);
+                        },
+                        () =>
+                        {
+                            Partners.Remove(SelectedPartner);
+                            SelectedPartner = null;
+                        },
+                        DataBase.Enums.EApplicationLogEvents.DeletePartner,
+                        "msgErrorDuringDeletingPartner");
+                    break;
+                case ENomenclatures.ItemsGroups:
+                    DeleteNomenclatureAsync(
+                        SelectedItemsGroup,
+                        "msgDoYouWantDeleteItemGroup",
+                        () =>
+                        {
+                            return SelectedItemsGroup.Id == 1;
+                        },
+                        "msgBaseItemGroupCanNotBeDeleted",
+                        async () =>
+                        {
+                            return await itemsGroupsRepository.DeleteGroupAsync(SelectedItemsGroup.Id);
+                        },
+                        () =>
+                        {
+                            ItemsGroups.Remove(SelectedItemsGroup);
+                            SelectedItemsGroup = null;
+                        },
+                        DataBase.Enums.EApplicationLogEvents.DeleteItemGroup,
+                        "msgErrorDuringDeletingGroup");
+                    break;
+                case ENomenclatures.PartnersGroups:
+                    DeleteNomenclatureAsync(
+                        SelectedPartnersGroup,
+                        "msgDoYouWantDeletePartnerGroup",
+                        () =>
+                        {
+                            return SelectedPartnersGroup.Id == 1;
+                        },
+                        "msgBasePartnerGroupCanNotBeDeleted",
+                        async () =>
+                        {
+                            return await partnersGroupsRepository.DeleteGroupAsync(SelectedPartnersGroup.Id);
+                        },
+                        () =>
+                        {
+                            PartnersGroups.Remove(SelectedPartnersGroup);
+                            SelectedPartnersGroup = null;
+                        },
+                        DataBase.Enums.EApplicationLogEvents.DeletePartnerGroup,
+                        "msgErrorDuringDeletingGroup");
+                    break;
+            }
         }
 
         /// <summary>
@@ -922,7 +1245,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public void AddAdditionalItemCode()
         {
-            SelectedItem.Codes.Add(new ItemCodeModel());
+            EditableItem.Codes.Add(new ItemCodeModel());
             // TODO: initialize method
         }
 
@@ -933,18 +1256,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public void DeleteAdditionalItemCode(ItemCodeModel itemCode)
         {
-            SelectedItem.Codes.Remove(itemCode);
-            // TODO: initialize method
-        }
-        
-
-        /// <summary>
-        /// Pay the order.
-        /// </summary>
-        /// <param name="paymentType">Type of payment.</param>
-        /// <date>30.05.2022.</date>
-        public void PaymentSale(EPaymentTypes paymentType)
-        {
+            EditableItem.Codes.Remove(itemCode);
             // TODO: initialize method
         }
 
@@ -966,8 +1278,145 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>03.06.2022.</date>
         public void CancelNomenclature(ENomenclatures nomenclature)
         {
+            switch (nomenclature)
+            {
+                case ENomenclatures.Items:
+                    EditableItem = null;
+                    break;
+                case ENomenclatures.ItemsGroups:
+                    EditableItemsGroup = null;
+                    break;
+                case ENomenclatures.Partners:
+                    EditablePartner = null;
+                    break;
+                case ENomenclatures.PartnersGroups:
+                    EditablePartnersGroup = null;
+                    break;
+            }
+
             IsNomenclaturePanelVisible = true;
-            // TODO: initialize method
+        }
+
+        /// <summary>
+        /// Changes the visibility property of the panel to pay.
+        /// </summary>
+        /// <date>27.05.2022.</date>
+        public async void ChangeIsPaymentPanelVisible()
+        {
+            if (Order.Count == 1 && Order[0].Item.Id == 0)
+            {
+                await loggerService.ShowDialog("msgEmptyTable", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                InvalidOrderRecord?.Invoke(-1, -1);
+                return;
+            }
+
+            for (int i = 0; i < Order.Count; i++)
+            {
+                if (Order[i].Item.Id != 0)
+                {
+                    if (Order[i].Price == 0)
+                    {
+                        await loggerService.ShowDialog("msgEmptyPrice", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                        InvalidOrderRecord?.Invoke(6, i);
+                        return;
+                    }
+
+                    if (Order[i].Qty == 0)
+                    {
+                        await loggerService.ShowDialog("msgEmptyQtty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                        InvalidOrderRecord?.Invoke(5, i);
+                        return;
+                    }
+                }
+            }
+
+            IsPaymentPanelVisible = !IsPaymentPanelVisible;
+        }
+
+        /// <summary>
+        /// Pay the order.
+        /// </summary>
+        /// <param name="paymentType">Type of payment.</param>
+        /// <date>30.05.2022.</date>
+        public async void PaymentSale(EPaymentTypes paymentType)
+        {
+            ValidateAmountSumStage validateStage = new ValidateAmountSumStage(AmountToPay, paymentType);
+            PaymentStage paymentStage = new PaymentStage(Order, paymentType);
+            WriteToDatabaseStage writeToDatabaseStage = new WriteToDatabaseStage(paymentService.FiscalDevice.ReceiptNumber, Order, OperationPartner, paymentType);
+            PrepareViewStage prepareViewStage = new PrepareViewStage(() =>
+            {
+                Order.Clear();
+                Order.Add(new OperationItemModel());
+
+                USN = paymentService.FiscalDevice.ReceiptNumber;
+                IsPaymentPanelVisible = false;
+            });
+
+            validateStage.SetNext(paymentStage).SetNext(writeToDatabaseStage).SetNext(prepareViewStage);
+            await validateStage.Invoke(TotalAmount);
+
+            // заполняем данные о покупателе
+            DocumentService.CustomerData = OperationPartner;
+            //documentService.CompanyLogoPath = Configurations.AppConfiguration.LogoPath;
+
+            // заполняем описание документа
+            DocumentService.DocumentDescription.DocumentName = translationService.Localize("strStockReceipt");
+            DocumentService.DocumentDescription.DocumentDescription = translationService.Localize("strForSale");
+            DocumentService.DocumentDescription.DocumentNumber = writeToDatabaseStage.Acct.ToString("D10");
+            DocumentService.DocumentDescription.DocumentDate = DateTime.Now;
+            DocumentService.DocumentDescription.PaymentType = "Cash";
+            DocumentService.DocumentDescription.DealReason = translationService.Localize("strSale");
+            DocumentService.DocumentDescription.DocumentSum = settingsService.AppLanguage.MoneyByWords(AmountToPay, ECurrencies.BGN);
+
+            // размечаем таблицу с товарами
+            DocumentService.ItemsData = new System.Data.DataTable();
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strRowNumber"), typeof(int));
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strCode"), typeof(string));
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strGoods"), typeof(string));
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strMeasure"), typeof(string));
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strQtty"), typeof(double));
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strPrice"), typeof(double));
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strDiscount"), typeof(double));
+            DocumentService.ItemsData.Columns.Add(translationService.Localize("strAmount_Short"), typeof(double));
+
+            foreach (var item in Order)
+            {
+                if (item.Item.Id > 0)
+                {
+                    DocumentService.ItemsData.Rows.Add(
+                        item.RecordId, 
+                        item.Item.Code, 
+                        item.Item.Name, 
+                        item.SelectedMeasure.Measure, 
+                        item.Qty, 
+                        item.Price, 
+                        item.Discount, 
+                        item.Amount);
+
+                    Microinvest.PDFCreator.Models.VATModel vAT = new Microinvest.PDFCreator.Models.VATModel()
+                    {
+                        VATRate = (float)item.Item.VATGroup.Value,
+                        VATSum = item.VATValue * item.Qty,
+                        VATBase = (item.Price - item.VATValue) * item.Qty,
+                    };
+
+                    DocumentService.AddNewVATRecord(vAT);
+                }
+            }
+
+            // генерируем документ
+            DocumentService.GenerateReceipt(EDocumentVersionsPrinting.Original, paymentType);
+            Pages = DocumentService.ConvertDocumentToImageList().Clone();
+
+            IsMainContentVisible = false;
+            DocumentService.SaveDocument(System.IO.Path.Combine(@"C:\Users\serhii.rozniuk\Desktop", "TetsPdf.pdf"));
+        }
+
+        private ObservableCollection<System.Drawing.Image> pages;
+        public ObservableCollection<System.Drawing.Image> Pages
+        {
+            get => pages == null ? pages = new ObservableCollection<System.Drawing.Image>() : pages;
+            set => this.RaiseAndSetIfChanged(ref pages, value);
         }
     }
 }

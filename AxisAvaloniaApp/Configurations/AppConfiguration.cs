@@ -56,12 +56,19 @@ namespace AxisAvaloniaApp.Configurations
                 string extention = value.Substring(value.LastIndexOf("."), value.Length - value.LastIndexOf("."));
                 if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".bmp") || extention.Equals(".ico"))
                 {
-                    if (File.Exists(LogoPath))
+                    try
                     {
-                        File.Delete(LogoPath);
-                    }
+                        if (File.Exists(LogoPath))
+                        {
+                            File.Delete(LogoPath);
+                        }
 
-                    File.Copy(value, Path.Combine(DatabaseLocation, "logo" + extention), true);
+                        File.Copy(value, Path.Combine(DatabaseLocation, "logo" + extention), true);
+                    }
+                    catch (System.Exception ex)
+                    {
+
+                    }
                 }
             }
         }

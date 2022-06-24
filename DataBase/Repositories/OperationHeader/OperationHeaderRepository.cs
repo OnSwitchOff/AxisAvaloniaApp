@@ -71,5 +71,30 @@ namespace DataBase.Repositories.OperationHeader
 
             });
         }
+
+        /// <summary>
+        /// Adds new record to OperationHeader table.
+        /// </summary>
+        /// <param name="record">Data to add.</param>
+        /// <returns>Returns 0 if record wasn't added to database; otherwise returns real id of new record.</returns>
+        /// <date>23.06.2022.</date>
+        public async Task<int> AddNewRecord(Entities.OperationHeader.OperationHeader record)
+        {
+            return await Task.Run(() =>
+            {
+                foreach (var detail in record.OperationDetails)
+                {
+                    detail.Goods = databaseContext.Items.Where(i => i.Id == detail.Goods.Id).FirstOrDefault();
+                }
+
+                record.Partner = databaseContext.Partners.Where(p => p.Id == record.Partner.Id).FirstOrDefault();
+                record.Payment = databaseContext.PaymentTypes.Where(pt => pt.Id == record.Payment.Id).FirstOrDefault();
+
+                databaseContext.OperationHeaders.Add(record);
+                databaseContext.SaveChanges();
+
+                return record.Id;
+            });
+        }
     }
 }

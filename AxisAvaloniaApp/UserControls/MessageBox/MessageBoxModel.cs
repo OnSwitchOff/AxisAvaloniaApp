@@ -24,6 +24,7 @@ namespace AxisAvaloniaApp.UserControls.MessageBox
         private bool isYesShowed;
         private bool isNoShowed;
         private bool isAbortShowed;
+        private bool isIgnoreShowed;
         private bool isCancelShowed;
         private bool isRetryShowed;
         private WindowStartupLocation locationOfMyWindow;
@@ -39,6 +40,7 @@ namespace AxisAvaloniaApp.UserControls.MessageBox
             IsYesShowed = false;
             IsNoShowed = false;
             IsAbortShowed = false;
+            IsIgnoreShowed = false;
             IsCancelShowed = false;
             IsRetryShowed = false;
             
@@ -171,6 +173,12 @@ namespace AxisAvaloniaApp.UserControls.MessageBox
             private set => this.RaiseAndSetIfChanged(ref isAbortShowed, value);
         }
 
+        public bool IsIgnoreShowed
+        {
+            get => isIgnoreShowed;
+            private set => this.RaiseAndSetIfChanged(ref isIgnoreShowed, value);
+        }
+
         public bool IsCancelShowed
         {
             get => isCancelShowed;
@@ -218,10 +226,10 @@ namespace AxisAvaloniaApp.UserControls.MessageBox
                     IsNoShowed = true;
                     IsAbortShowed = true;
                     break;
-                case EButtons.AbortRetryCancel:
+                case EButtons.AbortRetryIgnore:
                     IsAbortShowed = true;
                     IsRetryShowed = true;
-                    IsCancelShowed = true;
+                    IsIgnoreShowed = true;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(paramsButtonDefinitions), paramsButtonDefinitions, null);

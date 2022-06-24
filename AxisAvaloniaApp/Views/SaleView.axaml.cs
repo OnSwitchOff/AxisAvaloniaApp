@@ -7,13 +7,13 @@ using Avalonia.Markup.Xaml;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Scanning;
 using AxisAvaloniaApp.UserControls.Extensions;
 using AxisAvaloniaApp.ViewModels;
 using Microinvest.CommonLibrary.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace AxisAvaloniaApp.Views
 {
@@ -31,6 +31,7 @@ namespace AxisAvaloniaApp.Views
         private Dictionary<int, ESerializationKeys> itemsDataGridColumns;
         private Dictionary<int, ESerializationKeys> partnersDataGridColumns;       
         private readonly IScanningData scanningService;
+        private readonly ILoggerService loggerService;
         private IControl? inputControl;
 
         public SaleView()
@@ -41,8 +42,10 @@ namespace AxisAvaloniaApp.Views
             this.DataContext = dataContext;
             dataContext.ViewClosing += SerializeVisualData;
             dataContext.OrderChanged += DataContext_OrderChanged;
+            dataContext.InvalidOrderRecord += DataContext_InvalidOrderRecord;
 
             scanningService = Splat.Locator.Current.GetRequiredService<IScanningData>();
+            loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
             InputControl = null;
 
             saleDataGridColumns = new Dictionary<int, ESerializationKeys>()
@@ -76,24 +79,10 @@ namespace AxisAvaloniaApp.Views
                 {8, ESerializationKeys.ColDiscountCardWidth},
             };
             
-            IsPaymentPanelVisible = false;
             IsPayInCashPanelVisible = false;
             IsEditPanelVisible = false;
 
             DeserializeVisualData();
-        }
-
-        public static readonly StyledProperty<bool> IsPaymentPanelVisibleProperty =
-           AvaloniaProperty.Register<SaleView, bool>(nameof(IsPaymentPanelVisible));
-
-        /// <summary>
-        /// Gets or sets a value indicating whether panel to pay is visible.
-        /// </summary>
-        /// <date>30.05.2022.</date>
-        public bool IsPaymentPanelVisible
-        {
-            get => GetValue(IsPaymentPanelVisibleProperty);
-            set => SetValue(IsPaymentPanelVisibleProperty, value);
         }
 
         public static readonly StyledProperty<bool> IsPayInCashPanelVisibleProperty =
@@ -264,6 +253,7 @@ namespace AxisAvaloniaApp.Views
         {
             dataContext.ViewClosing -= SerializeVisualData;
             dataContext.OrderChanged -= DataContext_OrderChanged;
+            dataContext.InvalidOrderRecord -= DataContext_InvalidOrderRecord;
 
             // сохраняем данные основного раздела
             foreach (var column in saleGrid.Columns)
@@ -487,12 +477,25 @@ namespace AxisAvaloniaApp.Views
         }
 
         /// <summary>
-        /// Changes the visibility property of the panel to pay.
+        /// Shows user invalid data.
         /// </summary>
-        /// <date>27.05.2022.</date>
-        private void ChangeIsPaymentPanelVisible()
+        /// <param name="invalidColumn">Index of column with invalid data.</param>
+        /// <param name="invalidRow">Index of row with invalid data.</param>
+        /// <date>23.06.2022.</date>
+        private void DataContext_InvalidOrderRecord(int invalidColumn, int invalidRow)
         {
-            IsPaymentPanelVisible = !IsPaymentPanelVisible;
+            if (invalidColumn == -1 && invalidRow == -1)
+            {
+                SetFocusToDataGrid();
+            }
+            else
+            {
+                DataGridCell invalidCell = saleGrid.GetCell(invalidColumn, invalidRow);
+                saleGrid.SelectedItems.Clear();
+                saleGrid.SelectedItems.Add(dataContext.Order[invalidRow]);                
+                invalidCell.BeginCellEdit();
+                invalidCell.BeginCellEdit();
+            }
         }
 
         /// <summary>
@@ -600,18 +603,13 @@ namespace AxisAvaloniaApp.Views
             switch (e.Key)
             {
                 case Key.Enter:
-                    IList<DataGridRow> rows = itemsGrid.GetRows();
-
-                    switch (rows.Count)
+                    switch (dataContext.Items.Count)
                     {
                         case 0:
                             dataContext.AddItems(null);
                             break;
                         case 1:
-                            dataContext.AddItems(new List<ItemModel>()
-                            {
-                                rows[0].DataContext as ItemModel,
-                            });
+                            dataContext.AddItems(dataContext.Items);
                             break;
                         default:
                             itemsGrid.Focus();
@@ -633,15 +631,18 @@ namespace AxisAvaloniaApp.Views
             switch (e.Key)
             {
                 case Key.Enter:
-                    IList<DataGridRow> rows = partnersGrid.GetRows();
-
-                    switch (rows.Count)
+                    switch (dataContext.Partners.Count)
                     {
                         case 0:
-                            dataContext.AddPartner(null);
+                            string searchKey = (sender as TextBox).Text;
+                            dataContext.AddPartner(new PartnerModel()
+                            {
+                                Name = searchKey,
+                                Principal = searchKey,
+                            });
                             break;
                         case 1:
-                            dataContext.AddPartner(rows[0].DataContext as PartnerModel);
+                            dataContext.AddPartner(dataContext.Partners[0]);
                             break;
                         default:
                             partnersGrid.Focus();

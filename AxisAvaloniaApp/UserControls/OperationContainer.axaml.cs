@@ -6,15 +6,21 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using AxisAvaloniaApp.Enums;
+using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Document;
+using AxisAvaloniaApp.Services.Printing;
 using Microinvest.PDFCreator.Enums;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace AxisAvaloniaApp.UserControls
 {
     public class OperationContainer : TemplatedControl
     {
+        private readonly IPrintService printService;
         private ItemsRepeater listPages;
         private TextBox textBoxPagesToPrint;
         private double basePageWidth;
@@ -22,12 +28,18 @@ namespace AxisAvaloniaApp.UserControls
         int index = 0;
         public OperationContainer()
         {
+            printService = Splat.Locator.Current.GetRequiredService<IPrintService>();
             BackToOperationContentCommand = ReactiveCommand.Create(() =>
             {
                PrintContentVisible = false;
             });
 
-            Pages = new ObservableCollection<Bitmap>();
+            PrintCommand = ReactiveCommand.Create(() => 
+            {
+                printService.PrintImageList(SelectedPrinter, DocumentService.ConvertDocumentToImageList());
+            });
+
+            //Pages = new ObservableCollection<Bitmap>();
  
             //PrintContentHideCommand = ReactiveCommand.Create(() =>
             //{
@@ -66,7 +78,7 @@ namespace AxisAvaloniaApp.UserControls
                 new PrintModel<EPageOrientations>(EPageOrientations.Portrait, "/Assets/Icons/orientationPortrait.jpg", "strPortraitOrientation"),
                 new PrintModel<EPageOrientations>(EPageOrientations.Landscape, "/Assets/Icons/orientationLandscape.jpg", "strLandscapeOrientation"),
             };
-            SelectedOrientation = Orientations[1];
+            //SelectedOrientation = Orientations[1];
 
             PageFormats = new ObservableCollection<PrintModel<EPageFormats>>()
             {
@@ -77,7 +89,7 @@ namespace AxisAvaloniaApp.UserControls
                 new PrintModel<EPageFormats>(EPageFormats.A4, "/Assets/Icons/pageFormat.png", EPageFormats.A4.ToString(), "21 cm x 29.7 cm"),
                 new PrintModel<EPageFormats>(EPageFormats.A3, "/Assets/Icons/pageFormat.png", EPageFormats.A3.ToString(), "29,7 cm x 42 cm"),
             };
-            SelectedPageFormat = PageFormats[4];
+            //SelectedPageFormat = PageFormats[4];
 
             basePageWidth = PageWidth;
         }        
@@ -120,10 +132,24 @@ namespace AxisAvaloniaApp.UserControls
 
             if (selectedPage != null && selectedPage.DataContext is Bitmap bitmap)
             {
-                int index = Pages.IndexOf(bitmap);
-                ActivePage = Pages[index];
+                int index = AvaloniaPages.IndexOf(bitmap);
+                ActivePage = AvaloniaPages[index];
             }
         }
+
+        public static readonly StyledProperty<IDocumentService> DocumentServiceProperty =
+            AvaloniaProperty.Register<OperationContainer, IDocumentService>(nameof(DocumentService));
+
+        /// <summary>
+        /// Gets or sets service to generate documents.
+        /// </summary>
+        /// <date>24.06.2022.</date>
+        public IDocumentService DocumentService
+        {
+            get => GetValue(DocumentServiceProperty);
+            set => SetValue(DocumentServiceProperty, value);
+        }
+
 
         public static readonly StyledProperty<object> TitleContentProperty =
             AvaloniaProperty.Register<OperationContainer, object>(nameof(TitleContent));
@@ -203,17 +229,30 @@ namespace AxisAvaloniaApp.UserControls
             set => SetValue(BackToOperationContentCommandProperty, value);
         }
 
-        public static readonly StyledProperty<ObservableCollection<Bitmap>> PagesProperty =
-            AvaloniaProperty.Register<OperationContainer, ObservableCollection<Bitmap>>(nameof(Pages));
+        public static readonly StyledProperty<ObservableCollection<System.Drawing.Image>> PagesProperty =
+            AvaloniaProperty.Register<OperationContainer, ObservableCollection<System.Drawing.Image>>(nameof(Pages));
 
         /// <summary>
         /// Gets or sets list with pages to print.
         /// </summary>
-        /// <date>25.05.2022.</date>
-        public ObservableCollection<Bitmap> Pages
+        /// <date>24.06.2022.</date>
+        public ObservableCollection<System.Drawing.Image> Pages
         {
             get => GetValue(PagesProperty);
             set => SetValue(PagesProperty, value);
+        }
+
+        public static readonly StyledProperty<ObservableCollection<Bitmap>> AvaloniaPagesProperty =
+            AvaloniaProperty.Register<OperationContainer, ObservableCollection<Bitmap>>(nameof(AvaloniaPages), new ObservableCollection<Bitmap>());
+
+        /// <summary>
+        /// Gets or sets list with pages to show user.
+        /// </summary>
+        /// <date>25.05.2022.</date>
+        public ObservableCollection<Bitmap> AvaloniaPages
+        {
+            get => GetValue(AvaloniaPagesProperty);
+            set => SetValue(AvaloniaPagesProperty, value);
         }
 
         public static readonly StyledProperty<Bitmap> ActivePageProperty =
@@ -444,6 +483,46 @@ namespace AxisAvaloniaApp.UserControls
                     break;
                 case nameof(Scale):
                     PageWidth = basePageWidth * (Scale / 100);
+                    break;
+                case nameof(DocumentService):
+                    if (DocumentService != null)
+                    {
+                        SelectedOrientation = Orientations.Where(o => o.Type.Equals(DocumentService.PageParameters.PageOrientation)).FirstOrDefault();
+                        SelectedPageFormat = PageFormats.Where(pf => pf.Type.Equals(DocumentService.PageParameters.PageFormat)).FirstOrDefault();
+                    }
+                    break;
+                case nameof(SelectedOrientation):
+                    if (DocumentService != null && PrintContentVisible)
+                    {
+                        DocumentService.PageParameters.PageOrientation = SelectedOrientation.Type;
+                        DocumentService.GenerateDocument(
+                            DocumentService.DocumentType, 
+                            EDocumentVersionsPrinting.Original, 
+                            DocumentService.PaymentType);
+                        Pages = DocumentService.ConvertDocumentToImageList().Clone();
+                        DocumentService.SaveDocument(System.IO.Path.Combine(@"C:\Users\serhii.rozniuk\Desktop", "TetsPdf.pdf"));
+                    }
+                    break;
+                case nameof(SelectedPageFormat):
+                    break;
+                case nameof(PrintContentVisible):
+                    break;
+                case nameof(Pages):
+                    if (Pages != null && Pages.Count > 0)
+                    {
+                        AvaloniaPages.Clear();
+
+                        foreach (System.Drawing.Image page in Pages)
+                        {
+                            using (System.IO.Stream stream = new System.IO.MemoryStream())
+                            {
+                                page.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                                stream.Position = 0;
+
+                                AvaloniaPages.Add(new Bitmap(stream));
+                            }
+                        }
+                    }
                     break;
             }
         }

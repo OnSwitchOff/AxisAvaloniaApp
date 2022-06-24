@@ -28,7 +28,7 @@ namespace AxisAvaloniaApp.Services.SearchNomenclatureData
         /// <param name="language">Used application language (will be used to search data in according to language).</param>
         public void InitializeSearchDataTool(ELanguages language)
         {
-            int applicationId = 0;
+            int applicationId = 205;
             ELanguages searchEnum = ELanguages.Bulgarian;
             if (ELanguages.IsDefined(language.ToString()))
             {

@@ -3,13 +3,14 @@ using Microinvest.PDFCreator.Models;
 using System.Collections.Generic;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Models;
+using System;
 
 namespace AxisAvaloniaApp.Services.Document
 {
     /// <summary>
     /// Describes service to generate pdf document.
     /// </summary>
-    public interface IDocumentService
+    public interface IDocumentService : IDisposable
     {
         /// <summary>
         /// Gets or sets data to generate document.
@@ -22,18 +23,6 @@ namespace AxisAvaloniaApp.Services.Document
         /// </summary>
         /// <date>18.03.2022.</date>
         double[] ItemsTableColumnsWidth { get; set; }
-
-        /// <summary>
-        /// Gets or sets path with logo of company.
-        /// </summary>
-        /// <date>18.03.2022.</date>
-        string CompanyLogoPath { get; set; }
-
-        /// <summary>
-        /// Gets or sets path with signature of company.
-        /// </summary>
-        /// <date>18.03.2022.</date>
-        string CompanySignaturePath { get; set; }
 
         /// <summary>
         /// Sets data of customer.
@@ -52,6 +41,25 @@ namespace AxisAvaloniaApp.Services.Document
         /// </summary>
         /// <date>18.03.2022.</date>
         DocumentPageModel PageParameters { get; set; }
+
+        /// <summary>
+        /// Gets type of the document.
+        /// </summary>
+        /// <date>24.06.2022.</date>
+        EDocumentTypes DocumentType { get; }
+
+        /// <summary>
+        /// Gets type of payment.
+        /// </summary>
+        /// <date>24.06.2022.</date>
+        EPaymentTypes PaymentType { get; }
+
+        /// <summary>
+        /// Adds new VAT data to list to show user.
+        /// </summary>
+        /// <param name="vAT">VAT data to add.</param>
+        /// <date>24.06.2022.</date>
+        void AddNewVATRecord(VATModel vAT);
 
         /// <summary>
         /// Generates report.
@@ -104,6 +112,16 @@ namespace AxisAvaloniaApp.Services.Document
         /// <returns>Returns true if a receipt was generated successfully; otherwise returns false.</returns>
         /// <date>18.03.2022.</date>
         bool GenerateReceipt(EDocumentVersionsPrinting versionPrinting = EDocumentVersionsPrinting.Original, EPaymentTypes paymentType = EPaymentTypes.Cash);
+
+        /// <summary>
+        /// Generates document.
+        /// </summary>
+        /// <param name="documentType">Type of a document.</param>
+        /// <param name="versionPrinting">Version of a document to print.</param>
+        /// <param name="paymentTypes">Order payment type.</param>
+        /// <returns>Returns true if a header and footer of document was generated successfully; otherwise returns false.</returns>
+        /// <date>18.03.2022.</date>
+        bool GenerateDocument(EDocumentTypes documentType, EDocumentVersionsPrinting versionPrinting, EPaymentTypes paymentTypes);
 
         /// <summary>
         /// Saves document.
