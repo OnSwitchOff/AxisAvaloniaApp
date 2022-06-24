@@ -1,4 +1,7 @@
-﻿namespace DataBase.Repositories.ApplicationLog
+﻿using System.Threading.Tasks;
+using DataBase.Entities.ApplicationLog;
+
+namespace DataBase.Repositories.ApplicationLog
 {
     public class ApplicationLogRepository : IApplicationLogRepository
     {
@@ -11,6 +14,24 @@
         public ApplicationLogRepository(DatabaseContext databaseContext)
         {
             this.databaseContext = databaseContext;
+        }
+
+
+        /// <summary>
+        /// Adds new applicationLog to table with applicationLogs.
+        /// </summary>
+        /// <param name="applicationLog">applicationLog</param>
+        /// <returns>Returns 0 if applicationLog wasn't added to database; otherwise returns real id of new record.</returns>
+        /// <date>24.06.2022.</date>
+        public Task<int> AddApplicationLogAsync(Entities.ApplicationLog.ApplicationLog applicationLog)
+        {
+            return Task.Run<int>(() =>
+            {
+                databaseContext.ApplicationLogs.Add(applicationLog);
+                databaseContext.SaveChanges();
+
+                return applicationLog.Id;
+            });
         }
     }
 }

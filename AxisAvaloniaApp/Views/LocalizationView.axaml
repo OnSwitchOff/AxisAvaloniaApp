@@ -1,0 +1,166 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+        x:Class="AxisAvaloniaApp.Views.LocalizationView"
+		xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+		xmlns:conv="using:AxisAvaloniaApp.Converters"
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Title="LocalizationView"
+	    Width="600" MaxWidth="600" MinWidth="600"
+	    Height="350" MaxHeight="350" MinHeight="350"
+		WindowStartupLocation="CenterScreen"
+		x:Name="window">
+	<Window.Background>
+		<ImageBrush Source="/Assets/blue-world-map.jpg" Stretch="Fill"/>
+	</Window.Background>
+	<Window.Styles>
+		<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter" >
+			<Setter Property="Background" Value="{DynamicResource SystemControlHighlightListAccentLowBrush}" />
+			<Setter Property="BorderBrush" Value="White"/>
+		</Style>
+		<!--<Style Selector="ListBoxItem TextBlock">
+			<Setter Property="Foreground" Value="White" />
+		</Style>		
+		<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="Yellow" />
+		</Style>
+		<Style Selector="ListBoxItem:pointerover TextBlock">
+			<Setter Property="Foreground" Value="Black" />
+		</Style>
+	
+		<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#0080FF" />
+		</Style>
+		<Style Selector="ListBoxItem:selected TextBlock">
+			<Setter Property="Foreground" Value="White" />
+		</Style>	-->
+	</Window.Styles>
+	<Window.Resources>
+		<conv:BitmapAssetValueConverter x:Key="ImageAssetsConv"/>
+	</Window.Resources>
+    <Grid ColumnDefinitions="*,*" RowDefinitions="*,Auto">
+		
+		<Border Grid.Column="0" BorderBrush="#BB0e1434" BorderThickness="2" Padding="0" CornerRadius="10" Background="Transparent" Margin="20,10">
+			<Grid RowDefinitions="Auto,*">
+				
+				<Border BorderBrush="Gold" BorderThickness="0" Background="#BB0e1434"   Padding="20,10" CornerRadius="10,10,0,0">
+					<controlsEx:AxisTextBlock Foreground="White"  Text="Select Country" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				</Border>
+				<Border BorderBrush="Gold" BorderThickness="0" Grid.Row="1" Background="#990e1434" CornerRadius="0,0,10,10"  >
+					 <ListBox Grid.Column="0" Grid.Row="1" Background="Transparent" MinWidth="200" Padding="0,0,0,0" SelectionMode="Single" Items="{Binding Countries}" SelectedItem="{Binding SelectedCountry}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border  Padding="0" Margin="0" BorderBrush="White" BorderThickness="0">
+									<Grid ColumnDefinitions="Auto,Auto,*,*">
+										<Border Grid.Column="0"  VerticalAlignment="Center" Padding="0" Margin="0" Width="30" Height="30">
+											<Image Source="{Binding Value.ImageSource, Converter={StaticResource ResourceKey=ImageAssetsConv}}" Width="30" Height="30"/>	
+										</Border>
+										<Border Grid.Column="1"  VerticalAlignment="Center" Padding="0" Margin="0">
+											<controlsEx:AxisTextBlock Foreground="White" Text="{Binding Value.CountryName}" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />								
+										</Border>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Border>
+			</Grid>
+		</Border>
+	
+		<Border Grid.Column="1"  BorderBrush="#BB0e1434" BorderThickness="2" Padding="0" CornerRadius="10" Background="Transparent" Margin="20,10">
+			<Grid RowDefinitions="Auto,*">
+				
+				<Border BorderBrush="Gold" BorderThickness="0" Background="#BB0e1434" Padding="20,10"  CornerRadius="10,10,0,0">
+					<controlsEx:AxisTextBlock Text="Select Language" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				</Border>
+				
+				<Border BorderBrush="Gold" BorderThickness="0" Grid.Row="1" Background="#990e1434" CornerRadius="0,0,10,10">
+					 <ListBox Grid.Column="0" Grid.Row="1" Background="Transparent" MinWidth="200" Padding="0,0,0,0" SelectionMode="Single" Items="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border  Padding="0" Margin="0" BorderBrush="White" BorderThickness="0">
+									<Grid ColumnDefinitions="Auto,*">
+										<Border Grid.Column="0"  VerticalAlignment="Center" Padding="0" Margin="0" Width="30" Height="30">
+											<Image Source="{Binding Value.ImageSource, Converter={StaticResource ResourceKey=ImageAssetsConv}}" Width="30" Height="30"/>	
+										</Border>
+										<Border Grid.Column="1"  VerticalAlignment="Center" Padding="0" Margin="0">
+											<controlsEx:AxisTextBlock Foreground="White" Text="{Binding Value.LangName}" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />								
+										</Border>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Border>
+			</Grid>
+		</Border>
+	
+		
+		<Border Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="10,0,10,10">
+			<Button Padding="40,5" Foreground="White" Background="#990e1434" BorderThickness="2" BorderBrush="#BB0e1434" Command="{Binding ConfirmCommand}" CommandParameter="{Binding ElementName=window, Path=.}">
+				<controlsEx:AxisTextBlock Foreground="White" Text="Confirm" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />										
+			</Button>
+		</Border>
+		
+			
+		<Grid Grid.Row="1" Grid.ColumnSpan="5" RowDefinitions="Auto,*" ColumnDefinitions="Auto,*" IsVisible="False">
+			
+			<Border  BorderBrush="Gold" BorderThickness="2" Background="Transparent">
+				<controlsEx:AxisTextBlock Text="Country" Foreground="White"/>
+			</Border>
+			<Border Grid.Row="1" BorderBrush="Gold" BorderThickness="2" Background="Transparent">
+				<controlsEx:AxisTextBlock Text="Language" Foreground="White"/>
+			</Border>
+		
+			<Border Grid.Row="0" Grid.Column="1" BorderBrush="Gold" BorderThickness="2" Background="Transparent">
+				<ComboBox Margin="10,5"
+						HorizontalAlignment="Stretch"
+						Items="{Binding	Countries}"
+						SelectedItem="{Binding	SelectedCountry}"
+						CornerRadius="0">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<Border  Padding="0" Margin="0" BorderBrush="White" BorderThickness="0">
+								<Grid ColumnDefinitions="Auto,*">
+									<Border Grid.Column="0"  VerticalAlignment="Center" Padding="0" Margin="0" Width="30" Height="30">
+										<Image Source="{Binding Value.ImageSource, Converter={StaticResource ResourceKey=ImageAssetsConv}}" Width="30" Height="30"/>	
+									</Border>
+									<Border Grid.Column="1"  VerticalAlignment="Center" Padding="0" Margin="0">
+										<controlsEx:AxisTextBlock Foreground="Black" Text="{Binding Value.CountryName}" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />								
+									</Border>
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</Border>
+		
+			<Border Grid.Row="1" Grid.Column="1"  BorderBrush="Gold" BorderThickness="2" Background="Transparent">
+				<ComboBox Margin="10,5"
+						HorizontalAlignment="Stretch"
+						Items="{Binding	Languages}"
+						SelectedItem="{Binding	SelectedLanguage}"
+						CornerRadius="0">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<Border  Padding="0" Margin="0" BorderBrush="White" BorderThickness="0">
+								<Grid ColumnDefinitions="Auto,*">
+									<Border Grid.Column="0"  VerticalAlignment="Center" Padding="0" Margin="0" Width="30" Height="30">
+										<Image Source="{Binding Value.ImageSource, Converter={StaticResource ResourceKey=ImageAssetsConv}}" Width="30" Height="30"/>	
+									</Border>
+									<Border Grid.Column="1"  VerticalAlignment="Center" Padding="0" Margin="0">
+										<controlsEx:AxisTextBlock Foreground="Black" Text="{Binding Value.LangName}" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />								
+									</Border>
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</Border>
+		</Grid>
+	</Grid>
+</Window>

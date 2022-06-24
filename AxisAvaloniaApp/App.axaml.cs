@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using AxisAvaloniaApp.Helpers;
@@ -6,6 +7,7 @@ using AxisAvaloniaApp.Services.StartUp;
 using AxisAvaloniaApp.Views;
 using Splat;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp
 {
@@ -17,23 +19,33 @@ namespace AxisAvaloniaApp
         }
 
         [System.Obsolete]
-        public override void OnFrameworkInitializationCompleted()
+        public override async void OnFrameworkInitializationCompleted()
         {
-            // регистрируем зависимости (сервисы)
-            Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);            
 
-            IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
-            startUpService.ActivateAsync();
+            // регистрируем зависимости (сервисы)
+            Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow();
+               
+
+                MainWindow mw = null;
+                if (!Configurations.AppConfiguration.IsDatabaseExist)
+                {
+                    desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+                    LocalizationView dialog = new LocalizationView();
+                    mw = await dialog.MyShowDialog();
+                }
+                IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
+                startUpService.ActivateAsync();
+                desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
                 MainWindow.Closing += MainWindow_Closing;
             }
 
             base.OnFrameworkInitializationCompleted();
         }
+
 
         /// <summary>
         /// Gets main window.

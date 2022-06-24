@@ -27,6 +27,7 @@ namespace AxisAvaloniaApp.Services.Settings
         private Dictionary<ESettingKeys, SettingsItemModel> appSettings;
         private Dictionary<ESettingKeys, SettingsItemModel> axisCloudSettings;
         private Microinvest.DeviceService.CustomTypes.UniqueSaleNumber uniqueSaleNumber;
+        private string logfilePath = null;
 
         public SettingsService(
             ISettingsRepository settingsRepository,
@@ -73,6 +74,13 @@ namespace AxisAvaloniaApp.Services.Settings
         {
             get => this.qtyFormat == null ? (this.qtyFormat = string.Concat("N", this.Culture.NumberFormat.NumberDecimalDigits)) : this.qtyFormat;
         }
+
+
+        /// <summary>
+        /// Gets or sets path to Logfile.
+        /// </summary>
+        /// <date>24/06/2022.</date>
+        public string LogfilePath { get => logfilePath; set => logfilePath = value; }
 
         /// <summary>
         /// Gets or sets language of the application.
@@ -630,6 +638,7 @@ namespace AxisAvaloniaApp.Services.Settings
             get => uniqueSaleNumber;
             set => this.uniqueSaleNumber = value;
         }
+   
 
         /// <summary>
         /// Update settings in the database.

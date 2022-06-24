@@ -23,6 +23,14 @@ namespace DataBase.Repositories.OperationHeader
         Task<int> GetNextSaleNumberAsync(string fiscalDeviceNumber);
 
         /// <summary>
+        /// Gets OperationHeader from the database by id.
+        /// </summary>
+        /// <param name="id">Id to search OperationHeader in the database.</param>
+        /// <returns>OperationHeader</returns>
+        /// <date>24.06.2022.</date>
+        Task<Entities.OperationHeader.OperationHeader> GetOperationHeaderByIdAsync(int id);
+
+        /// <summary>
         /// Adds new record to OperationHeader table.
         /// </summary>
         /// <param name="record">Data to add.</param>

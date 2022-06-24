@@ -1,12 +1,28 @@
-﻿using AxisAvaloniaApp.UserControls.MessageBox;
+﻿using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Translation;
+using AxisAvaloniaApp.UserControls.MessageBox;
+using DataBase.Entities.ApplicationLog;
+using DataBase.Entities.OperationHeader;
 using DataBase.Enums;
+using DataBase.Repositories.ApplicationLog;
+using DataBase.Repositories.Items;
+using DataBase.Repositories.OperationHeader;
 using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Services.Logger
 {
     public class LoggerService : ILoggerService
     {
+        private readonly ITranslationService translationService;
+        private readonly ISettingsService settingsService;
+        private readonly IApplicationLogRepository applicationLogRepository;
+        private readonly IOperationHeaderRepository operationHeaderRepository;
+
         private MessageBox messageBox;
         private MessageBoxModel dataContext;
         private MessageBoxParams boxParams;
@@ -17,6 +33,11 @@ namespace AxisAvaloniaApp.Services.Logger
         /// </summary>
         public LoggerService()
         {
+            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
+            applicationLogRepository = Splat.Locator.Current.GetRequiredService<IApplicationLogRepository>();
+            operationHeaderRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+
             messageBox = new MessageBox(EMessageBoxStyles.Windows);
             messageBox.IsReuseWindow = true;
             messageBox.ControlBox = false;
@@ -41,9 +62,22 @@ namespace AxisAvaloniaApp.Services.Logger
         /// <param name="message">Description of error.</param>
         /// <param name="method">Method in which error is happened.</param>
         /// <date>13.06.2022.</date>
-        public void RegisterError(object sender, string message, string method = "")
+        public async void RegisterError(object sender, string message, string method = "")
         {
-
+            try
+            {
+                using (TextWriter logFile = new StreamWriter(settingsService.LogfilePath, true))
+                {
+                    logFile.Write("\r\n" + "Application:{0} {1}" + "\r\n" + "Date/Time:  {2:yyyy/MM/dd HH:mm:ss.fff}" + "\r\n" + "OS:         {3}" + "\r\n" + "Object:     {4}" + "\r\n" + "Method:      {5}" + "\r\n" + "Message:    {6}", FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion, DateTime.Now, Environment.OSVersion, sender.ToString(), method, message);
+                    logFile.WriteLine();
+                    logFile.Flush();
+                    logFile.Close();
+                }
+            }
+            catch (Exception el)
+            {
+                var result = await ShowDialog(translationService.Localize("msgErrorDuringWritingToLog")+ "\r\n" + el.ToString(), translationService.Localize("strError"), EButtonIcons.Error);
+            }
         }
 
         /// <summary>
@@ -53,9 +87,22 @@ namespace AxisAvaloniaApp.Services.Logger
         /// <param name="exception">Error exeption.</param>
         /// <param name="method">Method in which error is happened.</param>
         /// <date>13.06.2022.</date>
-        public void RegisterError(object sender, Exception exception, string method = "")
+        public async void RegisterError(object sender, Exception exception, string method = "")
         {
-
+            try
+            {
+                using (TextWriter logFile = new StreamWriter(settingsService.LogfilePath, true))
+                {
+                    logFile.Write("\r\n" + "Application:{0} {1}" + "\r\n" + "Date/Time:  {2:yyyy/MM/dd HH:mm:ss.fff}" + "\r\n" + "OS:         {3}" + "\r\n" + "Object:     {4}" + "\r\n" + "Method:      {5}" + "\r\n" + "Message:    {6}", FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion, DateTime.Now, Environment.OSVersion, sender.ToString(), method, exception.Source, exception.Message, exception.TargetSite, exception.StackTrace);
+                    logFile.WriteLine();
+                    logFile.Flush();
+                    logFile.Close();
+                }
+            }
+            catch (Exception el)
+            {
+                var result = await ShowDialog(translationService.Localize("msgErrorDuringWritingToLog") + "\r\n" + el.ToString(), translationService.Localize("strError"), EButtonIcons.Error);
+            }
         }
 
         /// <summary>
@@ -65,9 +112,22 @@ namespace AxisAvaloniaApp.Services.Logger
         /// <param name="description">Description of error.</param>
         /// <param name="operationHeaderID">The identifier of the operation in which the action took place.</param>
         /// <date>13.06.2022.</date>
-        public void RegisterError(EApplicationLogEvents eventID, string description, int operationHeaderID = 0)
+        public async void RegisterError(EApplicationLogEvents eventID, string description, int operationHeaderID = 0)
         {
-
+            try
+            {
+                description = description.Trim();
+                if (description.Length > 3000)
+                {
+                    description = description.Substring(0, 3000 - 1);
+                }
+                OperationHeader operationHeader = operationHeaderID > 0 ? await operationHeaderRepository.GetOperationHeaderByIdAsync(operationHeaderID) : null;
+                var result = await applicationLogRepository.AddApplicationLogAsync(ApplicationLog.Create(eventID,description,operationHeader));
+            }
+            catch (Exception ex)
+            {
+                RegisterError(nameof(LoggerService), ex, "WriteErrorToDatabase");
+            }
         }
 
         /// <summary>

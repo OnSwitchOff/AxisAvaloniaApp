@@ -51,8 +51,9 @@
 		Source="{Binding ObjectSettings.IconSource, Mode=OneWay, Converter={StaticResource IconAssetsConv}}"/>
 		  </Border>	
 		  <Button Classes="WhiteBorder" Grid.Row="1" Command="{Binding ObjectSettings.ShowChoseIconCommand}" Background="Transparent" BorderThickness="2" BorderBrush="White" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,5" HorizontalContentAlignment="Center">
-			  <Image  Width="120" Height="120" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20"
-		Source="{Binding ObjectSettings.IconSource, Mode=OneWay, Converter={StaticResource IconAssetsConv}}"/>
+			  <Border  VerticalAlignment="Center"  Padding="0" Margin="0">
+				  <controlsEx:AxisTextBlock LocalizeTextKey="strLogo"  Foreground="White"  VerticalAlignment="Center" Padding="0"  />
+			  </Border>
 		  </Button>
 	  </Grid>
 	  

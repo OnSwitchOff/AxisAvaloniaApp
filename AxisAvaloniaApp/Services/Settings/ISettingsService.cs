@@ -35,6 +35,13 @@ namespace AxisAvaloniaApp.Services.Settings
         /// <date>16/03/2022.</date>
         string QtyFormat { get; }
 
+
+        /// <summary>
+        /// Gets or sets path to Logfile.
+        /// </summary>
+        /// <date>24/06/2022.</date>
+        string LogfilePath { get; set; }
+
         /// <summary>
         /// Gets or sets language of the application.
         /// </summary>
