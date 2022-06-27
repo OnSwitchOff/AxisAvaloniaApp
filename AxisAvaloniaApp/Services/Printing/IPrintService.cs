@@ -14,7 +14,7 @@ namespace AxisAvaloniaApp.Services.Printing
     {
         List<string> GetPrinters();
         bool SendByteArrayToPrinter(string printerName, byte[] bytes);
-        bool PrintImageList(string szPrinterName, List<Image> images, bool landscape);
+        bool PrintImageList(string szPrinterName, List<Image> images, bool landscape = false);
     }
 
 }

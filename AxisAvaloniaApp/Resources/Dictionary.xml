@@ -1819,6 +1819,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	  <Data Key="strOutputInvoices">
+		  <Value Lang="bg-BG">Издадени фактури</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Not translated</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Выданные фактуры</Value>
+		  <Value Lang="uk-UA">Видані фактури</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
 	  <Data Key="strExchangeDirection">
 		  <Value Lang="bg-BG">Посока на обмен</Value>
 		  <Value Lang="el-GR">Κατεύθυνση ανταλλαγής</Value>

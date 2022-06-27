@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace AxisAvaloniaApp.Services.Reports.Bulgaria
@@ -62,6 +63,19 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
             });
 
             // документы
+
+            supportedReports.Add(new ReportItemModel()
+            {
+                LocalizeReportNameKey = "strDocuments",
+                SubReports = new List<ReportItemModel>()
+                {
+                    new ReportItemModel()
+                    {
+                        ReportKey = (int)EBulgarianReports.OutputInvoices,
+                        LocalizeReportNameKey = "strOutputInvoices",
+                    }
+                }
+            }) ;
 
             // СУПТО
         }
@@ -207,7 +221,34 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strPurchaseSum", "PurchaseSum", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSaleSum", "SaleSum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
-                    
+                    break;
+                case EBulgarianReports.OutputInvoices:
+                    columnsData = new ObservableCollection<ReportDataModel>()
+                    {
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strInvoiceNumber", "InvoiceNumber", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strInvoiceDate", "InvoiceDate", Avalonia.Layout.HorizontalAlignment.Center, 105),
+                        new ReportDataModel("strPartner", "Partner", Avalonia.Layout.HorizontalAlignment.Right, double.NaN),
+                        new ReportDataModel("strEIK", "EIK", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
+                    };
+
+                    source = new ObservableCollection<OutputInvoiceReportModel>()
+                    {
+                        new OutputInvoiceReportModel(1)
+                        {
+                            InvoiceNumber = "001",
+                            InvoiceDate =  DateTime.Now.ToShortDateString(),
+                            Partner = "MyPartner",
+                            EIK = "12312312",
+                            Sum = "100,00"
+                        },
+                        new OutputInvoiceReportModel()
+                        {
+                            Sum = "100,00"
+                        }
+
+                    };
                     break;
             }
         }

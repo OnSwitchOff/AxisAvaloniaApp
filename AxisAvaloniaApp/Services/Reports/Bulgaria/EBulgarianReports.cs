@@ -7,5 +7,6 @@
         SalesByPartners,
         SalesByItemsGroups,
         SalesByPartnersGroups,
+        OutputInvoices,
     }
 }
