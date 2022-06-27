@@ -76,7 +76,7 @@ namespace AxisAvaloniaApp.Services.Printing
 
         List<Image> Images = new List<Image>();
         // The Click event is raised when the user clicks the Print button.
-        public bool PrintImageList(string szPrinterName, List<Image> images)
+        public bool PrintImageList(string szPrinterName, List<Image> images, bool landscape = false)
         {
             try
             {

@@ -27,7 +27,7 @@ namespace AxisAvaloniaApp.Services.Activation
             Uri destination = new Uri(baseUri: BaseAddress, relativeUri: "/api/activation/getstatus/" + RequestFormater.GetParamString(pars));
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("ContentType", "text/html; charset=UTF-8");
-            client.DefaultRequestHeaders.Add("UserAgent", RequestFormater.UserAgent());
+            client.DefaultRequestHeaders.Add("User-Agent", RequestFormater.UserAgent());
             return await client.GetAsync(destination);
         }
 
@@ -40,7 +40,7 @@ namespace AxisAvaloniaApp.Services.Activation
             Uri destination = new Uri(baseUri: BaseAddress, relativeUri: "/api/activation/trylicense/" + RequestFormater.GetParamString(pars));
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("ContentType", "text/html; charset=UTF-8");
-            client.DefaultRequestHeaders.Add("UserAgent", RequestFormater.UserAgent());
+            client.DefaultRequestHeaders.Add("User-Agent", RequestFormater.UserAgent());
             return await client.GetAsync(destination);
         }
 
@@ -49,7 +49,7 @@ namespace AxisAvaloniaApp.Services.Activation
             Uri destination = new Uri(baseUri: BaseAddress, relativeUri: "/api/version/getlastversion/");
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("ContentType", "text/html; charset=UTF-8");
-            client.DefaultRequestHeaders.Add("UserAgent", RequestFormater.UserAgent());
+            client.DefaultRequestHeaders.Add("User-Agent", RequestFormater.UserAgent());
             return await client.GetAsync(destination);
         }
 

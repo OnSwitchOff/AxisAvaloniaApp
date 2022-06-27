@@ -61,13 +61,17 @@ namespace AxisAvaloniaApp.Services.Printing
 
         List<Image> Images = new List<Image>();
         // The Click event is raised when the user clicks the Print button.
-        public bool PrintImageList(string szPrinterName, List<Image> images)
+        public bool PrintImageList(string szPrinterName, List<Image> images, bool landscape = false)
         {
             try
             {
                 Images = images;
                 PrintDocument pd = new PrintDocument();
                 pd.PrinterSettings.PrinterName = szPrinterName;
+                pd.DefaultPageSettings.PaperSize = pd.PrinterSettings.PaperSizes.Cast<PaperSize>().First<PaperSize>(size => size.Kind == PaperKind.A4);
+                pd.DefaultPageSettings.Landscape = landscape;
+                pd.DefaultPageSettings.Margins = new Margins(0,0,0,0);
+
                 //pd.PrinterSettings.PrintFileName
                 pd.PrintPage += Pd_PrintPage;
                 pd.Print();
@@ -82,7 +86,27 @@ namespace AxisAvaloniaApp.Services.Printing
         // The PrintPage event is raised for each page to be printed.
         private void Pd_PrintPage(object sender, PrintPageEventArgs ev)
         {
-            // Create image.
+            float tgtWidthInches = ev.PageSettings.PrintableArea.Width / 100;
+            float tgtHeightInches = ev.PageSettings.PrintableArea.Height / 100;
+
+            if (ev.PageSettings.Landscape)
+            {
+                tgtWidthInches = ev.PageSettings.PrintableArea.Height / 100;
+                tgtHeightInches = ev.PageSettings.PrintableArea.Width / 100;
+            }
+
+            float srcWidthPx = Images[0].Width;
+            float srcHeightPx = Images[0].Height;
+            float dpiX = srcWidthPx / tgtWidthInches;
+            float dpiY = srcHeightPx / tgtHeightInches;
+
+            Bitmap bmp = (Bitmap)Images[0];
+            bmp.SetResolution(dpiX,dpiY);
+            
+            ev.Graphics.PageUnit = GraphicsUnit.Inch;
+            ev.Graphics.DrawImage(bmp, 0, 0, tgtWidthInches, tgtHeightInches);
+
+            /*// Create image.
             //Image newImage = Image.FromFile("SampImag.jpg");
             Image newImage = resizeImage(Images[0], new Size(ev.PageSettings.PaperSize.Width, ev.PageSettings.PaperSize.Height));
 
@@ -95,7 +119,8 @@ namespace AxisAvaloniaApp.Services.Printing
             GraphicsUnit units = GraphicsUnit.Point;
 
             // Draw image to screen.
-            ev.Graphics.DrawImage(newImage, x, y, srcRect, units);
+            ev.Graphics.DrawImage(newImage, x, y, srcRect, units);*/
+            
             Images.Remove(Images[0]);
             ev.HasMorePages = Images.Count > 0;
         }
@@ -125,6 +150,6 @@ namespace AxisAvaloniaApp.Services.Printing
             g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
             g.Dispose();
             return (System.Drawing.Image)b;
-        }
+        }       
     }
 }

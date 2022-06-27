@@ -30,7 +30,7 @@ namespace AxisAvaloniaApp.Helpers
 
         internal static string UserAgent()
         {
-            return "Axis My100R/1.1.0";
+            return "Axis Uno/1.0.0";
             return string.Format("{0}/{1}.{2}.{3}", typeof(Program).Assembly.GetName().FullName, typeof(Program).Assembly.GetName().Version.Major, typeof(Program).Assembly.GetName().Version.Minor, typeof(Program).Assembly.GetName().Version.Build);
         }
     }
