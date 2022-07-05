@@ -129,20 +129,20 @@ namespace AxisAvaloniaApp.Configurations
                     string cmd = "chmod -R 777 " + Path.Combine("/var", "lib");
                     try
                     {
-                        using (Process proc = Process.Start(Path.Combine("/var", "lib"), $"-c \"{cmd}\""))
+                        using (Process proc = Process.Start("/bin/bash", $"-c \"{cmd}\""))
                         {
                             proc.WaitForExit();
                             //return proc.ExitCode == 0;
+
+                            if (!Directory.Exists(dataBasePath))
+                            {
+                                Directory.CreateDirectory(dataBasePath);
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
 
-                    }
-
-                    if (!Directory.Exists(dataBasePath))
-                    {
-                        Directory.CreateDirectory(dataBasePath);
                     }
                 }
                 else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
