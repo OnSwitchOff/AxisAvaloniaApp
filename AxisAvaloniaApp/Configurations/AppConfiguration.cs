@@ -25,7 +25,7 @@ namespace AxisAvaloniaApp.Configurations
         /// <summary>
         /// Gets value indicating whether database exists. 
         /// </summary>
-        public static bool IsDatabaseExist => Directory.Exists(Path.Combine(Path.GetPathRoot(System.Environment.SystemDirectory), "ProgramData", "Axis", "Uno"));
+        public static bool IsDatabaseExist => Directory.Exists(DatabaseLocation);
 
         /// <summary>
         /// Gets or sets path to logo.
@@ -123,11 +123,11 @@ namespace AxisAvaloniaApp.Configurations
                 }
                 else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
                 {
-                    //dataBasePath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+                    dataBasePath = Path.Combine("var", "lib", "Axis", "Uno");
                 }
                 else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
                 {
-                    //dataBasePath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+                    dataBasePath = Path.Combine("Library", "Application Support", "Axis", "Uno");
                 }
                 else
                 {

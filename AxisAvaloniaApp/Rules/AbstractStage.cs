@@ -36,15 +36,15 @@ namespace AxisAvaloniaApp.Rules
         /// <param name="request">Data to the current method.</param>
         /// <returns>Returns invocation method of next stage.</returns>
         /// <date>23.06.2022.</date>
-        public virtual Task<object> Invoke(object request)
+        public virtual async Task<object> Invoke(object request)
         {
             if (this.nextStage != null)
             {
-                return this.nextStage.Invoke(request);
+                return await this.nextStage.Invoke(request);
             }
             else
             {
-                return Task.FromResult<object>(-1);
+                return await Task.FromResult<object>(1);
             }
         }
     }

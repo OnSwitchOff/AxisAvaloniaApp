@@ -28,10 +28,10 @@ namespace AxisAvaloniaApp.Rules.Item
             if (item.Codes.GroupBy(i => i.Code).Where(c => c.Count() > 1 || c.Key.Equals(item.Code)).FirstOrDefault() != null)
             {
                 await loggerService.ShowDialog("msgDuplicateItemBarcode", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
-                return Task.FromResult<object>(-1);
+                return await Task.FromResult<object>(-1);
             }
 
-            return base.Invoke(request);
+            return await base.Invoke(request);
         }
     }
 }

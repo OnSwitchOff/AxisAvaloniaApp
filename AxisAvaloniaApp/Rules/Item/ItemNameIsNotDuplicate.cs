@@ -30,10 +30,10 @@ namespace AxisAvaloniaApp.Rules.Item
             if (await itemRepository.ItemNameIsDuplicated(itemName))
             {
                 await loggerService.ShowDialog("msgDuplicateItemName", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
-                return Task.FromResult<object>(-1);
+                return await Task.FromResult<object>(-1);
             }
 
-            return base.Invoke(request);
+            return await base.Invoke(request);
         }
     }
 }

@@ -26,10 +26,10 @@ namespace AxisAvaloniaApp.Rules.Item
             if (string.IsNullOrEmpty(itemName))
             {
                 await loggerService.ShowDialog("msgItemNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
-                return Task.FromResult<object>(-1);
+                return await Task.FromResult<object>(-1);
             }
 
-            return base.Invoke(request);
+            return await base.Invoke(request);
         }
     }
 }
