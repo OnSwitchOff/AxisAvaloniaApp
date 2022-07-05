@@ -70,7 +70,7 @@ namespace AxisAvaloniaApp.UserControls.MessageBox
             ContentMessageKey = @params.ContentMessageKey;
             _window = @params.Window;
             SetButtons(@params.ButtonDefinitions);
-            if (string.IsNullOrEmpty(ContentHeader))
+            if (string.IsNullOrEmpty(ContentHeader) && string.IsNullOrEmpty(ContentHeaderKey))
             {
                 HasHeader = false;
             }

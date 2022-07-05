@@ -94,5 +94,28 @@ namespace DataBase.Repositories.Items
         /// <returns>Returns list of existing measures.</returns>
         /// <date>31.03.2022.</date>
         Task<List<string>> GetMeasuresAsync();
+
+        /// <summary>
+        /// Gets next code of item.
+        /// </summary>
+        /// <returns>Returns next code of item.</returns>
+        /// <date>04.07.2022.</date>
+        Task<int> GetNextItemCode();
+
+        /// <summary>
+        /// Checks whether name of item is duplicated.
+        /// </summary>
+        /// <param name="itemName">Name of item.</param>
+        /// <returns>Returns true if name of item is duplicated; otherwise returns false.</returns>
+        /// <date>04.07.2022.</date>
+        Task<bool> ItemNameIsDuplicated(string itemName);
+
+        /// <summary>
+        /// Checks whether barcode of item is duplicated.
+        /// </summary>
+        /// <param name="barcode">Barcode of item.</param>
+        /// <returns>Returns true if barcode of item is duplicated; otherwise returns false.</returns>
+        /// <date>04.07.2022.</date>
+        Task<bool> ItemBarcodeIsDuplicated(string barcode);
     }
 }

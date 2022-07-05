@@ -1,6 +1,6 @@
 ﻿using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
-using AxisAvaloniaApp.Services.Logger;
+using AxisAvaloniaApp.Rules;
 using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Translation;
 using AxisAvaloniaApp.UserControls.MessageBox;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class PaymentStage : SaleOperationStage
+    public class PaymentStage : AbstractStage
     {
         private readonly IPaymentService paymentService;
         private readonly ITranslationService translationService;

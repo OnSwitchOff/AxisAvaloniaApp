@@ -1,7 +1,9 @@
-﻿using Avalonia.Media.Imaging;
-using AxisAvaloniaApp.Enums;
+﻿using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Rules;
+using AxisAvaloniaApp.Rules.Item;
+using AxisAvaloniaApp.Rules.Sale;
 using AxisAvaloniaApp.Services.Document;
 using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Payment;
@@ -1011,6 +1013,19 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
         /// <summary>
+        /// Finds item data on the Microinvest club by barcode.
+        /// </summary>
+        /// <param name="barcode">Key to search item.</param>
+        /// <date>04.07.2022.</date>
+        public async void FindItem(string barcode)
+        {
+            if (!string.IsNullOrEmpty(barcode) && (SelectedItem == null || SelectedItem.Id == 0))
+            {
+                EditableItem = await searchService.GetItemData(barcode);
+            }
+        }
+
+        /// <summary>
         /// Deletes the nomenclature if all conditions are met.
         /// </summary>
         /// <param name="nomenclature">Nomenclature to delete.</param>
@@ -1071,10 +1086,33 @@ namespace AxisAvaloniaApp.ViewModels
                 case ENomenclatures.Items:
                     EditableItem = new ItemModel();
                     EditableItem.Group.Clone(SelectedItemsGroup);
+
+                    EditableItem.RegisterValidationData<ItemModel, string>(
+                        nameof(ItemModel.Barcode),
+                        () =>
+                        {
+                            return !string.IsNullOrEmpty(EditableItem.Barcode) && !validationService.IsBarcode(EditableItem.Barcode);
+                        },
+                        "msgInvalidBarcode");
                     break;
                 case ENomenclatures.Partners:
                     EditablePartner = new PartnerModel();
                     EditablePartner.Group.Clone(SelectedPartnersGroup);
+
+                    EditablePartner.RegisterValidationData<PartnerModel, string>(
+                        nameof(PartnerModel.TaxNumber), 
+                        () => 
+                        {
+                            return !string.IsNullOrEmpty(EditablePartner.TaxNumber) && !validationService.IsTaxNumber(EditablePartner.TaxNumber);
+                        }, 
+                        "msgInvalidTaxNumber");
+                    EditablePartner.RegisterValidationData<PartnerModel, string>(
+                        nameof(PartnerModel.VATNumber),
+                        () =>
+                        {
+                            return !string.IsNullOrEmpty(EditablePartner.VATNumber) && !validationService.IsVATNumber(EditablePartner.VATNumber);
+                        },
+                        "msgInvalidVATNumber");
                     break;
                 case ENomenclatures.ItemsGroups:
                     EditableItemsGroup = new GroupModel();
@@ -1104,6 +1142,14 @@ namespace AxisAvaloniaApp.ViewModels
                     else
                     {
                         EditableItem?.Clone(SelectedItem);
+                        EditableItem?.RegisterValidationData<ItemModel, string>(
+                            nameof(ItemModel.Barcode),
+                            () =>
+                            {
+                                return !string.IsNullOrEmpty(EditableItem.Barcode) && !validationService.IsBarcode(EditableItem.Barcode);
+                            },
+                            "msgInvalidBarcode");
+
                         IsNomenclaturePanelVisible = false;
                     }
                     break;
@@ -1115,6 +1161,21 @@ namespace AxisAvaloniaApp.ViewModels
                     else
                     {
                         EditablePartner?.Clone(SelectedPartner);
+                        EditablePartner?.RegisterValidationData<PartnerModel, string>(
+                        nameof(PartnerModel.TaxNumber),
+                        () =>
+                        {
+                            return !string.IsNullOrEmpty(EditablePartner.TaxNumber) && !validationService.IsTaxNumber(EditablePartner.TaxNumber);
+                        },
+                        "msgInvalidTaxNumber");
+                        EditablePartner?.RegisterValidationData<PartnerModel, string>(
+                            nameof(PartnerModel.VATNumber),
+                            () =>
+                            {
+                                return !string.IsNullOrEmpty(EditablePartner.VATNumber) && !validationService.IsVATNumber(EditablePartner.VATNumber);
+                            },
+                            "msgInvalidVATNumber");
+
                         IsNomenclaturePanelVisible = false;
                     }
                     break;
@@ -1243,10 +1304,26 @@ namespace AxisAvaloniaApp.ViewModels
         /// Add new code to list with additional codes of item.
         /// </summary>
         /// <date>31.05.2022.</date>
-        public void AddAdditionalItemCode()
+        public async void AddAdditionalItemCode()
         {
-            EditableItem.Codes.Add(new ItemCodeModel());
-            // TODO: initialize method
+            int nextItemCode = await itemRepository.GetNextItemCode();
+
+            if (EditableItem != null && EditableItem.Codes != null)
+            {
+                foreach (ItemCodeModel itemCode in EditableItem.Codes)
+                {
+                    if (int.TryParse(itemCode.Code, out int code) && nextItemCode <= code)
+                    {
+                        nextItemCode = code + 1;
+                    }
+                }
+            }
+
+            EditableItem?.Codes?.Add(
+                new ItemCodeModel()
+                { 
+                    Code = nextItemCode.ToString(),
+                });
         }
 
         /// <summary>
@@ -1256,8 +1333,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public void DeleteAdditionalItemCode(ItemCodeModel itemCode)
         {
-            EditableItem.Codes.Remove(itemCode);
-            // TODO: initialize method
+            EditableItem?.Codes.Remove(itemCode);
         }
 
         /// <summary>
@@ -1265,8 +1341,44 @@ namespace AxisAvaloniaApp.ViewModels
         /// </summary>
         /// <param name="nomenclature">Type of nomenclature.</param>
         /// <date>03.06.2022.</date>
-        public void SaveNomenclature(ENomenclatures nomenclature)
+        public async void SaveNomenclature(ENomenclatures nomenclature)
         {
+            switch (nomenclature)
+            {
+                case ENomenclatures.Items:
+                    if (EditableItem != null)
+                    {
+                        IStage itemNameIsNotEmpty = new ItemNameIsNotEmpty(EditableItem.Name);
+                        IStage itemNameIsNotDuplicate = new ItemNameIsNotDuplicate(EditableItem.Name);
+                        IStage itemBarcodeIsNotDuplicate = new ItemBarcodeIsNotDuplicate(EditableItem.Barcode);
+                        IStage itemCodesAreNotDuplicated = new ItemCodesAreNotDuplicated(EditableItem);
+                        IStage itemMeasuresAreNotDuplicated = new ItemMeasuresAreNotDuplicated(EditableItem);
+
+                        itemNameIsNotEmpty.
+                            SetNext(itemNameIsNotDuplicate).
+                            SetNext(itemBarcodeIsNotDuplicate).
+                            SetNext(itemCodesAreNotDuplicated).
+                            SetNext(itemMeasuresAreNotDuplicated);
+
+                        //Task validationResult = await itemNameIsNotEmpty.Invoke(new object());
+                        //Type type = validationResult.GetType();
+                        if (await itemNameIsNotEmpty.Invoke(new object()) is object obj)
+                        {
+
+                        }
+                    }
+                    break;
+                case ENomenclatures.ItemsGroups:
+
+                    break;
+                case ENomenclatures.Partners:
+
+                    break;
+                case ENomenclatures.PartnersGroups:
+
+                    break;
+            }
+
             IsNomenclaturePanelVisible = true;
             // TODO: initialize method
         }
@@ -1340,7 +1452,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>30.05.2022.</date>
         public async void PaymentSale(EPaymentTypes paymentType)
         {
-            ValidateAmountSumStage validateStage = new ValidateAmountSumStage(AmountToPay, paymentType);
+            IStage sumToPayIsEnough = new SumToPayIsEnough(AmountToPay, paymentType);
             PaymentStage paymentStage = new PaymentStage(Order, paymentType);
             WriteToDatabaseStage writeToDatabaseStage = new WriteToDatabaseStage(paymentService.FiscalDevice.ReceiptNumber, Order, OperationPartner, paymentType);
             PrepareViewStage prepareViewStage = new PrepareViewStage(() =>
@@ -1352,8 +1464,8 @@ namespace AxisAvaloniaApp.ViewModels
                 IsPaymentPanelVisible = false;
             });
 
-            validateStage.SetNext(paymentStage).SetNext(writeToDatabaseStage).SetNext(prepareViewStage);
-            await validateStage.Invoke(TotalAmount);
+            sumToPayIsEnough.SetNext(paymentStage).SetNext(writeToDatabaseStage).SetNext(prepareViewStage);
+            var res = await sumToPayIsEnough.Invoke(TotalAmount);
 
             // заполняем данные о покупателе
             DocumentService.CustomerData = OperationPartner;

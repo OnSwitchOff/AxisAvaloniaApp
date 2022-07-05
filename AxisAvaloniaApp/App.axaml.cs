@@ -30,14 +30,16 @@ namespace AxisAvaloniaApp
                
 
                 MainWindow mw = null;
+                bool isFirstStart = false;
                 if (!Configurations.AppConfiguration.IsDatabaseExist)
                 {
+                    isFirstStart = true;
                     desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
                     LocalizationView dialog = new LocalizationView();
                     mw = await dialog.MyShowDialog();
                 }
                 IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
-                startUpService.ActivateAsync();
+                startUpService.ActivateAsync(isFirstStart);
                 desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
                 MainWindow.Closing += MainWindow_Closing;

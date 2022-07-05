@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.Rules
 {
-    public interface ISaleStage
+    public interface IStage
     {
         /// <summary>
         /// Sets next stage to finalize operation of sale.
@@ -10,7 +10,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <param name="nextStage">Next stage.</param>
         /// <returns>Returns next stage to finalize operation of sale.</returns>
         /// <date>23.06.2022.</date>
-        ISaleStage SetNext(ISaleStage nextStage);
+        IStage SetNext(IStage nextStage);
 
         /// <summary>
         /// Starts invocation of stages.

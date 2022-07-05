@@ -46,7 +46,7 @@ namespace DataBase.Repositories.PaymentTypes
         /// <date>24.06.2022.</date>
         public async Task<int> AddPaymentTypesAsync(IList<Entities.PaymentTypes.PaymentType> paymentTypes)
         {
-            await databaseContext.AddAsync(paymentTypes);
+            await databaseContext.AddRangeAsync(paymentTypes);
             return await databaseContext.SaveChangesAsync();
         }
     }

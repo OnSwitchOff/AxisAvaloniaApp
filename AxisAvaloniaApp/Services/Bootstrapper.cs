@@ -1,7 +1,4 @@
-﻿using Autofac;
-using System;
-using AxisAvaloniaApp.AutofacModules;
-using Autofac.Extensions.DependencyInjection;
+﻿using System;
 using Splat;
 using AxisAvaloniaApp.Services.StartUp;
 using AxisAvaloniaApp.Helpers;
@@ -133,33 +130,6 @@ namespace AxisAvaloniaApp.Services
             services.Register<ISettingsRepository>(() => new SettingsRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));
             services.Register<IVATsRepository>(() => new VATsRepository((DatabaseContext)resolver.GetRequiredService(typeof(DatabaseContext))));
 
-        }
-
-        /// <summary>
-        /// Configures services.
-        /// </summary>
-        /// <returns>AutofacServiceProvider.</returns>
-        internal static IServiceProvider ConfigureServices()
-        {
-            var builder = new ContainerBuilder();
-
-            //builder.RegisterModule<ActivationModule>();
-            //builder.RegisterModule<LoggingModule>();
-            builder.RegisterModule<MediatorModule>();
-            builder.RegisterModule<ProcessingModule>();
-            // builder.RegisterModule<ApplicationServicesModule>();
-            //builder.RegisterModule(
-            //    new DatabaseModule(
-            //        Configurations.DatabaseConfiguration.GetOptions()));
-            //builder.RegisterModule<SettingsModule>();
-            //builder.RegisterModule<SerializationModule>();
-            //builder.RegisterModule<ScanningModule>();
-            //builder.RegisterModule<PaymentModule>();
-            //builder.RegisterModule<SearchDataModule>();
-            //builder.RegisterModule<DocumentModule>();
-            //builder.RegisterModule<AxisCloudModule>();
-
-            return new AutofacServiceProvider(builder.Build());
         }
     }
 }

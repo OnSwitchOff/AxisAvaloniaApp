@@ -448,11 +448,34 @@
                                       Grid.Column="0"
                                       Classes="Edit"
                                       LocalizeTextKey="strBarcode"/>
-            <controlsEx:AxisTextBox Grid.Row="2"
-                                    Grid.Column="1"
-                                    Classes="RightMargin"
-                                    ExplanationKey="EnterOrEditItemBarcode"
-                                    Text="{Binding EditableItem.Barcode, Mode=TwoWay}"/>
+            <Grid Grid.Row="2"
+                  Grid.Column="1"
+                  Classes="RightMargin"
+                  ColumnDefinitions="*, auto">
+              <controlsEx:AxisTextBox Grid.Column="0"
+                                      Name="TextBoxBarcode"
+                                      CornerRadius="3, 0, 0, 3"
+                                      Background="White"
+                                      BorderThickness="0"
+                                      ExplanationKey="EnterOrEditItemBarcode"
+                                      InputDataChecker="OnlyDigits"
+                                      Text="{Binding EditableItem.Barcode, Mode=TwoWay}"
+                                      KeyDown="TextBoxFindItem_KeyDown"/>
+              <Button Grid.Column="1"
+                      CornerRadius="0, 3, 3, 0"
+                      Margin="0"
+                      Padding="2"
+                      Background="{Binding ElementName=TextBoxBarcode, Path=Background}"
+                      BorderThickness="0"
+                      Command="{Binding FindItem}"
+                      CommandParameter="{Binding ElementName=TextBoxBarcode, Path=Text, Mode=OneWay}">
+                <Button.Content>
+                  <Image Source="/Assets/Icons/search.png"
+                         Height="30"
+                         Stretch="UniformToFill"/>
+                </Button.Content>
+              </Button>
+            </Grid>
             <controlsEx:AxisTextBlock Grid.Row="3"
                                       Grid.Column="0"
                                       Classes="Edit"
@@ -540,7 +563,7 @@
                       Grid.ColumnSpan="2"
                       Margin="5"
                       MinHeight="100"
-                      Items="{Binding SelectedItem.Codes, Mode=TwoWay}">
+                      Items="{Binding EditableItem.Codes, Mode=TwoWay}">
               <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Code}"
                                     Width="*"

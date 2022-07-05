@@ -728,6 +728,25 @@ namespace AxisAvaloniaApp.Views
         }
 
         /// <summary>
+        /// Finds item by barcode when Enter was pressed in accordinally TextBox.
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">AvaloniaPropertyChangedEventArgs.</param>
+        /// <date>04.07.2022.</date>
+        private void TextBoxFindItem_KeyDown(object? sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    if (sender is TextBox textBox)
+                    {
+                        dataContext.FindItem(textBox.Text);
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Sets InputControl when TextBox for number of card is focused; otherwise clears InputControl.
         /// </summary>
         /// <param name="sender">TextBox.</param>

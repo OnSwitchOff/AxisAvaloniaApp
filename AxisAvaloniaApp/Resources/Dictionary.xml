@@ -2286,6 +2286,66 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="msgInvalidBarcode">
+      <Value Lang="bg-BG">Невалиден баркод!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid barcode!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Недействительный штрихкод!</Value>
+      <Value Lang="uk-UA">Недійсний штрихкод!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgItemNameIsEmpty">
+      <Value Lang="bg-BG">Име на стока е празно!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Name of item is empty!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Название товара не заполнено!</Value>
+      <Value Lang="uk-UA">Назва товару не заповнена!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDuplicateItemName">
+      <Value Lang="bg-BG">Името на стока се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Name of item is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Название товара дублируется!</Value>
+      <Value Lang="uk-UA">Назва товару дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDuplicateItemBarcode">
+      <Value Lang="bg-BG">Баркодът на стоката се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Barcode of item is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Штрихкод товара дублируется!</Value>
+      <Value Lang="uk-UA">Штрихкод товару дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDuplicateItemAdditionalCodes">
+      <Value Lang="bg-BG">Допълнителният код на продукта се дублира с основния код!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The additional item code is duplicated with the main item code!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дополнительный код товара дублируется с основным кодом!</Value>
+      <Value Lang="uk-UA">Додатковий код товару дублюється з основним кодом!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDuplicateAdditionalMeasures">
+      <Value Lang="bg-BG">Мерната единица на допълнителния код на продукта се дублира с основната мерна единица!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The measure of an additional item code is duplicated with the main measure!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Единица измерения дополнительного кода товара дублируется с основной единицей измерения!</Value>
+      <Value Lang="uk-UA">Одиниця вимірювання додаткового коду товару дублюється з основною одиницею вимірювання!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="msgInvalidIPAddress">
       <Value Lang="bg-BG">Невалиден IP адрес!</Value>
       <Value Lang="el-GR">Not translated</Value>

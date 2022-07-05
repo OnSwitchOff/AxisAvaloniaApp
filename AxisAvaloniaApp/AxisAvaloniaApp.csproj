@@ -110,8 +110,6 @@
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.3.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="Avalonia" Version="0.10.12" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.12" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.12" />
@@ -121,8 +119,6 @@
     <PackageReference Include="Avalonia.Xaml.Interactions" Version="0.10.12" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
     <PackageReference Include="FluentValidation" Version="11.0.1" />
-    <PackageReference Include="MediatR" Version="10.0.1" />
-    <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microinvest.CommonLibrary" Version="1.0.0" />
     <PackageReference Include="Microinvest.DeviceService" Version="1.0.2" />
     <PackageReference Include="Microinvest.ExchangeDataService" Version="1.0.0" />
@@ -163,5 +159,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Rules\Partner\" />
   </ItemGroup>
 </Project>
