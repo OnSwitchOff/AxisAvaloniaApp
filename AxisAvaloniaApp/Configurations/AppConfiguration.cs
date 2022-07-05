@@ -115,11 +115,6 @@ namespace AxisAvaloniaApp.Configurations
                         "ProgramData",
                         "Axis",
                         "Uno");
-
-                    if (!Directory.Exists(dataBasePath))
-                    {
-                        Directory.CreateDirectory(dataBasePath);
-                    }
                 }
                 else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
                 {
@@ -132,6 +127,11 @@ namespace AxisAvaloniaApp.Configurations
                 else
                 {
                     throw new System.Exception("Unidentified operating system!");
+                }
+
+                if (!Directory.Exists(dataBasePath))
+                {
+                    Directory.CreateDirectory(dataBasePath);
                 }
 
                 return dataBasePath;
