@@ -1,5 +1,7 @@
 ﻿using DataBase;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace AxisAvaloniaApp.Configurations
@@ -115,23 +117,42 @@ namespace AxisAvaloniaApp.Configurations
                         "ProgramData",
                         "Axis",
                         "Uno");
+
+                    if (!Directory.Exists(dataBasePath))
+                    {
+                        Directory.CreateDirectory(dataBasePath);
+                    }
                 }
                 else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
                 {
-                    dataBasePath = Path.Combine("var", "lib", "Axis", "Uno");
+                    dataBasePath = Path.Combine("/var", "lib", "Axis", "Uno");
+                    string cmd = "chmod -R 777 " + Path.Combine("/var", "lib");
+                    try
+                    {
+                        using (Process proc = Process.Start(Path.Combine("/var", "lib"), $"-c \"{cmd}\""))
+                        {
+                            proc.WaitForExit();
+                            //return proc.ExitCode == 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                    if (!Directory.Exists(dataBasePath))
+                    {
+                        Directory.CreateDirectory(dataBasePath);
+                    }
                 }
                 else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
                 {
                     dataBasePath = Path.Combine("Library", "Application Support", "Axis", "Uno");
+                    
                 }
                 else
                 {
                     throw new System.Exception("Unidentified operating system!");
-                }
-
-                if (!Directory.Exists(dataBasePath))
-                {
-                    Directory.CreateDirectory(dataBasePath);
                 }
 
                 return dataBasePath;
