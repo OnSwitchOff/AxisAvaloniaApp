@@ -79,7 +79,9 @@ namespace AxisAvaloniaApp.Views
             documentContextMenu = this.FindControl<ContextMenu>("DocumentContextMenu");
             if (documentContextMenu != null && !string.IsNullOrEmpty(serializationService[ESerializationKeys.AddColumns].Value))
             {
+                var x = serializationService[ESerializationKeys.AddColumns];
                 int addColumnsValue = int.Parse(serializationService[ESerializationKeys.AddColumns].Value);
+                var test = (EAdditionalDocumentColumns)(serializationService[ESerializationKeys.AddColumns]);
                 foreach (CheckedMenuItem item in documentContextMenu.Items)
                 {
                     if (item.Tag != null && item.Tag is EAdditionalDocumentColumns column)
