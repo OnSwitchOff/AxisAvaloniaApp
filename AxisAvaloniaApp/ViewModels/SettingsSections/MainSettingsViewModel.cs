@@ -51,17 +51,17 @@ namespace AxisAvaloniaApp.ViewModels.Settings
 
         private async void Activate()
         {
-            List<Image> list = new List<Image>();
-            string img = "C:\\Users\\viktor.kassov\\Desktop\\фывф.png";
-            Image image = Image.FromFile(img);
-            list.Add(image);
-            var p = printService.GetPrinters();
+            //List<Image> list = new List<Image>();
+            //string img = "C:\\Users\\viktor.kassov\\Desktop\\фывф.png";
+            //Image image = Image.FromFile(img);
+            //list.Add(image);
+            //var p = printService.GetPrinters();
 
-            bool pr = printService.PrintImageList(p[4], list,false);
+            //bool pr = printService.PrintImageList(p[4], list,false);
 
 
             var x1 = await activationService.GetStatus("8714536025");
-           // x1.EnsureSuccessStatusCode();
+            //x1.EnsureSuccessStatusCode();
             var r1 = await x1.Content.ReadAsStringAsync();
 
             var x2 = await activationService.TryLicense("8714536025", "123");

@@ -1,5 +1,6 @@
 ﻿using Microinvest.CommonLibrary.Enums;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -106,6 +107,24 @@ namespace DataBase.Repositories.OperationHeader
                 databaseContext.SaveChanges();
 
                 return record.Id;
+            });
+        }
+
+
+        /// <summary>
+        /// GetOperationHeadersByDates.
+        /// </summary>
+        /// <returns>Next acc.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to)
+        {
+            return await Task.Run(async () =>
+            {
+                return databaseContext.
+                     OperationHeaders.
+                     Where(oh => oh.Date >= from && oh.Date <= to).
+                     Include(oh => oh.OperationDetails).
+                     ToList();
             });
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Microinvest.CommonLibrary.Enums;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,5 +38,12 @@ namespace DataBase.Repositories.OperationHeader
         /// <returns>Returns 0 if record wasn't added to database; otherwise returns real id of new record.</returns>
         /// <date>23.06.2022.</date>
         Task<int> AddNewRecord(Entities.OperationHeader.OperationHeader record);
+
+        /// <summary>
+        /// GetOperationHeadersByDates.
+        /// </summary>
+        /// <returns>Next acc.</returns>
+        /// <date>06.07.2022.</date>
+        Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to);
     }
 }

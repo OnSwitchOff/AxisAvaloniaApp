@@ -10,16 +10,25 @@ using AxisAvaloniaApp.Models;
 using Avalonia.Controls;
 using AxisAvaloniaApp.UserControls.Models;
 using System.Reactive;
+using DataBase.Repositories.OperationHeader;
+using DataBase.Repositories.Documents;
+using AxisAvaloniaApp.Helpers;
+using DataBase.Entities.OperationHeader;
+using DataBase.Entities.Documents;
 
 namespace AxisAvaloniaApp.ViewModels
 {
     public abstract class DocumentViewModel : OperationViewModelBase
     {
+        private readonly IOperationHeaderRepository operationHeaderRepository;
+        private readonly IDocumentsRepository documentsRepository;
+
         protected abstract EDocumentTypes documentType { get; }
 
         #region MainContent
         private DocumentItem selectedItem;
         private ObservableCollection<DocumentItem> items;
+        private ObservableCollection<DocumentItem> filtredItems;
         #endregion
 
         #region Filter section
@@ -43,6 +52,9 @@ namespace AxisAvaloniaApp.ViewModels
             }
         }
         public ObservableCollection<DocumentItem> Items { get => items; set => this.RaiseAndSetIfChanged(ref items, value); }
+        public ObservableCollection<DocumentItem> FiltredItems { get => filtredItems; set => this.RaiseAndSetIfChanged(ref filtredItems, value); }
+
+
         public ObservableCollection<ComboBoxItemModel> Periods
         {
             get => periods;
@@ -63,9 +75,27 @@ namespace AxisAvaloniaApp.ViewModels
                 if (value != null)
                 {
                     FromDateString = ((DateTime)FromDateTimeOffset).Date.ToString("dd.MM.yyyy");
+
+                    TryToGetSourceCollection();
                 }
             }
         }
+
+        private async void TryToGetSourceCollection()
+        {
+            if (FromDateTimeOffset > ToDateTimeOffset)
+            {
+                return;
+            }
+
+            Items.Clear();
+            foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset))
+            {
+                Items.Add(new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType)));
+            }
+            
+        }
+
         public string ToDateString { get => toDateString; set => this.RaiseAndSetIfChanged(ref toDateString, value); }
         public DateTime ToDateTimeOffset
         {
@@ -83,6 +113,9 @@ namespace AxisAvaloniaApp.ViewModels
 
         public DocumentViewModel()
         {
+            operationHeaderRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+            documentsRepository = Splat.Locator.Current.GetRequiredService<IDocumentsRepository>();
+            Items = new ObservableCollection<DocumentItem>();
             Periods = GetPeriodsCollection();
             SelectedPeriod = Periods[0];
             FromDateTimeOffset = DateTime.Today;
@@ -130,6 +163,8 @@ namespace AxisAvaloniaApp.ViewModels
         private DateTime dealDateTimeOffset;
         private string dealPlace;
         private string description;
+        private OperationHeader oh;
+        private Task<Document?> task;
         #endregion
 
         #region Properties
@@ -268,6 +303,31 @@ namespace AxisAvaloniaApp.ViewModels
             DealDateTimeOffset = DateTime.Now;
             DealPlace = "DealPlace";
             Description = "Description";
+
+            PrintCommand = ReactiveCommand.Create(Print);
+        }
+
+        public DocumentItem(OperationHeader oh, Document? doc)
+        {
+            Sale = oh.Acct.ToString();
+            SaleDateTimeOffset = oh.Date;
+            Client = oh.Partner;
+            Amount = oh.OperationDetails.Sum(od => od.Qtty * od.SalePrice).ToString("F");
+
+
+            if (doc != null)
+            {
+                InvoicePrepared = doc.CreatorName;
+                Receiver = doc.RecipientName;
+        
+                InvoiceNumber = doc.DocumentNumber;
+                InvoiceDateTimeOffset = doc.DocumentDate;
+                DealDateTimeOffset = doc.TaxDate;
+                DealPlace = doc.DealLocation;
+                Description = doc.DealDescription;
+            }
+
+
 
             PrintCommand = ReactiveCommand.Create(Print);
         }
