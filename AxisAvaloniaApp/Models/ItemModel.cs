@@ -16,7 +16,7 @@ namespace AxisAvaloniaApp.Models
         private string name;
         private string barcode;
         private string measure;
-        private decimal price;
+        private double price;
         private GroupModel group;
         private VATGroupModel vATGroup;
         private EItemTypes itemType;
@@ -32,7 +32,7 @@ namespace AxisAvaloniaApp.Models
             this.codes = new ObservableCollection<ItemCodeModel>();
             this.barcode = string.Empty;
             this.measure = string.Empty;
-            this.price = 0.0M;
+            this.price = 0.0;
             this.group = new GroupModel();
             this.vATGroup = new VATGroupModel();
             this.itemType = EItemTypes.Standard;
@@ -106,7 +106,7 @@ namespace AxisAvaloniaApp.Models
         /// Gets or sets sale price of item.
         /// </summary>
         /// <date>14.03.2022.</date>
-        public decimal Price
+        public double Price
         {
             get => this.price;
             set => this.RaiseAndSetIfChanged(ref this.price, value);

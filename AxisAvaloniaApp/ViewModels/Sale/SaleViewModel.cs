@@ -1,4 +1,5 @@
-﻿using AxisAvaloniaApp.Enums;
+﻿using AxisAvaloniaApp.Actions.Item;
+using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
@@ -586,9 +587,12 @@ namespace AxisAvaloniaApp.ViewModels
                 (GroupModel)itemsGroupsRepository.GetGroupByIdAsync((int)serializationItems[ESerializationKeys.SelectedGroupId]).GetAwaiter().GetResult(),
                 ItemsGroups[0]);
 
+            ItemModel itemModel;
             await foreach (var item in itemRepository.GetItemsAsync())
             {
-                Items.Add((ItemModel)item);
+                itemModel = (ItemModel)item;
+                itemModel.Price = await headerRepository.GetItemPriceAsync(itemModel.Id);
+                Items.Add(itemModel);
             }
 
             foreach (string measure in await itemRepository.GetMeasuresAsync())
@@ -1021,7 +1025,11 @@ namespace AxisAvaloniaApp.ViewModels
         {
             if (!string.IsNullOrEmpty(barcode) && (SelectedItem == null || SelectedItem.Id == 0))
             {
-                EditableItem = await searchService.GetItemData(barcode);
+                ItemModel result = await searchService.GetItemData(barcode);
+                if (result != null)
+                {
+                    EditableItem = result;
+                }
             }
         }
 
@@ -1085,7 +1093,15 @@ namespace AxisAvaloniaApp.ViewModels
             {
                 case ENomenclatures.Items:
                     EditableItem = new ItemModel();
-                    EditableItem.Group.Clone(SelectedItemsGroup);
+                    if (SelectedItemsGroup.Path.Equals("-2"))
+                    {
+                        EditableItem.Group.Clone(SelectedItemsGroup.SubGroups[0]);
+                    }
+                    else
+                    {
+                        EditableItem.Group.Clone(SelectedItemsGroup);
+                    }                    
+                    EditableItem.VATGroup = VATGroups[0];
 
                     EditableItem.RegisterValidationData<ItemModel, string>(
                         nameof(ItemModel.Barcode),
@@ -1097,7 +1113,14 @@ namespace AxisAvaloniaApp.ViewModels
                     break;
                 case ENomenclatures.Partners:
                     EditablePartner = new PartnerModel();
-                    EditablePartner.Group.Clone(SelectedPartnersGroup);
+                    if (SelectedPartnersGroup.Path.Equals("-2"))
+                    {
+                        EditablePartner.Group.Clone(SelectedPartnersGroup.SubGroups[0]);
+                    }
+                    else
+                    {
+                        EditablePartner.Group.Clone(SelectedPartnersGroup);
+                    }
 
                     EditablePartner.RegisterValidationData<PartnerModel, string>(
                         nameof(PartnerModel.TaxNumber), 
@@ -1186,8 +1209,11 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     else
                     {
-                        EditableItemsGroup?.Clone(SelectedItemsGroup);
-                        IsNomenclaturePanelVisible = false;
+                        if (!SelectedItemsGroup.Path.Equals("-2"))
+                        {
+                            EditableItemsGroup?.Clone(SelectedItemsGroup);
+                            IsNomenclaturePanelVisible = false;
+                        }
                     }
                     break;
                 case ENomenclatures.PartnersGroups:
@@ -1197,8 +1223,11 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     else
                     {
-                        EditablePartnersGroup?.Clone(SelectedPartnersGroup);
-                        IsNomenclaturePanelVisible = false;
+                        if (!SelectedPartnersGroup.Path.Equals("-2"))
+                        {
+                            EditablePartnersGroup?.Clone(SelectedPartnersGroup);
+                            IsNomenclaturePanelVisible = false;
+                        }
                     }
                     break;
             }
@@ -1306,7 +1335,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>31.05.2022.</date>
         public async void AddAdditionalItemCode()
         {
-            int nextItemCode = await itemRepository.GetNextItemCode();
+            int nextItemCode = await itemRepository.GetNextItemCodeAsync();
 
             if (EditableItem != null && EditableItem.Codes != null)
             {
@@ -1343,43 +1372,95 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>03.06.2022.</date>
         public async void SaveNomenclature(ENomenclatures nomenclature)
         {
+            bool isSuccess;
             switch (nomenclature)
             {
                 case ENomenclatures.Items:
                     if (EditableItem != null)
                     {
                         IStage itemNameIsNotEmpty = new ItemNameIsNotEmpty(EditableItem.Name);
-                        IStage itemNameIsNotDuplicate = new ItemNameIsNotDuplicate(EditableItem.Name);
-                        IStage itemBarcodeIsNotDuplicate = new ItemBarcodeIsNotDuplicate(EditableItem.Barcode);
+                        IStage itemNameIsNotDuplicate = new ItemNameIsNotDuplicate(EditableItem);
+                        IStage itemBarcodeIsNotDuplicate = new ItemBarcodeIsNotDuplicate(EditableItem);
                         IStage itemCodesAreNotDuplicated = new ItemCodesAreNotDuplicated(EditableItem);
                         IStage itemMeasuresAreNotDuplicated = new ItemMeasuresAreNotDuplicated(EditableItem);
+                        IStage saveItem = new SaveItem(EditableItem);
 
                         itemNameIsNotEmpty.
                             SetNext(itemNameIsNotDuplicate).
                             SetNext(itemBarcodeIsNotDuplicate).
                             SetNext(itemCodesAreNotDuplicated).
-                            SetNext(itemMeasuresAreNotDuplicated);
+                            SetNext(itemMeasuresAreNotDuplicated).
+                            SetNext(saveItem);
 
-                        //Task validationResult = await itemNameIsNotEmpty.Invoke(new object());
-                        //Type type = validationResult.GetType();
-                        if (await itemNameIsNotEmpty.Invoke(new object()) is object obj)
+                        if (await itemNameIsNotEmpty.Invoke(new object()) is object obj && 
+                            obj != null && 
+                            int.TryParse(obj.ToString(), out int result) && 
+                            result == 1)
                         {
+                            switch (EditableItem.Id)
+                            {
+                                case 0:
+                                    int newItemId = await itemRepository.AddItemAsync((DataBase.Entities.Items.Item)EditableItem);
+                                    EditableItem.Id = newItemId;
+                                    isSuccess = newItemId > 0;
 
+                                    if (EditableItem.Price > 0)
+                                    {
+                                        DataBase.Entities.OperationHeader.OperationHeader header = DataBase.Entities.OperationHeader.OperationHeader.Create(
+                                                EOperTypes.Revaluation,
+                                                await headerRepository.GetNextAcctAsync(EOperTypes.Revaluation),
+                                                DateTime.Now,
+                                                "",
+                                                (DataBase.Entities.Partners.Partner)Partners[0],
+                                                null,
+                                                "",
+                                                EECCheckTypes.Unknown,
+                                                0);
+                                        header.OperationDetails.Add(DataBase.Entities.OperationDetails.OperationDetail.Create(
+                                            header,
+                                            (DataBase.Entities.Items.Item)EditableItem,
+                                            0,
+                                            0,
+                                            (decimal)EditableItem.Price,
+                                            (decimal)(EditableItem.Price - (EditableItem.Price / (1 + EditableItem.VATGroup.Value / 100)))));
+
+                                        isSuccess = await headerRepository.AddNewRecordAsync(header) > 0;
+                                    }
+                                    if (isSuccess && 
+                                        SelectedItemsGroup != null &&
+                                        (SelectedItemsGroup.Path.Equals("-2") ||
+                                        EditableItem.Group.Path.StartsWith(SelectedItemsGroup.Path)))
+                                    {
+                                        Items.Add(EditableItem);
+                                        SelectedItem = Items[Items.Count - 1];
+                                    }
+                                    break;
+                                default:
+                                    isSuccess = await itemRepository.UpdateItemAsync((DataBase.Entities.Items.Item)EditableItem);
+                                    break;
+                            }
+
+                            if (isSuccess)
+                            {
+                                IsNomenclaturePanelVisible = true;
+                            }
+                            else
+                            {
+                                
+                            }
                         }
                     }
                     break;
                 case ENomenclatures.ItemsGroups:
-
+                    IsNomenclaturePanelVisible = true;
                     break;
                 case ENomenclatures.Partners:
-
+                    IsNomenclaturePanelVisible = true;
                     break;
                 case ENomenclatures.PartnersGroups:
-
+                    IsNomenclaturePanelVisible = true;
                     break;
             }
-
-            IsNomenclaturePanelVisible = true;
             // TODO: initialize method
         }
 

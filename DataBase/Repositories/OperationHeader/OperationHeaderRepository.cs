@@ -90,7 +90,7 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="record">Data to add.</param>
         /// <returns>Returns 0 if record wasn't added to database; otherwise returns real id of new record.</returns>
         /// <date>23.06.2022.</date>
-        public async Task<int> AddNewRecord(Entities.OperationHeader.OperationHeader record)
+        public async Task<int> AddNewRecordAsync(Entities.OperationHeader.OperationHeader record)
         {
             return await Task.Run(() =>
             {
@@ -99,13 +99,56 @@ namespace DataBase.Repositories.OperationHeader
                     detail.Goods = databaseContext.Items.Where(i => i.Id == detail.Goods.Id).FirstOrDefault();
                 }
 
-                record.Partner = databaseContext.Partners.Where(p => p.Id == record.Partner.Id).FirstOrDefault();
-                record.Payment = databaseContext.PaymentTypes.Where(pt => pt.Id == record.Payment.Id).FirstOrDefault();
+                if (record.Partner != null)
+                {
+                    record.Partner = databaseContext.Partners.Where(p => p.Id == record.Partner.Id).FirstOrDefault();
+                }
+
+                if (record.Payment != null)
+                {
+                    record.Payment = databaseContext.PaymentTypes.Where(pt => pt.Id == record.Payment.Id).FirstOrDefault();
+                }
 
                 databaseContext.OperationHeaders.Add(record);
                 databaseContext.SaveChanges();
 
                 return record.Id;
+            });
+        }
+
+        /// <summary>
+        /// Gets price of item.
+        /// </summary>
+        /// <param name="itemId">Id of item to search price.</param>
+        /// <returns>Returns 0 if record is absent; otherwise returns actual price of item.</returns>
+        /// <date>05.07.2022.</date>
+        public async Task<double> GetItemPriceAsync(int itemId)
+        {
+            return await Task.Run(() => 
+            {
+                Entities.OperationHeader.OperationHeader currentPrice = databaseContext.OperationHeaders.
+                Where(oh => oh.OperType == EOperTypes.Revaluation).
+                Include(h => h.OperationDetails).
+                ThenInclude(d => d.Goods).
+                Where(delegate(Entities.OperationHeader.OperationHeader h)
+                {
+                    foreach (var detail in h.OperationDetails)
+                    {
+                        if (detail.Goods.Id == itemId)
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }).MaxBy(h => h.Date);
+
+                if (currentPrice != null)
+                {
+                    return (double)currentPrice.OperationDetails.Where(d => d.Goods.Id == itemId).Select(i => i.SalePrice).FirstOrDefault();
+                }
+
+                return 0;
             });
         }
     }

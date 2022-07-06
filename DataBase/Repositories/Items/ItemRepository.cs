@@ -166,6 +166,7 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run<bool>(() =>
             {
+                databaseContext.ChangeTracker.Clear();
                 databaseContext.Items.Update(item);
                 return databaseContext.SaveChanges() > 0;
             });
@@ -216,7 +217,7 @@ namespace DataBase.Repositories.Items
         /// </summary>
         /// <returns>Returns next code of item.</returns>
         /// <date>04.07.2022.</date>
-        public async Task<int> GetNextItemCode()
+        public async Task<int> GetNextItemCodeAsync()
         {
             return await Task.Run(() =>
             {
@@ -244,13 +245,16 @@ namespace DataBase.Repositories.Items
         /// Checks whether name of item is duplicated.
         /// </summary>
         /// <param name="itemName">Name of item.</param>
+        /// <param name="itemId">Id of item</param>
         /// <returns>Returns true if name of item is duplicated; otherwise returns false.</returns>
         /// <date>04.07.2022.</date>
-        public async Task<bool> ItemNameIsDuplicated(string itemName)
+        public async Task<bool> ItemNameIsDuplicatedAsync(string itemName, int itemId)
         {
             return await Task.Run(() => 
             {
-                return databaseContext.Items.Where(i => i.Name.ToLower().Equals(itemName.ToLower())).FirstOrDefault() != null;
+                return databaseContext.Items.
+                Where(i => i.Id != itemId && i.Name.ToLower().Equals(itemName.ToLower())).
+                FirstOrDefault() != null;
             });
         }
 
@@ -258,13 +262,16 @@ namespace DataBase.Repositories.Items
         /// Checks whether barcode of item is duplicated.
         /// </summary>
         /// <param name="barcode">Barcode of item.</param>
+        /// <param name="itemId">Id of item</param>
         /// <returns>Returns true if barcode of item is duplicated; otherwise returns false.</returns>
         /// <date>04.07.2022.</date>
-        public async Task<bool> ItemBarcodeIsDuplicated(string barcode)
+        public async Task<bool> ItemBarcodeIsDuplicatedAsync(string barcode, int itemId)
         {
             return await Task.Run(() =>
             {
-                return databaseContext.Items.Where(i => i.Barcode.ToLower().Equals(barcode.ToLower())).FirstOrDefault() != null;
+                return databaseContext.Items.
+                Where(i => i.Id != itemId && !string.IsNullOrEmpty(i.Barcode) && i.Barcode.ToLower().Equals(barcode.ToLower())).
+                FirstOrDefault() != null;
             });
         }
     }

@@ -9,6 +9,35 @@ namespace AxisAvaloniaApp.Configurations
     public static class AppConfiguration
     {
         private const string DatabaseName = "AxisUno.db";
+        private static string databaseLocation;
+
+        /// <summary>
+        /// Initialize databaseLocation field
+        /// </summary>
+        /// <exception cref="Exception">Throws Exception if operation system is not identified.</exception>
+        static AppConfiguration()
+        {
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                databaseLocation = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ProgramData");
+            }
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+            {
+                //databaseLocation = Path.Combine("/var", "lib");
+                databaseLocation = Path.Combine("/home", Environment.UserName);
+            }
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+            {
+                databaseLocation = Path.Combine("Library", "Application Support");
+
+            }
+            else
+            {
+                throw new Exception("Unidentified operating system!");
+            }
+
+            databaseLocation = Path.Combine(databaseLocation, "Axis", "Uno");
+        }
 
         /// <summary>
         /// Gets options to configure a database.
@@ -27,7 +56,7 @@ namespace AxisAvaloniaApp.Configurations
         /// <summary>
         /// Gets value indicating whether database exists. 
         /// </summary>
-        public static bool IsDatabaseExist => Directory.Exists(DatabaseLocation);
+        public static bool IsDatabaseExist => Directory.Exists(databaseLocation);
 
         /// <summary>
         /// Gets or sets path to logo.
@@ -109,53 +138,58 @@ namespace AxisAvaloniaApp.Configurations
         {
             get
             {
-                string dataBasePath = string.Empty;
-                if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+                if (!Directory.Exists(databaseLocation))
                 {
-                    dataBasePath = Path.Combine(
-                        Path.GetPathRoot(System.Environment.SystemDirectory),
-                        "ProgramData",
-                        "Axis",
-                        "Uno");
-
-                    if (!Directory.Exists(dataBasePath))
-                    {
-                        Directory.CreateDirectory(dataBasePath);
-                    }
+                    Directory.CreateDirectory(databaseLocation);
                 }
-                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
-                {
-                    dataBasePath = Path.Combine("/var", "lib", "Axis", "Uno");
-                    string cmd = "chmod -R 777 " + Path.Combine("/var", "lib");
-                    try
-                    {
-                        using (Process proc = Process.Start("/bin/bash", $"-c \"{cmd}\""))
-                        {
-                            proc.WaitForExit();
-                            //return proc.ExitCode == 0;
 
-                            if (!Directory.Exists(dataBasePath))
-                            {
-                                Directory.CreateDirectory(dataBasePath);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
+                //string dataBasePath = string.Empty;
+                //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+                //{
+                //    dataBasePath = Path.Combine(
+                //        Path.GetPathRoot(System.Environment.SystemDirectory),
+                //        "ProgramData",
+                //        "Axis",
+                //        "Uno");
 
-                    }
-                }
-                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
-                {
-                    dataBasePath = Path.Combine("Library", "Application Support", "Axis", "Uno");
+                //    if (!Directory.Exists(dataBasePath))
+                //    {
+                //        Directory.CreateDirectory(dataBasePath);
+                //    }
+                //}
+                //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+                //{
+                //    dataBasePath = Path.Combine("/var", "lib", "Axis", "Uno");
+                //    string cmd = "chmod -R 777 " + Path.Combine("/var", "lib");
+                //    try
+                //    {
+                //        using (Process proc = Process.Start("/bin/bash", $"-c \"{cmd}\""))
+                //        {
+                //            proc.WaitForExit();
+                //            //return proc.ExitCode == 0;
+
+                //            if (!Directory.Exists(databaseLocation))
+                //            {
+                //                Directory.CreateDirectory(databaseLocation);
+                //            }
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+
+                //    }
+                //}
+                //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+                //{
+                //    dataBasePath = Path.Combine("Library", "Application Support", "Axis", "Uno");
                     
-                }
-                else
-                {
-                    throw new System.Exception("Unidentified operating system!");
-                }
+                //}
+                //else
+                //{
+                //    throw new System.Exception("Unidentified operating system!");
+                //}
 
-                return dataBasePath;
+                return databaseLocation;
             }
         }
     }

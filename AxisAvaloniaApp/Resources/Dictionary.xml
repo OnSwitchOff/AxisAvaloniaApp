@@ -2346,6 +2346,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="msgErrorDuringSavingOrUpdatingItem">
+      <Value Lang="bg-BG">Възникнала е грешка при запис/актуализиране на данните за стока в базата данни!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during writing/updating the item data in the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время записи/обновления данных о товаре в базу данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час збереження/актуалізації даних про товар у базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="msgInvalidIPAddress">
       <Value Lang="bg-BG">Невалиден IP адрес!</Value>
       <Value Lang="el-GR">Not translated</Value>

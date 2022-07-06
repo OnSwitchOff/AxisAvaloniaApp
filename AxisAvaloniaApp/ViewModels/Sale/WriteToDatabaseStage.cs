@@ -96,7 +96,7 @@ namespace AxisAvaloniaApp.ViewModels
 
             while (true)
             {
-                if (await headerRepository.AddNewRecord(header) > 0)
+                if (await headerRepository.AddNewRecordAsync(header) > 0)
                 {
                     return base.Invoke(request);
                 }

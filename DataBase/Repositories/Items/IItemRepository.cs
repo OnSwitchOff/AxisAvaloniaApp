@@ -100,22 +100,24 @@ namespace DataBase.Repositories.Items
         /// </summary>
         /// <returns>Returns next code of item.</returns>
         /// <date>04.07.2022.</date>
-        Task<int> GetNextItemCode();
+        Task<int> GetNextItemCodeAsync();
 
         /// <summary>
         /// Checks whether name of item is duplicated.
         /// </summary>
         /// <param name="itemName">Name of item.</param>
+        /// <param name="itemId">Id of item</param>
         /// <returns>Returns true if name of item is duplicated; otherwise returns false.</returns>
         /// <date>04.07.2022.</date>
-        Task<bool> ItemNameIsDuplicated(string itemName);
+        Task<bool> ItemNameIsDuplicatedAsync(string itemName, int itemId);
 
         /// <summary>
         /// Checks whether barcode of item is duplicated.
         /// </summary>
         /// <param name="barcode">Barcode of item.</param>
+        /// <param name="itemId">Id of item</param>
         /// <returns>Returns true if barcode of item is duplicated; otherwise returns false.</returns>
         /// <date>04.07.2022.</date>
-        Task<bool> ItemBarcodeIsDuplicated(string barcode);
+        Task<bool> ItemBarcodeIsDuplicatedAsync(string barcode, int itemId);
     }
 }

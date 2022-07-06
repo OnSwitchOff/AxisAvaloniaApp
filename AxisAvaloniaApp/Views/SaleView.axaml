@@ -543,7 +543,8 @@
             <controlsEx:AxisTextBox Grid.Row="7"
                                     Grid.Column="1"
                                     Classes="RightMargin"
-                                    HorizontalContentAlignment="Right"
+                                    HorizontalContentAlignment="Right" 
+                                    InputDataChecker="OnlyDigitsAndPoint"                                    
                                     ExplanationKey="EnterOrEditItemSalePrice"
                                     Text="{Binding EditableItem.Price, Converter={StaticResource DoubleToString}, ConverterParameter={x:Static enums:EDoubleTypes.Price} Mode=TwoWay}"/>
             <StackPanel Grid.Row="8"

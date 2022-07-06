@@ -1,4 +1,5 @@
 ﻿using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Models;
 using DataBase.Repositories.Items;
 using System.Threading.Tasks;
 
@@ -7,16 +8,16 @@ namespace AxisAvaloniaApp.Rules.Item
     public class ItemNameIsNotDuplicate : AbstractStage
     {
         private readonly IItemRepository itemRepository;
-        private string itemName;
+        private ItemModel item;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemNameIsNotDuplicate"/> class.
         /// </summary>
-        /// <param name="itemName">Name of item.</param>
-        public ItemNameIsNotDuplicate(string itemName)
+        /// <param name="item">Data of item.</param>
+        public ItemNameIsNotDuplicate(ItemModel item)
         {
             itemRepository = Splat.Locator.Current.GetRequiredService<IItemRepository>();
-            this.itemName = itemName;
+            this.item = item;
         }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace AxisAvaloniaApp.Rules.Item
         /// <date>04.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            if (await itemRepository.ItemNameIsDuplicated(itemName))
+            if (await itemRepository.ItemNameIsDuplicatedAsync(item.Name, item.Id))
             {
                 await loggerService.ShowDialog("msgDuplicateItemName", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
