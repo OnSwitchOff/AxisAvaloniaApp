@@ -31,7 +31,7 @@
 			<DataGrid Grid.Row="1"
 					  Background="White"
 					  Foreground="Black"
-					  Items="{Binding Items}"
+					  Items="{Binding FiltredItems}"
 					  SelectionMode="Single"
 					  SelectedItem="{Binding SelectedItem}"
 					  AutoGenerateColumns="False"
@@ -63,9 +63,9 @@
 						<Setter Property="ContextMenu">
 							<Setter.Value>								
 								<ContextMenu Name="DocumentContextMenu">
-									<controlsEx:CheckedMenuItem Name="CityMenu" LocalizeTextKey="strCode" />
-									<controlsEx:CheckedMenuItem Name="AddressMenu" LocalizeTextKey="strBarcode"/>
-									<controlsEx:CheckedMenuItem Name="PhoneMenu" LocalizeTextKey="strNote"/>
+									<controlsEx:CheckedMenuItem Name="CityMenu" LocalizeTextKey="strCity" />
+									<controlsEx:CheckedMenuItem Name="AddressMenu" LocalizeTextKey="strAddress"/>
+									<controlsEx:CheckedMenuItem Name="PhoneMenu" LocalizeTextKey="strPhone"/>
 								</ContextMenu>
 							</Setter.Value>
 						</Setter>
