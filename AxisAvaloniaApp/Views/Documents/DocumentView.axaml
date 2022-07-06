@@ -9,6 +9,7 @@
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
 			 xmlns:conv="using:AxisAvaloniaApp.Converters"
 			 xmlns:c="using:AxisAvaloniaApp.UserControls.MyCalendar"
+			 xmlns:enums="using:AxisAvaloniaApp.Enums"
 			 xmlns:ucModels="using:AxisAvaloniaApp.UserControls.Models"
              x:Class="AxisAvaloniaApp.Views.DocumentView">
 	<UserControl.Styles>
@@ -63,9 +64,9 @@
 						<Setter Property="ContextMenu">
 							<Setter.Value>								
 								<ContextMenu Name="DocumentContextMenu">
-									<controlsEx:CheckedMenuItem Name="CityMenu" LocalizeTextKey="strCity" />
-									<controlsEx:CheckedMenuItem Name="AddressMenu" LocalizeTextKey="strAddress"/>
-									<controlsEx:CheckedMenuItem Name="PhoneMenu" LocalizeTextKey="strPhone"/>
+									<controlsEx:CheckedMenuItem Name="CityMenu" LocalizeTextKey="strCity" Tag="{x:Static enums:EAdditionalDocumentColumns.City}" />
+									<controlsEx:CheckedMenuItem Name="AddressMenu" LocalizeTextKey="strAddress" Tag="{x:Static enums:EAdditionalDocumentColumns.Address}"/>
+									<controlsEx:CheckedMenuItem Name="PhoneMenu" LocalizeTextKey="strPhone" Tag="{x:Static enums:EAdditionalDocumentColumns.Phone}"/>
 								</ContextMenu>
 							</Setter.Value>
 						</Setter>
