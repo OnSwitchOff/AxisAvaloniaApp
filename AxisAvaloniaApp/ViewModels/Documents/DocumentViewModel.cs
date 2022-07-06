@@ -15,6 +15,7 @@ using DataBase.Repositories.Documents;
 using AxisAvaloniaApp.Helpers;
 using DataBase.Entities.OperationHeader;
 using DataBase.Entities.Documents;
+using System.Diagnostics;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -136,15 +137,19 @@ namespace AxisAvaloniaApp.ViewModels
                 }
             }
         }
+
+        private Avalonia.Threading.DispatcherTimer filterTimer;
+
+        private string lastFilterString;
         public string FilterString
         {
             get => filterString;
             set 
             { 
                 this.RaiseAndSetIfChanged(ref filterString, value);
-                FilterSourceCollection();
             } 
         }
+
 
         public DocumentViewModel()
         {
@@ -155,7 +160,23 @@ namespace AxisAvaloniaApp.ViewModels
             Periods = GetPeriodsCollection();
             SelectedPeriod = Periods[0];
             FromDateTimeOffset = DateTime.Today;
-            ToDateTimeOffset = DateTime.Today;      
+            ToDateTimeOffset = DateTime.Today;
+
+            filterTimer = new Avalonia.Threading.DispatcherTimer();
+            filterTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            filterTimer.Tick += FilterTimer_Tick;
+            filterTimer.Start();
+
+        }
+
+        private void FilterTimer_Tick(object? sender, EventArgs e)
+        {
+            Debug.WriteLine("Filtter");
+            if (lastFilterString != FilterString)
+            {       
+                FilterSourceCollection();
+                lastFilterString = FilterString;
+            }
         }
 
         private ObservableCollection<ComboBoxItemModel> GetPeriodsCollection()
