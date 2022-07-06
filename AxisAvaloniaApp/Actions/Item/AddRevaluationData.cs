@@ -36,7 +36,7 @@ namespace AxisAvaloniaApp.Actions.Item
         /// <date>06.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            bool isSuccess;
+            bool isSuccess = true;
             //switch (item.Id)
             //{
             //    case 0:
