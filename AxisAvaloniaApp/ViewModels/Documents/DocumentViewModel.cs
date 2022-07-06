@@ -84,6 +84,7 @@ namespace AxisAvaloniaApp.ViewModels
 
         private void FilterSourceCollection()
         {
+            isFiltring = true;
             FiltredItems.Clear();
 
             foreach (DocumentItem doc in Items)
@@ -104,6 +105,7 @@ namespace AxisAvaloniaApp.ViewModels
             {
                 SelectedItem = FiltredItems[0];
             }
+            isFiltring = false;
         }
 
         private async Task TryToGetSourceCollection()
@@ -140,6 +142,8 @@ namespace AxisAvaloniaApp.ViewModels
 
         private Avalonia.Threading.DispatcherTimer filterTimer;
 
+        private bool isFiltring;
+
         private string lastFilterString;
         public string FilterString
         {
@@ -147,6 +151,22 @@ namespace AxisAvaloniaApp.ViewModels
             set 
             { 
                 this.RaiseAndSetIfChanged(ref filterString, value);
+
+                if (filterTimer != null)
+                {
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    return;
+                }
+
+                filterTimer = new Avalonia.Threading.DispatcherTimer();
+                filterTimer.Interval = TimeSpan.FromMilliseconds(1000);
+                filterTimer.Tick += FilterTimer_Tick;
+                filterTimer.Start();
+                
             } 
         }
 
@@ -161,22 +181,26 @@ namespace AxisAvaloniaApp.ViewModels
             SelectedPeriod = Periods[0];
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
-
-            filterTimer = new Avalonia.Threading.DispatcherTimer();
-            filterTimer.Interval = TimeSpan.FromMilliseconds(1000);
-            filterTimer.Tick += FilterTimer_Tick;
-            filterTimer.Start();
-
         }
 
         private void FilterTimer_Tick(object? sender, EventArgs e)
         {
-            Debug.WriteLine("Filtter");
-            if (lastFilterString != FilterString)
-            {       
-                FilterSourceCollection();
-                lastFilterString = FilterString;
+            Debug.WriteLine("TryToFilter -" + FilterString);
+
+            if (isFiltring)
+            {
+                Debug.WriteLine("Already Filtring");
+                return;
             }
+
+            if (lastFilterString == FilterString)
+            {
+                Debug.WriteLine("No Changes");
+                return;
+            }
+
+            FilterSourceCollection();
+            lastFilterString = FilterString;
         }
 
         private ObservableCollection<ComboBoxItemModel> GetPeriodsCollection()
