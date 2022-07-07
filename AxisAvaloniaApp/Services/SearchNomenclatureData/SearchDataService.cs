@@ -81,7 +81,7 @@ namespace AxisAvaloniaApp.Services.SearchNomenclatureData
                 return response.Data;
             }
 
-            return new ItemModel();
+            return null;
         }
     }
 }

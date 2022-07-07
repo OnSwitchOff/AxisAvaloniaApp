@@ -55,9 +55,9 @@ namespace AxisAvaloniaApp.Services.StartUp
             this.headerRepository = headerRepository;
         }
 
-        public async Task ActivateAsync()
+        public async Task ActivateAsync(bool isFirstRun)
         {
-            if (!Configurations.AppConfiguration.IsDatabaseExist)
+            if (isFirstRun)
             {
                 await InitializeAsync();
             }

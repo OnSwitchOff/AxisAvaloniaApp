@@ -259,7 +259,7 @@ namespace AxisAvaloniaApp.Models
 
                     SelectedMeasure = Measures[0];
                     Qty = 1;
-                    Price = (double)(Item.Price * Multiplier);
+                    Price = Item.Price * (double)Multiplier;
                     ItemDiscount = this.Item.Group.Discount;
 
                     break;
@@ -278,7 +278,7 @@ namespace AxisAvaloniaApp.Models
                     Multiplier = 1;
                     break;
                 case nameof(Multiplier):
-                    Price = (double)(Item.Price * Multiplier);
+                    Price = Item.Price * (double)Multiplier;
                     break;
                 case nameof(this.Qty):
                     priceWithDiscount = Price * (1 - Discount / 100);

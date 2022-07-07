@@ -2,17 +2,17 @@
 using AxisAvaloniaApp.Services.Logger;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.Rules
 {
-    public abstract class SaleOperationStage : ISaleStage
+    public abstract class AbstractStage : IStage
     {
         protected readonly ILoggerService loggerService;
-        private ISaleStage nextStage;
+        private IStage nextStage;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SaleOperationStage"/> class.
+        /// Initializes a new instance of the <see cref="AbstractStage"/> class.
         /// </summary>
-        public SaleOperationStage()
+        public AbstractStage()
         {
             loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
         }
@@ -23,7 +23,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <param name="nextStage">Next stage.</param>
         /// <returns>Returns next stage to finalize operation of sale.</returns>
         /// <date>23.06.2022.</date>
-        public ISaleStage SetNext(ISaleStage nextStage)
+        public IStage SetNext(IStage nextStage)
         {
             this.nextStage = nextStage;
 
@@ -36,18 +36,16 @@ namespace AxisAvaloniaApp.ViewModels
         /// <param name="request">Data to the current method.</param>
         /// <returns>Returns invocation method of next stage.</returns>
         /// <date>23.06.2022.</date>
-        public virtual Task<object> Invoke(object request)
+        public virtual async Task<object> Invoke(object request)
         {
             if (this.nextStage != null)
             {
-                return this.nextStage.Invoke(request);
+                return await this.nextStage.Invoke(request);
             }
             else
             {
-                return Task.FromResult<object>(-1);
+                return await Task.FromResult<object>(1);
             }
         }
-
-        
     }
 }

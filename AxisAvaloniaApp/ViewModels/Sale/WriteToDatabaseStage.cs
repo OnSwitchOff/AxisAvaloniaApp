@@ -1,5 +1,6 @@
 ﻿using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
+using AxisAvaloniaApp.Rules;
 using DataBase.Entities.OperationDetails;
 using DataBase.Entities.OperationHeader;
 using DataBase.Repositories.OperationHeader;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class WriteToDatabaseStage : SaleOperationStage
+    public class WriteToDatabaseStage : AbstractStage
     {
         private readonly IOperationHeaderRepository headerRepository;
         private readonly IPaymentTypesRepository paymentTypesRepository;
@@ -95,7 +96,7 @@ namespace AxisAvaloniaApp.ViewModels
 
             while (true)
             {
-                if (await headerRepository.AddNewRecord(header) > 0)
+                if (await headerRepository.AddNewRecordAsync(header) > 0)
                 {
                     return base.Invoke(request);
                 }

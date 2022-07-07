@@ -7,7 +7,7 @@ namespace AxisAvaloniaApp.Views
 {
     public partial class DebitNoteView : DocumentView
     {
-        public DebitNoteView() : base(Enums.ESerializationGroups.Invoice, Splat.Locator.Current.GetRequiredService<ViewModels.DebitNoteViewModel>())
+        public DebitNoteView() : base(Enums.ESerializationGroups.DebitNote, Splat.Locator.Current.GetRequiredService<ViewModels.DebitNoteViewModel>())
         {
 
         }

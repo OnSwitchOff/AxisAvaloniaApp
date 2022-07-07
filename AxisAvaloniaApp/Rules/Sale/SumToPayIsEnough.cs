@@ -2,19 +2,19 @@
 using System;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.Rules.Sale
 {
-    public class ValidateAmountSumStage : SaleOperationStage
+    public class SumToPayIsEnough : AbstractStage
     {
         private double amountSum;
         private EPaymentTypes paymentType;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidateAmountSumStage"/> class.
+        /// Initializes a new instance of the <see cref="SumToPayIsEnough"/> class.
         /// </summary>
         /// <param name="amountSum">Amount to pay order.</param>
         /// <param name="paymentType">Type of payment.</param>
-        public ValidateAmountSumStage(double amountSum, EPaymentTypes paymentType)
+        public SumToPayIsEnough(double amountSum, EPaymentTypes paymentType)
         {
             this.amountSum = amountSum;
             this.paymentType = paymentType;

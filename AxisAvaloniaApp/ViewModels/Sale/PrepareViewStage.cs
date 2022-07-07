@@ -1,9 +1,10 @@
-﻿using System;
+﻿using AxisAvaloniaApp.Rules;
+using System;
 using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
-    public class PrepareViewStage : SaleOperationStage
+    public class PrepareViewStage : AbstractStage
     {
         private Action prepareViewAction;
 

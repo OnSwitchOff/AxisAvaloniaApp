@@ -52,6 +52,7 @@ namespace AxisAvaloniaApp.Helpers
         public static void Clone(this ItemModel item, ItemModel clonedItem)
         {
             item.Id = clonedItem.Id;
+            item.Name = clonedItem.Name;
             item.Code = clonedItem.Code;
             item.Codes.Clone(clonedItem.Codes);
             item.Barcode = clonedItem.Barcode;

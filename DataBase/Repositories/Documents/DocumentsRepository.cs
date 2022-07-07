@@ -1,4 +1,10 @@
-﻿namespace DataBase.Repositories.Documents
+﻿using DataBase.Entities.Documents;
+using Microinvest.CommonLibrary.Enums;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace DataBase.Repositories.Documents
 {
     public class DocumentsRepository : IDocumentsRepository
     {
@@ -11,6 +17,21 @@
         public DocumentsRepository(DatabaseContext databaseContext)
         {
             this.databaseContext = databaseContext;
+        }
+
+        /// <summary>
+        /// GetDocumentsByOperationHeader.
+        /// </summary>
+        /// <returns>Document</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<Document?> GetDocumentsByOperationHeaderAsync(Entities.OperationHeader.OperationHeader OperationHeader, EDocumentTypes DocumentType)
+        {
+            return await Task.Run(async () =>
+            {
+                return databaseContext.
+                     Documents.
+                     Where(doc => doc.OperationHeader.Id == OperationHeader.Id && doc.DocumentType == DocumentType).FirstOrDefault();
+            });
         }
     }
 }

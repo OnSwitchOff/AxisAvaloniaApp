@@ -7,7 +7,7 @@ namespace AxisAvaloniaApp.Views
 {
     public partial class CreditNoteView : DocumentView
     {
-        public CreditNoteView() : base(Enums.ESerializationGroups.Invoice, Splat.Locator.Current.GetRequiredService<ViewModels.CreditNoteViewModel>())
+        public CreditNoteView() : base(Enums.ESerializationGroups.CreditNote, Splat.Locator.Current.GetRequiredService<ViewModels.CreditNoteViewModel>())
         {
 
         }
