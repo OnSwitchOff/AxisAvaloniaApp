@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Services.Reports.Bulgaria
 {
-    internal class OutputInvoiceReportModel : IReportModel
+    internal class NomenclatureOfPartnersReportModel : IReportModel
     {
-        public OutputInvoiceReportModel(int rowNumber = 0)
+        public NomenclatureOfPartnersReportModel(int rowNumber = 0)
         {
             if (rowNumber > 0)
             {
@@ -16,6 +16,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
             }
             IsTotalRow = rowNumber == 0;
         }
+
         /// <summary>
         /// Gets a value indicating whether the row includes summarized data.
         /// </summary>
@@ -33,21 +34,14 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         /// Gets number of the current row.
         /// </summary>
         /// <date>28.06.2022.</date>
-        public string InvoiceNumber { get; set; }
+        public string ClientCode { get; set; }
 
 
         /// <summary>
         /// Gets number of the current row.
         /// </summary>
         /// <date>28.06.2022.</date>
-        public string InvoiceDate { get; set; }
-
-
-        /// <summary>
-        /// Gets number of the current row.
-        /// </summary>
-        /// <date>28.06.2022.</date>
-        public string Partner { get; set; }
+        public string NameOfClient { get; set; }
 
         /// <summary>
         /// Gets number of the current row.
@@ -60,8 +54,39 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         /// Gets number of the current row.
         /// </summary>
         /// <date>28.06.2022.</date>
-        public string Sum { get; set; }
+        public string Principal { get; set; }
+        /// <summary>
+        /// Gets number of the current row.
+        /// </summary>
+        /// <date>28.06.2022.</date>
+        public string City { get; set; }
+
+
+        /// <summary>
+        /// Gets number of the current row.
+        /// </summary>
+        /// <date>28.06.2022.</date>
+        public string Address { get; set; }
+        /// <summary>
+        /// Gets number of the current row.
+        /// </summary>
+        /// <date>28.06.2022.</date>
+        public string Phone { get; set; }
+
+
+        /// <summary>
+        /// Gets number of the current row.
+        /// </summary>
+        /// <date>28.06.2022.</date>
+        public string DiscountCard { get; set; }
+
+
+        /// <summary>
+        /// Gets number of the current row.
+        /// </summary>
+        /// <date>28.06.2022.</date>
+        public string Discount { get; set; }
+
+
     }
-
-
 }

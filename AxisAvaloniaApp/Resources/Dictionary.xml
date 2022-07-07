@@ -616,6 +616,36 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strPaymentTypes">
+      <Value Lang="bg-BG">Видове на плащане</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Payment types</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Типы оплаты</Value>
+      <Value Lang="uk-UA">Типи оплати</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strPaymentType">
+      <Value Lang="bg-BG">Вид на плащане</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Payment type</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Тип оплаты</Value>
+      <Value Lang="uk-UA">Тип оплати</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strId">
+      <Value Lang="bg-BG">ID на запис</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not translated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">ID записи</Value>
+      <Value Lang="uk-UA">ID запису</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strCard">
       <Value Lang="bg-BG">Дебитна/Кредитна</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -1369,6 +1399,26 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strClientCode">
+      <Value Lang="bg-BG">Код на клиента</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Client code</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Код клиента</Value>
+      <Value Lang="uk-UA">Код клієнта</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strNameOfClient">
+      <Value Lang="bg-BG">Име на клиента</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Client's name</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Имя клиента</Value>
+      <Value Lang="uk-UA">Ім'я клієнта</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strSum">
 		  <Value Lang="bg-BG">Сума</Value>
 		  <Value Lang="el-GR">Not translated</Value>
@@ -1829,6 +1879,116 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strInvoiceNumber">
+      <Value Lang="bg-BG">Номер на фактура</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invoice number</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номер фактуры</Value>
+      <Value Lang="uk-UA">Номер фактури</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strInvoiceDate">
+      <Value Lang="bg-BG">Дата на фактура</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invoice date</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дата фактуры</Value>
+      <Value Lang="uk-UA">Дата фактури</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strOutputProformInvoices">
+      <Value Lang="bg-BG">Издадени проформи</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not translated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выданные счета-проформы</Value>
+      <Value Lang="uk-UA">Видані рахунки-проформи</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strProformInvoiceNumber">
+      <Value Lang="bg-BG">Номер на проформа</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Proforma invoice number</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номер счета-проформы</Value>
+      <Value Lang="uk-UA">Номер рахунку-проформи</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strProformInvoiceDate">
+      <Value Lang="bg-BG">Дата на проформа</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Proforma invoice date</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дата счета-проформы</Value>
+      <Value Lang="uk-UA">Дата рахунку-проформи</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strOutputDebitNotes">
+      <Value Lang="bg-BG">Издадени дебитни известия</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Issued debit notices</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выданные дебитные извещения</Value>
+      <Value Lang="uk-UA">Видані дебітні сповіщення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDebitNoteNumber">
+      <Value Lang="bg-BG">Номер на дебитно известие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Debit notе number</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номер дебитного извещения</Value>
+      <Value Lang="uk-UA">Номер дебітного сповіщення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDebitNoteDate">
+      <Value Lang="bg-BG">Дата на дебитно известие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Debit notе date</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дата дебитного извещения</Value>
+      <Value Lang="uk-UA">Дата дебітного сповіщення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strOutputCreditNotes">
+      <Value Lang="bg-BG">Издадени кредитни известия</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Issued credit notices</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Выданные кредитные извещения</Value>
+      <Value Lang="uk-UA">Видані кредитні сповіщення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCreditNoteNumber">
+      <Value Lang="bg-BG">Номер на кредитно известие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Credit notе number</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номер кредитного извещения</Value>
+      <Value Lang="uk-UA">Номер кредитного сповіщення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCreditNoteDate">
+      <Value Lang="bg-BG">Дата на кредитно известие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Credit notе date</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дата кредитного извещения</Value>
+      <Value Lang="uk-UA">Дата кредитного сповіщення</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strExchangeDirection">
 		  <Value Lang="bg-BG">Посока на обмен</Value>
 		  <Value Lang="el-GR">Κατεύθυνση ανταλλαγής</Value>
@@ -1897,6 +2057,16 @@
         <Value Lang="uk-UA">Документи</Value>
         <Value Lang="hy-AM">Not translated</Value>
         <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strNomenclatures">
+      <Value Lang="bg-BG">Номенклатури</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Nomenclatures</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номенклатуры</Value>
+      <Value Lang="uk-UA">Номенклатури</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
     </Data>
     <Data Key="strDevices">
         <Value Lang="bg-BG">Устройства</Value>

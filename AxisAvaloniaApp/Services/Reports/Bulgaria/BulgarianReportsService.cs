@@ -73,9 +73,50 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                     {
                         ReportKey = (int)EBulgarianReports.OutputInvoices,
                         LocalizeReportNameKey = "strOutputInvoices",
+                    },
+                    new ReportItemModel()
+                    {
+                        ReportKey = (int)EBulgarianReports.OutputProformInvoices,
+                        LocalizeReportNameKey = "strOutputProformInvoices",
+                    },
+                    new ReportItemModel()
+                    {
+                        ReportKey = (int)EBulgarianReports.OutputDebitNotes,
+                        LocalizeReportNameKey = "strOutputDebitNotes",
+                    },
+                    new ReportItemModel()
+                    {
+                        ReportKey= (int)EBulgarianReports.OutputCreditNotes,
+                        LocalizeReportNameKey = "strOutputCreditNotes"
                     }
                 }
             }) ;
+
+            // Номенклатуры
+
+            supportedReports.Add(new ReportItemModel()
+            {
+                LocalizeReportNameKey = "strNomenclatures",
+                SubReports = new List<ReportItemModel>()
+                {
+                    new ReportItemModel(){
+                        ReportKey = (int)EBulgarianReports.NomenclatureOfItems,
+                        LocalizeReportNameKey = "strItems",
+                    },
+                    new ReportItemModel()
+                    {
+                        ReportKey = (int)EBulgarianReports.NomenclatureOfPaymentTypes,
+                        LocalizeReportNameKey = "strPaymentTypes",
+                    },
+                    new ReportItemModel()
+                    {
+                        ReportKey = (int)EBulgarianReports.NomenclatureOfPartners,
+                        LocalizeReportNameKey = "strPartners",
+                    }
+                }
+            });
+
+
 
             // СУПТО
         }
@@ -222,6 +263,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strSaleSum", "SaleSum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
                     break;
+
                 case EBulgarianReports.OutputInvoices:
                     columnsData = new ObservableCollection<ReportDataModel>()
                     {
@@ -229,27 +271,76 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strInvoiceNumber", "InvoiceNumber", Avalonia.Layout.HorizontalAlignment.Left, 100),
                         new ReportDataModel("strInvoiceDate", "InvoiceDate", Avalonia.Layout.HorizontalAlignment.Center, 105),
                         new ReportDataModel("strPartner", "Partner", Avalonia.Layout.HorizontalAlignment.Right, double.NaN),
-                        new ReportDataModel("strEIK", "EIK", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
-
-                    source = new ObservableCollection<OutputInvoiceReportModel>()
+                    break;
+                case EBulgarianReports.OutputProformInvoices:
+                    columnsData = new ObservableCollection<ReportDataModel>()
                     {
-                        new OutputInvoiceReportModel(1)
-                        {
-                            InvoiceNumber = "001",
-                            InvoiceDate =  DateTime.Now.ToShortDateString(),
-                            Partner = "MyPartner",
-                            EIK = "12312312",
-                            Sum = "100,00"
-                        },
-                        new OutputInvoiceReportModel()
-                        {
-                            Sum = "100,00"
-                        }
-
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strProformInvoiceNumber", "ProformInvoiceNumber", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strProformInvoiceDate", "ProformInvoiceDate", Avalonia.Layout.HorizontalAlignment.Center, 105),
+                        new ReportDataModel("strPartner", "Partner", Avalonia.Layout.HorizontalAlignment.Right, double.NaN),
+                        new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
                     break;
+                case EBulgarianReports.OutputDebitNotes:
+                    columnsData = new ObservableCollection<ReportDataModel>()
+                    {
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strDebitNoteNumber", "DebitNoteNumber", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strDebitNoteDate", "DebitNoteDate", Avalonia.Layout.HorizontalAlignment.Center, 105),
+                        new ReportDataModel("strPartner", "Partner", Avalonia.Layout.HorizontalAlignment.Right, double.NaN),
+                        new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
+                    };
+                    break;
+                case EBulgarianReports.OutputCreditNotes:
+                    columnsData = new ObservableCollection<ReportDataModel>()
+                    {
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strCreditNoteNumber", "CreditNoteNumber", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strCreditNoteDate", "CreditNoteDate", Avalonia.Layout.HorizontalAlignment.Center, 105),
+                        new ReportDataModel("strPartner", "Partner", Avalonia.Layout.HorizontalAlignment.Right, double.NaN),
+                        new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
+                    };
+                    break;
+
+                case EBulgarianReports.NomenclatureOfItems:
+                    columnsData = new ObservableCollection<ReportDataModel>()
+                    {
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strCode", "Code", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strGoods", "Item", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
+                    };
+                    break;
+                case EBulgarianReports.NomenclatureOfPaymentTypes:
+                    columnsData = new ObservableCollection<ReportDataModel>()
+                    {
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strId", "Id", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strPaymentType", "PaymentType", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
+                    };
+                    break;
+                case EBulgarianReports.NomenclatureOfPartners:
+                    columnsData = new ObservableCollection<ReportDataModel>()
+                    {
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strClientCode", "ClientCode", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strNameOfClient", "NameOfClient", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
+                        new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strPrincipal", "Principal", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strCity", "City", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strAddress", "Address", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strPhone", "Phone", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strDiscountCard", "DiscountCard", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                        new ReportDataModel("strDiscount", "Discount", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                    };
+                    break;
+
             }
         }
     }

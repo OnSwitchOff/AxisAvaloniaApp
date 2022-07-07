@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Services.Reports.Bulgaria
 {
-    internal class OutputInvoiceReportModel : IReportModel
+    internal class OutputDebitNoteReportModel : IReportModel
     {
-        public OutputInvoiceReportModel(int rowNumber = 0)
+        public OutputDebitNoteReportModel(int rowNumber = 0)
         {
             if (rowNumber > 0)
             {
@@ -33,14 +33,14 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         /// Gets number of the current row.
         /// </summary>
         /// <date>28.06.2022.</date>
-        public string InvoiceNumber { get; set; }
+        public string DebitNoteNumber { get; set; }
 
 
         /// <summary>
         /// Gets number of the current row.
         /// </summary>
         /// <date>28.06.2022.</date>
-        public string InvoiceDate { get; set; }
+        public string DebitNoteDate { get; set; }
 
 
         /// <summary>
@@ -62,6 +62,4 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         /// <date>28.06.2022.</date>
         public string Sum { get; set; }
     }
-
-
 }

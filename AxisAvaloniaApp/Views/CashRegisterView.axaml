@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             
-             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="1450"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="850"
 			 xmlns:container="using:AxisAvaloniaApp.UserControls"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"

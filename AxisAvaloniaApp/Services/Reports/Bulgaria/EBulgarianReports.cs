@@ -8,5 +8,11 @@
         SalesByItemsGroups,
         SalesByPartnersGroups,
         OutputInvoices,
+        OutputProformInvoices,
+        OutputDebitNotes,
+        OutputCreditNotes,
+        NomenclatureOfItems,
+        NomenclatureOfPaymentTypes,
+        NomenclatureOfPartners,
     }
 }
