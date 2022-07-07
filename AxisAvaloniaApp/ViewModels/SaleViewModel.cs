@@ -1,9 +1,15 @@
 ﻿using AxisAvaloniaApp.Actions.Item;
+using AxisAvaloniaApp.Actions.Partner;
+using AxisAvaloniaApp.Actions.PartnersGroup;
+using AxisAvaloniaApp.Actions.Sale;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
 using AxisAvaloniaApp.Rules.Item;
+using AxisAvaloniaApp.Rules.ItemsGroup;
+using AxisAvaloniaApp.Rules.Partner;
+using AxisAvaloniaApp.Rules.PartnersGroup;
 using AxisAvaloniaApp.Rules.Sale;
 using AxisAvaloniaApp.Services.Document;
 using AxisAvaloniaApp.Services.Logger;
@@ -54,7 +60,6 @@ namespace AxisAvaloniaApp.ViewModels
         private readonly ILoggerService loggerService;
         private readonly IValidationService validationService;
         private readonly ISearchData searchService;
-        public IDocumentService DocumentService { get; private set; }
 
         private readonly IPartnerRepository partnerRepository;
         private readonly IItemsGroupsRepository itemsGroupsRepository;
@@ -94,6 +99,8 @@ namespace AxisAvaloniaApp.ViewModels
         private ObservableCollection<GroupModel> partnersGroups;
         private GroupModel selectedPartnersGroup;
         private GroupModel? editablePartnersGroup;
+
+        private ObservableCollection<System.Drawing.Image> pages;
 
         private Avalonia.Threading.DispatcherTimer searchPartnerTimer;
         private Avalonia.Threading.DispatcherTimer searchItemsTimer;
@@ -532,8 +539,6 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref editablePartnersGroup, value);
         }
 
-        
-
         /// <summary>
         /// Gets or sets list with partners.
         /// </summary>
@@ -562,6 +567,22 @@ namespace AxisAvaloniaApp.ViewModels
         {
             get => editablePartner == null ? editablePartner = new PartnerModel() : editablePartner;
             set => this.RaiseAndSetIfChanged(ref editablePartner, value);
+        }
+
+        /// <summary>
+        /// Gets service to generate receipt.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        public IDocumentService DocumentService { get; private set; }
+
+        /// <summary>
+        /// Gets or sets list with images to show receipt.
+        /// </summary>
+        /// <date>22.06.2022.</date>
+        public ObservableCollection<System.Drawing.Image> Pages
+        {
+            get => pages == null ? pages = new ObservableCollection<System.Drawing.Image>() : pages;
+            set => this.RaiseAndSetIfChanged(ref pages, value);
         }
 
         /// <summary>
@@ -1372,93 +1393,142 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>03.06.2022.</date>
         public async void SaveNomenclature(ENomenclatures nomenclature)
         {
-            bool isSuccess;
             switch (nomenclature)
             {
                 case ENomenclatures.Items:
                     if (EditableItem != null)
                     {
                         IStage itemNameIsNotEmpty = new ItemNameIsNotEmpty(EditableItem.Name);
-                        IStage itemNameIsNotDuplicate = new ItemNameIsNotDuplicate(EditableItem);
-                        IStage itemBarcodeIsNotDuplicate = new ItemBarcodeIsNotDuplicate(EditableItem);
+                        IStage itemNameIsNotDuplicate = new ItemNameIsNotDuplicated(EditableItem);
+                        IStage itemBarcodeIsNotDuplicate = new ItemBarcodeIsNotDuplicated(EditableItem);
                         IStage itemCodesAreNotDuplicated = new ItemCodesAreNotDuplicated(EditableItem);
+                        IStage itemMeasureIsNotEmpty = new ItemMeasureIsNotEmpty(EditableItem.Measure);
                         IStage itemMeasuresAreNotDuplicated = new ItemMeasuresAreNotDuplicated(EditableItem);
-                        IStage saveItem = new SaveItem(EditableItem);
+                        SaveItem saveItem = new SaveItem(EditableItem);
+                        IStage addRevaluationData = new AddRevaluationData(EditableItem, EditableItem.Id == 0 ? 0 : SelectedItem.Price);
 
                         itemNameIsNotEmpty.
                             SetNext(itemNameIsNotDuplicate).
                             SetNext(itemBarcodeIsNotDuplicate).
                             SetNext(itemCodesAreNotDuplicated).
+                            SetNext(itemMeasureIsNotEmpty).
                             SetNext(itemMeasuresAreNotDuplicated).
-                            SetNext(saveItem);
+                            SetNext(saveItem).
+                            SetNext(addRevaluationData);
 
                         if (await itemNameIsNotEmpty.Invoke(new object()) is object obj && 
                             obj != null && 
                             int.TryParse(obj.ToString(), out int result) && 
                             result == 1)
                         {
-                            switch (EditableItem.Id)
+                            if (saveItem.IsNewItem)
                             {
-                                case 0:
-                                    int newItemId = await itemRepository.AddItemAsync((DataBase.Entities.Items.Item)EditableItem);
-                                    EditableItem.Id = newItemId;
-                                    isSuccess = newItemId > 0;
-
-                                    if (EditableItem.Price > 0)
-                                    {
-                                        DataBase.Entities.OperationHeader.OperationHeader header = DataBase.Entities.OperationHeader.OperationHeader.Create(
-                                                EOperTypes.Revaluation,
-                                                await headerRepository.GetNextAcctAsync(EOperTypes.Revaluation),
-                                                DateTime.Now,
-                                                "",
-                                                (DataBase.Entities.Partners.Partner)Partners[0],
-                                                null,
-                                                "",
-                                                EECCheckTypes.Unknown,
-                                                0);
-                                        header.OperationDetails.Add(DataBase.Entities.OperationDetails.OperationDetail.Create(
-                                            header,
-                                            (DataBase.Entities.Items.Item)EditableItem,
-                                            0,
-                                            0,
-                                            (decimal)EditableItem.Price,
-                                            (decimal)(EditableItem.Price - (EditableItem.Price / (1 + EditableItem.VATGroup.Value / 100)))));
-
-                                        isSuccess = await headerRepository.AddNewRecordAsync(header) > 0;
-                                    }
-                                    if (isSuccess && 
-                                        SelectedItemsGroup != null &&
-                                        (SelectedItemsGroup.Path.Equals("-2") ||
-                                        EditableItem.Group.Path.StartsWith(SelectedItemsGroup.Path)))
-                                    {
-                                        Items.Add(EditableItem);
-                                        SelectedItem = Items[Items.Count - 1];
-                                    }
-                                    break;
-                                default:
-                                    isSuccess = await itemRepository.UpdateItemAsync((DataBase.Entities.Items.Item)EditableItem);
-                                    break;
-                            }
-
-                            if (isSuccess)
-                            {
-                                IsNomenclaturePanelVisible = true;
+                                if (SelectedItemsGroup != null &&
+                                    (SelectedItemsGroup.Path.Equals("-2") ||
+                                    EditableItem.Group.Path.StartsWith(SelectedItemsGroup.Path)))
+                                {
+                                    Items.Add(EditableItem);
+                                    SelectedItem = Items[Items.Count - 1];
+                                }
                             }
                             else
                             {
-                                
+                                SelectedItem.Clone(EditableItem);
                             }
+                            
+                            IsNomenclaturePanelVisible = true;
                         }
                     }
                     break;
                 case ENomenclatures.ItemsGroups:
+                    IStage itemsGroupNameIsNotEmpty = new ItemsGroupNameIsNotEmpty(EditableItemsGroup.Name);
+                    IStage itemsGroupNameIsNotDuplicated = new ItemsGroupNameIsNotDuplicated(EditableItemsGroup);
+
+                    itemsGroupNameIsNotEmpty.
+                        SetNext(itemsGroupNameIsNotDuplicated);
+
                     IsNomenclaturePanelVisible = true;
                     break;
                 case ENomenclatures.Partners:
-                    IsNomenclaturePanelVisible = true;
+                    if (EditablePartner != null)
+                    {
+                        IStage partnerNameIsNotEmpty = new PartnerNameIsNotEmpty(EditablePartner.Name);
+                        IStage partnerNameIsNotDuplicated = new PartnerNameIsNotDuplicated(EditablePartner);
+                        IStage partnerTaxNumberIsNotDuplicated = new PartnerTaxNumberIsNotDuplicated(EditablePartner);
+                        IStage partnerVATNumberIsNotDuplicated = new PartnerVATNumberIsNotDuplicated(EditablePartner);
+                        IStage partnerPhoneIsNotDuplicated = new PartnerPhoneIsNotDuplicated(EditablePartner);
+                        IStage partnerEmailIsNotDuplicated = new PartnerEmailIsNotDuplicated(EditablePartner);
+                        SavePartner savePartner = new SavePartner(EditablePartner);
+
+                        partnerNameIsNotEmpty.
+                            SetNext(partnerNameIsNotDuplicated).
+                            SetNext(partnerTaxNumberIsNotDuplicated).
+                            SetNext(partnerVATNumberIsNotDuplicated).
+                            SetNext(partnerPhoneIsNotDuplicated).
+                            SetNext(partnerEmailIsNotDuplicated).
+                            SetNext(savePartner);
+
+                        if (await partnerNameIsNotEmpty.Invoke(new object()) is object obj &&
+                            obj != null &&
+                            int.TryParse(obj.ToString(), out int result) &&
+                            result == 1)
+                        {
+                            if (savePartner.IsNewPartner)
+                            {
+                                if (selectedPartnersGroup != null &&
+                                    (selectedPartnersGroup.Path.Equals("-2") ||
+                                    EditablePartner.Group.Path.StartsWith(selectedPartnersGroup.Path)))
+                                {
+                                    Partners.Add(EditablePartner);
+                                    SelectedPartner = Partners[Partners.Count - 1];
+                                }
+                            }
+                            else
+                            {
+                                SelectedPartner.Clone(EditablePartner);
+                            }
+
+                            IsNomenclaturePanelVisible = true;
+                        }
+                    }
                     break;
                 case ENomenclatures.PartnersGroups:
-                    IsNomenclaturePanelVisible = true;
+                    if (EditablePartnersGroup != null)
+                    {
+                        IStage partnersGroupNameIsNotEmpty = new PartnersGroupNameIsNotEmpty(EditablePartnersGroup.Name);
+                        IStage partnersGroupNameIsNotDuplicated = new PartnersGroupNameIsNotDuplicated(EditablePartnersGroup);
+                        SavePartnersGroup savePartnersGroup = new SavePartnersGroup(EditablePartnersGroup);
+
+                        partnersGroupNameIsNotEmpty.
+                            SetNext(partnersGroupNameIsNotDuplicated).
+                            SetNext(savePartnersGroup);
+
+                        if (await partnersGroupNameIsNotEmpty.Invoke(new object()) is object obj &&
+                            obj != null &&
+                            int.TryParse(obj.ToString(), out int result) &&
+                            result == 1)
+                        {
+                            if (savePartnersGroup.IsNewPartnersGroup)
+                            {
+                                SelectedPartnersGroup.SubGroups.Add(EditablePartnersGroup);
+                                SelectedPartnersGroup.IsExpanded = true;
+                                SelectedPartnersGroup = EditablePartnersGroup;
+                                //if (selectedPartnersGroup != null &&
+                                //    (selectedPartnersGroup.Path.Equals("-2") ||
+                                //    EditablePartner.Group.Path.StartsWith(selectedPartnersGroup.Path)))
+                                //{
+                                //    Partners.Add(EditablePartner);
+                                //    SelectedPartner = Partners[Partners.Count - 1];
+                                //}
+                            }
+                            else
+                            {
+                                SelectedPartnersGroup.Clone(EditablePartnersGroup);
+                            }
+
+                            IsNomenclaturePanelVisible = true;
+                        }
+                    }
                     break;
             }
             // TODO: initialize method
@@ -1534,82 +1604,28 @@ namespace AxisAvaloniaApp.ViewModels
         public async void PaymentSale(EPaymentTypes paymentType)
         {
             IStage sumToPayIsEnough = new SumToPayIsEnough(AmountToPay, paymentType);
-            PaymentStage paymentStage = new PaymentStage(Order, paymentType);
-            WriteToDatabaseStage writeToDatabaseStage = new WriteToDatabaseStage(paymentService.FiscalDevice.ReceiptNumber, Order, OperationPartner, paymentType);
-            PrepareViewStage prepareViewStage = new PrepareViewStage(() =>
+            IStage paymentStage = new PaymentOrder(Order, paymentType);
+            SaveOrder writeToDatabaseStage = new SaveOrder(paymentService.FiscalDevice.ReceiptNumber, Order, OperationPartner, paymentType);
+            CreateReceipt createReceipt = new CreateReceipt(Order, DocumentService);
+            IStage prepareViewStage = new PrepareView(() =>
             {
                 Order.Clear();
                 Order.Add(new OperationItemModel());
 
                 USN = paymentService.FiscalDevice.ReceiptNumber;
                 IsPaymentPanelVisible = false;
+
+                Pages = createReceipt.Pages.Clone();
+                IsMainContentVisible = Pages.Count == 0;
             });
 
-            sumToPayIsEnough.SetNext(paymentStage).SetNext(writeToDatabaseStage).SetNext(prepareViewStage);
-            var res = await sumToPayIsEnough.Invoke(TotalAmount);
-
-            // заполняем данные о покупателе
-            DocumentService.CustomerData = OperationPartner;
-            //documentService.CompanyLogoPath = Configurations.AppConfiguration.LogoPath;
-
-            // заполняем описание документа
-            DocumentService.DocumentDescription.DocumentName = translationService.Localize("strStockReceipt");
-            DocumentService.DocumentDescription.DocumentDescription = translationService.Localize("strForSale");
-            DocumentService.DocumentDescription.DocumentNumber = writeToDatabaseStage.Acct.ToString("D10");
-            DocumentService.DocumentDescription.DocumentDate = DateTime.Now;
-            DocumentService.DocumentDescription.PaymentType = "Cash";
-            DocumentService.DocumentDescription.DealReason = translationService.Localize("strSale");
-            DocumentService.DocumentDescription.DocumentSum = settingsService.AppLanguage.MoneyByWords(AmountToPay, ECurrencies.BGN);
-
-            // размечаем таблицу с товарами
-            DocumentService.ItemsData = new System.Data.DataTable();
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strRowNumber"), typeof(int));
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strCode"), typeof(string));
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strGoods"), typeof(string));
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strMeasure"), typeof(string));
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strQtty"), typeof(double));
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strPrice"), typeof(double));
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strDiscount"), typeof(double));
-            DocumentService.ItemsData.Columns.Add(translationService.Localize("strAmount_Short"), typeof(double));
-
-            foreach (var item in Order)
-            {
-                if (item.Item.Id > 0)
-                {
-                    DocumentService.ItemsData.Rows.Add(
-                        item.RecordId, 
-                        item.Item.Code, 
-                        item.Item.Name, 
-                        item.SelectedMeasure.Measure, 
-                        item.Qty, 
-                        item.Price, 
-                        item.Discount, 
-                        item.Amount);
-
-                    Microinvest.PDFCreator.Models.VATModel vAT = new Microinvest.PDFCreator.Models.VATModel()
-                    {
-                        VATRate = (float)item.Item.VATGroup.Value,
-                        VATSum = item.VATValue * item.Qty,
-                        VATBase = (item.Price - item.VATValue) * item.Qty,
-                    };
-
-                    DocumentService.AddNewVATRecord(vAT);
-                }
-            }
-
-            // генерируем документ
-            DocumentService.GenerateReceipt(EDocumentVersionsPrinting.Original, paymentType);
-            Pages = DocumentService.ConvertDocumentToImageList().Clone();
-
-            IsMainContentVisible = false;
-            DocumentService.SaveDocument(System.IO.Path.Combine(@"C:\Users\serhii.rozniuk\Desktop", "TetsPdf.pdf"));
-        }
-
-        private ObservableCollection<System.Drawing.Image> pages;
-        public ObservableCollection<System.Drawing.Image> Pages
-        {
-            get => pages == null ? pages = new ObservableCollection<System.Drawing.Image>() : pages;
-            set => this.RaiseAndSetIfChanged(ref pages, value);
+            sumToPayIsEnough.
+                SetNext(paymentStage).
+                SetNext(writeToDatabaseStage).
+                SetNext(createReceipt).
+                SetNext(prepareViewStage);
+            
+            await sumToPayIsEnough.Invoke(TotalAmount);
         }
     }
 }

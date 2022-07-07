@@ -207,6 +207,15 @@ namespace AxisAvaloniaApp.Services.Document
         }
 
         /// <summary>
+        /// Clears list with VATs.
+        /// </summary>
+        /// <date>06.07.2022.</date>
+        public void ClearVATList()
+        {
+            pdfDocument.VATs.Clear();
+        }
+
+        /// <summary>
         /// Generates report.
         /// </summary>
         /// <returns>Returns true if a report was generated successfully; otherwise returns false.</returns>
@@ -520,7 +529,7 @@ namespace AxisAvaloniaApp.Services.Document
             // добавляем в тело документа таблицу с товарами
             this.pdfDocument.AddNewItemToContent(this.pdfDocument.PrepareOperationData(this.ItemsTableColumnsWidth));
 
-            // добавляем в тело документа таблицу с разбивкой по таварам в зависимости от групп НДС
+            // добавляем в тело документа таблицу с разбивкой по товарам в зависимости от групп НДС
             this.pdfDocument.AddNewItemToContent(this.pdfDocument.PrepareVATData(4, 2));
 
             // создаём и размечаем блок с информацией об оплате и описании документа

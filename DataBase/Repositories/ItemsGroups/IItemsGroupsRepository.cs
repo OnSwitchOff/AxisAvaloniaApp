@@ -52,5 +52,14 @@ namespace DataBase.Repositories.ItemsGroups
         /// <returns>Returns list with groups of items.</returns>
         /// <date>01.04.2022.</date>
         Task<List<ItemsGroup>> GetItemsGroupsAsync();
+
+        /// <summary>
+        /// Checks whether name of items group is duplicated.
+        /// </summary>
+        /// <param name="itemsGroupName">Name of items group.</param>
+        /// <param name="itemsGroupId">Id of items group.</param>
+        /// <returns>Returns true if name of items group is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        Task<bool> ItemsGroupNameIsDuplicatedAsync(string itemsGroupName, int itemsGroupId);
     }
 }

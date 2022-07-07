@@ -160,9 +160,4 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Actions\Partner\" />
-    <Folder Include="Actions\Sale\" />
-    <Folder Include="Rules\Partner\" />
-  </ItemGroup>
 </Project>

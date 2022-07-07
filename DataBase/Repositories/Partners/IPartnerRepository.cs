@@ -96,5 +96,50 @@ namespace DataBase.Repositories.Partners
         /// <returns>Returns true if partner was deleted; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
         Task<bool> DeletePartnerAsync(int partnerId);
+
+        /// <summary>
+        /// Checks whether name of partner is duplicated.
+        /// </summary>
+        /// <param name="partnerName">Name of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if name of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        Task<bool> PartnerNameIsDuplicatedAsync(string partnerName, int partnerId);
+
+        /// <summary>
+        /// Checks whether tax number of partner is duplicated.
+        /// </summary>
+        /// <param name="taxNumber">Tax number of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if tax number of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        Task<bool> PartnerTaxNumberIsDuplicatedAsync(string taxNumber, int partnerId);
+
+        /// <summary>
+        /// Checks whether VAT number of partner is duplicated.
+        /// </summary>
+        /// <param name="vATNumber">VAT number of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if VAT number of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        Task<bool> PartnerVATNumberIsDuplicatedAsync(string vATNumber, int partnerId);
+
+        /// <summary>
+        /// Checks whether phone of partner is duplicated.
+        /// </summary>
+        /// <param name="phone">Phone of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if phone of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        Task<bool> PartnerPhoneIsDuplicatedAsync(string phone, int partnerId);
+
+        /// <summary>
+        /// Checks whether e-mail of partner is duplicated.
+        /// </summary>
+        /// <param name="eMail">E-mail of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if e-mail of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        Task<bool> PartnerEMailIsDuplicatedAsync(string eMail, int partnerId);
     }
 }

@@ -34,7 +34,7 @@ namespace AxisAvaloniaApp.Rules
         /// Starts invocation of stages.
         /// </summary>
         /// <param name="request">Data to the current method.</param>
-        /// <returns>Returns invocation method of next stage.</returns>
+        /// <returns>Returns a method to call the next step if it exists; otherwise returns "1".</returns>
         /// <date>23.06.2022.</date>
         public virtual async Task<object> Invoke(object request)
         {

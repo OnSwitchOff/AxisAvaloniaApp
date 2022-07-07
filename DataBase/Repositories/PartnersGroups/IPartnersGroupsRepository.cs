@@ -52,5 +52,14 @@ namespace DataBase.Repositories.PartnersGroups
         /// <returns>Returns list with groups of partners.</returns>
         /// <date>01.04.2022.</date>
         Task<List<PartnersGroup>> GetPartnersGroupsAsync();
+
+        /// <summary>
+        /// Checks whether name of partners group is duplicated.
+        /// </summary>
+        /// <param name="partnersGroupName">Name of partners group.</param>
+        /// <param name="partnersGroupId">Id of partners group.</param>
+        /// <returns>Returns true if name of partners group is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        Task<bool> PartnersGroupNameIsDuplicatedAsync(string partnersGroupName, int partnersGroupId);
     }
 }

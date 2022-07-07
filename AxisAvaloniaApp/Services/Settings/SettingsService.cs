@@ -109,6 +109,8 @@ namespace AxisAvaloniaApp.Services.Settings
                     // актуализируем язык
                     this.AppSettings[ESettingKeys.Language].Value = ((int)value).ToString();
                     this.AppSettings[ESettingKeys.Language].UpdateData();
+
+                    Microinvest.PDFCreator.Helpers.TranslationHelper.Language = value;
                 }
             }
         }

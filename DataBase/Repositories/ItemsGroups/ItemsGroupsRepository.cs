@@ -75,6 +75,7 @@ namespace DataBase.Repositories.ItemsGroups
         {
             return await Task.Run<bool>(() =>
             {
+                databaseContext.ChangeTracker.Clear();
                 databaseContext.ItemsGroups.Update(itemsGroup);
                 return databaseContext.SaveChanges() > 0;
             });
@@ -111,6 +112,23 @@ namespace DataBase.Repositories.ItemsGroups
         public Task<List<ItemsGroup>> GetItemsGroupsAsync()
         {
             return databaseContext.ItemsGroups.ToListAsync();
+        }
+
+        /// <summary>
+        /// Checks whether name of items group is duplicated.
+        /// </summary>
+        /// <param name="itemsGroupName">Name of items group.</param>
+        /// <param name="itemsGroupId">Id of items group.</param>
+        /// <returns>Returns true if name of items group is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<bool> ItemsGroupNameIsDuplicatedAsync(string itemsGroupName, int itemsGroupId)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.ItemsGroups.
+                Where(i => i.Id != itemsGroupId && i.Name.ToLower().Equals(itemsGroupName.ToLower())).
+                FirstOrDefault() != null;
+            });
         }
     }
 }

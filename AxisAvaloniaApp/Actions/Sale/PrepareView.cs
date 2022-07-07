@@ -2,17 +2,17 @@
 using System;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.Actions.Sale
 {
-    public class PrepareViewStage : AbstractStage
+    public class PrepareView : AbstractStage
     {
         private Action prepareViewAction;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrepareViewStage"/> class.
+        /// Initializes a new instance of the <see cref="PrepareView"/> class.
         /// </summary>
         /// <param name="prepareViewAction">Action to prepare view for new sale.</param>
-        public PrepareViewStage(Action prepareViewAction)
+        public PrepareView(Action prepareViewAction)
         {
             this.prepareViewAction = prepareViewAction;
         }
@@ -23,11 +23,11 @@ namespace AxisAvaloniaApp.ViewModels
         /// <param name="request">Data to the current method.</param>
         /// <returns>Returns invocation method of next stage.</returns>
         /// <date>23.06.2022.</date>
-        public override Task<object> Invoke(object request)
+        public override async Task<object> Invoke(object request)
         {
             prepareViewAction.Invoke();
 
-            return base.Invoke(request);
+            return await base.Invoke(request);
         }
     }
 }

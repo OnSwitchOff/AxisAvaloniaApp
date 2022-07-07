@@ -2,17 +2,17 @@
 
 namespace AxisAvaloniaApp.Rules.Item
 {
-    public class ItemNameIsNotEmpty : AbstractStage
+    internal class ItemMeasureIsNotEmpty : AbstractStage
     {
-        private string itemName;
+        private string itemMeasure;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemNameIsNotEmpty"/> class.
+        /// Initializes a new instance of the <see cref="ItemMeasureIsNotEmpty"/> class.
         /// </summary>
-        /// <param name="itemName">Name of item.</param>
-        public ItemNameIsNotEmpty(string itemName)
+        /// <param name="itemMeasure">Measure of item.</param>
+        public ItemMeasureIsNotEmpty(string itemMeasure)
         {
-            this.itemName = itemName;
+            this.itemMeasure = itemMeasure;
         }
 
         /// <summary>
@@ -23,9 +23,9 @@ namespace AxisAvaloniaApp.Rules.Item
         /// <date>04.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            if (string.IsNullOrEmpty(itemName))
+            if (string.IsNullOrEmpty(itemMeasure))
             {
-                await loggerService.ShowDialog("msgItemNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgItemMeasureIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

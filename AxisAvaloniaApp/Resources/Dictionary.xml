@@ -2336,6 +2336,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="msgItemMeasureIsEmpty">
+      <Value Lang="bg-BG">Мерната единица на стока е празна!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The measure of item is empty!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Единица измерения товара не заполнена!</Value>
+      <Value Lang="uk-UA">Одиниця вимірювання товару не заповнена!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="msgDuplicateAdditionalMeasures">
       <Value Lang="bg-BG">Мерната единица на допълнителния код на продукта се дублира с основната мерна единица!</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -2351,8 +2361,128 @@
       <Value Lang="el-GR">Not translated</Value>
       <Value Lang="en-GB">An error occurred during writing/updating the item data in the database!</Value>
       <Value Lang="ro-RO">Not translated</Value>
-      <Value Lang="ru-RU">Произошла ошибка во время записи/обновления данных о товаре в базу данных!</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время сохранения/обновления данных о товаре в базу данных!</Value>
       <Value Lang="uk-UA">Сталася помилка під час збереження/актуалізації даних про товар у базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringSavingRevaluationData">
+      <Value Lang="bg-BG">Възникнала е грешка при запис на данните за цената на стока в базата данни!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during writing the price of item in the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время сохранения цены товара в базу данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час збереження ціни товару у базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgPartnerNameIsEmpty">
+      <Value Lang="bg-BG">Име на фирмата е празно!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Name of company is empty!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Название компании не заполнено!</Value>
+      <Value Lang="uk-UA">Назва компанії не заповнена!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgPartnerNameIsDuplicated">
+      <Value Lang="bg-BG">Името на фирмата се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Name of company is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Название компании дублируется!</Value>
+      <Value Lang="uk-UA">Назва компанії дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgPartnerTaxNumberIsDuplicated">
+      <Value Lang="bg-BG">ЕИК на партньора се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax number of a partner is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговый номер партнёра дублируется!</Value>
+      <Value Lang="uk-UA">Податковий номер партнера дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgPartnerVATNumberIsDuplicated">
+      <Value Lang="bg-BG">ДДС номерът на партньора се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">VAT number of a partner is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номер плательщика НДС партнёра дублируется!</Value>
+      <Value Lang="uk-UA">Номер платника ПДВ партнера дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgPartnerPhoneIsDuplicated">
+      <Value Lang="bg-BG">Телефонът на партньора се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Phone of a partner is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Телефонный номер партнёра дублируется!</Value>
+      <Value Lang="uk-UA">Номер телефона партнера дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgPartnerEMailIsDuplicated">
+      <Value Lang="bg-BG">E-mail на партньора се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">E-mail of a partner is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">E-mail партнёра дублируется!</Value>
+      <Value Lang="uk-UA">E-mail партнера дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgErrorDuringSavingOrUpdatingPartner">
+      <Value Lang="bg-BG">Възникнала е грешка при запис/актуализиране на данните за партньора в базата данни!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during writing/updating the partner data in the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время сохранения/обновления данных о партнёре в базу данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час збереження/актуалізації даних про партнера у базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgGroupNameIsEmpty">
+      <Value Lang="bg-BG">Името на групата е празно!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Name of group is empty!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Название группы не заполнено!</Value>
+      <Value Lang="uk-UA">Назва групи не заповнена!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgGroupNameIsDuplicated">
+      <Value Lang="bg-BG">Името на групата се дублира!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Name of group is duplicated!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Название группы дублируется!</Value>
+      <Value Lang="uk-UA">Назва групи дублюється!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>  
+    <Data Key="msgErrorDuringSavingOrUpdatingGroup">
+      <Value Lang="bg-BG">Възникнала е грешка при запис/актуализиране на група в базата данни!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during saving/updating of group in the database!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время сохранения/обновления данных группы в базе данных!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час збереження/актуалізації даних групи в базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>  
+    <Data Key="msgErrorDuringReceiptGeneration">
+      <Value Lang="bg-BG">Възникнала е грешка при формиране на стокова разписка!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred during stock receipt is generating!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время формирования товарной накладной!</Value>
+      <Value Lang="uk-UA">Сталася помилка під час формування товарної накладної!</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>

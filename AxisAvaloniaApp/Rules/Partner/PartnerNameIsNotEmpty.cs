@@ -1,18 +1,18 @@
 ﻿using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.Rules.Item
+namespace AxisAvaloniaApp.Rules.Partner
 {
-    public class ItemNameIsNotEmpty : AbstractStage
+    public class PartnerNameIsNotEmpty : AbstractStage
     {
-        private string itemName;
+        private string partnerName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemNameIsNotEmpty"/> class.
+        /// Initializes a new instance of the <see cref="PartnerNameIsNotEmpty"/> class.
         /// </summary>
-        /// <param name="itemName">Name of item.</param>
-        public ItemNameIsNotEmpty(string itemName)
+        /// <param name="partnerName">Name of partner.</param>
+        public PartnerNameIsNotEmpty(string partnerName)
         {
-            this.itemName = itemName;
+            this.partnerName = partnerName;
         }
 
         /// <summary>
@@ -20,12 +20,12 @@ namespace AxisAvaloniaApp.Rules.Item
         /// </summary>
         /// <param name="request">Data to the current method.</param>
         /// <returns>Returns a method to call the next step if the rule is met; otherwise returns "-1".</returns>
-        /// <date>04.07.2022.</date>
+        /// <date>06.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            if (string.IsNullOrEmpty(itemName))
+            if (string.IsNullOrEmpty(partnerName))
             {
-                await loggerService.ShowDialog("msgItemNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgPartnerNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

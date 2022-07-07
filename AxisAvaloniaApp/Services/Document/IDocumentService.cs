@@ -62,6 +62,12 @@ namespace AxisAvaloniaApp.Services.Document
         void AddNewVATRecord(VATModel vAT);
 
         /// <summary>
+        /// Clears list with VATs.
+        /// </summary>
+        /// <date>06.07.2022.</date>
+        void ClearVATList();
+
+        /// <summary>
         /// Generates report.
         /// </summary>
         /// <returns>Returns true if a report was generated successfully; otherwise returns false.</returns>

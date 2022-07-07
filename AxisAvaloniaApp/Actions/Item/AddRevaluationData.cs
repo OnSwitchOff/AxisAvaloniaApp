@@ -2,10 +2,8 @@
 using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
 using DataBase.Repositories.OperationHeader;
+using Microinvest.CommonLibrary.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Actions.Item
@@ -36,29 +34,33 @@ namespace AxisAvaloniaApp.Actions.Item
         /// <date>06.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            bool isSuccess = true;
-            //switch (item.Id)
-            //{
-            //    case 0:
-            //        int newItemId = await itemRepository.AddItemAsync((DataBase.Entities.Items.Item)item);
-            //        item.Id = newItemId;
-            //        isSuccess = newItemId > 0;
-            //        break;
-            //    default:
-            //        isSuccess = await itemRepository.UpdateItemAsync((DataBase.Entities.Items.Item)item);
-            //        break;
-            //}
+            if (Math.Round(oldPrice, 3) != Math.Round(item.Price, 3))
+            {
+                DataBase.Entities.OperationHeader.OperationHeader header = DataBase.Entities.OperationHeader.OperationHeader.Create(
+                                                    EOperTypes.Revaluation,
+                                                    await headerRepository.GetNextAcctAsync(EOperTypes.Revaluation),
+                                                    DateTime.Now,
+                                                    "",
+                                                    null,
+                                                    null,
+                                                    "",
+                                                    EECCheckTypes.Unknown,
+                                                    0);
+                header.OperationDetails.Add(DataBase.Entities.OperationDetails.OperationDetail.Create(
+                    header,
+                    (DataBase.Entities.Items.Item)item,
+                    0,
+                    0,
+                    (decimal)item.Price,
+                    (decimal)(item.Price - (item.Price / (1 + item.VATGroup.Value / 100)))));
 
-            if (isSuccess)
-            {
-                return await base.Invoke(request);
+                if (await headerRepository.AddNewRecordAsync(header) == 0)
+                {
+                    await loggerService.ShowDialog("msgErrorDuringSavingRevaluationData", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
+                }
             }
-            else
-            {
-                loggerService.RegisterError(this, "An error occurred during writing/updating the item data in the database!", nameof(SaveItem.Invoke));
-                await loggerService.ShowDialog("msgErrorDuringSavingOrUpdatingItem", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
-                return await Task.FromResult<object>(-1);
-            }
+            
+            return await base.Invoke(request);
         }
     }
 }

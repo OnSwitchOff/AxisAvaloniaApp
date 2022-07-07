@@ -12,9 +12,9 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.Actions.Sale
 {
-    public class WriteToDatabaseStage : AbstractStage
+    public class SaveOrder : AbstractStage
     {
         private readonly IOperationHeaderRepository headerRepository;
         private readonly IPaymentTypesRepository paymentTypesRepository;
@@ -25,13 +25,13 @@ namespace AxisAvaloniaApp.ViewModels
         private EPaymentTypes paymentType;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PaymentStage"/> class.
+        /// Initializes a new instance of the <see cref="PaymentOrder"/> class.
         /// </summary>
         /// <param name="uSN">Unique sale number.</param>
         /// <param name="order">Orders list.</param>
         /// <param name="partner">Partner that is selected for the operation.</param>
         /// <param name="paymentType">Type of payment of the operation.</param>
-        public WriteToDatabaseStage(string uSN, ObservableCollection<OperationItemModel> order, PartnerModel partner, EPaymentTypes paymentType)
+        public SaveOrder(string uSN, ObservableCollection<OperationItemModel> order, PartnerModel partner, EPaymentTypes paymentType)
         {
             headerRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
             paymentTypesRepository = Splat.Locator.Current.GetRequiredService<IPaymentTypesRepository>();
@@ -98,19 +98,19 @@ namespace AxisAvaloniaApp.ViewModels
             {
                 if (await headerRepository.AddNewRecordAsync(header) > 0)
                 {
-                    return base.Invoke(request);
+                    return await base.Invoke(header);
                 }
                 else
                 {
                     switch (await loggerService.ShowDialog("msgErrorDuringSavingOperation", "strError", UserControls.MessageBox.EButtonIcons.Error, UserControls.MessageBox.EButtons.AbortRetryIgnore))
                     {
                         case UserControls.MessageBox.EButtonResults.Abort:
-                            return Task.FromResult<object>(-1);
+                            return await Task.FromResult<object>(-1);
                         case UserControls.MessageBox.EButtonResults.Retry:
                             break;
                         case UserControls.MessageBox.EButtonResults.Ignore:
                             loggerService.RegisterError(DataBase.Enums.EApplicationLogEvents.SaveOperation, "Writing data to database is ignored by user!");
-                            return base.Invoke(request);
+                            return await base.Invoke(header);
                     }
                 }
             }

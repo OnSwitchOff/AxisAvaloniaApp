@@ -1,18 +1,18 @@
 ﻿using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.Rules.Item
+namespace AxisAvaloniaApp.Rules.PartnersGroup
 {
-    public class ItemNameIsNotEmpty : AbstractStage
+    public class PartnersGroupNameIsNotEmpty : AbstractStage
     {
-        private string itemName;
+        private string partnersGroupName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemNameIsNotEmpty"/> class.
+        /// Initializes a new instance of the <see cref="PartnersGroupNameIsNotEmpty"/> class.
         /// </summary>
-        /// <param name="itemName">Name of item.</param>
-        public ItemNameIsNotEmpty(string itemName)
+        /// <param name="itemsGroupName">Name of partners group.</param>
+        public PartnersGroupNameIsNotEmpty(string partnersGroupName)
         {
-            this.itemName = itemName;
+            this.partnersGroupName = partnersGroupName;
         }
 
         /// <summary>
@@ -23,9 +23,9 @@ namespace AxisAvaloniaApp.Rules.Item
         /// <date>04.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            if (string.IsNullOrEmpty(itemName))
+            if (string.IsNullOrEmpty(partnersGroupName))
             {
-                await loggerService.ShowDialog("msgItemNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgGroupNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

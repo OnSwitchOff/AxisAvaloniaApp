@@ -159,6 +159,7 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run<bool>(() =>
             {
+                databaseContext.ChangeTracker.Clear();
                 databaseContext.Partners.Update(partner);
                 return databaseContext.SaveChanges() > 0;
             });
@@ -184,6 +185,94 @@ namespace DataBase.Repositories.Partners
                     databaseContext.Partners.Remove(partner);
                     return databaseContext.SaveChanges() > 0;
                 }
+            });
+        }
+
+        /// <summary>
+        /// Checks whether name of partner is duplicated.
+        /// </summary>
+        /// <param name="partnerName">Name of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if name of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<bool> PartnerNameIsDuplicatedAsync(string partnerName, int partnerId)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.Partners.
+                Where(p => p.Id != partnerId && p.Company.ToLower().Equals(partnerName.ToLower())).
+                FirstOrDefault() != null;
+            });
+        }
+
+        /// <summary>
+        /// Checks whether tax number of partner is duplicated.
+        /// </summary>
+        /// <param name="taxNumber">Tax number of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if tax number of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<bool> PartnerTaxNumberIsDuplicatedAsync(string taxNumber, int partnerId)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.Partners.
+                Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.TaxNumber) && p.TaxNumber.ToLower().Equals(taxNumber.ToLower())).
+                FirstOrDefault() != null;
+            });
+        }
+
+        /// <summary>
+        /// Checks whether VAT number of partner is duplicated.
+        /// </summary>
+        /// <param name="vATNumber">VAT number of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if VAT number of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<bool> PartnerVATNumberIsDuplicatedAsync(string vATNumber, int partnerId)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.Partners.
+                Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.VATNumber) && p.VATNumber.ToLower().Equals(vATNumber.ToLower())).
+                FirstOrDefault() != null;
+            });
+        }
+
+        /// <summary>
+        /// Checks whether phone of partner is duplicated.
+        /// </summary>
+        /// <param name="phone">Phone of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if phone of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<bool> PartnerPhoneIsDuplicatedAsync(string phone, int partnerId)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.Partners.
+                Where(p => 
+                p.Id != partnerId 
+                && !string.IsNullOrEmpty(p.Phone) 
+                && p.Phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Equals(phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", ""))).
+                FirstOrDefault() != null;
+            });
+        }
+
+        /// <summary>
+        /// Checks whether e-mail of partner is duplicated.
+        /// </summary>
+        /// <param name="eMail">E-mail of partner.</param>
+        /// <param name="partnerId">Id of partner.</param>
+        /// <returns>Returns true if e-mail of partner is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<bool> PartnerEMailIsDuplicatedAsync(string eMail, int partnerId)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.Partners.
+                Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.Email) && p.Email.ToLower().Equals(eMail.ToLower())).
+                FirstOrDefault() != null;
             });
         }
     }

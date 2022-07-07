@@ -194,9 +194,10 @@ namespace AxisAvaloniaApp.Views
             {
                 foreach (CheckedMenuItem item in saleContextMenu.Items)
                 {
+                    int saleTableColumns = (int)dataContext.SerializationService[ESerializationKeys.AddColumns];
                     if (item.Tag != null && item.Tag is EAdditionalSaleTableColumns column)
                     {
-                        item.IsChecked = ((EAdditionalSaleTableColumns)dataContext.SerializationService[ESerializationKeys.AddColumns] & column) > 0;
+                        item.IsChecked = (saleTableColumns & (int)column) > 0;
                     }
                 }
             }
@@ -213,11 +214,12 @@ namespace AxisAvaloniaApp.Views
             itemsContextMenu = this.FindControl<ContextMenu>("ItemsContextMenu");
             if (itemsContextMenu != null)
             {
+                int itemsTableColumns = (int)dataContext.SerializationItems[ESerializationKeys.AddColumns];
                 foreach (CheckedMenuItem item in itemsContextMenu.Items)
                 {
                     if (item.Tag != null && item.Tag is EAdditionalItemsTableColumns column)
                     {
-                        item.IsChecked = ((EAdditionalItemsTableColumns)dataContext.SerializationItems[ESerializationKeys.AddColumns] & column) > 0;
+                        item.IsChecked = (itemsTableColumns & (int)column) > 0;
                     }
                 }
             }
@@ -234,11 +236,12 @@ namespace AxisAvaloniaApp.Views
             partnersContextMenu = this.FindControl<ContextMenu>("PartnersContextMenu");
             if (partnersContextMenu != null)
             {
+                int partnerTableColumns = (int)dataContext.SerializationPartners[ESerializationKeys.AddColumns];
                 foreach (CheckedMenuItem item in partnersContextMenu.Items)
                 {
                     if (item.Tag != null && item.Tag is EAdditionalPartnersTableColumns column)
                     {
-                        item.IsChecked = ((EAdditionalPartnersTableColumns)dataContext.SerializationPartners[ESerializationKeys.AddColumns] & column) > 0;
+                        item.IsChecked = (partnerTableColumns & (int)column) > 0;
                     }
                 }
             }

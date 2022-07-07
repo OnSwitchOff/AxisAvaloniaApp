@@ -77,6 +77,7 @@ namespace DataBase.Repositories.PartnersGroups
         {
             return await Task.Run<bool>(() =>
             {
+                databaseContext.ChangeTracker.Clear();
                 databaseContext.PartnersGroups.Update(partnersGroup);
                 return databaseContext.SaveChanges() > 0;
             });
@@ -113,6 +114,23 @@ namespace DataBase.Repositories.PartnersGroups
         public Task<List<PartnersGroup>> GetPartnersGroupsAsync()
         {
             return databaseContext.PartnersGroups.ToListAsync();
+        }
+
+        /// <summary>
+        /// Checks whether name of partners group is duplicated.
+        /// </summary>
+        /// <param name="partnersGroupName">Name of partners group.</param>
+        /// <param name="partnersGroupId">Id of partners group.</param>
+        /// <returns>Returns true if name of partners group is duplicated; otherwise returns false.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<bool> PartnersGroupNameIsDuplicatedAsync(string partnersGroupName, int partnersGroupId)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.PartnersGroups.
+                Where(i => i.Id != partnersGroupId && i.Name.ToLower().Equals(partnersGroupName.ToLower())).
+                FirstOrDefault() != null;
+            });
         }
     }
 }

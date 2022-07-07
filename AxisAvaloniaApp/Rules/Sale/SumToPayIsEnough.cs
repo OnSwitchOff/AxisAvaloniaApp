@@ -24,7 +24,7 @@ namespace AxisAvaloniaApp.Rules.Sale
         /// Starts invocation of stages.
         /// </summary>
         /// <param name="request">Total amount of the orders list.</param>
-        /// <returns>Returns invocation method of next stage.</returns>
+        /// <returns>Returns a method to call the next step if the rule is met; otherwise returns "-1".</returns>
         /// <date>23.06.2022.</date>
         public async override Task<object> Invoke(object request)
         {
@@ -40,7 +40,7 @@ namespace AxisAvaloniaApp.Rules.Sale
                     if (Math.Round(totalAmount, 3) > Math.Round(amountSum, 3))
                     {
                         await loggerService.ShowDialog("msgNotEnoughMoney", "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
-                        return Task.FromResult<object>(-1);
+                        return await Task.FromResult<object>(-1);
                     }
 
                     break;
@@ -49,7 +49,7 @@ namespace AxisAvaloniaApp.Rules.Sale
                     break;
             }
 
-            return base.Invoke(amountSum);
+            return await base.Invoke(amountSum);
         }
     }
 }

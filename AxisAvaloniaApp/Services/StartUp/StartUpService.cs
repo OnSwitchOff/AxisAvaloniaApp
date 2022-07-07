@@ -71,10 +71,12 @@ namespace AxisAvaloniaApp.Services.StartUp
             {
                 try
                 {
-                    using (Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico"))))
-                    {
-                        logo.Save(Configurations.AppConfiguration.LogoPath);
-                    }
+                    Microinvest.PDFCreator.MicroinvestPdfDocument pdf = new Microinvest.PDFCreator.MicroinvestPdfDocument();
+                    pdf.DefaultHeaderImage.Save(Configurations.AppConfiguration.LogoPath);
+                    //using (Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico"))))
+                    //{
+                    //    logo.Save(Configurations.AppConfiguration.LogoPath);
+                    //}
                     
                     WriteDefaultValuesIntoDatabase();
                     
@@ -94,6 +96,8 @@ namespace AxisAvaloniaApp.Services.StartUp
                 try
                 {
                     searchService.InitializeSearchDataTool(settings.AppLanguage);
+
+                    Microinvest.PDFCreator.Helpers.TranslationHelper.Language = settings.AppLanguage;
 
                     if (!string.IsNullOrEmpty(settings.COMScannerSettings[Enums.ESettingKeys.ComPort]) &&
                     !settings.COMScannerSettings[Enums.ESettingKeys.ComPort].ToString().Equals("strNotActive"))

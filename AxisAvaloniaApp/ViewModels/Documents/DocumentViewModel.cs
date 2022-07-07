@@ -89,10 +89,10 @@ namespace AxisAvaloniaApp.ViewModels
             }
 
             Items.Clear();
-            foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset))
-            {
-                Items.Add(new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType)));
-            }
+            //foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset))
+            //{
+            //    Items.Add(new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType)));
+            //}
             
         }
 

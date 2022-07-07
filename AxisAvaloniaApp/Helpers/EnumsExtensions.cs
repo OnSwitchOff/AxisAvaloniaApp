@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Microinvest.CommonLibrary.Enums;
 using System;
 
 namespace AxisAvaloniaApp.Helpers
@@ -46,20 +47,44 @@ namespace AxisAvaloniaApp.Helpers
         /// <param name="receiptType">Type of receipt to convert.</param>
         /// <returns>EECRReceiptType.</returns>
         /// <date>23.06.2022.</date>
-        public static Microinvest.CommonLibrary.Enums.EECCheckTypes Convert(this Microinvest.DeviceService.Enums.EECRReceiptType receiptType)
+        public static EECCheckTypes Convert(this Microinvest.DeviceService.Enums.EECRReceiptType receiptType)
         {
             switch (receiptType)
             {
                 case Microinvest.DeviceService.Enums.EECRReceiptType.FiscalReceipt:
-                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.FiscalCheck;
+                    return EECCheckTypes.FiscalCheck;
                 case Microinvest.DeviceService.Enums.EECRReceiptType.NonFiscalReceipt:
-                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.NonFiscalCheck;
+                    return EECCheckTypes.NonFiscalCheck;
                 case Microinvest.DeviceService.Enums.EECRReceiptType.ReturnReceipt:
-                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.ReturnCheck;
+                    return EECCheckTypes.ReturnCheck;
                 case Microinvest.DeviceService.Enums.EECRReceiptType.DuplicateReceipt:
-                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.DuplicateCheck;
+                    return EECCheckTypes.DuplicateCheck;
                 default:
-                    return Microinvest.CommonLibrary.Enums.EECCheckTypes.Unknown;
+                    return EECCheckTypes.Unknown;
+            }
+        }
+
+        /// <summary>
+        /// Converts currency code to ECurrencies enum.
+        /// </summary>
+        /// <param name="currencyCode">Currency code.</param>
+        /// <returns>ECurrencies</returns>
+        /// <exception cref="Exception">Throws Exception if currency code is not included to ECurrencies.</exception>
+        /// <date>06.07.2022.</date>
+        public static ECurrencies Convert(this string currencyCode)
+        {
+            switch (currencyCode)
+            {
+                case "BGN":
+                    return ECurrencies.BGN;
+                case "USD":
+                    return ECurrencies.USD;
+                case "RUB":
+                    return ECurrencies.RUB;
+                case "UAH":
+                    return ECurrencies.UAH;
+                default:
+                    throw new Exception(String.Format("The currency \"{0}\" is not supported", currencyCode));
             }
         }
     }

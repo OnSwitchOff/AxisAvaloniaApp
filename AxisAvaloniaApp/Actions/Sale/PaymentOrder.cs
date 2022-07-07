@@ -11,9 +11,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.ViewModels
+namespace AxisAvaloniaApp.Actions.Sale
 {
-    public class PaymentStage : AbstractStage
+    public class PaymentOrder : AbstractStage
     {
         private readonly IPaymentService paymentService;
         private readonly ITranslationService translationService;
@@ -22,11 +22,11 @@ namespace AxisAvaloniaApp.ViewModels
         private EPaymentTypes paymentType;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PaymentStage"/> class.
+        /// Initializes a new instance of the <see cref="PaymentOrder"/> class.
         /// </summary>
         /// <param name="orderList">Orders list.</param>
         /// <param name="paymentType">Type of payment.</param>
-        public PaymentStage(ObservableCollection<OperationItemModel> orderList, EPaymentTypes paymentType)
+        public PaymentOrder(ObservableCollection<OperationItemModel> orderList, EPaymentTypes paymentType)
         {
             paymentService = Splat.Locator.Current.GetRequiredService<IPaymentService>();
             translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
@@ -55,7 +55,7 @@ namespace AxisAvaloniaApp.ViewModels
 
                 if (fiscalResult.ResultException == null)
                 {
-                    return base.Invoke(fiscalResult);
+                    return await base.Invoke(fiscalResult);
 
                 }
                 else
@@ -78,12 +78,12 @@ namespace AxisAvaloniaApp.ViewModels
                     switch (await loggerService.ShowDialog1(errorDescription, errorTitle, EButtonIcons.Error, EButtons.AbortRetryIgnore))
                     {
                         case EButtonResults.Abort:
-                            return Task.FromResult<object>(-1);
+                            return await Task.FromResult<object>(-1);
                         case EButtonResults.Retry:
                             break;
                         case EButtonResults.Ignore:
                             loggerService.RegisterError(DataBase.Enums.EApplicationLogEvents.PrintReceipt, "Printing of receipt is ignored by user!");
-                            return base.Invoke(fiscalResult);
+                            return await base.Invoke(fiscalResult);
                     }
                 }
             }
