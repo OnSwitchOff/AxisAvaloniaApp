@@ -16,6 +16,12 @@ using AxisAvaloniaApp.Helpers;
 using DataBase.Entities.OperationHeader;
 using DataBase.Entities.Documents;
 using System.Diagnostics;
+using AxisAvaloniaApp.Services.Document;
+using System.Reactive.Subjects;
+using AxisAvaloniaApp.Services.Translation;
+using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Enums;
+using AxisAvaloniaApp.Services.Logger;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -24,12 +30,20 @@ namespace AxisAvaloniaApp.ViewModels
         private readonly IOperationHeaderRepository operationHeaderRepository;
         private readonly IDocumentsRepository documentsRepository;
 
+        private readonly IDocumentService documentService;
+        private readonly ITranslationService translationService;
+        private readonly ISettingsService settingsService;
+        private readonly ILoggerService loggerService;
+
         protected abstract EDocumentTypes documentType { get; }
 
         #region MainContent
+        private bool isMainContentVisible;
         private DocumentItem selectedItem;
         private ObservableCollection<DocumentItem> items;
         private ObservableCollection<DocumentItem> filtredItems;
+        private ObservableCollection<System.Drawing.Image> pages;
+
         #endregion
 
         #region Filter section
@@ -45,15 +59,27 @@ namespace AxisAvaloniaApp.ViewModels
         private string filterString;
         #endregion
 
+        public bool IsMainContentVisible { get => isMainContentVisible; set => this.RaiseAndSetIfChanged(ref isMainContentVisible, value); }
+        public IDocumentService DocumentService
+        {
+            get => documentService;
+        }
         public DocumentItem SelectedItem {
             get=>selectedItem;
             set
             {
                 this.RaiseAndSetIfChanged(ref selectedItem, value);
+                DocumentIsSelected = value != null;
             }
         }
         public ObservableCollection<DocumentItem> Items { get => items; set => this.RaiseAndSetIfChanged(ref items, value); }
         public ObservableCollection<DocumentItem> FiltredItems { get => filtredItems; set => this.RaiseAndSetIfChanged(ref filtredItems, value); }
+
+        public ObservableCollection<System.Drawing.Image> Pages
+        {
+            get => pages == null ? pages = new ObservableCollection<System.Drawing.Image>() : pages;
+            set => this.RaiseAndSetIfChanged(ref pages, value);
+        }
 
 
         public ObservableCollection<ComboBoxItemModel> Periods
@@ -171,16 +197,103 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
 
+        public ReactiveCommand<Unit, Unit> PrintCommand { get; }
+        private readonly BehaviorSubject<bool> _DocumentIsSelectedSubject = new BehaviorSubject<bool>(false);
+        public bool DocumentIsSelected
+        {
+            get => _DocumentIsSelectedSubject.Value;
+            set => _DocumentIsSelectedSubject.OnNext(value);
+        }
+        public IObservable<bool> ObservableDocumentIsSelected => _DocumentIsSelectedSubject;
+
         public DocumentViewModel()
         {
             operationHeaderRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
             documentsRepository = Splat.Locator.Current.GetRequiredService<IDocumentsRepository>();
+            documentService = Splat.Locator.Current.GetRequiredService<IDocumentService>();
+            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
+            loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
             Items = new ObservableCollection<DocumentItem>();
             FiltredItems = new ObservableCollection<DocumentItem>();
             Periods = GetPeriodsCollection();
             SelectedPeriod = Periods[0];
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
+            PrintCommand = ReactiveCommand.Create(Print, ObservableDocumentIsSelected);
+            IsMainContentVisible = true;
+        }
+
+        void  Print()
+        {
+            OperationHeader? operationData = SelectedItem.OperationHeader;
+            if (operationData == null)
+            {
+                throw new InvalidCastException();
+            }
+
+            // заполняем данные о покупателе
+            documentService.CustomerData = operationData.Partner;
+
+            // заполняем описание документа
+            documentService.DocumentDescription.DocumentName = translationService.Localize("str" + documentType.ToString());
+            //documentService.DocumentDescription.DocumentDescription = translationService.Localize("strForSale");
+            documentService.DocumentDescription.DocumentNumber = operationData.Acct.ToString("D10");
+            documentService.DocumentDescription.DocumentDate = DateTime.Now;
+            documentService.DocumentDescription.PaymentType = operationData.Payment.Name;
+            documentService.DocumentDescription.DealReason = translationService.Localize("strSale");
+            documentService.DocumentDescription.DocumentSum = settingsService.AppLanguage.MoneyByWords(
+                (double)operationData.OperationDetails.Sum(d => d.Qtty * d.SalePrice),
+                settingsService.Country.CurrencyCode.Convert());
+            documentService.DocumentDescription.ReceivedBy = operationData.Partner.Principal;
+            documentService.DocumentDescription.CreatedBy = settingsService.AppSettings[ESettingKeys.Principal];
+
+            // размечаем таблицу с товарами
+            documentService.ItemsData = new System.Data.DataTable();
+            documentService.ItemsData.Columns.Add(translationService.Localize("strRowNumber"), typeof(int));
+            documentService.ItemsData.Columns.Add(translationService.Localize("strCode"), typeof(string));
+            documentService.ItemsData.Columns.Add(translationService.Localize("strGoods"), typeof(string));
+            documentService.ItemsData.Columns.Add(translationService.Localize("strMeasure"), typeof(string));
+            documentService.ItemsData.Columns.Add(translationService.Localize("strQtty"), typeof(double));
+            documentService.ItemsData.Columns.Add(translationService.Localize("strPrice"), typeof(double));
+            documentService.ItemsData.Columns.Add(translationService.Localize("strAmount_Short"), typeof(double));
+
+            // заполняем таблицу с товарами данными
+            documentService.ClearVATList();
+            for (int i = 0; i < operationData.OperationDetails.Count; i++)
+            {
+                var item = operationData.OperationDetails[i];
+
+                documentService.ItemsData.Rows.Add(
+                    i+1,
+                    item.Goods.Code,
+                    item.Goods.Name,
+                    item.Goods.Measure,
+                    item.Qtty,
+                    item.SalePrice,
+                    item.Qtty * item.SalePrice);
+
+                Microinvest.PDFCreator.Models.VATModel vAT = new Microinvest.PDFCreator.Models.VATModel()
+                {
+                    VATRate = (float)item.Goods.Vatgroup.VATValue,
+                    VATSum = (double)Math.Round((item.SaleVAT * item.Qtty), 2),
+                    VATBase = (double)Math.Round((item.SalePrice - item.SaleVAT) * item.Qtty, 2),
+                };
+
+                documentService.AddNewVATRecord(vAT);
+            }           
+
+            // генерируем документ
+            if (documentService.GenerateDocument(documentType, EDocumentVersionsPrinting.Original, operationData.Payment.PaymentIndex))
+            {
+                Pages = documentService.ConvertDocumentToImageList().Clone();
+            }
+            else
+            {
+               loggerService.ShowDialog("msgErrorDuringReceiptGeneration", "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
+            }
+
+            IsMainContentVisible = Pages.Count == 0;
         }
 
         private void FilterTimer_Tick(object? sender, EventArgs e)
@@ -240,7 +353,7 @@ namespace AxisAvaloniaApp.ViewModels
         private string dealPlace;
         private string description;
         private OperationHeader oh;
-        private Task<Document?> task;
+        private Document? document;
         #endregion
 
         #region Properties
@@ -309,93 +422,20 @@ namespace AxisAvaloniaApp.ViewModels
         }
         public string DealPlace { get => dealPlace; set =>  this.RaiseAndSetIfChanged(ref dealPlace, value);}
         public string Description { get => description; set => this.RaiseAndSetIfChanged(ref description, value);}
+        public OperationHeader OperationHeader { get => oh; set => this.RaiseAndSetIfChanged(ref oh, value); }
+        public Document? Document { get => document; set => this.RaiseAndSetIfChanged(ref document, value); }
         #endregion
 
         #region Commands
-        public ReactiveCommand<Unit, Unit> PrintCommand { get;}
+
         #endregion
-
-        public DocumentItem()
-        {
-            Sale = "sale";
-            SaleDateTimeOffset = DateTime.Now;         
-            Amount = "amount";
-            InvoiceNumber = "invoice#";
-            InvoiceDateTimeOffset = DateTime.Now;
-            InvoicePrepared = "prep";
-
-            Client = new PartnerModel();
-            Client.Address = "Address";
-            Client.BankBIC = "BankBIC";
-            Client.BankName = "BankName";
-            Client.City = "City";
-            Client.DiscountCardNumber = "DiscountCardNumber";            
-            Client.Email = "Email";
-            Client.IBAN = "Iban";
-            Client.Id = 0;
-            Client.Name = "Name";
-            Client.Phone = "Phone";
-            Client.Principal = "Principal";
-            Client.Status = ENomenclatureStatuses.Active;
-            Client.TaxNumber = "TaxNumber";
-            Client.VATNumber = "VatNumber";
-
-            Receiver = "Reciever";
-            DealDateTimeOffset = DateTime.Now;
-            DealPlace = "DealPlace";
-            Description = "Description";
-
-
-            PrintCommand = ReactiveCommand.Create(Print);
-        }
-
-        public DocumentItem(string sale, DateTime saleDate, PartnerModel client, string amount, string invoice, DateTime invoiceDate)
-        {
-            Sale = sale;
-            SaleDateTimeOffset = saleDate;
-            Client = client;
-            Amount = amount;
-            InvoiceNumber = invoice;
-            InvoiceDateTimeOffset = invoiceDate;
-            PrintCommand = ReactiveCommand.Create(Print);
-        }
-
-        public DocumentItem(int x)
-        {
-
-            Sale = "sale"+x;
-            SaleDateTimeOffset = DateTime.Now; ;
-            InvoicePrepared = "InvoicePrepared"+x;
-
-            Client = new PartnerModel();
-            Client.Address = "Address";
-            Client.BankBIC = "BankBIC";
-            Client.BankName = "BankName";
-            Client.City = "City";
-            Client.DiscountCardNumber = "DiscountCardNumber";
-            Client.Email = "Email";
-            Client.IBAN = "Iban";
-            Client.Id = 0;
-            Client.Name = "Name";
-            Client.Phone = "Phone";
-            Client.Principal = "Principal";
-            Client.Status = ENomenclatureStatuses.Active;
-            Client.TaxNumber = "TaxNumber";
-            Client.VATNumber = "VatNumber";
-
-            Receiver = "Reciever";
-            Amount = "amount";
-            InvoiceNumber = "invoice#";
-            InvoiceDateTimeOffset = DateTime.Now;
-            DealDateTimeOffset = DateTime.Now;
-            DealPlace = "DealPlace";
-            Description = "Description";
-
-            PrintCommand = ReactiveCommand.Create(Print);
-        }
+       
 
         public DocumentItem(OperationHeader oh, Document? doc)
         {
+            OperationHeader = oh;
+            Document = doc;
+
             Sale = oh.Acct.ToString();
             SaleDateTimeOffset = oh.Date;
             Client = oh.Partner;
@@ -418,12 +458,8 @@ namespace AxisAvaloniaApp.ViewModels
 
 
 
-            PrintCommand = ReactiveCommand.Create(Print);
+           
         }
-
-        void Print()
-        {
-
-        }      
+    
     }
 }
