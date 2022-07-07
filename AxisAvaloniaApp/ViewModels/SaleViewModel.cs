@@ -1,4 +1,5 @@
 ﻿using AxisAvaloniaApp.Actions.Item;
+using AxisAvaloniaApp.Actions.ItemsGroup;
 using AxisAvaloniaApp.Actions.Partner;
 using AxisAvaloniaApp.Actions.PartnersGroup;
 using AxisAvaloniaApp.Actions.Sale;
@@ -1160,9 +1161,25 @@ namespace AxisAvaloniaApp.ViewModels
                     break;
                 case ENomenclatures.ItemsGroups:
                     EditableItemsGroup = new GroupModel();
+                    if (SelectedItemsGroup.Path.Equals("-1"))
+                    {
+                        EditableItemsGroup.ParentGroup = ItemsGroups[0];
+                    }
+                    else
+                    {
+                        EditableItemsGroup.ParentGroup = SelectedItemsGroup;
+                    }
                     break;
                 case ENomenclatures.PartnersGroups:
                     EditablePartnersGroup = new GroupModel();
+                    if (SelectedPartnersGroup.Path.Equals("-1"))
+                    {
+                        EditablePartnersGroup.ParentGroup = PartnersGroups[0];
+                    }
+                    else
+                    {
+                        EditablePartnersGroup.ParentGroup = SelectedPartnersGroup;
+                    }                    
                     break;
             }
 
@@ -1441,13 +1458,42 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     break;
                 case ENomenclatures.ItemsGroups:
-                    IStage itemsGroupNameIsNotEmpty = new ItemsGroupNameIsNotEmpty(EditableItemsGroup.Name);
-                    IStage itemsGroupNameIsNotDuplicated = new ItemsGroupNameIsNotDuplicated(EditableItemsGroup);
+                    if (EditableItemsGroup != null)
+                    {
+                        IStage itemsGroupNameIsNotEmpty = new ItemsGroupNameIsNotEmpty(EditableItemsGroup.Name);
+                        IStage itemsGroupNameIsNotDuplicated = new ItemsGroupNameIsNotDuplicated(EditableItemsGroup);
+                        SaveItemsGroup saveItemsGroup = new SaveItemsGroup(EditableItemsGroup);
 
-                    itemsGroupNameIsNotEmpty.
-                        SetNext(itemsGroupNameIsNotDuplicated);
+                        itemsGroupNameIsNotEmpty.
+                            SetNext(itemsGroupNameIsNotDuplicated).
+                            SetNext(saveItemsGroup);
 
-                    IsNomenclaturePanelVisible = true;
+                        if (await itemsGroupNameIsNotEmpty.Invoke(new object()) is object obj &&
+                            obj != null &&
+                            int.TryParse(obj.ToString(), out int result) &&
+                            result == 1)
+                        {
+                            if (saveItemsGroup.IsNewItemsGroup)
+                            {
+                                if (EditableItemsGroup.Path.Length == 3)
+                                {
+                                    ItemsGroups[0].SubGroups.Add(EditableItemsGroup);
+                                }
+                                else
+                                {
+                                    SelectedItemsGroup.SubGroups.Add(EditableItemsGroup);
+                                    SelectedItemsGroup.IsExpanded = true;
+                                    SelectedItemsGroup = EditableItemsGroup;
+                                }
+                            }
+                            else
+                            {
+                                SelectedPartnersGroup.Clone(EditableItemsGroup);
+                            }
+
+                            IsNomenclaturePanelVisible = true;
+                        }
+                    }
                     break;
                 case ENomenclatures.Partners:
                     if (EditablePartner != null)
@@ -1510,16 +1556,16 @@ namespace AxisAvaloniaApp.ViewModels
                         {
                             if (savePartnersGroup.IsNewPartnersGroup)
                             {
-                                SelectedPartnersGroup.SubGroups.Add(EditablePartnersGroup);
-                                SelectedPartnersGroup.IsExpanded = true;
-                                SelectedPartnersGroup = EditablePartnersGroup;
-                                //if (selectedPartnersGroup != null &&
-                                //    (selectedPartnersGroup.Path.Equals("-2") ||
-                                //    EditablePartner.Group.Path.StartsWith(selectedPartnersGroup.Path)))
-                                //{
-                                //    Partners.Add(EditablePartner);
-                                //    SelectedPartner = Partners[Partners.Count - 1];
-                                //}
+                                if (EditablePartnersGroup.Path.Length == 3)
+                                {
+                                    PartnersGroups[0].SubGroups.Add(EditablePartnersGroup);
+                                }
+                                else
+                                {
+                                    SelectedPartnersGroup.SubGroups.Add(EditablePartnersGroup);
+                                    SelectedPartnersGroup.IsExpanded = true;
+                                    SelectedPartnersGroup = EditablePartnersGroup;
+                                }
                             }
                             else
                             {
@@ -1531,7 +1577,6 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     break;
             }
-            // TODO: initialize method
         }
 
         /// <summary>

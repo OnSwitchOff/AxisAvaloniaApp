@@ -14,7 +14,7 @@ namespace AxisAvaloniaApp.Actions.PartnersGroup
         /// <summary>
         /// Initializes a new instance of the <see cref="SavePartnersGroup"/> class.
         /// </summary>
-        /// <param name="partner">Data of partners group.</param>
+        /// <param name="group">Data of partners group.</param>
         public SavePartnersGroup(GroupModel group)
         {
             partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<IPartnersGroupsRepository>();
@@ -31,7 +31,7 @@ namespace AxisAvaloniaApp.Actions.PartnersGroup
         /// Starts invocation of stages.
         /// </summary>
         /// <param name="request">Data to the current method.</param>
-        /// <returns>Returns invocation method of next stage.</returns>
+        /// <returns>Returns a method to call the next step if the rule is met; otherwise returns "-1".</returns>
         /// <date>06.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
@@ -40,6 +40,7 @@ namespace AxisAvaloniaApp.Actions.PartnersGroup
             switch (group.Id)
             {
                 case 0:
+                    group.SetPath();
                     group.Id = await partnersGroupsRepository.AddGroupAsync((DataBase.Entities.PartnersGroups.PartnersGroup)group);
                     isSuccess = group.Id > 0;
                     break;

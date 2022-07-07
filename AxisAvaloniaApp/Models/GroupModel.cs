@@ -1,5 +1,7 @@
 ﻿using ReactiveUI;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 
 namespace AxisAvaloniaApp.Models
 {
@@ -167,6 +169,37 @@ namespace AxisAvaloniaApp.Models
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Sets path if it is absent.
+        /// </summary>
+        /// <date>07.07.2022.</date>
+        public void SetPath()
+        {
+            if (string.IsNullOrEmpty(this.path))
+            {
+                string path = (this.ParentGroup.Path.Equals("-2") ? "" : this.ParentGroup.Path) + "AAA";
+
+                StringBuilder nextPath = new StringBuilder(path);
+                for (int i = nextPath.Length - 1; i >= 0; i--)
+                {
+                    while (nextPath[i] < 90)
+                    {
+                        if (this.ParentGroup.SubGroups.Where(g => g.Path.Equals(nextPath.ToString())).FirstOrDefault() == null)
+                        {
+                            this.Path = nextPath.ToString();
+                            return;
+                        }
+
+                        nextPath[i]++;
+                    }
+
+                    nextPath[i] = 'A';
+                }
+
+                this.Path = nextPath.ToString();
+            }
         }
     }
 }

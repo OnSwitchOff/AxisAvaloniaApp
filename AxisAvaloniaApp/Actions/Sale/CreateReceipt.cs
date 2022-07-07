@@ -48,7 +48,7 @@ namespace AxisAvaloniaApp.Actions.Sale
         /// Starts invocation of stages.
         /// </summary>
         /// <param name="request">FiscalExecutionResult.</param>
-        /// <returns>Returns invocation method of next stage.</returns>
+        /// <returns>Returns a method to call the next step if the rule is met; otherwise returns "-1".</returns>
         /// <date>23.06.2022.</date>
         public async override Task<object> Invoke(object request)
         {

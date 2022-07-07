@@ -103,12 +103,17 @@ namespace AxisAvaloniaApp.UserControls
             textBoxPagesToPrint = e.NameScope.Find<TextBox>("TextBoxPagesToPrint");
         }
 
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            ConvertImageToAvaloniaImage();
+            base.OnAttachedToVisualTree(e);
+        }
+
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {
             listPages.PointerPressed -= ItemsRepeater_PointerPressed;
             base.OnDetachedFromVisualTree(e);
         }
-
 
         private void ItemsRepeater_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
@@ -508,22 +513,31 @@ namespace AxisAvaloniaApp.UserControls
                 case nameof(PrintContentVisible):
                     break;
                 case nameof(Pages):
-                    if (Pages != null && Pages.Count > 0)
-                    {
-                        AvaloniaPages.Clear();
-
-                        foreach (System.Drawing.Image page in Pages)
-                        {
-                            using (System.IO.Stream stream = new System.IO.MemoryStream())
-                            {
-                                page.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                                stream.Position = 0;
-
-                                AvaloniaPages.Add(new Bitmap(stream));
-                            }
-                        }
-                    }
+                    ConvertImageToAvaloniaImage();
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Converts System.Drawing.Image to Avalonia.Media.Imaging.Bitmap.
+        /// </summary>
+        /// <date>07.07.2022.</date>
+        private void ConvertImageToAvaloniaImage()
+        {
+            if (Pages != null && Pages.Count > 0)
+            {
+                AvaloniaPages.Clear();
+
+                foreach (System.Drawing.Image page in Pages)
+                {
+                    using (System.IO.Stream stream = new System.IO.MemoryStream())
+                    {
+                        page.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        stream.Position = 0;
+
+                        AvaloniaPages.Add(new Bitmap(stream));
+                    }
+                }
             }
         }
     }
