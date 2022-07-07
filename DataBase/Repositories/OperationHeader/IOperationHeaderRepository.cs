@@ -46,5 +46,12 @@ namespace DataBase.Repositories.OperationHeader
         /// <returns>Returns 0 if record is absent; otherwise returns actual price of item.</returns>
         /// <date>05.07.2022.</date>
         Task<double> GetItemPriceAsync(int itemId);
+
+        /// <summary>
+        /// GetOperationHeadersByDates.
+        /// </summary>
+        /// <returns>Next acc.</returns>
+        /// <date>06.07.2022.</date>
+        Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to);
     }
 }

@@ -148,8 +148,26 @@ namespace DataBase.Repositories.OperationHeader
                 {
                     return (double)currentPrice.OperationDetails.Where(d => d.Goods.Id == itemId).Select(i => i.SalePrice).FirstOrDefault();
                 }
-
                 return 0;
+            });
+        }
+
+
+        /// <summary>
+        /// GetOperationHeadersByDates.
+        /// </summary>
+        /// <returns>Next acc.</returns>
+        /// <date>06.07.2022.</date>
+        public async Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to)
+        {
+            return await Task.Run(async () =>
+            {
+                return databaseContext.
+                     OperationHeaders.
+                     Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1)).
+                     Include(oh => oh.OperationDetails).
+                     Include(oh => oh.Partner).
+                     ToList();
             });
         }
     }

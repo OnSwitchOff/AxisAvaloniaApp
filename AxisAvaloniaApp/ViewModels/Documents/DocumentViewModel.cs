@@ -15,6 +15,7 @@ using DataBase.Repositories.Documents;
 using AxisAvaloniaApp.Helpers;
 using DataBase.Entities.OperationHeader;
 using DataBase.Entities.Documents;
+using System.Diagnostics;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -81,7 +82,33 @@ namespace AxisAvaloniaApp.ViewModels
             }
         }
 
-        private async void TryToGetSourceCollection()
+        private void FilterSourceCollection()
+        {
+            isFiltring = true;
+            FiltredItems.Clear();
+
+            foreach (DocumentItem doc in Items)
+            {
+                if (string.IsNullOrEmpty(FilterString)
+                    || (doc.InvoiceNumber != null && doc.InvoiceNumber.Contains(FilterString))
+                    || doc.Sale.Contains(FilterString)
+                    || doc.Client.Name.Contains(FilterString)
+                    || doc.Client.Address.Contains(FilterString)
+                    || doc.Client.Phone.Contains(FilterString)
+                    || doc.Client.City.Contains(FilterString))
+                {
+                    FiltredItems.Add(doc);
+                }         
+            }
+
+            if (FiltredItems.Count > 0)
+            {
+                SelectedItem = FiltredItems[0];
+            }
+            isFiltring = false;
+        }
+
+        private async Task TryToGetSourceCollection()
         {
             if (FromDateTimeOffset > ToDateTimeOffset)
             {
@@ -89,11 +116,13 @@ namespace AxisAvaloniaApp.ViewModels
             }
 
             Items.Clear();
-            //foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset))
-            //{
-            //    Items.Add(new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType)));
-            //}
-            
+
+            foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset))
+            {
+                Items.Add(new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType)));
+            }
+
+            FilterSourceCollection();
         }
 
         public string ToDateString { get => toDateString; set => this.RaiseAndSetIfChanged(ref toDateString, value); }
@@ -106,25 +135,72 @@ namespace AxisAvaloniaApp.ViewModels
                 if (value != null)
                 {
                     ToDateString = ((DateTime)ToDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                    TryToGetSourceCollection();
                 }
             }
         }
-        public string FilterString { get => filterString; set => this.RaiseAndSetIfChanged(ref filterString, value); }
+
+        private Avalonia.Threading.DispatcherTimer filterTimer;
+
+        private bool isFiltring;
+
+        private string lastFilterString;
+        public string FilterString
+        {
+            get => filterString;
+            set 
+            { 
+                this.RaiseAndSetIfChanged(ref filterString, value);
+
+                if (filterTimer != null)
+                {
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    return;
+                }
+
+                filterTimer = new Avalonia.Threading.DispatcherTimer();
+                filterTimer.Interval = TimeSpan.FromMilliseconds(1000);
+                filterTimer.Tick += FilterTimer_Tick;
+                filterTimer.Start();
+                
+            } 
+        }
+
 
         public DocumentViewModel()
         {
             operationHeaderRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
             documentsRepository = Splat.Locator.Current.GetRequiredService<IDocumentsRepository>();
             Items = new ObservableCollection<DocumentItem>();
+            FiltredItems = new ObservableCollection<DocumentItem>();
             Periods = GetPeriodsCollection();
             SelectedPeriod = Periods[0];
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
-            FilterString = "filterstring";
-            //Items = new ObservableCollection<DocumentItem>() { new DocumentItem(1), new DocumentItem(2), new DocumentItem(3) };
-            Items = new ObservableCollection<DocumentItem>() { new DocumentItem(4), new DocumentItem(5), new DocumentItem(6) };
-            SelectedItem = Items[0];
-            //Items.Add(new DocumentItem(99));          
+        }
+
+        private void FilterTimer_Tick(object? sender, EventArgs e)
+        {
+            Debug.WriteLine("TryToFilter -" + FilterString);
+
+            if (isFiltring)
+            {
+                Debug.WriteLine("Already Filtring");
+                return;
+            }
+
+            if (lastFilterString == FilterString)
+            {
+                Debug.WriteLine("No Changes");
+                return;
+            }
+
+            FilterSourceCollection();
+            lastFilterString = FilterString;
         }
 
         private ObservableCollection<ComboBoxItemModel> GetPeriodsCollection()
@@ -183,8 +259,15 @@ namespace AxisAvaloniaApp.ViewModels
             }
         }
         public string Amount { get => amount; set => this.RaiseAndSetIfChanged(ref amount, value); }
-        public string InvoiceNumber { get => invoiceNumber; set => this.RaiseAndSetIfChanged(ref invoiceNumber, value); }
-        public string InvoiceDateString { get => invoiceDateString; set => this.RaiseAndSetIfChanged(ref invoiceDateString, value); }
+        public string InvoiceNumber
+        {
+            get => invoiceNumber;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref invoiceNumber, value);
+            }
+        }
+        public string InvoiceDateString { get =>  invoiceDateString; set => this.RaiseAndSetIfChanged(ref invoiceDateString, value); }
         public DateTime InvoiceDateTimeOffset
         {
             get => invoiceDateTimeOffset;
@@ -194,6 +277,10 @@ namespace AxisAvaloniaApp.ViewModels
                 if (value != null)
                 {
                     InvoiceDateString = ((DateTime)InvoiceDateTimeOffset).Date.ToString("dd.MM.yyyy");
+                }
+                if (string.IsNullOrEmpty(InvoiceNumber))
+                {
+                    InvoiceDateString = "";
                 }
             }
         }
@@ -314,6 +401,8 @@ namespace AxisAvaloniaApp.ViewModels
             Client = oh.Partner;
             Amount = oh.OperationDetails.Sum(od => od.Qtty * od.SalePrice).ToString("F");
 
+            InvoiceDateTimeOffset = DateTime.Now;
+            DealDateTimeOffset = DateTime.Now;
 
             if (doc != null)
             {
