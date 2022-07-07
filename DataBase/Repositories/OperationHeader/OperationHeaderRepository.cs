@@ -165,8 +165,9 @@ namespace DataBase.Repositories.OperationHeader
                 return databaseContext.
                      OperationHeaders.
                      Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1)).
-                     Include(oh => oh.OperationDetails).
+                     Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
                      Include(oh => oh.Partner).
+                     Include(oh => oh.Payment).
                      ToList();
             });
         }

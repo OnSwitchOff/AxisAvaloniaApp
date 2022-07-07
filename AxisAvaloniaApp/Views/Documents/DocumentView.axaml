@@ -18,7 +18,10 @@
 		  <Setter Property="BorderBrush" Value="White"/>
 		</Style>
 	</UserControl.Styles>
-    <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" >
+    <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}"
+								  PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}"
+								  Pages="{Binding Pages, Mode=TwoWay}"
+                                  DocumentService="{Binding DocumentService}" >
 	    <container:OperationContainer.TitleContent>
 			<Grid Height="50">
 				<Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
@@ -218,7 +221,7 @@
 				  </Border>
 				  
 				  <Border  Grid.Row="3" VerticalAlignment="Top" MinHeight="40" HorizontalAlignment="Stretch">
-					  <Button VerticalAlignment="Top" Margin="40,20,40,10" Command="{Binding SelectedItem.PrintCommand}" HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="2" Classes="WhiteBorder">
+					  <Button VerticalAlignment="Top" Margin="40,20,40,10" Command="{Binding PrintCommand}" HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="2" Classes="WhiteBorder">
 						  <controlsEx:AxisTextBlock LocalizeTextKey="strPrint" FontSize="18" Foreground="White" Background="Transparent" TextAlignment="Center" />
 					  </Button>
 				  </Border>

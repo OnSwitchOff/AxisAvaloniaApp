@@ -164,6 +164,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="strProformInvoice">
+		<Value Lang="bg-BG">Проформа</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Proforma Invoice</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Счет-проформа</Value>
+		<Value Lang="uk-UA">Рахунок-проформа</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
     <Data Key="strDebitNotes">
       <Value Lang="bg-BG">Дебитно известие</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -174,6 +184,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="strDebitNote">
+		<Value Lang="bg-BG">Дебитно известие</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Debit note</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Дебетное извещение</Value>
+		<Value Lang="uk-UA">Дебетне сповіщення</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
     <Data Key="strCreditNotes">
       <Value Lang="bg-BG">Кредитно известие</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -184,6 +204,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="strCreditNote">
+		<Value Lang="bg-BG">Кредитно известие</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Credit note</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Документ возврата</Value>
+		<Value Lang="uk-UA">Документ повернення</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
     <Data Key="strCashRegister">
       <Value Lang="bg-BG">Касов апарат</Value>
       <Value Lang="el-GR">Not translated</Value>
