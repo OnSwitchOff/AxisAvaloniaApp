@@ -85,19 +85,34 @@ namespace DataBase.Repositories.ItemsGroups
         /// Deletes group of items by id.
         /// </summary>
         /// <param name="groupId">Id of group of item.</param>
+        /// <param name="includeSubGroups">Flag indicating whether should be deleted also subgroups.</param>
         /// <returns>Returns true if group of items was deleted; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        public async Task<bool> DeleteGroupAsync(int groupId)
+        public async Task<bool> DeleteGroupAsync(int groupId, bool includeSubGroups = true)
         {
             return await Task.Run<bool>(() =>
             {
-                ItemsGroup itemsGroup = databaseContext.ItemsGroups.FirstOrDefault(i => i.Id == groupId);
+                ItemsGroup itemsGroup = databaseContext.ItemsGroups.
+                Include(ig => ig.Items).
+                FirstOrDefault(i => i.Id == groupId);
                 if (itemsGroup == null)
                 {
                     return false;
                 }
                 else
                 {
+                    if (includeSubGroups)
+                    {
+                        List<ItemsGroup> subGroups = databaseContext.ItemsGroups.
+                        Where(ig => ig.Path.StartsWith(itemsGroup.Path)).
+                        Include(ig => ig.Items).
+                        ToList();
+                        if (subGroups != null && subGroups.Count > 0)
+                        {
+                            databaseContext.ItemsGroups.RemoveRange(subGroups);
+                        }
+                    }
+
                     databaseContext.ItemsGroups.Remove(itemsGroup);
                     return databaseContext.SaveChanges() > 0;
                 }

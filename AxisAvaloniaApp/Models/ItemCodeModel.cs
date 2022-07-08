@@ -1,4 +1,5 @@
 ﻿using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Translation;
 using ReactiveUI;
 
 namespace AxisAvaloniaApp.Models
@@ -8,6 +9,7 @@ namespace AxisAvaloniaApp.Models
     /// </summary>
     public class ItemCodeModel : BaseModel
     {
+        private readonly ITranslationService translationService;
         private int id;
         private string code;
         private string measure;
@@ -18,9 +20,11 @@ namespace AxisAvaloniaApp.Models
         /// </summary>
         public ItemCodeModel()
         {
+            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+
             this.id = 0;
             this.code = string.Empty;
-            this.measure = "item";
+            this.measure = translationService.Localize("strMeasureItem");
             this.multiplier = 1.0;
         }
 

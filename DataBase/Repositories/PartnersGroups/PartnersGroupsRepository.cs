@@ -87,19 +87,34 @@ namespace DataBase.Repositories.PartnersGroups
         /// Deletes group of partners by id.
         /// </summary>
         /// <param name="groupId">Id of group of partners.</param>
+        /// <param name="includeSubGroups">Flag indicating whether should be deleted also subgroups.</param>
         /// <returns>Returns true if group of partners was deleted; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        public async Task<bool> DeleteGroupAsync(int groupId)
+        public async Task<bool> DeleteGroupAsync(int groupId, bool includeSubGroups = true)
         {
             return await Task.Run<bool>(() =>
             {
-                PartnersGroup partnersGroup = databaseContext.PartnersGroups.FirstOrDefault(i => i.Id == groupId);
+                PartnersGroup partnersGroup = databaseContext.PartnersGroups.
+                Include(pg => pg.Partners).
+                FirstOrDefault(i => i.Id == groupId);
                 if (partnersGroup == null)
                 {
                     return false;
                 }
                 else
                 {
+                    if (includeSubGroups)
+                    {
+                        List<PartnersGroup> subGroups = databaseContext.PartnersGroups.
+                        Where(pg => pg.Path.StartsWith(partnersGroup.Path)).
+                        Include(pg => pg.Partners).
+                        ToList();
+                        if (subGroups != null && subGroups.Count > 0)
+                        {
+                            databaseContext.PartnersGroups.RemoveRange(subGroups);
+                        }
+                    }
+
                     databaseContext.PartnersGroups.Remove(partnersGroup);
                     return databaseContext.SaveChanges() > 0;
                 }

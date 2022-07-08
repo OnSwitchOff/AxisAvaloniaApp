@@ -102,13 +102,26 @@ namespace AxisAvaloniaApp.Views
            AvaloniaProperty.Register<SaleView, string>(nameof(SearchDataGridRows));
 
         /// <summary>
-        /// Gets or sets a value indicating whether panel to pay in cash is visible.
+        /// Gets or sets a value to filter table with orders.
         /// </summary>
         /// <date>30.05.2022.</date>
         public string SearchDataGridRows
         {
             get => GetValue(SearchDataGridRowsProperty);
             set => SetValue(SearchDataGridRowsProperty, value);
+        }
+
+        public static readonly StyledProperty<string> SearchDataGridNomenclaturesProperty =
+           AvaloniaProperty.Register<SaleView, string>(nameof(SearchDataGridNomenclatures));
+
+        /// <summary>
+        /// Gets or sets a value to filter table with nomenclatures.
+        /// </summary>
+        /// <date>08.07.2022.</date>
+        public string SearchDataGridNomenclatures
+        {
+            get => GetValue(SearchDataGridNomenclaturesProperty);
+            set => SetValue(SearchDataGridNomenclaturesProperty, value);
         }
 
         public static readonly StyledProperty<bool> IsEditPanelVisibleProperty =
@@ -750,6 +763,48 @@ namespace AxisAvaloniaApp.Views
         }
 
         /// <summary>
+        /// Filters nomenclatures when Enter was pressed in accordinally TextBox.
+        /// </summary>
+        /// <param name="sender">TextBox.</param>
+        /// <param name="e">AvaloniaPropertyChangedEventArgs.</param>
+        /// <date>08.07.2022.</date>
+        private void TextBoxFilterNomenclature_KeyDown(object? sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    switch (ActiveNomenclature)
+                    {
+                        case ENomenclatures.Items:
+                            if (itemsGrid.SelectedItems.Count > 0)
+                            {
+                                dataContext.AddItems(itemsGrid.SelectedItems);
+                            }
+
+                            SearchDataGridNomenclatures = string.Empty;
+                            break;
+                        case ENomenclatures.Partners:
+                            switch (partnersGrid.SelectedItems.Count)
+                            {
+                                case 0:
+                                    break;
+                                case 1:
+                                    dataContext.AddPartner((PartnerModel?)partnersGrid.SelectedItems[0]);
+                                    break;
+                                default:
+                                    partnersGrid.Focus();
+                                    partnersGrid.SelectedItem = partnersGrid.SelectedItems;
+                                    break;
+                            }
+
+                            SearchDataGridNomenclatures = string.Empty;
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Sets InputControl when TextBox for number of card is focused; otherwise clears InputControl.
         /// </summary>
         /// <param name="sender">TextBox.</param>
@@ -796,17 +851,67 @@ namespace AxisAvaloniaApp.Views
             switch (change.Property.Name)
             {
                 case nameof(SearchDataGridRows):
-                    DataGrid dataGrid = this.FindControl<DataGrid>("SaleGrid");
-                    if (dataGrid != null)
+                    if (saleGrid != null)
                     {
-                        dataGrid.SelectAll();
-                        foreach (OperationItemModel item in dataGrid.Items)
+                        if (string.IsNullOrEmpty(SearchDataGridRows))
                         {
-                            if (!item.Name.Contains(SearchDataGridRows))
+                            saleGrid.SelectedItems.Clear();
+                        }
+                        else
+                        {
+                            saleGrid.SelectAll();
+                            foreach (OperationItemModel item in saleGrid.Items)
                             {
-                                dataGrid.SelectedItems.Remove(item);
+                                if (!item.Name.ToLower().Contains(SearchDataGridRows.ToLower()))
+                                {
+                                    saleGrid.SelectedItems.Remove(item);
+                                }
                             }
                         }
+                    }
+                    break;
+                case nameof(SearchDataGridNomenclatures):
+                    switch (ActiveNomenclature)
+                    {
+                        case ENomenclatures.Items:
+                            if (itemsGrid != null)
+                            {
+                                if (string.IsNullOrEmpty(SearchDataGridNomenclatures))
+                                {
+                                    if (itemsGrid.SelectedItems.Count > 0)
+                                    {
+                                        itemsGrid.SelectedItems.Clear();
+                                    }
+                                }
+                                else
+                                {
+                                    itemsGrid.SelectAll();
+                                    foreach (ItemModel item in itemsGrid.Items)
+                                    {
+                                        if (!item.Name.ToLower().Contains(SearchDataGridNomenclatures.ToLower()))
+                                        {
+                                            itemsGrid.SelectedItems.Remove(item);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case ENomenclatures.Partners:
+                            if (partnersGrid != null)
+                            {
+                                if (!string.IsNullOrEmpty(SearchDataGridNomenclatures))
+                                {
+                                    foreach (PartnerModel item in partnersGrid.Items)
+                                    {
+                                        if (item.Name.ToLower().Contains(SearchDataGridNomenclatures.ToLower()))
+                                        {
+                                            partnersGrid.SelectedItem = item;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
                     }
                     break;
             }

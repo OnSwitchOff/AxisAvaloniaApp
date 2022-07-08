@@ -42,9 +42,10 @@ namespace DataBase.Repositories.ItemsGroups
         /// Deletes group of items by id.
         /// </summary>
         /// <param name="groupId">Id of group of item.</param>
+        /// <param name="includeSubGroups">Flag indicating whether should be deleted also subgroups.</param>
         /// <returns>Returns true if group of items was deleted; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        Task<bool> DeleteGroupAsync(int groupId);
+        Task<bool> DeleteGroupAsync(int groupId, bool includeSubGroups = true);
 
         /// <summary>
         /// Gets list with groups of items.

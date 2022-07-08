@@ -1,5 +1,4 @@
-﻿using AxisAvaloniaApp.Helpers;
-using AxisAvaloniaApp.Models;
+﻿using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
 using DataBase.Repositories.PartnersGroups;
 using System.Threading.Tasks;
@@ -15,9 +14,10 @@ namespace AxisAvaloniaApp.Actions.PartnersGroup
         /// Initializes a new instance of the <see cref="SavePartnersGroup"/> class.
         /// </summary>
         /// <param name="group">Data of partners group.</param>
-        public SavePartnersGroup(GroupModel group)
+        /// <param name="partnersGroupsRepository">Repository to update data in the database.</param>
+        public SavePartnersGroup(GroupModel group, IPartnersGroupsRepository partnersGroupsRepository)
         {
-            partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<IPartnersGroupsRepository>();
+            this.partnersGroupsRepository = partnersGroupsRepository;
             this.group = group;
         }
 

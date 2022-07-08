@@ -177,12 +177,6 @@ namespace AxisAvaloniaApp.Models
         public static explicit operator DataBase.Entities.Items.Item(ItemModel itemModel)
         {
             List<DataBase.Entities.ItemsCodes.ItemCode> itemCodes = new List<DataBase.Entities.ItemsCodes.ItemCode>();
-            foreach (ItemCodeModel itemCode in itemModel.Codes)
-            {
-                itemCodes.Add((DataBase.Entities.ItemsCodes.ItemCode)itemCode);
-                itemCodes[itemCodes.Count - 1].Item = (DataBase.Entities.Items.Item)itemModel;
-            }
-
             DataBase.Entities.Items.Item item = DataBase.Entities.Items.Item.Create(
                 itemModel.Code,
                 itemModel.Name,
@@ -194,6 +188,14 @@ namespace AxisAvaloniaApp.Models
                 itemCodes);
             item.Id = itemModel.Id;
             item.Status = itemModel.Status;
+
+            foreach (ItemCodeModel itemCode in itemModel.Codes)
+            {
+                item.ItemsCodes.Add(itemCode);
+                item.ItemsCodes[item.ItemsCodes.Count - 1].Item = item;
+                //itemCodes.Add((DataBase.Entities.ItemsCodes.ItemCode)itemCode);
+                //itemCodes[itemCodes.Count - 1].Item = item;
+            }
 
             return item;
         }

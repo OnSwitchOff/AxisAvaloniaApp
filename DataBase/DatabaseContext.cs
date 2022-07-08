@@ -55,6 +55,8 @@ namespace DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<Entities.Items.Item>().HasOne(i => i.Group).WithMany(ig => ig.Items).HasForeignKey(key => key.Id);
+            //modelBuilder.Entity<Entities.ItemsGroups.ItemsGroup>().HasMany(ig => ig.Items).WithOne().OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(modelBuilder);
         }
     }

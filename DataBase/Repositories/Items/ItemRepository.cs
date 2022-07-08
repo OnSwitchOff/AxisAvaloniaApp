@@ -134,6 +134,7 @@ namespace DataBase.Repositories.Items
                 Where(i => (i.Status == ENomenclatureStatuses.All || i.Status == status)).
                 Include(i => i.Group).
                 Include(i => i.Vatgroup).
+                Include(i => i.ItemsCodes).
                 AsAsyncEnumerable();
         }
 
@@ -272,6 +273,38 @@ namespace DataBase.Repositories.Items
                 return databaseContext.Items.
                 Where(i => i.Id != itemId && !string.IsNullOrEmpty(i.Barcode) && i.Barcode.ToLower().Equals(barcode.ToLower())).
                 FirstOrDefault() != null;
+            });
+        }
+
+        /// <summary>
+        /// Sets default group for all items without group.
+        /// </summary>
+        /// <param name="groupId">Id of default group.</param>
+        /// <returns>Returns true if default group was set successfully; otherwise returns false.</returns>
+        /// <date>08.07.2022.</date>
+        public async Task<bool> SetDefaultGroup(int groupId = 1)
+        {
+            return await Task.Run(() =>
+            {
+                Entities.ItemsGroups.ItemsGroup itemsGroup = databaseContext.ItemsGroups.Where(ig => ig.Id == groupId).FirstOrDefault();
+                if (itemsGroup == null)
+                {
+                    return false;
+                }
+
+                List<Item> items = databaseContext.Items.Where(i => i.Group == null).ToList();
+                if (items == null || items.Count == 0)
+                {
+                    return true;
+                }
+
+                foreach (Item item in items)
+                {
+                    item.Group = itemsGroup;
+                }
+
+                databaseContext.Items.UpdateRange(items);
+                return databaseContext.SaveChanges() > 0;
             });
         }
     }

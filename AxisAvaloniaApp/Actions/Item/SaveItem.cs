@@ -1,5 +1,4 @@
-﻿using AxisAvaloniaApp.Helpers;
-using AxisAvaloniaApp.Models;
+﻿using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
 using DataBase.Repositories.Items;
 using System.Threading.Tasks;
@@ -15,17 +14,12 @@ namespace AxisAvaloniaApp.Actions.Item
         /// Initializes a new instance of the <see cref="SaveItem"/> class.
         /// </summary>
         /// <param name="item">Data of item.</param>
-        public SaveItem(ItemModel item)
+        /// <param name="itemRepository">Repository to update data in the database.</param>
+        public SaveItem(ItemModel item, IItemRepository itemRepository)
         {
-            itemRepository = Splat.Locator.Current.GetRequiredService<IItemRepository>();
+            this.itemRepository = itemRepository;
             this.item = item;
         }
-
-        /// <summary>
-        /// Gets value indicating whether the item is new.
-        /// </summary>
-        /// <date>06.07.2022.</date>
-        public bool IsNewItem { get; private set; }
 
         /// <summary>
         /// Starts invocation of stages.
@@ -35,7 +29,6 @@ namespace AxisAvaloniaApp.Actions.Item
         /// <date>06.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            IsNewItem = item.Id == 0;
             bool isSuccess;
             switch (item.Id)
             {

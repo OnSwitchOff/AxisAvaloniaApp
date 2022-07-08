@@ -275,5 +275,37 @@ namespace DataBase.Repositories.Partners
                 FirstOrDefault() != null;
             });
         }
+
+        /// <summary>
+        /// Sets default group for all partners without group.
+        /// </summary>
+        /// <param name="groupId">Id of default group.</param>
+        /// <returns>Returns true if default group was set successfully; otherwise returns false.</returns>
+        /// <date>08.07.2022.</date>
+        public async Task<bool> SetDefaultGroup(int groupId = 1)
+        {
+            return await Task.Run(() =>
+            {
+                Entities.PartnersGroups.PartnersGroup partnersGroup = databaseContext.PartnersGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
+                if (partnersGroup == null)
+                {
+                    return false;
+                }
+
+                List<Partner> partners = databaseContext.Partners.Where(p => p.Group == null).ToList();
+                if (partners == null || partners.Count == 0)
+                {
+                    return true;
+                }
+
+                foreach (Partner partner in partners)
+                {
+                    partner.Group = partnersGroup;
+                }
+
+                databaseContext.Partners.UpdateRange(partners);
+                return databaseContext.SaveChanges() > 0;
+            });
+        }
     }
 }

@@ -141,5 +141,13 @@ namespace DataBase.Repositories.Partners
         /// <returns>Returns true if e-mail of partner is duplicated; otherwise returns false.</returns>
         /// <date>06.07.2022.</date>
         Task<bool> PartnerEMailIsDuplicatedAsync(string eMail, int partnerId);
+
+        /// <summary>
+        /// Sets default group for all partners without group.
+        /// </summary>
+        /// <param name="groupId">Id of default group.</param>
+        /// <returns>Returns true if default group was set successfully; otherwise returns false.</returns>
+        /// <date>08.07.2022.</date>
+        Task<bool> SetDefaultGroup(int groupId = 1);
     }
 }

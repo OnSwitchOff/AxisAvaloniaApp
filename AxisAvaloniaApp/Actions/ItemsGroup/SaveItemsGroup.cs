@@ -1,5 +1,4 @@
-﻿using AxisAvaloniaApp.Helpers;
-using AxisAvaloniaApp.Models;
+﻿using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
 using DataBase.Repositories.ItemsGroups;
 using System.Threading.Tasks;
@@ -15,9 +14,10 @@ namespace AxisAvaloniaApp.Actions.ItemsGroup
         /// Initializes a new instance of the <see cref="SaveItemsGroup"/> class.
         /// </summary>
         /// <param name="group">Data of items group.</param>
-        public SaveItemsGroup(GroupModel group)
+        /// <param name="itemsGroupsRepository">Repository to update data in the database.</param>
+        public SaveItemsGroup(GroupModel group, IItemsGroupsRepository itemsGroupsRepository)
         {
-            itemsGroupsRepository = Splat.Locator.Current.GetRequiredService<IItemsGroupsRepository>();
+            this.itemsGroupsRepository = itemsGroupsRepository;
             this.group = group;
         }
 

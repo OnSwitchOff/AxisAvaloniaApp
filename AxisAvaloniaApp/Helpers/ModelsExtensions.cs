@@ -15,6 +15,7 @@ namespace AxisAvaloniaApp.Helpers
         {
             group.Id = clonedGroup.Id;
             group.Name = clonedGroup.Name;
+            group.Path = clonedGroup.Path;
             group.Discount = clonedGroup.Discount;
         }
 

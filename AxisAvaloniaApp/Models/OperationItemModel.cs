@@ -267,7 +267,7 @@ namespace AxisAvaloniaApp.Models
                     // сменить коэффициент, применяемый к цене
                     foreach (ItemCodeModel productCode in Item.Codes)
                     {
-                        if (productCode.Measure.Equals(SelectedMeasure))
+                        if (productCode.Measure.Equals(SelectedMeasure.Measure))
                         {
                             Multiplier = (decimal)productCode.Multiplier;
                             return;

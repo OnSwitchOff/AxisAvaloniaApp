@@ -1,5 +1,4 @@
-﻿using AxisAvaloniaApp.Helpers;
-using AxisAvaloniaApp.Models;
+﻿using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
 using DataBase.Repositories.Partners;
 using System.Threading.Tasks;
@@ -15,17 +14,12 @@ namespace AxisAvaloniaApp.Actions.Partner
         /// Initializes a new instance of the <see cref="SavePartner"/> class.
         /// </summary>
         /// <param name="partner">Data of item.</param>
-        public SavePartner(PartnerModel partner)
+        /// <param name="partnerRepository">Repository to update data in the database.</param>
+        public SavePartner(PartnerModel partner, IPartnerRepository partnerRepository)
         {
-            partnerRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
+            this.partnerRepository = partnerRepository;
             this.partner = partner;
         }
-
-        /// <summary>
-        /// Gets value indicating whether the partner is new.
-        /// </summary>
-        /// <date>06.07.2022.</date>
-        public bool IsNewPartner { get; private set; }
 
         /// <summary>
         /// Starts invocation of stages.
@@ -35,7 +29,6 @@ namespace AxisAvaloniaApp.Actions.Partner
         /// <date>06.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            IsNewPartner = partner.Id == 0;
             bool isSuccess;
             switch (partner.Id)
             {

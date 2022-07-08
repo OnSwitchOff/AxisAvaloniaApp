@@ -119,5 +119,13 @@ namespace DataBase.Repositories.Items
         /// <returns>Returns true if barcode of item is duplicated; otherwise returns false.</returns>
         /// <date>04.07.2022.</date>
         Task<bool> ItemBarcodeIsDuplicatedAsync(string barcode, int itemId);
+
+        /// <summary>
+        /// Sets default group for all items without group.
+        /// </summary>
+        /// <param name="groupId">Id of default group.</param>
+        /// <returns>Returns true if default group was set successfully; otherwise returns false.</returns>
+        /// <date>08.07.2022.</date>
+        Task<bool> SetDefaultGroup(int groupId = 1);
     }
 }

@@ -1174,10 +1174,12 @@
                 ColumnDefinitions="*, auto">
             <controlsEx:AxisTextBox Grid.Column="0"
                                     LocalizePlaceholderKey="strSearch"
-                                    Foreground="White"
+                                    Text="{Binding $parent[UserControl].SearchDataGridNomenclatures, Mode=TwoWay}"
+                                    Foreground="Gray"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
-                                    Background="Transparent"/>
+                                    Background="Transparent" 
+                                    KeyDown="TextBoxFilterNomenclature_KeyDown"/>
             <Button Grid.Column="1" Name="editButton" Click="ButtonEditNomenclature_Click">
               <Button.Content>
                 <StackPanel>

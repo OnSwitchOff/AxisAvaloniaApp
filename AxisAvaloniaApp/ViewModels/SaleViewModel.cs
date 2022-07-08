@@ -7,6 +7,7 @@ using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
+using AxisAvaloniaApp.Rules.Common;
 using AxisAvaloniaApp.Rules.Item;
 using AxisAvaloniaApp.Rules.ItemsGroup;
 using AxisAvaloniaApp.Rules.Partner;
@@ -38,7 +39,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -88,14 +88,14 @@ namespace AxisAvaloniaApp.ViewModels
         private GroupModel selectedItemsGroup;
         private GroupModel? editableItemsGroup;
         private ObservableCollection<ItemModel> items;
-        private ItemModel selectedItem;
+        private ItemModel? selectedItem;
         private ItemModel? editableItem;
         private string itemString;
         private ObservableCollection<VATGroupModel> vATGroups;
         private ObservableCollection<ComboBoxItemModel> itemsTypes;
         private ObservableCollection<string> measures;
         private ObservableCollection<PartnerModel> partners;
-        private PartnerModel selectedPartner;
+        private PartnerModel? selectedPartner;
         private PartnerModel? editablePartner;
         private ObservableCollection<GroupModel> partnersGroups;
         private GroupModel selectedPartnersGroup;
@@ -386,7 +386,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// Gets or sets item that is selected by user.
         /// </summary>
         /// <date>01.07.2022.</date>
-        public ItemModel SelectedItem
+        public ItemModel? SelectedItem
         {
             get => selectedItem;
             set => this.RaiseAndSetIfChanged(ref selectedItem, value);
@@ -554,7 +554,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// Gets or sets partner that is selected by user.
         /// </summary>
         /// <date>01.06.2022.</date>
-        public PartnerModel SelectedPartner
+        public PartnerModel? SelectedPartner
         {
             get => selectedPartner;
             set => this.RaiseAndSetIfChanged(ref selectedPartner, value);
@@ -934,37 +934,48 @@ namespace AxisAvaloniaApp.ViewModels
         /// </summary>
         /// <param name="items">List of items.</param>
         /// <date>03.06.2022.</date>
-        public void AddItems(System.Collections.IList items)
+        public async void AddItems(System.Collections.IList items)
         {
-            foreach(ItemModel item in items)
-            {
-                OperationItemModel? tmpItem = Order.Contains(item);
-                if (tmpItem != null)
-                {
-                    tmpItem.Qty++;
-                    OrderChanged?.Invoke();
-                }
-                else
-                {
-                    if (SelectedOrderRecord != null)
-                    {
-                        SelectedOrderRecord.Item = item;
-                    }
-                    else
-                    {
-                        Order[Order.Count - 1].Item = item;                        
-                    }
-
-                    if (Order[Order.Count - 1].Item.Id != 0)
-                    {
-                        Order.Add(new OperationItemModel());
-                    }
-                }
-            }
-
             if (searchItemsTimer != null && searchItemsTimer.IsEnabled)
             {
                 searchItemsTimer.Stop();
+            }
+
+            if (items == null)
+            {
+                if (await loggerService.ShowDialog("msgItemNotFound", "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
+                {
+                    AddNewNomenclature(ENomenclatures.Items);
+                }
+            }
+            else
+            {
+                foreach (ItemModel item in items)
+                {
+                    OperationItemModel? tmpItem = Order.Contains(item);
+                    if (tmpItem != null)
+                    {
+                        tmpItem.Qty++;
+                        OrderChanged?.Invoke();
+                    }
+                    else
+                    {
+                        if (SelectedOrderRecord != null)
+                        {
+                            SelectedOrderRecord.Item = item;
+                        }
+                        else
+                        {
+                            Order[Order.Count - 1].Item = item;
+                        }
+
+                        if (Order[Order.Count - 1].Item.Id != 0)
+                        {
+                            Order.Add(new OperationItemModel());
+                            SelectedOrderRecord = Order[Order.Count - 1];
+                        }
+                    }
+                }
             }
         }
 
@@ -973,11 +984,20 @@ namespace AxisAvaloniaApp.ViewModels
         /// </summary>
         /// <param name="partner"></param>
         /// <date>03.06.2022.</date>
-        public void AddPartner(PartnerModel? partner)
+        public async void AddPartner(PartnerModel? partner)
         {
             if (partner == null || partner.Id == 0)
             {
-                InitPartnerCreation(partner);
+                if (await loggerService.ShowDialog("msgPartnerNotFound", "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
+                {
+                    if (partner == null)
+                    {
+                        partner = new PartnerModel();
+                    }
+
+                    EditablePartner = partner;
+                    IsNomenclaturePanelVisible = false;
+                }
             }
             else
             {
@@ -1020,25 +1040,6 @@ namespace AxisAvaloniaApp.ViewModels
         }
 
         /// <summary>
-        /// Creates a new partner if the user agrees. 
-        /// </summary>
-        /// <param name="newPartner">Data of new partner.</param>
-        /// <date>21.06.2022.</date>
-        private async void InitPartnerCreation(PartnerModel newPartner)
-        {
-            if (await loggerService.ShowDialog("msgPartnerNotFound", "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
-            {
-                if (newPartner == null)
-                {
-                    newPartner = new PartnerModel();
-                }
-                
-                EditablePartner = newPartner;
-                IsNomenclaturePanelVisible = false;
-            }
-        }
-
-        /// <summary>
         /// Finds item data on the Microinvest club by barcode.
         /// </summary>
         /// <param name="barcode">Key to search item.</param>
@@ -1051,55 +1052,6 @@ namespace AxisAvaloniaApp.ViewModels
                 if (result != null)
                 {
                     EditableItem = result;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deletes the nomenclature if all conditions are met.
-        /// </summary>
-        /// <param name="nomenclature">Nomenclature to delete.</param>
-        /// <param name="agreeMessage">Key for localize message to confirm whether user agrees to delete nomenclature</param>
-        /// <param name="warningCondition">Condition if nomenclature can't be deleted</param>
-        /// <param name="warningMessage">Key for localize message</param>
-        /// <param name="databaseAction">
-        /// Method to delete nomenclature from the database. 
-        /// The method returns true if nomenclature was deleted; otherwise returns false. 
-        /// </param>
-        /// <param name="viewModelAction">Method to update ViewModel data.</param>
-        /// <param name="logEvents">Error sign when deleting an item.</param>
-        /// <param name="deleteErrorMessage">Key for localized message if deleting an item is unsuccess.</param>
-        /// <date>22.06.2022.</date>
-        private async void DeleteNomenclatureAsync(
-            object nomenclature,
-            string agreeMessage,
-            Func<bool> warningCondition,
-            string warningMessage,
-            Func<Task<bool>> databaseAction,
-            Action viewModelAction,
-            DataBase.Enums.EApplicationLogEvents logEvents,
-            string deleteErrorMessage)
-        {
-            if (await loggerService.ShowDialog(agreeMessage, "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
-            {
-                if (nomenclature != null)
-                {
-                    if (warningCondition.Invoke())
-                    {
-                        await loggerService.ShowDialog(warningMessage, "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
-                    }
-                    else
-                    {
-                        if (await databaseAction.Invoke())
-                        {
-                            viewModelAction.Invoke();
-                        }
-                        else
-                        {
-                            loggerService.RegisterError(logEvents, translationService.Localize(deleteErrorMessage));
-                            await loggerService.ShowDialog(deleteErrorMessage, "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
-                        }
-                    }
                 }
             }
         }
@@ -1276,94 +1228,118 @@ namespace AxisAvaloniaApp.ViewModels
         /// </summary>
         /// <param name="nomenclature">Type of nomenclature.</param>
         /// <date>31.05.2022.</date>
-        public void DeleteNomenclature(ENomenclatures nomenclature)
+        public async void DeleteNomenclature(ENomenclatures nomenclature)
         {
+            IStage nomenclatureIsNotNull;
+            IStage prepareView;
+
             switch (nomenclature)
             {
                 case ENomenclatures.Items:
-                    DeleteNomenclatureAsync(
-                        SelectedItem,
-                        "msgDoYouWantDeleteItem",
-                        () =>
-                        {
-                            return SelectedItem.Id == 1;
-                        },
-                        "msgBaseItemCanNotBeDeleted",
-                        async () =>
-                        {
-                            return await itemRepository.DeleteItemAsync(SelectedItem.Id);
-                        },
-                        () =>
-                        {
-                            Items.Remove(SelectedItem);
-                            SelectedItem = null;
-                        },
-                        DataBase.Enums.EApplicationLogEvents.DeleteItem,
-                        "msgErrorDuringDeletingItem");
+                    IStage userAgreesToDeleteItem = new UserAgreesToDeleteItem();
+                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedItem);
+                    IStage baseItemCanNotBeDeleted = new BaseItemCanNotBeDeleted(SelectedItem);
+                    IStage deleteItem = new DeleteItem(SelectedItem);
+                    prepareView = new PrepareView(() =>
+                    {
+                        Items.Remove(SelectedItem);
+                        SelectedItem = null;
+                    });
+
+                    userAgreesToDeleteItem.
+                        SetNext(nomenclatureIsNotNull).
+                        SetNext(baseItemCanNotBeDeleted).
+                        SetNext(deleteItem).
+                        SetNext(prepareView);
+
+                    await userAgreesToDeleteItem.Invoke(new object());
                     break;
                 case ENomenclatures.Partners:
-                    DeleteNomenclatureAsync(
-                        SelectedPartner,
-                        "msgDoYouWantDeletePartner",
-                        () =>
-                        {
-                            return SelectedPartner.Id == 1;
-                        },
-                        "msgBasePartnerCanNotBeDeleted",
-                        async () =>
-                        {
-                            return await partnerRepository.DeletePartnerAsync(SelectedPartner.Id);
-                        },
-                        () =>
-                        {
-                            Partners.Remove(SelectedPartner);
-                            SelectedPartner = null;
-                        },
-                        DataBase.Enums.EApplicationLogEvents.DeletePartner,
-                        "msgErrorDuringDeletingPartner");
+                    IStage userAgreesToDeletePartner = new UserAgreesToDeletePartner();
+                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedPartner);
+                    IStage basePartnerCanNotBeDeleted = new BasePartnerCanNotBeDeleted(SelectedPartner);
+                    IStage deletePartner = new DeletePartner(SelectedPartner);
+                    prepareView = new PrepareView(() =>
+                    {
+                        Partners.Remove(SelectedPartner);
+                        SelectedPartner = null;
+                    });
+
+                    userAgreesToDeletePartner.
+                        SetNext(nomenclatureIsNotNull).
+                        SetNext(basePartnerCanNotBeDeleted).
+                        SetNext(deletePartner).
+                        SetNext(prepareView);
+
+                    await userAgreesToDeletePartner.Invoke(new object());
                     break;
                 case ENomenclatures.ItemsGroups:
-                    DeleteNomenclatureAsync(
-                        SelectedItemsGroup,
-                        "msgDoYouWantDeleteItemGroup",
-                        () =>
-                        {
-                            return SelectedItemsGroup.Id == 1;
-                        },
-                        "msgBaseItemGroupCanNotBeDeleted",
-                        async () =>
-                        {
-                            return await itemsGroupsRepository.DeleteGroupAsync(SelectedItemsGroup.Id);
-                        },
-                        () =>
-                        {
-                            ItemsGroups.Remove(SelectedItemsGroup);
-                            SelectedItemsGroup = null;
-                        },
-                        DataBase.Enums.EApplicationLogEvents.DeleteItemGroup,
-                        "msgErrorDuringDeletingGroup");
+                    IStage userAgreesToDeleteItemsGroup = new UserAgreesToDeleteItemsGroup();
+                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedItemsGroup);
+                    IStage baseItemsGroupCanNotBeDeleted = new BaseItemsGroupCanNotBeDeleted(SelectedItemsGroup);
+                    IStage deleteItemsGroup = new DeleteItemsGroup(SelectedItemsGroup);
+                    IStage fixNullItemsGroups = new FixNullItemsGroups(itemRepository);
+                    prepareView = new PrepareView(() =>
+                    {
+                        DeleteSelectedGroup(ItemsGroups[0].SubGroups, SelectedItemsGroup);
+                        SelectedItemsGroup = ItemsGroups[0];
+                    });
+
+                    userAgreesToDeleteItemsGroup.
+                        SetNext(nomenclatureIsNotNull).
+                        SetNext(baseItemsGroupCanNotBeDeleted).
+                        SetNext(deleteItemsGroup).
+                        SetNext(fixNullItemsGroups).
+                        SetNext(prepareView);
+
+                    await userAgreesToDeleteItemsGroup.Invoke(new object());
                     break;
                 case ENomenclatures.PartnersGroups:
-                    DeleteNomenclatureAsync(
-                        SelectedPartnersGroup,
-                        "msgDoYouWantDeletePartnerGroup",
-                        () =>
-                        {
-                            return SelectedPartnersGroup.Id == 1;
-                        },
-                        "msgBasePartnerGroupCanNotBeDeleted",
-                        async () =>
-                        {
-                            return await partnersGroupsRepository.DeleteGroupAsync(SelectedPartnersGroup.Id);
-                        },
-                        () =>
-                        {
-                            PartnersGroups.Remove(SelectedPartnersGroup);
-                            SelectedPartnersGroup = null;
-                        },
-                        DataBase.Enums.EApplicationLogEvents.DeletePartnerGroup,
-                        "msgErrorDuringDeletingGroup");
+                    IStage userAgreesToDeletePartnersGroup = new UserAgreesToDeletePartnersGroup();
+                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedPartnersGroup);
+                    IStage basePartnersGroupCanNotBeDeleted = new BasePartnersGroupCanNotBeDeleted(SelectedPartnersGroup);
+                    IStage deletePartnersGroup = new DeletePartnersGroup(SelectedPartnersGroup);
+                    IStage fixNullPartnersGroups = new FixNullPartnersGroups(partnerRepository);
+                    prepareView = new PrepareView(() =>
+                    {
+                        DeleteSelectedGroup(PartnersGroups[0].SubGroups, SelectedPartnersGroup);
+                        SelectedPartnersGroup = PartnersGroups[0];
+                    });
+
+                    userAgreesToDeletePartnersGroup.
+                        SetNext(nomenclatureIsNotNull).
+                        SetNext(basePartnersGroupCanNotBeDeleted).
+                        SetNext(deletePartnersGroup).
+                        SetNext(fixNullPartnersGroups).
+                        SetNext(prepareView);
+
+                    await userAgreesToDeletePartnersGroup.Invoke(new object());
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Deletes group from collection of groups by recursion.
+        /// </summary>
+        /// <param name="groups">Collections of groups.</param>
+        /// <param name="currentGroup">Group to delete.</param>
+        /// <date>08.07.2022.</date>
+        private void DeleteSelectedGroup(ObservableCollection<GroupModel> groups, GroupModel currentGroup)
+        {
+            if (groups.Count == 0)
+            {
+                return;
+            }
+
+            if (groups.Contains(currentGroup))
+            {
+                groups.Remove(currentGroup);
+                return;
+            }
+
+            foreach (GroupModel subGroup in groups)
+            {
+                DeleteSelectedGroup(subGroup.SubGroups, currentGroup);
             }
         }
 
@@ -1410,6 +1386,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>03.06.2022.</date>
         public async void SaveNomenclature(ENomenclatures nomenclature)
         {
+            IStage prepareViewStage;
             switch (nomenclature)
             {
                 case ENomenclatures.Items:
@@ -1421,8 +1398,35 @@ namespace AxisAvaloniaApp.ViewModels
                         IStage itemCodesAreNotDuplicated = new ItemCodesAreNotDuplicated(EditableItem);
                         IStage itemMeasureIsNotEmpty = new ItemMeasureIsNotEmpty(EditableItem.Measure);
                         IStage itemMeasuresAreNotDuplicated = new ItemMeasuresAreNotDuplicated(EditableItem);
-                        SaveItem saveItem = new SaveItem(EditableItem);
+                        IStage saveItem = new SaveItem(EditableItem, itemRepository);
                         IStage addRevaluationData = new AddRevaluationData(EditableItem, EditableItem.Id == 0 ? 0 : SelectedItem.Price);
+                        prepareViewStage = new PrepareView(() =>
+                        {
+                            if (SelectedItemsGroup != null)
+                            {
+                                ItemModel? containedItem = Items.Where(i => i.Id == EditableItem.Id).FirstOrDefault();
+                                if (SelectedItemsGroup.Path.Equals("-2") || EditableItem.Group.Path.StartsWith(SelectedItemsGroup.Path))
+                                {
+                                    if (containedItem == null)
+                                    {
+                                        Items.Add(EditableItem);                                        
+                                    }
+
+                                    SelectedItem?.Clone(EditableItem);
+                                }
+                                else
+                                {
+                                    if (containedItem != null)
+                                    {
+                                        Items.Remove(containedItem);
+                                        SelectedItem = null;
+                                    }
+                                }
+
+                            }
+
+                            IsNomenclaturePanelVisible = true;
+                        });
 
                         itemNameIsNotEmpty.
                             SetNext(itemNameIsNotDuplicate).
@@ -1431,30 +1435,10 @@ namespace AxisAvaloniaApp.ViewModels
                             SetNext(itemMeasureIsNotEmpty).
                             SetNext(itemMeasuresAreNotDuplicated).
                             SetNext(saveItem).
-                            SetNext(addRevaluationData);
+                            SetNext(addRevaluationData).
+                            SetNext(prepareViewStage);
 
-                        if (await itemNameIsNotEmpty.Invoke(new object()) is object obj && 
-                            obj != null && 
-                            int.TryParse(obj.ToString(), out int result) && 
-                            result == 1)
-                        {
-                            if (saveItem.IsNewItem)
-                            {
-                                if (SelectedItemsGroup != null &&
-                                    (SelectedItemsGroup.Path.Equals("-2") ||
-                                    EditableItem.Group.Path.StartsWith(SelectedItemsGroup.Path)))
-                                {
-                                    Items.Add(EditableItem);
-                                    SelectedItem = Items[Items.Count - 1];
-                                }
-                            }
-                            else
-                            {
-                                SelectedItem.Clone(EditableItem);
-                            }
-                            
-                            IsNomenclaturePanelVisible = true;
-                        }
+                        await itemNameIsNotEmpty.Invoke(new object());
                     }
                     break;
                 case ENomenclatures.ItemsGroups:
@@ -1462,16 +1446,8 @@ namespace AxisAvaloniaApp.ViewModels
                     {
                         IStage itemsGroupNameIsNotEmpty = new ItemsGroupNameIsNotEmpty(EditableItemsGroup.Name);
                         IStage itemsGroupNameIsNotDuplicated = new ItemsGroupNameIsNotDuplicated(EditableItemsGroup);
-                        SaveItemsGroup saveItemsGroup = new SaveItemsGroup(EditableItemsGroup);
-
-                        itemsGroupNameIsNotEmpty.
-                            SetNext(itemsGroupNameIsNotDuplicated).
-                            SetNext(saveItemsGroup);
-
-                        if (await itemsGroupNameIsNotEmpty.Invoke(new object()) is object obj &&
-                            obj != null &&
-                            int.TryParse(obj.ToString(), out int result) &&
-                            result == 1)
+                        SaveItemsGroup saveItemsGroup = new SaveItemsGroup(EditableItemsGroup, itemsGroupsRepository);
+                        prepareViewStage = new PrepareView(() =>
                         {
                             if (saveItemsGroup.IsNewItemsGroup)
                             {
@@ -1492,7 +1468,14 @@ namespace AxisAvaloniaApp.ViewModels
                             }
 
                             IsNomenclaturePanelVisible = true;
-                        }
+                        });
+
+                        itemsGroupNameIsNotEmpty.
+                            SetNext(itemsGroupNameIsNotDuplicated).
+                            SetNext(saveItemsGroup).
+                            SetNext(prepareViewStage);
+
+                        await itemsGroupNameIsNotEmpty.Invoke(new object());
                     }
                     break;
                 case ENomenclatures.Partners:
@@ -1504,7 +1487,34 @@ namespace AxisAvaloniaApp.ViewModels
                         IStage partnerVATNumberIsNotDuplicated = new PartnerVATNumberIsNotDuplicated(EditablePartner);
                         IStage partnerPhoneIsNotDuplicated = new PartnerPhoneIsNotDuplicated(EditablePartner);
                         IStage partnerEmailIsNotDuplicated = new PartnerEmailIsNotDuplicated(EditablePartner);
-                        SavePartner savePartner = new SavePartner(EditablePartner);
+                        IStage savePartner = new SavePartner(EditablePartner, partnerRepository);
+                        prepareViewStage = new PrepareView(() =>
+                        {
+                            if (SelectedPartnersGroup != null)
+                            {
+                                PartnerModel? containedPartner = Partners.Where(p => p.Id == EditablePartner.Id).FirstOrDefault();
+                                if (SelectedPartnersGroup.Path.Equals("-2") || EditablePartner.Group.Path.StartsWith(selectedPartnersGroup.Path))
+                                {
+                                    if (containedPartner == null)
+                                    {
+                                        Partners.Add(EditablePartner);                                        
+                                    }
+
+                                    SelectedPartner?.Clone(EditablePartner);
+                                }
+                                else
+                                {
+                                   if (containedPartner != null)
+                                    {
+                                        Partners.Remove(containedPartner);
+                                        SelectedPartner = null;
+                                    }
+                                }
+                                
+                            }
+
+                            IsNomenclaturePanelVisible = true;
+                        });
 
                         partnerNameIsNotEmpty.
                             SetNext(partnerNameIsNotDuplicated).
@@ -1512,30 +1522,10 @@ namespace AxisAvaloniaApp.ViewModels
                             SetNext(partnerVATNumberIsNotDuplicated).
                             SetNext(partnerPhoneIsNotDuplicated).
                             SetNext(partnerEmailIsNotDuplicated).
-                            SetNext(savePartner);
+                            SetNext(savePartner).
+                            SetNext(prepareViewStage);
 
-                        if (await partnerNameIsNotEmpty.Invoke(new object()) is object obj &&
-                            obj != null &&
-                            int.TryParse(obj.ToString(), out int result) &&
-                            result == 1)
-                        {
-                            if (savePartner.IsNewPartner)
-                            {
-                                if (selectedPartnersGroup != null &&
-                                    (selectedPartnersGroup.Path.Equals("-2") ||
-                                    EditablePartner.Group.Path.StartsWith(selectedPartnersGroup.Path)))
-                                {
-                                    Partners.Add(EditablePartner);
-                                    SelectedPartner = Partners[Partners.Count - 1];
-                                }
-                            }
-                            else
-                            {
-                                SelectedPartner.Clone(EditablePartner);
-                            }
-
-                            IsNomenclaturePanelVisible = true;
-                        }
+                        await partnerNameIsNotEmpty.Invoke(new object());
                     }
                     break;
                 case ENomenclatures.PartnersGroups:
@@ -1543,16 +1533,8 @@ namespace AxisAvaloniaApp.ViewModels
                     {
                         IStage partnersGroupNameIsNotEmpty = new PartnersGroupNameIsNotEmpty(EditablePartnersGroup.Name);
                         IStage partnersGroupNameIsNotDuplicated = new PartnersGroupNameIsNotDuplicated(EditablePartnersGroup);
-                        SavePartnersGroup savePartnersGroup = new SavePartnersGroup(EditablePartnersGroup);
-
-                        partnersGroupNameIsNotEmpty.
-                            SetNext(partnersGroupNameIsNotDuplicated).
-                            SetNext(savePartnersGroup);
-
-                        if (await partnersGroupNameIsNotEmpty.Invoke(new object()) is object obj &&
-                            obj != null &&
-                            int.TryParse(obj.ToString(), out int result) &&
-                            result == 1)
+                        SavePartnersGroup savePartnersGroup = new SavePartnersGroup(EditablePartnersGroup, partnersGroupsRepository);
+                        prepareViewStage = new PrepareView(() =>
                         {
                             if (savePartnersGroup.IsNewPartnersGroup)
                             {
@@ -1573,7 +1555,14 @@ namespace AxisAvaloniaApp.ViewModels
                             }
 
                             IsNomenclaturePanelVisible = true;
-                        }
+                        });
+
+                        partnersGroupNameIsNotEmpty.
+                            SetNext(partnersGroupNameIsNotDuplicated).
+                            SetNext(savePartnersGroup).
+                            SetNext(prepareViewStage);
+
+                        await partnersGroupNameIsNotEmpty.Invoke(new object());
                     }
                     break;
             }

@@ -42,9 +42,10 @@ namespace DataBase.Repositories.PartnersGroups
         /// Deletes group of partners by id.
         /// </summary>
         /// <param name="groupId">Id of group of partners.</param>
+        /// <param name="includeSubGroups">Flag indicating whether should be deleted also subgroups.</param>
         /// <returns>Returns true if group of partners was deleted; otherwise returns false.</returns>
         /// <date>31.03.2022.</date>
-        Task<bool> DeleteGroupAsync(int groupId);
+        Task<bool> DeleteGroupAsync(int groupId, bool includeSubGroups = true);
 
         /// <summary>
         /// Gets list with groups of partners.
