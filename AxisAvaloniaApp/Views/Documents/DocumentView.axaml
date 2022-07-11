@@ -17,7 +17,6 @@
 		  <Setter Property="Background" Value="Transparent" />
 		  <Setter Property="BorderBrush" Value="White"/>
 		</Style>
-
 		<Style Selector="ComboBox VirtualizingStackPanel" >
 			<Setter Property="Background" Value="Transparent" />
 		</Style>

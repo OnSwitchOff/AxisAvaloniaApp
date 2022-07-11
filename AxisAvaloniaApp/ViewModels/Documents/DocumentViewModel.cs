@@ -35,7 +35,7 @@ namespace AxisAvaloniaApp.ViewModels
         private readonly ISettingsService settingsService;
         private readonly ILoggerService loggerService;
 
-        protected abstract EDocumentTypes documentType { get; }
+        protected abstract EDocumentTypes documentType { get; }       
 
         #region MainContent
         private bool isMainContentVisible;
@@ -221,7 +221,36 @@ namespace AxisAvaloniaApp.ViewModels
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
             PrintCommand = ReactiveCommand.Create(Print, ObservableDocumentIsSelected);
-            IsMainContentVisible = true;
+            IsMainContentVisible = true;           
+
+            switch (documentType)
+            {
+                case EDocumentTypes.Unknown:
+                    Title = translationService.Localize("strUnknownDocument");
+                    break;
+                case EDocumentTypes.Invoice:
+                    Title = translationService.Localize("strInvoice");
+                    break;
+                case EDocumentTypes.DebitNote:             
+                    Title = translationService.Localize("strDebitNote");
+                    break;
+                case EDocumentTypes.CreditNote:
+                    Title = translationService.Localize("strCreditNote");
+                    break;
+                case EDocumentTypes.ProformInvoice:
+                    Title = translationService.Localize("strProformInvoice");
+                    break;
+                case EDocumentTypes.Receipt:
+                    Title = translationService.Localize("strReceipt");
+                    break;
+                case EDocumentTypes.Report:
+                    Title = translationService.Localize("strReport");
+                    break;
+                default:
+                    Title = translationService.Localize("strUnknown");
+                    break;
+            }           
+        
         }
 
         void  Print()
