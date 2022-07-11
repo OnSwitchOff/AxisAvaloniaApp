@@ -221,8 +221,12 @@ namespace AxisAvaloniaApp.ViewModels
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
             PrintCommand = ReactiveCommand.Create(Print, ObservableDocumentIsSelected);
-            IsMainContentVisible = true;           
+            IsMainContentVisible = true;
+            InitDocumentTitle();
+        }
 
+        private void InitDocumentTitle()
+        {
             switch (documentType)
             {
                 case EDocumentTypes.Unknown:
@@ -231,7 +235,7 @@ namespace AxisAvaloniaApp.ViewModels
                 case EDocumentTypes.Invoice:
                     Title = translationService.Localize("strInvoice");
                     break;
-                case EDocumentTypes.DebitNote:             
+                case EDocumentTypes.DebitNote:
                     Title = translationService.Localize("strDebitNote");
                     break;
                 case EDocumentTypes.CreditNote:
@@ -249,8 +253,7 @@ namespace AxisAvaloniaApp.ViewModels
                 default:
                     Title = translationService.Localize("strUnknown");
                     break;
-            }           
-        
+            }
         }
 
         void  Print()
