@@ -36,7 +36,12 @@ namespace AxisAvaloniaApp.UserControls.MyCalendar
         {
             get { return _SelectedDate; }
             set
-            { 
+            {
+                if (value == null || value.ToShortDateString() == new DateTime().ToShortDateString())
+                {
+                    SetAndRaise(SelectedDateProperty, ref _SelectedDate, DateTime.Now);
+                    return;
+                }
                 SetAndRaise(SelectedDateProperty, ref _SelectedDate, value);
                 SelectedDateString = SelectedDate.ToString("dd MMMM yyyy");
                 IsExpanded = false;

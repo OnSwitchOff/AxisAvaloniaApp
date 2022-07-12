@@ -9,6 +9,13 @@
              x:Class="AxisAvaloniaApp.Views.SettingsView">
 	<UserControl.Resources>
 		<conv:BitmapAssetValueConverter x:Key="IconAssetsConv" />
+
+		<SolidColorBrush x:Key="ComboBoxDropDownBackground">White</SolidColorBrush>
+		<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush">DarkGray</SolidColorBrush>
+		<Thickness x:Key="ComboBoxDropdownBorderPadding">0</Thickness>
+		<Thickness x:Key="ComboBoxDropdownBorderThickness">1,1,1,2</Thickness>
+		<Thickness x:Key="OverlayCornerRadius">0</Thickness>
+
 	</UserControl.Resources>
 	<UserControl.Styles>
 		<Style Selector="Button.WhiteBorder:pointerover /template/ ContentPresenter#PART_ContentPresenter" >
@@ -18,6 +25,7 @@
 		<Style Selector="ListBoxItem TextBlock">
 			<Setter Property="Foreground" Value="White" />
 		</Style>
+		
 		<!--
 		<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="Yellow" />
