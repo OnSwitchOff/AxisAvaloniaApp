@@ -517,6 +517,8 @@ namespace AxisAvaloniaApp.Services.Document
         /// <date>18.03.2022.</date>
         private void GenerateDocumentBody(EDocumentAuthenticities documentAuthenticity, EDocumentTypes documentType, EPaymentTypes paymentType)
         {
+            this.DocumentDescription.DocumentAuthenticity = documentAuthenticity;
+
             // создаём и размечаем блок с данными о клиенте и документе
             this.pdfDocument.CreateCaptionSection();
 

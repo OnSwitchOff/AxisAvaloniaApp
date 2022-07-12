@@ -20,8 +20,7 @@ namespace AxisAvaloniaApp.Views
 
         public DocumentView()
         {
-
-
+            
         }
 
         public DocumentView(ESerializationGroups documentType, OperationViewModelBase viewModel) : this()
@@ -34,7 +33,15 @@ namespace AxisAvaloniaApp.Views
 
             this.DataContext = viewModel;
             viewModel.ViewClosing += DocumentView_ViewClosing;
-        }      
+        }
+
+        private void DocumentWasPrinted(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (this.DataContext is DocumentViewModel viewModel)
+            {
+                viewModel.SaveDocument();
+            }
+        }
 
         private void InitSerializedResources()
         {

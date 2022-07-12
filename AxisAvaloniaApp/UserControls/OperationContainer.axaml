@@ -172,9 +172,9 @@
                                             LocalizeTextKey="strPages"/>
                   <TextBox Grid.Column="1" 
                            Name="TextBoxPagesToPrint"
-                           Text="{TemplateBinding PagesToPrint}"
+                           Text="{TemplateBinding PagesToPrint, Mode=TwoWay}"
                            HorizontalAlignment="Stretch"
-                           IsEnabled="{Binding ElementName=ComboBoxPrintingModes, Path=SelectedItem.PrintType, Converter={StaticResource EPrintingModesToBool}, ConverterParameter={x:Static enums:EPrintingModes.CustomPrint}, Mode=OneWay}"/>
+                           IsEnabled="{Binding ElementName=ComboBoxPrintingModes, Path=SelectedItem.Type, Converter={StaticResource EPrintingModesToBool}, ConverterParameter={x:Static enums:EPrintingModes.CustomPrint}, Mode=OneWay}"/>
                 </Grid>
                 <ComboBox Items="{TemplateBinding SortingModes}"
                           SelectedItem="{TemplateBinding SelectedSortingMode}"
@@ -246,10 +246,38 @@
                   </ComboBox.ItemTemplate>
                 </ComboBox>
 
+                <ComboBox Items="{TemplateBinding DocumentVersions}"
+                          SelectedItem="{TemplateBinding SelectedDocumentVersion, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <Grid ColumnDefinitions="auto, *"
+                            RowDefinitions="auto, auto">
+                        <Image Grid.Column="0"
+                               Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Height="40"
+                               Margin="0, 3, 0,0"
+                               Source="{Binding ImagePath, Converter={StaticResource BitmapAsset}}"/>
+                        <controlsEx:AxisTextBlock Grid.Column="1"
+                                                  Grid.Row="0"
+                                                  LocalizeTextKey="{Binding LocalizeKey}"
+                                                  Margin="5, 0"/>
+                        <TextBlock Grid.Column="1"
+                                   Grid.Row="1"
+                                   Text="{Binding AdditionalData}"
+                                   Foreground="Gray"
+                                   Margin="5, 0"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+
                 <Button Background="Transparent"
                         BorderBrush="Gray"
                         BorderThickness="0.5"
-                        Margin="1, 50, 1, 1">
+                        Margin="1, 50, 1, 1"
+                        Command="{TemplateBinding ExportCommand, Mode=TwoWay}">
                   <Button.Content>
                     <StackPanel Orientation="Horizontal">
                       <Image Source="/Assets/Icons/exportToPDF.png" Stretch="Uniform" Height="40"/>

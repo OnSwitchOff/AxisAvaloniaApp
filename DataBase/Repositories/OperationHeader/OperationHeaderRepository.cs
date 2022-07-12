@@ -160,15 +160,16 @@ namespace DataBase.Repositories.OperationHeader
         /// <date>06.07.2022.</date>
         public async Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to)
         {
-            return await Task.Run(async () =>
+            return await Task.Run(() =>
             {
-                return databaseContext.
+                List<Entities.OperationHeader.OperationHeader> list = databaseContext.
                      OperationHeaders.
                      Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1)).
                      Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
                      Include(oh => oh.Partner).
                      Include(oh => oh.Payment).
                      ToList();
+                return list;
             });
         }
     }

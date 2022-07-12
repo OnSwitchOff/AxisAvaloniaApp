@@ -39,7 +39,10 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public Task<Partner> GetPartnerByDiscountCardAsync(string discountCardNumber)
         {
-            return databaseContext.Partners.Include(p => p.Group).FirstOrDefaultAsync(p => p.DiscountCard.ToLower().Equals(discountCardNumber.ToLower()));
+            return databaseContext.Partners.
+                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                Include(p => p.Group).
+                FirstOrDefaultAsync(p => p.DiscountCard.ToLower().Equals(discountCardNumber.ToLower()));
         }
 
         /// <summary>
@@ -50,7 +53,10 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public async Task<Partner> GetPartnerByKeyAsync(string key)
         {
-            return await databaseContext.Partners.Include(p => p.Group).FirstOrDefaultAsync(p => p.TaxNumber.Equals(key) || p.VATNumber.Equals(key) || p.Email.Equals(key));
+            return await databaseContext.Partners.
+                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                Include(p => p.Group).
+                FirstOrDefaultAsync(p => p.TaxNumber.Equals(key) || p.VATNumber.Equals(key) || p.Email.Equals(key));
         }
 
         /// <summary>
@@ -61,7 +67,10 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public Task<Partner> GetPartnerByNameAsync(string name)
         {
-            return databaseContext.Partners.Include(p => p.Group).FirstOrDefaultAsync(p => p.Company.Equals(name));
+            return databaseContext.Partners.
+                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                Include(p => p.Group).
+                FirstOrDefaultAsync(p => p.Company.Equals(name));
         }
 
         /// <summary>
@@ -70,9 +79,13 @@ namespace DataBase.Repositories.Partners
         /// <param name="status">Status of partner.</param>
         /// <returns>List of partners.</returns>
         /// <date>28.03.2022.</date>
-        public IAsyncEnumerable<Partner> GetParnersAsync(ENomenclatureStatuses status)
+        public IAsyncEnumerable<Partner> GetParnersAsync(ENomenclatureStatuses status = ENomenclatureStatuses.Active)
         {
-            return databaseContext.Partners.Include(p => p.Group).Where(x => (x.Status == ENomenclatureStatuses.All || x.Status == status)).Include(p => p.Group).AsAsyncEnumerable();
+            return databaseContext.Partners.
+                Include(p => p.Group).
+                Where(x => (x.Status == ENomenclatureStatuses.All || x.Status == status)).
+                Include(p => p.Group).
+                AsAsyncEnumerable();
         }
 
         /// <summary>
@@ -84,7 +97,9 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Partner> GetParnersAsync(string groupPath, string searchKey)
         {
-            foreach (var partner in databaseContext.Partners.Include(p => p.Group))
+            foreach (var partner in databaseContext.Partners.
+                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                Include(p => p.Group))
             {
                 if ((groupPath.Equals("-2") ? 1 == 1 : partner.Group.Path.StartsWith(groupPath)) &&
                     (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
@@ -107,7 +122,9 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Partner> GetParnersAsync(string searchKey)
         {
-            foreach(var partner in databaseContext.Partners.Include(p => p.Group))
+            foreach(var partner in databaseContext.Partners.
+                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                Include(p => p.Group))
             {
                 if (partner.Company.ToLower().Contains(searchKey.ToLower()) ||
                     partner.TaxNumber.Contains(searchKey) ||
@@ -128,7 +145,10 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public IAsyncEnumerable<Partner> GetParnersByGroupIdAsync(int GroupID)
         {
-            return databaseContext.Partners.Include(p => p.Group).Where(p => p.Group.Id == GroupID).AsAsyncEnumerable();
+            return databaseContext.Partners.
+                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                Include(p => p.Group).
+                Where(p => p.Group.Id == GroupID).AsAsyncEnumerable();
         }
 
         /// <summary>
@@ -182,7 +202,17 @@ namespace DataBase.Repositories.Partners
                 }
                 else
                 {
-                    databaseContext.Partners.Remove(partner);
+                    if (databaseContext.OperationHeaders.Where(oh => oh.Partner.Id == partnerId).FirstOrDefault() != null)
+                    {
+                        partner.Status = ENomenclatureStatuses.Hidden;
+                        databaseContext.ChangeTracker.Clear();
+                        databaseContext.Partners.Update(partner);
+                    }
+                    else
+                    {
+                        databaseContext.Partners.Remove(partner);
+                    }
+
                     return databaseContext.SaveChanges() > 0;
                 }
             });

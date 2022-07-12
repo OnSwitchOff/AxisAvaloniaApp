@@ -384,6 +384,46 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strOriginal">
+      <Value Lang="bg-BG">Оригинал</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Original</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Оригинал</Value>
+      <Value Lang="uk-UA">Оригінал</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDuplicate">
+      <Value Lang="bg-BG">Копие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Duplicate</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Копия</Value>
+      <Value Lang="uk-UA">Копія</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strOriginalAndDuplicate">
+      <Value Lang="bg-BG">Оригинал и копие</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Original and duplicate</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Оригинал и копия</Value>
+      <Value Lang="uk-UA">Оригінал і копія</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strOriginalAndTwoDuplicates">
+      <Value Lang="bg-BG">Оригинал и две копия</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Original and two duplicates</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Оригинал и две копии</Value>
+      <Value Lang="uk-UA">Оригінал і дві копії</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     
     <!--Продажа-->
     <Data Key="strPartner">
@@ -1609,6 +1649,66 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strAll">
+      <Value Lang="bg-BG">Всички</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">All</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Все</Value>
+      <Value Lang="uk-UA">Всі</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strToday">
+      <Value Lang="bg-BG">Днес</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Today</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Сегодня</Value>
+      <Value Lang="uk-UA">Сьогодні</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strWeekAgo">
+      <Value Lang="bg-BG">Една седмица назад</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">One week ago</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Неделю назад</Value>
+      <Value Lang="uk-UA">Тиждень тому</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strMonthAgo">
+      <Value Lang="bg-BG">Един месец назад</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">One month ago</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Месяц назад</Value>
+      <Value Lang="uk-UA">Місяць тому</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strYearAgo">
+      <Value Lang="bg-BG">Една година назад</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">One year ago</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Год назад</Value>
+      <Value Lang="uk-UA">Рік тому</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strCustom">
+      <Value Lang="bg-BG">По избор</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Custom</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">На выбор</Value>
+      <Value Lang="uk-UA">На вибір</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strFrom">
 		  <Value Lang="bg-BG">От</Value>
 		  <Value Lang="el-GR">Not translated</Value>

@@ -1,13 +1,11 @@
 ﻿using Microinvest.CommonLibrary.Enums;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ReactiveUI;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AxisAvaloniaApp.Models;
-using Avalonia.Controls;
 using AxisAvaloniaApp.UserControls.Models;
 using System.Reactive;
 using DataBase.Repositories.OperationHeader;
@@ -22,6 +20,8 @@ using AxisAvaloniaApp.Services.Translation;
 using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Services.Logger;
+using Avalonia.Interactivity;
+using System.ComponentModel;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -84,7 +84,23 @@ namespace AxisAvaloniaApp.ViewModels
 
         public ObservableCollection<ComboBoxItemModel> Periods
         {
-            get => periods;
+            get
+            {
+                if (periods == null)
+                {
+                    periods = new ObservableCollection<ComboBoxItemModel>()
+                    {
+                        new ComboBoxItemModel() { Key = "strAll", Value = EPeriods.All, },
+                        new ComboBoxItemModel() { Key = "strToday", Value = EPeriods.Today, },
+                        new ComboBoxItemModel() { Key = "strWeekAgo", Value = EPeriods.WeekAgo, },
+                        new ComboBoxItemModel() { Key = "strMonthAgo", Value = EPeriods.MonthAgo, },
+                        new ComboBoxItemModel() { Key = "strYearAgo", Value = EPeriods.YearAgo, },
+                        new ComboBoxItemModel() { Key = "strCustom", Value = EPeriods.Custom, },
+                    };
+                }
+
+                return periods;
+            }
             set => this.RaiseAndSetIfChanged(ref periods, value);
         }
         public ComboBoxItemModel SelectedPeriod
@@ -106,6 +122,11 @@ namespace AxisAvaloniaApp.ViewModels
                     TryToGetSourceCollection();
                 }
             }
+        }
+
+        public void SaveDocument()
+        {
+            //TODO
         }
 
         private void FilterSourceCollection()
@@ -216,12 +237,49 @@ namespace AxisAvaloniaApp.ViewModels
             loggerService = Splat.Locator.Current.GetRequiredService<ILoggerService>();
             Items = new ObservableCollection<DocumentItem>();
             FiltredItems = new ObservableCollection<DocumentItem>();
-            Periods = GetPeriodsCollection();
             SelectedPeriod = Periods[0];
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
             PrintCommand = ReactiveCommand.Create(Print, ObservableDocumentIsSelected);
             IsMainContentVisible = true;
+
+            this.PropertyChanged += DocumentViewModel_PropertyChanged;
+        }
+
+        private void DocumentViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(SelectedPeriod):
+                    switch ((EPeriods)SelectedPeriod.Value)
+                    {
+                        case EPeriods.All:
+                            FromDateTimeOffset = new DateTime(2022, 1, 1);
+                            ToDateTimeOffset = DateTime.Now;
+                            break;
+                        case EPeriods.Today:
+                            FromDateTimeOffset = DateTime.Now;
+                            ToDateTimeOffset = DateTime.Now;
+                            break;
+                        case EPeriods.WeekAgo:
+                            FromDateTimeOffset = DateTime.Now.AddDays(-7);
+                            ToDateTimeOffset = DateTime.Now;
+                            break;
+                        case EPeriods.MonthAgo:
+                            FromDateTimeOffset = DateTime.Now.AddMonths(-1);
+                            ToDateTimeOffset = DateTime.Now;
+                            break;
+                        case EPeriods.YearAgo:
+                            FromDateTimeOffset = DateTime.Now.AddYears(-1);
+                            ToDateTimeOffset = DateTime.Now;
+                            break;
+                        case EPeriods.Custom:
+                            break;
+                    }
+                    break;
+                    case nameof(FromDateTimeOffset):
+                    break;
+            }
         }
 
         void  Print()
@@ -314,21 +372,6 @@ namespace AxisAvaloniaApp.ViewModels
 
             FilterSourceCollection();
             lastFilterString = FilterString;
-        }
-
-        private ObservableCollection<ComboBoxItemModel> GetPeriodsCollection()
-        {
-            ObservableCollection<ComboBoxItemModel> result = new ObservableCollection<ComboBoxItemModel>();
-
-            for (int i = 0; i < 5; i++)
-            {
-                ComboBoxItemModel item = new ComboBoxItemModel();
-                item.Value = i;
-                item.Key = "period" + i;
-                result.Add(item);
-            }
-
-            return result;
         }
     }
 

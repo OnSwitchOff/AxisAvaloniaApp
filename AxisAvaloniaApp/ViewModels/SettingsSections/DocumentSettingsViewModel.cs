@@ -118,7 +118,6 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             {
                 System.IO.File.Copy(Configurations.AppConfiguration.LogFilePath, filePath, true);
             }
-
         }
 
         /// <summary>

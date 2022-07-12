@@ -52,6 +52,7 @@ namespace DataBase.Repositories.Items
         {
             return await databaseContext.
                     Items.
+                    Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
                     Include(i => i.Group).
                     Include(i => i.Vatgroup).
                     FirstOrDefaultAsync(i =>
@@ -69,7 +70,10 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Item> GetItemsAsync(string searchKey)
         {
-            foreach (var item in databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup))
+            foreach (var item in databaseContext.Items.
+                Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
+                Include(i => i.Group).
+                Include(i => i.Vatgroup))
             {
                 if (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
                      (item.Name.ToLower().Contains(searchKey.ToLower()) ||
@@ -91,7 +95,10 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Item> GetItemsAsync(string groupPath, string searchKey)
         {
-            foreach (var item in databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup))
+            foreach (var item in databaseContext.Items.
+                Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
+                Include(i => i.Group).
+                Include(i => i.Vatgroup))
             {
                 if ((groupPath.Equals("-2") ? 1 == 1 : item.Group.Path.StartsWith(groupPath)) &&
                     (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
@@ -115,6 +122,7 @@ namespace DataBase.Repositories.Items
         {
             return databaseContext.
                     Items.
+                    Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
                     Where(i => i.Group.Id == groupId).
                     Include(i => i.Group).
                     Include(i => i.Vatgroup).
@@ -131,7 +139,7 @@ namespace DataBase.Repositories.Items
         {
             return databaseContext.
                 Items.
-                Where(i => (i.Status == ENomenclatureStatuses.All || i.Status == status)).
+                Where(i => (i.Status == ENomenclatureStatuses.All && i.Status == status)).
                 Include(i => i.Group).
                 Include(i => i.Vatgroup).
                 Include(i => i.ItemsCodes).
@@ -190,7 +198,23 @@ namespace DataBase.Repositories.Items
                 }
                 else
                 {
-                    databaseContext.Items.Remove(item);
+                    if (databaseContext.OperationDetails.Where(od => od.Goods.Id == itemId).FirstOrDefault() != null)
+                    {
+                        item.Status = ENomenclatureStatuses.Hidden;
+                        databaseContext.ChangeTracker.Clear();
+                        List<Entities.ItemsCodes.ItemCode> itemCodes = databaseContext.ItemsCodes.Where(ic => ic.Item.Id == itemId).ToList();
+                        if (itemCodes != null && itemCodes.Count > 0)
+                        {
+                            databaseContext.ItemsCodes.RemoveRange(itemCodes);
+                        }
+                        databaseContext.Items.Update(item);
+                    }
+                    else
+                    {
+                        databaseContext.Items.Remove(item);
+                    }
+
+                    
                     return databaseContext.SaveChanges() > 0;
                 }
             });

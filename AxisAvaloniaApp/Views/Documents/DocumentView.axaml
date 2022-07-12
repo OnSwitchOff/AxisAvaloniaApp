@@ -19,9 +19,10 @@
 		</Style>
 	</UserControl.Styles>
     <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}"
-								  PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}"
-								  Pages="{Binding Pages, Mode=TwoWay}"
-                                  DocumentService="{Binding DocumentService}" >
+                                  PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}"
+                                  Pages="{Binding Pages, Mode=TwoWay}"
+                                  DocumentService="{Binding DocumentService}" 
+                                  DocumentWasPrinted="DocumentWasPrinted">
 	    <container:OperationContainer.TitleContent>
 			<Grid Height="50">
 				<Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
@@ -248,10 +249,18 @@
 
 						  
 					
-						<ComboBox  HorizontalAlignment="Stretch"  Items="{Binding Periods, Mode=TwoWay}" SelectedItem="{Binding SelectedPeriod, Mode=TwoWay}" Grid.Row="1" Height="32" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2">
+						<ComboBox Grid.Row="1" 
+                      Grid.Column="1"                       
+                      Items="{Binding Periods, Mode=TwoWay}" 
+                      SelectedItem="{Binding SelectedPeriod, Mode=TwoWay}" 
+                      Height="32"
+                      HorizontalAlignment="Stretch" 
+                      CornerRadius="0" 
+                      Background="White" 
+                      Margin="5,2">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
-									<controlsEx:AxisTextBlock Background="Transparent" Text="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="5,2"  TextAlignment="Left" Padding="0"  />
+									<controlsEx:AxisTextBlock Background="Transparent" LocalizeTextKey="{Binding	Key, Mode=TwoWay}" FontSize="12" VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="5,2"  TextAlignment="Left" Padding="0"  />
 								</DataTemplate>
 							</ComboBox.ItemTemplate>
 						</ComboBox>						  
