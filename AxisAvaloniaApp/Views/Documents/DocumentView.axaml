@@ -149,11 +149,11 @@
 								<controlsEx:AxisTextBlock LocalizeTextKey="strPrepared" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap"/>
 							</Border>			
 
-							<TextBox Text="{Binding SelectedItem.InvoiceNumber, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+							<TextBox Text="{Binding SelectedItem.TempDocumentNumber, Mode=TwoWay}" IsReadOnly="{Binding SelectedItem.HasDocument}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 							<Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Margin="5,2" >
-								<c:MyDatePicker Foreground="White"  SelectedDate="{Binding SelectedItem.InvoiceDateTimeOffset, Mode=TwoWay}" />
+								<c:MyDatePicker Foreground="White"	IsEnabled="{Binding !SelectedItem.HasDocument}"  SelectedDate="{Binding SelectedItem.InvoiceDateTimeOffset, Mode=TwoWay}" />
 							</Border>
-							<TextBox Text="{Binding SelectedItem.InvoicePrepared, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+							<TextBox IsReadOnly="{Binding SelectedItem.HasDocument}" Text="{Binding SelectedItem.InvoicePrepared, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 						</Grid>
 				  </Border>
 				  <Border Margin="10,0" Grid.Row="1">
@@ -207,7 +207,7 @@
 						  </Border>
 
 						  <Border Grid.Row="1" VerticalAlignment="Center">
-							  <controlsEx:AxisTextBlock LocalizeTextKey="strPlaceDeal" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
+							  <controlsEx:AxisTextBlock LocalizeTextKey="strPlaceDeal"  Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
 						  </Border>
 						  <Border Grid.Row="2" VerticalAlignment="Center">
 							  <controlsEx:AxisTextBlock LocalizeTextKey="strDate" Foreground="White"  Padding="0,0,10,0" TextWrapping="Wrap"/>
@@ -216,11 +216,11 @@
 							  <controlsEx:AxisTextBlock LocalizeTextKey="strDescription" Foreground="White" Padding="0,0,10,0" TextWrapping="Wrap"/>
 						  </Border>
 
-						  <TextBox Text="{Binding SelectedItem.DealPlace, Mode=TwoWay}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>						
+						  <TextBox Text="{Binding SelectedItem.DealPlace, Mode=TwoWay}" IsReadOnly="{Binding SelectedItem.HasDocument}" Grid.Row="1" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>						
 						  <Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Margin="5,2" >
-							  <c:MyDatePicker Foreground="White"  SelectedDate="{Binding SelectedItem.DealDateTimeOffset, Mode=TwoWay}" />
+							  <c:MyDatePicker Foreground="White" IsEnabled="{Binding !SelectedItem.HasDocument}"  SelectedDate="{Binding SelectedItem.DealDateTimeOffset, Mode=TwoWay}" />
 						  </Border>
-						  <TextBox Text="{Binding SelectedItem.Description, Mode=TwoWay}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
+						  <TextBox Text="{Binding SelectedItem.Description, Mode=TwoWay}" IsReadOnly="{Binding SelectedItem.HasDocument}" Grid.Row="3" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 					  </Grid>
 				  </Border>
 				  
