@@ -27,9 +27,14 @@
                                   DocumentService="{Binding DocumentService}" 
                                   DocumentWasPrinted="DocumentWasPrinted">
 	    <container:OperationContainer.TitleContent>
-			<Grid Height="50">
-				<Border Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10">
-					<controlsEx:AxisTextBlock Text="{Binding Title}" FontSize="18" Foreground="White" FontWeight="Bold"  />
+			<Grid Height="50" ColumnDefinitions="Auto,Auto">
+				<Border Grid.Column="0"  VerticalAlignment="Center">
+					<controlsEx:AxisTextBlock Text="{Binding Title}" FontSize="18" Foreground="White" FontWeight="Bold"  Padding="0"  />
+				</Border>
+				<Border Grid.Column="1" Margin="0,9" >
+					<Button  Command="{Binding RefreshItemsListCommand}" Background="Transparent"  Padding="7">
+						<Image Source="/Assets/Icons/refresh.png"/>
+					</Button>
 				</Border>
 			</Grid>
 		</container:OperationContainer.TitleContent>

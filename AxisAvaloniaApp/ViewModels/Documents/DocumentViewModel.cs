@@ -82,7 +82,6 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref pages, value);
         }
 
-
         public ObservableCollection<ComboBoxItemModel> Periods
         {
             get
@@ -166,6 +165,7 @@ namespace AxisAvaloniaApp.ViewModels
                         docItem.TempDocumentNumber = nextDocumentNumber;
                     }
                 }
+                IsMainContentVisible = true;
             }
         }
 
@@ -262,7 +262,6 @@ namespace AxisAvaloniaApp.ViewModels
             } 
         }
 
-
         public ReactiveCommand<Unit, Unit> PrintCommand { get; }
         private readonly BehaviorSubject<bool> _DocumentIsSelectedSubject = new BehaviorSubject<bool>(false);
         public bool DocumentIsSelected
@@ -271,6 +270,8 @@ namespace AxisAvaloniaApp.ViewModels
             set => _DocumentIsSelectedSubject.OnNext(value);
         }
         public IObservable<bool> ObservableDocumentIsSelected => _DocumentIsSelectedSubject;
+
+        public ReactiveCommand<Unit, Unit> RefreshItemsListCommand { get; }
 
         public DocumentViewModel()
         {
@@ -286,6 +287,7 @@ namespace AxisAvaloniaApp.ViewModels
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
             PrintCommand = ReactiveCommand.Create(Print, ObservableDocumentIsSelected);
+            RefreshItemsListCommand = ReactiveCommand.Create(RefreshItemList);
             IsMainContentVisible = true;
             InitDocumentTitle();
             SetNextDocumentNumber();
@@ -367,7 +369,6 @@ namespace AxisAvaloniaApp.ViewModels
 
         void  Print()
         {
-
             OperationHeader? operationData = SelectedItem.OperationHeader;
             if (operationData == null)
             {
@@ -436,6 +437,11 @@ namespace AxisAvaloniaApp.ViewModels
             }
 
             IsMainContentVisible = Pages.Count == 0;
+        }
+
+        void RefreshItemList()
+        {
+            TryToGetSourceCollection();
         }
 
         private void FilterTimer_Tick(object? sender, EventArgs e)
