@@ -219,17 +219,22 @@ namespace DataBase.Repositories.OperationHeader
             });
         }
 
-        //public async Task<decimal> GetLastPriceByGoodId(int goodId)
-        //{
-        //    return await Task.Run(() =>
-        //    {
-        //        return databaseContext.
-        //        OperationHeaders.
-        //        Where(oh => oh.OperType == EOperTypes.Revaluation).
-        //        Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
-        //        Where(oh => oh.OperationDetails.Any(od => od.Goods.Id == goodId)).
-        //        Select(oh => oh.OperationDetails.Where(od => od.Goods.Id == goodId).OrderByDescending(od => od.Id).First().SalePrice).FirstOrDefault();
-        //    });
-        //}
+        public double GetLastPriceByGoodId(int goodId)
+        {
+            try
+            {
+                return ((double)databaseContext.
+                OperationHeaders.
+                Where(oh => oh.OperType == EOperTypes.Revaluation).
+                Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
+                Where(oh => oh.OperationDetails.Any(od => od.Goods.Id == goodId)).
+                Select(oh => oh.OperationDetails.Where(od => od.Goods.Id == goodId).OrderByDescending(od => od.Id).First().SalePrice).FirstOrDefault());
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+
+        }
     }
 }

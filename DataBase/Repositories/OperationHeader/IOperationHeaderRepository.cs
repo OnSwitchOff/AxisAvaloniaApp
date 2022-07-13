@@ -52,17 +52,11 @@ namespace DataBase.Repositories.OperationHeader
         /// </summary>
         /// <returns>Next acc.</returns>
         /// <date>06.07.2022.</date>
-        Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to);
+        Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to, EOperTypes operType);
 
-        /// <summary>
-        /// Gets sales and refunds by acct range, specific year and month.
-        /// </summary>
-        /// <param name="year">Year to search data into the database.</param>
-        /// <param name="month">Month to search data into the database.</param>
-        /// <param name="acctFrom">Start acct to search data into the database.</param>
-        /// <param name="acctTo">End acct to search data into the database.</param>
-        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
-        /// <date>13.07.2022.</date>
+
         Task<List<Entities.OperationHeader.OperationHeader>> GetSalesAndRefunds(int year, int month, long acctFrom, long acctTo);
+
+        double GetLastPriceByGoodId(int goodId);
     }
 }
