@@ -219,8 +219,11 @@ namespace AxisAvaloniaApp.Models
                 Group = (GroupModel)item.Group,
                 VATGroup = (VATGroupModel)item.Vatgroup,
                 ItemType = item.ItemType,
-                Status = item.Status
+                Status = item.Status,
+                
             };
+
+            itemModel.Price = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>().GetLastPriceByGoodId(item.Id);
 
             foreach (DataBase.Entities.ItemsCodes.ItemCode itemCode in item.ItemsCodes)
             {
