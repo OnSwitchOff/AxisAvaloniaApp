@@ -22,6 +22,8 @@ using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Services.Logger;
 using Avalonia.Interactivity;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -204,7 +206,7 @@ namespace AxisAvaloniaApp.ViewModels
 
             Items.Clear();
 
-            foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset))
+            foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset, EOperTypes.Sale))
             {
                 DocumentItem docItem = new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType));
                 if (docItem.Document == null)
@@ -367,8 +369,23 @@ namespace AxisAvaloniaApp.ViewModels
             }
         }
 
-        void  Print()
+        async void Print()
         {
+            if (await CheckDocNumberRepeating(SelectedItem.TempDocumentNumber, documentType))
+            {
+                loggerService.ShowDialog("msgErrorDuplicateDocumentNumber",icon: UserControls.MessageBox.EButtonIcons.Info);
+                return;
+            }
+            if (CheckDocDataAfterOperation(SelectedItem.SaleDateTimeOffset, SelectedItem.InvoiceDateTimeOffset))
+            {
+                loggerService.ShowDialog("msgErrorDocDataAfterOperation");
+                return;
+            }
+            else
+            {
+
+            }
+
             OperationHeader? operationData = SelectedItem.OperationHeader;
             if (operationData == null)
             {
@@ -437,6 +454,18 @@ namespace AxisAvaloniaApp.ViewModels
             }
 
             IsMainContentVisible = Pages.Count == 0;
+        }
+
+
+
+        private async Task<bool> CheckDocNumberRepeating(string documentNumber, EDocumentTypes documentType)
+        { 
+            return await documentsRepository.IsExistDocumentNumberAsync(documentNumber, documentType);
+        }
+
+        private bool CheckDocDataAfterOperation(DateTime saleDateTimeOffset, DateTime invoiceDateTimeOffset)
+        {
+            return DateTime.Compare(invoiceDateTimeOffset, saleDateTimeOffset) < 0 ;
         }
 
         void RefreshItemList()

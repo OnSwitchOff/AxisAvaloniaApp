@@ -52,6 +52,6 @@ namespace DataBase.Repositories.OperationHeader
         /// </summary>
         /// <returns>Next acc.</returns>
         /// <date>06.07.2022.</date>
-        Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to);
+        Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to, EOperTypes operType);
     }
 }

@@ -760,6 +760,7 @@ namespace AxisAvaloniaApp.ViewModels
 
                         await foreach (ItemModel item in itemRepository.GetItemsAsync(SelectedItemsGroup.Path, string.Empty))
                         {
+                            item.Price = await headerRepository.GetItemPriceAsync(item.Id);
                             Items.Add(item);
                         }
                     }

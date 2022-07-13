@@ -1,7 +1,12 @@
-﻿using System;
+﻿using AxisAvaloniaApp.Helpers;
+using DataBase.Repositories.Documents;
+using DataBase.Repositories.OperationHeader;
+using Microinvest.CommonLibrary.Enums;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace AxisAvaloniaApp.Services.Reports.Bulgaria
 {
@@ -11,8 +16,14 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         private ObservableCollection<ReportDataModel> columnsData;
         private IEnumerable source;
 
+        private readonly IOperationHeaderRepository operationHeaderRepository;
+        private readonly IDocumentsRepository documentsRepository;
+
         public BulgarianReportsService()
         {
+            operationHeaderRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+            documentsRepository = Splat.Locator.Current.GetRequiredService<IDocumentsRepository>();
+
             supportedReports = new ObservableCollection<ReportItemModel>();
             InitSupportedReports();
         }
@@ -148,11 +159,12 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         /// <param name="dateFrom">Start date to filter data</param>
         /// <param name="dateTo">End date to filter data.</param>
         /// <date>16.06.2022.</date>
-        public void GenerateReportData(int reportKey, ulong acctFrom, ulong acctTo, DateTime dateFrom, DateTime dateTo)
+        public async void GenerateReportData(int reportKey, ulong acctFrom, ulong acctTo, DateTime dateFrom, DateTime dateTo)
         {
             switch ((EBulgarianReports)reportKey)
             {
                 case EBulgarianReports.Sales:
+
                     columnsData = new ObservableCollection<ReportDataModel>()
                     {
                         new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
@@ -165,62 +177,44 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strSaleSum", "SaleSum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
 
-                    source = new ObservableCollection<SalesReportModel>()
+                    source = new ObservableCollection<SalesReportModel>();
+                    int i = 0;
+                    decimal totalQtty = 0;
+                    decimal totalSaleSum = 0;
+                    decimal totalPurchaseSum = 0;
+                    (await operationHeaderRepository.GetOperationHeadersByDatesAsync(dateFrom, dateTo, EOperTypes.Sale)).ForEach((oh) =>
+                        {
+                            oh.OperationDetails.ForEach((od)=>
+                                {
+                                    i++;
+                                    totalQtty += od.Qtty;
+                                    totalSaleSum += od.Qtty * od.SalePrice;
+                                    totalPurchaseSum += od.Qtty * od.PurchasePrice;
+                                    ((ObservableCollection<SalesReportModel>)source).Add(new SalesReportModel(i)
+                                    {
+                                        Acct = oh.Acct.ToString(),
+                                        Date = oh.Date.ToShortDateString(),
+                                        ItemName = od.Goods.Name,
+                                        Qty = od.Qtty.ToString(),
+                                        Measure = od.Goods.Measure,
+                                        PurchaseSum = (od.Qtty * od.PurchasePrice).ToString("F"),
+                                        SaleSum = (od.Qtty * od.SalePrice).ToString("F")
+                                    }); 
+
+                                }
+                            );
+                            
+                        }
+                    );                  
+
+                    SalesReportModel resultRow = new SalesReportModel()
                     {
-                        new SalesReportModel(1)
-                        {
-                            Acct = "1",
-                            Date = DateTime.Now.ToShortDateString(),
-                            ItemName = "Item 1",
-                            Qty = "1.00",
-                            SaleSum = "1.00",
-                        },
-                        new SalesReportModel(2)
-                        {
-                            Acct = "2",
-                            Date = DateTime.Now.ToShortDateString(),
-                            ItemName = "Item 2",
-                            Qty = "10.00",
-                            SaleSum = "51.00",
-                        },
-                        new SalesReportModel(3)
-                        {
-                            Acct = "3",
-                            Date = DateTime.Now.ToShortDateString(),
-                            ItemName = "Item 3",
-                            Qty = "10.00",
-                            SaleSum = "51.00",
-                        },
-                        new SalesReportModel(4)
-                        {
-                            Acct = "4",
-                            Date = DateTime.Now.ToShortDateString(),
-                            ItemName = "Item 4",
-                            Qty = "1.00",
-                            SaleSum = "1.00",
-                        },
-                        new SalesReportModel(5)
-                        {
-                            Acct = "5",
-                            Date = DateTime.Now.ToShortDateString(),
-                            ItemName = "Item 5",
-                            Qty = "1.00",
-                            SaleSum = "1.00",
-                        },
-                        new SalesReportModel(6)
-                        {
-                            Acct = "6",
-                            Date = DateTime.Now.ToShortDateString(),
-                            ItemName = "Item 6",
-                            Qty = "1.00",
-                            SaleSum = "1.00",
-                        },
-                        new SalesReportModel()
-                        {
-                            Qty = "24.00",
-                            SaleSum = "106.00",
-                        },
+                        Qty = totalQtty.ToString("F"),
+                        SaleSum = totalSaleSum.ToString("F"),
+                        PurchaseSum = totalPurchaseSum.ToString("F")
                     };
+                    ((ObservableCollection<SalesReportModel>)source).Add(resultRow);
+    
 
                     break;
                 case EBulgarianReports.SalesByItems:

@@ -99,5 +99,15 @@ namespace DataBase.Repositories.Documents
 
             });
         }
+
+
+
+        public async Task<bool> IsExistDocumentNumberAsync(string documentNumber, EDocumentTypes documentType)
+        {
+            return await Task.Run(() =>
+            {
+                return databaseContext.Documents.Any(d => documentType == d.DocumentType && d.DocumentNumber == documentNumber);
+            });
+        }
     }
 }

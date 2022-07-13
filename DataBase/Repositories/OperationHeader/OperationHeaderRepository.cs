@@ -158,13 +158,13 @@ namespace DataBase.Repositories.OperationHeader
         /// </summary>
         /// <returns>Next acc.</returns>
         /// <date>06.07.2022.</date>
-        public async Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to)
+        public async Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to, EOperTypes operType)
         {
             return await Task.Run(() =>
             {
                 List<Entities.OperationHeader.OperationHeader> list = databaseContext.
                      OperationHeaders.
-                     Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1)).
+                     Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1) && oh.OperType == operType).
                      Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
                      Include(oh => oh.Partner).
                      Include(oh => oh.Payment).
@@ -172,5 +172,18 @@ namespace DataBase.Repositories.OperationHeader
                 return list;
             });
         }
+
+        //public async Task<decimal> GetLastPriceByGoodId(int goodId)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        return databaseContext.
+        //        OperationHeaders.
+        //        Where(oh => oh.OperType == EOperTypes.Revaluation).
+        //        Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
+        //        Where(oh => oh.OperationDetails.Any(od => od.Goods.Id == goodId)).
+        //        Select(oh => oh.OperationDetails.Where(od => od.Goods.Id == goodId).OrderByDescending(od => od.Id).First().SalePrice).FirstOrDefault();
+        //    });
+        //}
     }
 }

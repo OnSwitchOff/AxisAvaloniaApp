@@ -15,5 +15,6 @@ namespace DataBase.Repositories.Documents
         Task<Document?> GetDocumentsByOperationHeaderAsync(Entities.OperationHeader.OperationHeader OperationHeader, EDocumentTypes DocumentType);
         Task<int> AddDocumentAsync(Document document);
         Task<string> GetNextDocumentNumberAsync(EDocumentTypes documentType);
+        Task<bool> IsExistDocumentNumberAsync(string documentNumber, EDocumentTypes documentType);
     }
 }
