@@ -195,7 +195,9 @@ namespace DataBase.Repositories.Exchanges
                         return false;
                     }
 
-                    databaseContext.Exchanges.Add(Exchange.Create(header, direction, appName, appKey, header.OperType));
+                    //databaseContext.Exchanges.Add(Exchange.Create(header, direction, appName, appKey, header.OperType));
+
+                    return true;
                 }
             });
         }
