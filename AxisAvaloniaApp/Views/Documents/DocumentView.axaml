@@ -4,14 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:container="using:AxisAvaloniaApp.UserControls"
              mc:Ignorable="d" d:DesignWidth="1800" d:DesignHeight="1450"
-			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
-			 xmlns:conv="using:AxisAvaloniaApp.Converters"
-			 xmlns:c="using:AxisAvaloniaApp.UserControls.MyCalendar"
-			 xmlns:enums="using:AxisAvaloniaApp.Enums"
-			 xmlns:ucModels="using:AxisAvaloniaApp.UserControls.Models"
+             xmlns:conv="using:AxisAvaloniaApp.Converters"
+             xmlns:c="using:AxisAvaloniaApp.UserControls.MyCalendar"
+             xmlns:enums="using:AxisAvaloniaApp.Enums"
+             xmlns:ucModels="using:AxisAvaloniaApp.UserControls.Models"
              x:Class="AxisAvaloniaApp.Views.DocumentView">
+
+  <UserControl.Resources>
+    <conv:EPeriodsToBoolConverter x:Key="EPeriodsToBool"/>
+  </UserControl.Resources>
+  
 	<UserControl.Styles>
 		<Style Selector="Button.WhiteBorder:pointerover /template/ ContentPresenter#PART_ContentPresenter" >
 		  <Setter Property="Background" Value="Transparent" />
@@ -267,11 +272,31 @@
 								</DataTemplate>
 							</ComboBox.ItemTemplate>
 						</ComboBox>						  
-						<Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" CornerRadius="0" Margin="5,2" >
-							<c:MyDatePicker Foreground="White"  SelectedDate="{Binding FromDateTimeOffset, Mode=TwoWay}" />
+						<Border Grid.Row="2" 
+                    Grid.Column="1" 
+                    Height="30" 
+                    BorderThickness="1" 
+                    BorderBrush="White"  
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Stretch" 
+                    CornerRadius="0" 
+                    Margin="5,2" >
+							<c:MyDatePicker Foreground="White" 
+                              SelectedDate="{Binding FromDateTimeOffset, Mode=TwoWay}"
+                              IsEnabled="{Binding SelectedPeriod.Value, Converter={StaticResource EPeriodsToBool}, ConverterParameter={x:Static enums:EPeriods.Custom}}"/>
 						</Border>
-						<Border  Height="30" BorderThickness="1" BorderBrush="White"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1" CornerRadius="0" Margin="5,2" >
-							<c:MyDatePicker Foreground="White"  SelectedDate="{Binding ToDateTimeOffset, Mode=TwoWay}" />
+						<Border Grid.Row="3" 
+                    Grid.Column="1" 
+                    Height="30" 
+                    BorderThickness="1" 
+                    BorderBrush="White" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Stretch" 
+                    CornerRadius="0" 
+                    Margin="5,2" >
+							<c:MyDatePicker Foreground="White"
+                              SelectedDate="{Binding ToDateTimeOffset, Mode=TwoWay}" 
+                              IsEnabled="{Binding SelectedPeriod.Value, Converter={StaticResource EPeriodsToBool}, ConverterParameter={x:Static enums:EPeriods.Custom}}"/>
 						</Border>
 						<TextBox Text="{Binding FilterString, Mode=TwoWay}" Watermark="FilterString" Grid.Row="4" Height="20" Grid.Column="1" CornerRadius="0" Background="White" Margin="5,2"/>
 						<Border Grid.Row="4" Grid.Column="1" Height="24" Width="24"	Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,10,0" Padding="0" >

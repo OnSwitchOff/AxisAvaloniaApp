@@ -9,6 +9,7 @@ namespace DataBase.Repositories.PartnersGroups
     public class PartnersGroupsRepository : IPartnersGroupsRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PartnersGroupsRepository"/> class.
@@ -29,13 +30,16 @@ namespace DataBase.Repositories.PartnersGroups
         {
             return await Task.Run<string>(() =>
             {
-                PartnersGroup res = databaseContext.PartnersGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
-                if (res == null)
+                lock (locker)
                 {
-                    return "-2";
-                }
+                    PartnersGroup res = databaseContext.PartnersGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
+                    if (res == null)
+                    {
+                        return "-2";
+                    }
 
-                return res.Path;
+                    return res.Path;
+                }
             });
         }
 
@@ -45,9 +49,15 @@ namespace DataBase.Repositories.PartnersGroups
         /// <param name="id">Id to find group of partners.</param>
         /// <returns>Returns group of partners if group exists; otherwise returns null.</returns>
         /// <date>20.06.2022.</date>
-        public Task<PartnersGroup> GetGroupByIdAsync(int id)
+        public async Task<PartnersGroup> GetGroupByIdAsync(int id)
         {
-            return databaseContext.PartnersGroups.Where(g => g.Id == id).FirstOrDefaultAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.PartnersGroups.Where(g => g.Id == id).FirstOrDefault();
+                }
+            });
         }
 
         /// <summary>
@@ -60,10 +70,13 @@ namespace DataBase.Repositories.PartnersGroups
         {
             return await Task.Run<int>(() =>
             {
-                databaseContext.PartnersGroups.Add(partnersGroup);
-                databaseContext.SaveChanges();
+                lock (locker)
+                {
+                    databaseContext.PartnersGroups.Add(partnersGroup);
+                    databaseContext.SaveChanges();
 
-                return partnersGroup.Id;
+                    return partnersGroup.Id;
+                }
             });
         }
 
@@ -77,9 +90,12 @@ namespace DataBase.Repositories.PartnersGroups
         {
             return await Task.Run<bool>(() =>
             {
-                databaseContext.ChangeTracker.Clear();
-                databaseContext.PartnersGroups.Update(partnersGroup);
-                return databaseContext.SaveChanges() > 0;
+                lock (locker)
+                {
+                    databaseContext.ChangeTracker.Clear();
+                    databaseContext.PartnersGroups.Update(partnersGroup);
+                    return databaseContext.SaveChanges() > 0;
+                }
             });
         }
 
@@ -94,29 +110,32 @@ namespace DataBase.Repositories.PartnersGroups
         {
             return await Task.Run<bool>(() =>
             {
-                PartnersGroup partnersGroup = databaseContext.PartnersGroups.
-                Include(pg => pg.Partners).
-                FirstOrDefault(i => i.Id == groupId);
-                if (partnersGroup == null)
+                lock (locker)
                 {
-                    return false;
-                }
-                else
-                {
-                    if (includeSubGroups)
+                    PartnersGroup partnersGroup = databaseContext.PartnersGroups.
+                    Include(pg => pg.Partners).
+                    FirstOrDefault(i => i.Id == groupId);
+                    if (partnersGroup == null)
                     {
-                        List<PartnersGroup> subGroups = databaseContext.PartnersGroups.
-                        Where(pg => pg.Path.StartsWith(partnersGroup.Path)).
-                        Include(pg => pg.Partners).
-                        ToList();
-                        if (subGroups != null && subGroups.Count > 0)
-                        {
-                            databaseContext.PartnersGroups.RemoveRange(subGroups);
-                        }
+                        return false;
                     }
+                    else
+                    {
+                        if (includeSubGroups)
+                        {
+                            List<PartnersGroup> subGroups = databaseContext.PartnersGroups.
+                            Where(pg => pg.Path.StartsWith(partnersGroup.Path)).
+                            Include(pg => pg.Partners).
+                            ToList();
+                            if (subGroups != null && subGroups.Count > 0)
+                            {
+                                databaseContext.PartnersGroups.RemoveRange(subGroups);
+                            }
+                        }
 
-                    databaseContext.PartnersGroups.Remove(partnersGroup);
-                    return databaseContext.SaveChanges() > 0;
+                        databaseContext.PartnersGroups.Remove(partnersGroup);
+                        return databaseContext.SaveChanges() > 0;
+                    }
                 }
             });
         }
@@ -126,9 +145,15 @@ namespace DataBase.Repositories.PartnersGroups
         /// </summary>
         /// <returns>Returns list with groups of partners.</returns>
         /// <date>01.04.2022.</date>
-        public Task<List<PartnersGroup>> GetPartnersGroupsAsync()
+        public async Task<List<PartnersGroup>> GetPartnersGroupsAsync()
         {
-            return databaseContext.PartnersGroups.ToListAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.PartnersGroups.ToList();
+                }
+            });
         }
 
         /// <summary>
@@ -142,9 +167,12 @@ namespace DataBase.Repositories.PartnersGroups
         {
             return await Task.Run(() =>
             {
-                return databaseContext.PartnersGroups.
-                Where(i => i.Id != partnersGroupId && i.Name.ToLower().Equals(partnersGroupName.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.PartnersGroups.
+                    Where(i => i.Id != partnersGroupId && i.Name.ToLower().Equals(partnersGroupName.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
     }

@@ -13,7 +13,7 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="operType">Operation type for which is needed to find next account number.</param>
         /// <returns>Next acc.</returns>
         /// <date>13.04.2022.</date>
-        Task<int> GetNextAcctAsync(EOperTypes operType);
+        Task<long> GetNextAcctAsync(EOperTypes operType);
 
         /// <summary>
         /// Get next unique sale number.
@@ -21,7 +21,7 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="fiscalDeviceNumber">Number of a fiscal device for which is needed to find next unique sale number.</param>
         /// <returns>Next unique sale number.</returns>
         /// <date>13.04.2022.</date>
-        Task<int> GetNextSaleNumberAsync(string fiscalDeviceNumber);
+        Task<long> GetNextSaleNumberAsync(string fiscalDeviceNumber);
 
         /// <summary>
         /// Gets OperationHeader from the database by id.
@@ -53,5 +53,16 @@ namespace DataBase.Repositories.OperationHeader
         /// <returns>Next acc.</returns>
         /// <date>06.07.2022.</date>
         Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to);
+
+        /// <summary>
+        /// Gets sales and refunds by acct range, specific year and month.
+        /// </summary>
+        /// <param name="year">Year to search data into the database.</param>
+        /// <param name="month">Month to search data into the database.</param>
+        /// <param name="acctFrom">Start acct to search data into the database.</param>
+        /// <param name="acctTo">End acct to search data into the database.</param>
+        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
+        /// <date>13.07.2022.</date>
+        Task<List<Entities.OperationHeader.OperationHeader>> GetSalesAndRefunds(int year, int month, long acctFrom, long acctTo);
     }
 }

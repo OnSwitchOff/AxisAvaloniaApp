@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataBase.Repositories.PaymentTypes
@@ -7,6 +7,7 @@ namespace DataBase.Repositories.PaymentTypes
     public class PaymentTypesRepository : IPaymentTypesRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentTypesRepository"/> class.
@@ -24,7 +25,10 @@ namespace DataBase.Repositories.PaymentTypes
         /// <date>05.05.2022.</date>
         public IAsyncEnumerable<Entities.PaymentTypes.PaymentType> GetPaymentTypes()
         {
-            return databaseContext.PaymentTypes.AsAsyncEnumerable();
+            lock (locker)
+            {
+                return databaseContext.PaymentTypes.AsAsyncEnumerable();
+            }
         }
 
         /// <summary>
@@ -35,7 +39,13 @@ namespace DataBase.Repositories.PaymentTypes
         /// <date>23.06.2022.</date>
         public async Task<Entities.PaymentTypes.PaymentType> GetPaymentTypeByIndexAsync(Microinvest.CommonLibrary.Enums.EPaymentTypes paymentType)
         {
-            return await databaseContext.PaymentTypes.FirstOrDefaultAsync(p => p.PaymentIndex == paymentType);
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.PaymentTypes.FirstOrDefault(p => p.PaymentIndex == paymentType);
+                }
+            });            
         }
 
         /// <summary>
@@ -46,8 +56,14 @@ namespace DataBase.Repositories.PaymentTypes
         /// <date>24.06.2022.</date>
         public async Task<int> AddPaymentTypesAsync(IList<Entities.PaymentTypes.PaymentType> paymentTypes)
         {
-            await databaseContext.AddRangeAsync(paymentTypes);
-            return await databaseContext.SaveChangesAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    databaseContext.AddRange(paymentTypes);
+                    return databaseContext.SaveChanges();
+                }
+            });
         }
     }
 }

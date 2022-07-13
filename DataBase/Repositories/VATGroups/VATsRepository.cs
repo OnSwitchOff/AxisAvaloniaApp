@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +7,7 @@ namespace DataBase.Repositories.VATGroups
     public class VATsRepository : IVATsRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VATsRepository"/> class.
@@ -25,7 +25,10 @@ namespace DataBase.Repositories.VATGroups
         /// <date>05.05.2022.</date>
         public IAsyncEnumerable<Entities.VATGroups.VATGroup> GetVATGroupsAsync()
         {
-            return databaseContext.Vatgroups.AsAsyncEnumerable();
+            lock (locker)
+            {
+                return databaseContext.Vatgroups.AsAsyncEnumerable();
+            }
         }
 
         /// <summary>
@@ -34,9 +37,15 @@ namespace DataBase.Repositories.VATGroups
         /// <param name="id">Id to find group of VAT.</param>
         /// <returns>Returns group of VAT if group exists; otherwise returns null.</returns>
         /// <date>20.06.2022.</date>
-        public Task<Entities.VATGroups.VATGroup> GetVATGroupByIdAsync(int id)
+        public async Task<Entities.VATGroups.VATGroup> GetVATGroupByIdAsync(int id)
         {
-            return databaseContext.Vatgroups.Where(vg => vg.Id == id).FirstOrDefaultAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.Vatgroups.Where(vg => vg.Id == id).FirstOrDefault();
+                }
+            });            
         }
 
         /// <summary>
@@ -47,8 +56,14 @@ namespace DataBase.Repositories.VATGroups
         /// <date>17.06.2022.</date>
         public async Task<int> AddVATGroupsAsync(IList<Entities.VATGroups.VATGroup> vATGroups)
         {
-            await databaseContext.Vatgroups.AddRangeAsync(vATGroups);
-            return await databaseContext.SaveChangesAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    databaseContext.Vatgroups.AddRange(vATGroups);
+                    return databaseContext.SaveChanges();
+                }
+            });            
         }
     }
 }

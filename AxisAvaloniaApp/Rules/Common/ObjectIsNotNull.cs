@@ -2,15 +2,15 @@
 
 namespace AxisAvaloniaApp.Rules.Common
 {
-    internal class NomenclatureIsNotNull : AbstractStage
+    internal class ObjectIsNotNull : AbstractStage
     {
         private object nomanclature;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NomenclatureIsNotNull"/> class.
+        /// Initializes a new instance of the <see cref="ObjectIsNotNull"/> class.
         /// </summary>
         /// <param name="nomanclature">Nomenclature object.</param>
-        public NomenclatureIsNotNull(object nomanclature)
+        public ObjectIsNotNull(object nomanclature)
         {
             this.nomanclature = nomanclature;
         }

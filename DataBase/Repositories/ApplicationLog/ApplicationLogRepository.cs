@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using DataBase.Entities.ApplicationLog;
 
 namespace DataBase.Repositories.ApplicationLog
 {
     public class ApplicationLogRepository : IApplicationLogRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationLogRepository"/> class.
@@ -27,10 +27,13 @@ namespace DataBase.Repositories.ApplicationLog
         {
             return Task.Run<int>(() =>
             {
-                databaseContext.ApplicationLogs.Add(applicationLog);
-                databaseContext.SaveChanges();
+                lock (locker)
+                {
+                    databaseContext.ApplicationLogs.Add(applicationLog);
+                    databaseContext.SaveChanges();
 
-                return applicationLog.Id;
+                    return applicationLog.Id;
+                }
             });
         }
     }

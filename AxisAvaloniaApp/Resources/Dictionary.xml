@@ -2148,6 +2148,46 @@
 		  <Value Lang="hy-AM">Ներմուծում ից</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
+    <Data Key="strWarehouseSkladPro">
+      <Value Lang="bg-BG">Warehouse Sklad Pro</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Warehouse Sklad Pro</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Warehouse Sklad Pro</Value>
+      <Value Lang="uk-UA">Warehouse Sklad Pro</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strAnotherApp">
+      <Value Lang="bg-BG">Друго приложение</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Another app</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Другое приложение</Value>
+      <Value Lang="uk-UA">Інша програма</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strNAP">
+      <Value Lang="bg-BG">НАП</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">NRA</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">НАД</Value>
+      <Value Lang="uk-UA">НАД</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDeltaPro">
+      <Value Lang="bg-BG">Delta Pro</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Delta Pro</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Delta Pro</Value>
+      <Value Lang="uk-UA">Delta Pro</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
 	  <Data Key="strOperType">
 		  <Value Lang="bg-BG">Тип на операция</Value>
 		  <Value Lang="el-GR">Not translated</Value>
@@ -3073,6 +3113,26 @@
       <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Произошла ошибка во время записи данных операции в базу данных!</Value>
       <Value Lang="uk-UA">Сталася помилка під час збереження даних операції у базі даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgSelectOneFullMonth">
+      <Value Lang="bg-BG">За този тип експорт трябва да изберете един пълен месец!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">For this type of export, you need to select one full month!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Для данного типа экспорта Вам необходимо выбрать один полный месяц!</Value>
+      <Value Lang="uk-UA">Для цього типу експорту Вам необхідно вибрати один повний місяць!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDataWasExported">
+      <Value Lang="bg-BG">Текущите данни вече са експортирани! Желаете ли повторен експорт на данните?</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The current data has already been exported! Are you sure you want to re-export them?</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Текущие данные уже ранее экспортировались! Вы действительно желаете экспортировать их повторно?</Value>
+      <Value Lang="uk-UA">Поточні дані вже раніше були експортовані! Ви справді бажаєте експортувати їх повторно?</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
