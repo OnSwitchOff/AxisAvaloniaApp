@@ -22,6 +22,8 @@ using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Services.Logger;
 using Avalonia.Interactivity;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -35,7 +37,8 @@ namespace AxisAvaloniaApp.ViewModels
         private readonly ISettingsService settingsService;
         private readonly ILoggerService loggerService;
 
-        protected abstract EDocumentTypes documentType { get; }       
+        protected abstract EDocumentTypes documentType { get; }
+        protected string nextDocumentNumber { get; set; }
 
         #region MainContent
         private bool isMainContentVisible;
@@ -81,7 +84,6 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref pages, value);
         }
 
-
         public ObservableCollection<ComboBoxItemModel> Periods
         {
             get
@@ -124,9 +126,49 @@ namespace AxisAvaloniaApp.ViewModels
             }
         }
 
-        public void SaveDocument()
+        public async void SaveDocument()
         {
-            //TODO
+            Document document = Document.Create(
+                SelectedItem.OperationHeader,
+                SelectedItem.TempDocumentNumber,
+                SelectedItem.InvoiceDateTimeOffset,
+                documentType,
+                SelectedItem.DealDateTimeOffset,
+                "", new DateTime(),
+                SelectedItem.Receiver,
+                SelectedItem.InvoicePrepared,
+                SelectedItem.Description,
+                SelectedItem.DealPlace);
+
+            int docId = await documentsRepository.AddDocumentAsync(document);
+
+            if (docId > 0)
+            {
+                SelectedItem.Document = document;
+                if (document != null)
+                {
+                    SelectedItem.InvoicePrepared = document.CreatorName;
+                    SelectedItem.Receiver = document.RecipientName;
+
+                    SelectedItem.InvoiceNumber = document.DocumentNumber;
+                    SelectedItem.TempDocumentNumber = document.DocumentNumber;
+                    SelectedItem.InvoiceDateTimeOffset = document.DocumentDate;
+                    SelectedItem.DealDateTimeOffset = document.TaxDate;
+                    SelectedItem.DealPlace = document.DealLocation;
+                    SelectedItem.Description = document.DealDescription;
+                }
+
+                string prev = nextDocumentNumber;
+                nextDocumentNumber = await documentsRepository.GetNextDocumentNumberAsync(documentType);
+                foreach (DocumentItem docItem in Items)
+                {
+                    if (docItem != SelectedItem && (string.IsNullOrEmpty(docItem.TempDocumentNumber) || docItem.TempDocumentNumber == prev))
+                    {
+                        docItem.TempDocumentNumber = nextDocumentNumber;
+                    }
+                }
+                IsMainContentVisible = true;
+            }
         }
 
         private void FilterSourceCollection()
@@ -164,9 +206,14 @@ namespace AxisAvaloniaApp.ViewModels
 
             Items.Clear();
 
-            foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset))
+            foreach (OperationHeader oh in await operationHeaderRepository.GetOperationHeadersByDatesAsync(FromDateTimeOffset, ToDateTimeOffset, EOperTypes.Sale))
             {
-                Items.Add(new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType)));
+                DocumentItem docItem = new DocumentItem(oh, await documentsRepository.GetDocumentsByOperationHeaderAsync(oh, documentType));
+                if (docItem.Document == null)
+                {
+                    docItem.TempDocumentNumber = nextDocumentNumber;
+                }
+                Items.Add(docItem);
             }
 
             FilterSourceCollection();
@@ -217,7 +264,6 @@ namespace AxisAvaloniaApp.ViewModels
             } 
         }
 
-
         public ReactiveCommand<Unit, Unit> PrintCommand { get; }
         private readonly BehaviorSubject<bool> _DocumentIsSelectedSubject = new BehaviorSubject<bool>(false);
         public bool DocumentIsSelected
@@ -226,6 +272,8 @@ namespace AxisAvaloniaApp.ViewModels
             set => _DocumentIsSelectedSubject.OnNext(value);
         }
         public IObservable<bool> ObservableDocumentIsSelected => _DocumentIsSelectedSubject;
+
+        public ReactiveCommand<Unit, Unit> RefreshItemsListCommand { get; }
 
         public DocumentViewModel()
         {
@@ -241,8 +289,15 @@ namespace AxisAvaloniaApp.ViewModels
             FromDateTimeOffset = DateTime.Today;
             ToDateTimeOffset = DateTime.Today;
             PrintCommand = ReactiveCommand.Create(Print, ObservableDocumentIsSelected);
+            RefreshItemsListCommand = ReactiveCommand.Create(RefreshItemList);
             IsMainContentVisible = true;
             InitDocumentTitle();
+            SetNextDocumentNumber();
+        }
+
+        private async void SetNextDocumentNumber()
+        {
+            nextDocumentNumber = await Task.Run(() => documentsRepository.GetNextDocumentNumberAsync(documentType));
         }
 
         private void InitDocumentTitle()
@@ -314,8 +369,23 @@ namespace AxisAvaloniaApp.ViewModels
             }
         }
 
-        void  Print()
+        async void Print()
         {
+            if (await CheckDocNumberRepeating(SelectedItem.TempDocumentNumber, documentType))
+            {
+                loggerService.ShowDialog("msgErrorDuplicateDocumentNumber",icon: UserControls.MessageBox.EButtonIcons.Info);
+                return;
+            }
+            if (CheckDocDataAfterOperation(SelectedItem.SaleDateTimeOffset, SelectedItem.InvoiceDateTimeOffset))
+            {
+                loggerService.ShowDialog("msgErrorDocDataAfterOperation");
+                return;
+            }
+            else
+            {
+
+            }
+
             OperationHeader? operationData = SelectedItem.OperationHeader;
             if (operationData == null)
             {
@@ -386,6 +456,23 @@ namespace AxisAvaloniaApp.ViewModels
             IsMainContentVisible = Pages.Count == 0;
         }
 
+
+
+        private async Task<bool> CheckDocNumberRepeating(string documentNumber, EDocumentTypes documentType)
+        { 
+            return await documentsRepository.IsExistDocumentNumberAsync(documentNumber, documentType);
+        }
+
+        private bool CheckDocDataAfterOperation(DateTime saleDateTimeOffset, DateTime invoiceDateTimeOffset)
+        {
+            return DateTime.Compare(invoiceDateTimeOffset, saleDateTimeOffset) < 0 ;
+        }
+
+        void RefreshItemList()
+        {
+            TryToGetSourceCollection();
+        }
+
         private void FilterTimer_Tick(object? sender, EventArgs e)
         {
             Debug.WriteLine("TryToFilter -" + FilterString);
@@ -418,6 +505,7 @@ namespace AxisAvaloniaApp.ViewModels
         private string address;
         private string phone;
         private string amount;
+        private string tempDocumentNumber;
         private string invoiceNumber;
         private string invoiceDateString;
         private DateTime invoiceDateTimeOffset;        
@@ -447,6 +535,14 @@ namespace AxisAvaloniaApp.ViewModels
             }
         }
         public string Amount { get => amount; set => this.RaiseAndSetIfChanged(ref amount, value); }
+        public string TempDocumentNumber
+        {
+            get => tempDocumentNumber;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref tempDocumentNumber, value);
+            }
+        }
         public string InvoiceNumber
         {
             get => invoiceNumber;
@@ -498,7 +594,16 @@ namespace AxisAvaloniaApp.ViewModels
         public string DealPlace { get => dealPlace; set =>  this.RaiseAndSetIfChanged(ref dealPlace, value);}
         public string Description { get => description; set => this.RaiseAndSetIfChanged(ref description, value);}
         public OperationHeader OperationHeader { get => oh; set => this.RaiseAndSetIfChanged(ref oh, value); }
-        public Document? Document { get => document; set => this.RaiseAndSetIfChanged(ref document, value); }
+        public Document? Document
+        {
+            get => document;
+            set 
+            {
+                this.RaiseAndSetIfChanged(ref document, value);
+                this.RaisePropertyChanged(nameof(HasDocument));
+            }
+        }
+        public bool HasDocument { get => Document != null; }
         #endregion
 
         #region Commands
@@ -525,16 +630,12 @@ namespace AxisAvaloniaApp.ViewModels
                 Receiver = doc.RecipientName;
         
                 InvoiceNumber = doc.DocumentNumber;
+                TempDocumentNumber = doc.DocumentNumber;
                 InvoiceDateTimeOffset = doc.DocumentDate;
                 DealDateTimeOffset = doc.TaxDate;
                 DealPlace = doc.DealLocation;
                 Description = doc.DealDescription;
-            }
-
-
-
-           
+            }           
         }
-    
     }
 }

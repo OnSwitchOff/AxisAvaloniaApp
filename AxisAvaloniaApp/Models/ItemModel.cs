@@ -1,4 +1,6 @@
-﻿using Microinvest.CommonLibrary.Enums;
+﻿using AxisAvaloniaApp.Helpers;
+using DataBase.Repositories.OperationHeader;
+using Microinvest.CommonLibrary.Enums;
 using ReactiveUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -217,7 +219,7 @@ namespace AxisAvaloniaApp.Models
                 Group = (GroupModel)item.Group,
                 VATGroup = (VATGroupModel)item.Vatgroup,
                 ItemType = item.ItemType,
-                Status = item.Status,
+                Status = item.Status
             };
 
             foreach (DataBase.Entities.ItemsCodes.ItemCode itemCode in item.ItemsCodes)

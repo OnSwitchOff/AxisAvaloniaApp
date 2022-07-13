@@ -113,7 +113,7 @@ namespace AxisAvaloniaApp.ViewModels
 
         public void GenerateReport()
         {
-            reportsService.GenerateReportData(SelectedReport.ReportKey, 0, 0, System.DateTime.Now, System.DateTime.Now);
+            reportsService.GenerateReportData(SelectedReport.ReportKey, 0, 0, DateFrom, DateTo);
             Source = reportsService.Source;
             ColumnsData = reportsService.ColumnsData;
         }

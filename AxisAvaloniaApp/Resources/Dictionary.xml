@@ -3116,6 +3116,26 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="msgErrorDuplicateDocumentNumber">
+      <Value Lang="bg-BG">Not translated</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not translated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Документ с таким номером уже существует!</Value>
+      <Value Lang="uk-UA">Документ з таким номером вже існує</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+	  	<Data Key="msgErrorDocDataAfterOperation">
+      <Value Lang="bg-BG">Not translated</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Not translated</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Дата проведения операции не может привысшать дату создания документа!</Value>
+      <Value Lang="uk-UA">Дата проведення операції не може перевищувати дату створення документа!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="msgSelectOneFullMonth">
       <Value Lang="bg-BG">За този тип експорт трябва да изберете един пълен месец!</Value>
       <Value Lang="el-GR">Not translated</Value>

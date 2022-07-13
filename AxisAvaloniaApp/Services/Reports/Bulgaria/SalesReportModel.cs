@@ -71,7 +71,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         /// Gets or sets purchase sum of items that were sold.
         /// </summary>
         /// <date>07.06.2022.</date>
-        public string PurchaseSum { get; }
+        public string PurchaseSum { get; set; }
 
         /// <summary>
         /// Gets or sets sale sum of items that were sold.
