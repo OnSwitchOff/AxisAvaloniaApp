@@ -55,6 +55,8 @@ namespace DataBase.Repositories.OperationHeader
         Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to, EOperTypes operType);
 
 
+        Task<List<Entities.OperationHeader.OperationHeader>> GetSalesAndRefunds(int year, int month, long acctFrom, long acctTo);
+
         double GetLastPriceByGoodId(int goodId);
     }
 }
