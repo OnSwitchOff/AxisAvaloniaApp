@@ -5,6 +5,7 @@ namespace DataBase.Repositories.OperationDetails
     public class OperationDetailsRepository : IOperationDetailsRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OperationDetailsRepository"/> class.
@@ -25,10 +26,13 @@ namespace DataBase.Repositories.OperationDetails
         {
             return await Task.Run(() =>
             {
-                databaseContext.OperationDetails.Add(record);
-                databaseContext.SaveChanges();
+                lock (locker)
+                {
+                    databaseContext.OperationDetails.Add(record);
+                    databaseContext.SaveChanges();
 
-                return record.Id;
+                    return record.Id;
+                }
             });
         }
     }

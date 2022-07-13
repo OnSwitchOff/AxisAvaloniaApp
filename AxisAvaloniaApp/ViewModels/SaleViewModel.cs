@@ -263,7 +263,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// <date>26.05.2022.</date>
         public string TotalAmount
         {
-            get => totalAmount;
+            get => totalAmount == null ? totalAmount = 0.ToString(settingsService.PriceFormat) : totalAmount;
             set => this.RaiseAndSetIfChanged(ref totalAmount, value);
         }
 
@@ -595,18 +595,20 @@ namespace AxisAvaloniaApp.ViewModels
             IsChoiceOfPartnerEnabled = (bool)serializationService[ESerializationKeys.TbPartnerEnabled];
             if ((int)serializationService[ESerializationKeys.TbPartnerID] > 0)
             {
-                OperationPartner = partnerRepository.GetPartnerByIdAsync((int)serializationService[ESerializationKeys.TbPartnerID]).GetAwaiter().GetResult();
+                OperationPartner = await partnerRepository.GetPartnerByIdAsync((int)serializationService[ESerializationKeys.TbPartnerID]);
                 OperationPartnerString = OperationPartner.Name;
             }
 
             USN = paymentService.FiscalDevice.ReceiptNumber;
-            TotalAmount = 0.ToString(settingsService.PriceFormat);
+            //TotalAmount = 0.ToString(settingsService.PriceFormat);
             Order.Add(new OperationItemModel());
 
+            List<DataBase.Entities.ItemsGroups.ItemsGroup> itemsGroups = await itemsGroupsRepository.GetItemsGroupsAsync();
+            GroupModel selectedItemsGroup = (GroupModel)await itemsGroupsRepository.GetGroupByIdAsync((int)serializationItems[ESerializationKeys.SelectedGroupId]);
             SelectedItemsGroup = GetGroups(
                 ItemsGroups[0].SubGroups,
-                itemsGroupsRepository.GetItemsGroupsAsync().GetAwaiter().GetResult(),
-                (GroupModel)itemsGroupsRepository.GetGroupByIdAsync((int)serializationItems[ESerializationKeys.SelectedGroupId]).GetAwaiter().GetResult(),
+                itemsGroups,
+                selectedItemsGroup,
                 ItemsGroups[0]);
 
             ItemModel itemModel;
@@ -625,10 +627,12 @@ namespace AxisAvaloniaApp.ViewModels
                 }
             }
 
-            SelectedPartnersGroup = GetGroups<PartnersGroup>(
+            List<PartnersGroup> partnersGroups = await partnersGroupsRepository.GetPartnersGroupsAsync();
+            GroupModel selectedPartnersGroup = (GroupModel)await partnersGroupsRepository.GetGroupByIdAsync((int)serializationPartners[ESerializationKeys.SelectedGroupId]);
+            SelectedPartnersGroup = GetGroups(
                 PartnersGroups[0].SubGroups,
-                partnersGroupsRepository.GetPartnersGroupsAsync().GetAwaiter().GetResult(),
-                (GroupModel)partnersGroupsRepository.GetGroupByIdAsync((int)serializationPartners[ESerializationKeys.SelectedGroupId]).GetAwaiter().GetResult(),
+                partnersGroups,
+                selectedPartnersGroup,
                 PartnersGroups[0]);
 
             await foreach (var partner in partnerRepository.GetParnersAsync(SelectedPartnersGroup.Path, string.Empty))
@@ -717,7 +721,7 @@ namespace AxisAvaloniaApp.ViewModels
                 case nameof(IsChoiceOfPartnerEnabled):
                     if (!IsChoiceOfPartnerEnabled && OperationPartner == null)
                     {
-                        OperationPartner = partnerRepository.GetPartnerByIdAsync(1).GetAwaiter().GetResult();
+                        OperationPartner = await partnerRepository.GetPartnerByIdAsync(1);
                     }
                     break;
                 case nameof(OperationPartner):
@@ -1238,7 +1242,7 @@ namespace AxisAvaloniaApp.ViewModels
             {
                 case ENomenclatures.Items:
                     IStage userAgreesToDeleteItem = new UserAgreesToDeleteItem();
-                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedItem);
+                    nomenclatureIsNotNull = new ObjectIsNotNull(SelectedItem);
                     IStage baseItemCanNotBeDeleted = new BaseItemCanNotBeDeleted(SelectedItem);
                     IStage deleteItem = new DeleteItem(SelectedItem);
                     prepareView = new PrepareView(() =>
@@ -1257,7 +1261,7 @@ namespace AxisAvaloniaApp.ViewModels
                     break;
                 case ENomenclatures.Partners:
                     IStage userAgreesToDeletePartner = new UserAgreesToDeletePartner();
-                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedPartner);
+                    nomenclatureIsNotNull = new ObjectIsNotNull(SelectedPartner);
                     IStage basePartnerCanNotBeDeleted = new BasePartnerCanNotBeDeleted(SelectedPartner);
                     IStage deletePartner = new DeletePartner(SelectedPartner);
                     prepareView = new PrepareView(() =>
@@ -1276,7 +1280,7 @@ namespace AxisAvaloniaApp.ViewModels
                     break;
                 case ENomenclatures.ItemsGroups:
                     IStage userAgreesToDeleteItemsGroup = new UserAgreesToDeleteItemsGroup();
-                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedItemsGroup);
+                    nomenclatureIsNotNull = new ObjectIsNotNull(SelectedItemsGroup);
                     IStage baseItemsGroupCanNotBeDeleted = new BaseItemsGroupCanNotBeDeleted(SelectedItemsGroup);
                     IStage deleteItemsGroup = new DeleteItemsGroup(SelectedItemsGroup);
                     IStage fixNullItemsGroups = new FixNullItemsGroups(itemRepository);
@@ -1297,7 +1301,7 @@ namespace AxisAvaloniaApp.ViewModels
                     break;
                 case ENomenclatures.PartnersGroups:
                     IStage userAgreesToDeletePartnersGroup = new UserAgreesToDeletePartnersGroup();
-                    nomenclatureIsNotNull = new NomenclatureIsNotNull(SelectedPartnersGroup);
+                    nomenclatureIsNotNull = new ObjectIsNotNull(SelectedPartnersGroup);
                     IStage basePartnersGroupCanNotBeDeleted = new BasePartnersGroupCanNotBeDeleted(SelectedPartnersGroup);
                     IStage deletePartnersGroup = new DeletePartnersGroup(SelectedPartnersGroup);
                     IStage fixNullPartnersGroups = new FixNullPartnersGroups(partnerRepository);

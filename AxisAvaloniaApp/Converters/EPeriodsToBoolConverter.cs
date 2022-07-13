@@ -1,29 +1,31 @@
 ﻿using Avalonia.Data.Converters;
-using Microinvest.CommonLibrary.Enums;
+using AxisAvaloniaApp.Enums;
 using System;
 using System.Globalization;
 
 namespace AxisAvaloniaApp.Converters
 {
-    public class ENomenclaturesToBoolConverter : IValueConverter
+    public class EPeriodsToBoolConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value != null && parameter != null)
+            if (value != null)
             {
-                ENomenclatures val, par;
-                if (Enum.TryParse<ENomenclatures>(value.ToString(), out val))
+                if (parameter == null)
                 {
-                    if (Enum.TryParse<ENomenclatures>(parameter.ToString(), out par))
+                    return true;
+                }
+
+                EPeriods val, par;
+                if (Enum.TryParse<EPeriods>(value.ToString(), out val))
+                {
+                    if (Enum.TryParse<EPeriods>(parameter.ToString(), out par))
                     {
                         return val == par;
                     }
-                    else
-                    {
-                        return parameter.ToString().Contains(val.ToString());
-                    }
                 }
             }
+
             throw new NotImplementedException();
         }
 

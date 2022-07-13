@@ -10,6 +10,7 @@ namespace DataBase.Repositories.Items
     public class ItemRepository : IItemRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemRepository"/> class.
@@ -28,7 +29,13 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async Task<Item> GetItemByBarcodeAsync(string barcode)
         {
-            return await databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup).FirstOrDefaultAsync(i => i.Barcode.Equals(barcode));
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup).FirstOrDefault(i => i.Barcode.Equals(barcode));
+                }
+            });
         }
 
         /// <summary>
@@ -39,7 +46,14 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async Task<Item> GetItemByIdAsync(int id)
         {
-            return await databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup).FirstOrDefaultAsync(i => i.Id == id);
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.Items.Include(i => i.Group).Include(i => i.Vatgroup).FirstOrDefault(i => i.Id == id);
+                }
+            });
+            
         }
 
         /// <summary>
@@ -50,16 +64,22 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async Task<Item> GetItemByKeyAsync(string key)
         {
-            return await databaseContext.
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.
                     Items.
                     Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
                     Include(i => i.Group).
                     Include(i => i.Vatgroup).
-                    FirstOrDefaultAsync(i =>
+                    FirstOrDefault(i =>
                     i.Name.Equals(key) ||
                     i.Code.Equals(key) ||
                     i.Barcode.Equals(key) ||
                     i.ItemsCodes.FirstOrDefault(ic => ic.Code.Equals(key)) != null);
+                }
+            });
         }
 
         /// <summary>
@@ -70,18 +90,21 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Item> GetItemsAsync(string searchKey)
         {
-            foreach (var item in databaseContext.Items.
-                Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
-                Include(i => i.Group).
-                Include(i => i.Vatgroup))
+            lock (locker)
             {
-                if (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
-                     (item.Name.ToLower().Contains(searchKey.ToLower()) ||
-                     item.Code.Contains(searchKey) ||
-                     item.Barcode.Contains(searchKey) ||
-                     item.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null))
+                foreach (var item in databaseContext.Items.
+                    Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
+                    Include(i => i.Group).
+                    Include(i => i.Vatgroup))
                 {
-                    yield return item;
+                    if (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
+                         (item.Name.ToLower().Contains(searchKey.ToLower()) ||
+                         item.Code.Contains(searchKey) ||
+                         item.Barcode.Contains(searchKey) ||
+                         item.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null))
+                    {
+                        yield return item;
+                    }
                 }
             }
         }
@@ -95,19 +118,22 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Item> GetItemsAsync(string groupPath, string searchKey)
         {
-            foreach (var item in databaseContext.Items.
-                Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
-                Include(i => i.Group).
-                Include(i => i.Vatgroup))
+            lock (locker)
             {
-                if ((groupPath.Equals("-2") ? 1 == 1 : item.Group.Path.StartsWith(groupPath)) &&
-                    (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
-                    (item.Name.ToLower().Contains(searchKey.ToLower()) ||
-                    item.Code.Contains(searchKey) ||
-                    item.Barcode.Contains(searchKey) ||
-                    item.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null)))
+                foreach (var item in databaseContext.Items.
+                    Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
+                    Include(i => i.Group).
+                    Include(i => i.Vatgroup))
                 {
-                    yield return item;
+                    if ((groupPath.Equals("-2") ? 1 == 1 : item.Group.Path.StartsWith(groupPath)) &&
+                        (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
+                        (item.Name.ToLower().Contains(searchKey.ToLower()) ||
+                        item.Code.Contains(searchKey) ||
+                        item.Barcode.Contains(searchKey) ||
+                        item.ItemsCodes.Where(ic => ic.Code.Contains(searchKey)).FirstOrDefault() != null)))
+                    {
+                        yield return item;
+                    }
                 }
             }
         }
@@ -120,13 +146,16 @@ namespace DataBase.Repositories.Items
         /// <date>30.03.2022.</date>
         public IAsyncEnumerable<Item> GetItemsByGroupIdAsync(int groupId)
         {
-            return databaseContext.
-                    Items.
-                    Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
-                    Where(i => i.Group.Id == groupId).
-                    Include(i => i.Group).
-                    Include(i => i.Vatgroup).
-                    AsAsyncEnumerable();
+            lock (locker)
+            {
+                return databaseContext.
+                        Items.
+                        Where(i => i.Status != ENomenclatureStatuses.Hidden && i.Status != ENomenclatureStatuses.Deleted).
+                        Where(i => i.Group.Id == groupId).
+                        Include(i => i.Group).
+                        Include(i => i.Vatgroup).
+                        AsAsyncEnumerable();
+            }
         }
 
         /// <summary>
@@ -137,13 +166,16 @@ namespace DataBase.Repositories.Items
         /// <date>17.06.2022.</date>
         public IAsyncEnumerable<Item> GetItemsAsync(ENomenclatureStatuses status = ENomenclatureStatuses.Active)
         {
-            return databaseContext.
-                Items.
-                Where(i => (i.Status == ENomenclatureStatuses.All && i.Status == status)).
-                Include(i => i.Group).
-                Include(i => i.Vatgroup).
-                Include(i => i.ItemsCodes).
-                AsAsyncEnumerable();
+            lock (locker)
+            {
+                return databaseContext.
+                    Items.
+                    Where(i => (i.Status == ENomenclatureStatuses.All || i.Status == status)).
+                    Include(i => i.Group).
+                    Include(i => i.Vatgroup).
+                    Include(i => i.ItemsCodes).
+                    AsAsyncEnumerable();
+            }
         }
 
         /// <summary>
@@ -156,12 +188,15 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run<int>(() =>
             {
-                item.Group = databaseContext.ItemsGroups.Where(g => g.Id == item.Group.Id).FirstOrDefault();
-                item.Vatgroup = databaseContext.Vatgroups.Where(vg => vg.Id == item.Vatgroup.Id).FirstOrDefault();
-                databaseContext.Items.AddAsync(item);
-                databaseContext.SaveChangesAsync();
+                lock (locker)
+                {
+                    item.Group = databaseContext.ItemsGroups.Where(g => g.Id == item.Group.Id).FirstOrDefault();
+                    item.Vatgroup = databaseContext.Vatgroups.Where(vg => vg.Id == item.Vatgroup.Id).FirstOrDefault();
+                    databaseContext.Items.AddAsync(item);
+                    databaseContext.SaveChangesAsync();
 
-                return item.Id;
+                    return item.Id;
+                }
             });
         }
 
@@ -175,9 +210,12 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run<bool>(() =>
             {
-                databaseContext.ChangeTracker.Clear();
-                databaseContext.Items.Update(item);
-                return databaseContext.SaveChanges() > 0;
+                lock (locker)
+                {
+                    databaseContext.ChangeTracker.Clear();
+                    databaseContext.Items.Update(item);
+                    return databaseContext.SaveChanges() > 0;
+                }
             });
         }
 
@@ -191,31 +229,34 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run<bool>(() =>
             {
+                lock (locker)
+                { 
                 Item item = databaseContext.Items.FirstOrDefault(i => i.Id == itemId);
-                if (item == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    if (databaseContext.OperationDetails.Where(od => od.Goods.Id == itemId).FirstOrDefault() != null)
+                    if (item == null)
                     {
-                        item.Status = ENomenclatureStatuses.Hidden;
-                        databaseContext.ChangeTracker.Clear();
-                        List<Entities.ItemsCodes.ItemCode> itemCodes = databaseContext.ItemsCodes.Where(ic => ic.Item.Id == itemId).ToList();
-                        if (itemCodes != null && itemCodes.Count > 0)
-                        {
-                            databaseContext.ItemsCodes.RemoveRange(itemCodes);
-                        }
-                        databaseContext.Items.Update(item);
+                        return false;
                     }
                     else
                     {
-                        databaseContext.Items.Remove(item);
-                    }
+                        if (databaseContext.OperationDetails.Where(od => od.Goods.Id == itemId).FirstOrDefault() != null)
+                        {
+                            item.Status = ENomenclatureStatuses.Hidden;
+                            databaseContext.ChangeTracker.Clear();
+                            List<Entities.ItemsCodes.ItemCode> itemCodes = databaseContext.ItemsCodes.Where(ic => ic.Item.Id == itemId).ToList();
+                            if (itemCodes != null && itemCodes.Count > 0)
+                            {
+                                databaseContext.ItemsCodes.RemoveRange(itemCodes);
+                            }
+                            databaseContext.Items.Update(item);
+                        }
+                        else
+                        {
+                            databaseContext.Items.Remove(item);
+                        }
 
-                    
-                    return databaseContext.SaveChanges() > 0;
+
+                        return databaseContext.SaveChanges() > 0;
+                    }
                 }
             });
         }
@@ -229,11 +270,14 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run<List<string>>(() =>
             {
-                List<string> list = new List<string>();
-                list.AddRange(databaseContext.Items.Select(i => i.Measure).Distinct().ToList());
-                list.AddRange(databaseContext.ItemsCodes.Select(ic => ic.Measure).Distinct().ToList());
+                lock (locker)
+                {
+                    List<string> list = new List<string>();
+                    list.AddRange(databaseContext.Items.Select(i => i.Measure).Distinct().ToList());
+                    list.AddRange(databaseContext.ItemsCodes.Select(ic => ic.Measure).Distinct().ToList());
 
-                return list.Distinct().ToList();
+                    return list.Distinct().ToList();
+                }
             });
         }
 
@@ -246,22 +290,25 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run(() =>
             {
-                List<string> codesList = databaseContext.Items.Select(i => i.Code).Distinct().ToList();
-                codesList.AddRange(databaseContext.ItemsCodes.Select(ic => ic.Code).Distinct().ToList());
-
-                int[] codesArray = codesList.
-                Where(code => System.Text.RegularExpressions.Regex.IsMatch(code, @"^\d+$")).
-                Select(int.Parse).
-                OrderBy(c => c).
-                ToArray<int>();
-
-                if (codesArray.Length == 0)
+                lock (locker)
                 {
-                    return 1;
-                }
-                else
-                {
-                    return codesArray[codesArray.Length - 1] + 1;
+                    List<string> codesList = databaseContext.Items.Select(i => i.Code).Distinct().ToList();
+                    codesList.AddRange(databaseContext.ItemsCodes.Select(ic => ic.Code).Distinct().ToList());
+
+                    int[] codesArray = codesList.
+                    Where(code => System.Text.RegularExpressions.Regex.IsMatch(code, @"^\d+$")).
+                    Select(int.Parse).
+                    OrderBy(c => c).
+                    ToArray<int>();
+
+                    if (codesArray.Length == 0)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return codesArray[codesArray.Length - 1] + 1;
+                    }
                 }
             });
         }
@@ -277,9 +324,12 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run(() => 
             {
-                return databaseContext.Items.
-                Where(i => i.Id != itemId && i.Name.ToLower().Equals(itemName.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.Items.
+                    Where(i => i.Id != itemId && i.Name.ToLower().Equals(itemName.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
 
@@ -294,9 +344,12 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run(() =>
             {
-                return databaseContext.Items.
-                Where(i => i.Id != itemId && !string.IsNullOrEmpty(i.Barcode) && i.Barcode.ToLower().Equals(barcode.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.Items.
+                    Where(i => i.Id != itemId && !string.IsNullOrEmpty(i.Barcode) && i.Barcode.ToLower().Equals(barcode.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
 
@@ -310,25 +363,28 @@ namespace DataBase.Repositories.Items
         {
             return await Task.Run(() =>
             {
-                Entities.ItemsGroups.ItemsGroup itemsGroup = databaseContext.ItemsGroups.Where(ig => ig.Id == groupId).FirstOrDefault();
-                if (itemsGroup == null)
+                lock (locker)
                 {
-                    return false;
-                }
+                    Entities.ItemsGroups.ItemsGroup itemsGroup = databaseContext.ItemsGroups.Where(ig => ig.Id == groupId).FirstOrDefault();
+                    if (itemsGroup == null)
+                    {
+                        return false;
+                    }
 
-                List<Item> items = databaseContext.Items.Where(i => i.Group == null).ToList();
-                if (items == null || items.Count == 0)
-                {
-                    return true;
-                }
+                    List<Item> items = databaseContext.Items.Where(i => i.Group == null).ToList();
+                    if (items == null || items.Count == 0)
+                    {
+                        return true;
+                    }
 
-                foreach (Item item in items)
-                {
-                    item.Group = itemsGroup;
-                }
+                    foreach (Item item in items)
+                    {
+                        item.Group = itemsGroup;
+                    }
 
-                databaseContext.Items.UpdateRange(items);
-                return databaseContext.SaveChanges() > 0;
+                    databaseContext.Items.UpdateRange(items);
+                    return databaseContext.SaveChanges() > 0;
+                }
             });
         }
     }

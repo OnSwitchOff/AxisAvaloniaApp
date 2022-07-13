@@ -8,7 +8,7 @@ namespace DataBase.Entities.OperationHeader
     {
         public int Id { get; set; }
         public EOperTypes OperType { get; set; }
-        public int Acct { get; set; }
+        public long Acct { get; set; }
         public DateTime Date { get; set; }
         public string USN { get; set; } = null!;
         public Partners.Partner Partner { get; set; }
@@ -16,7 +16,7 @@ namespace DataBase.Entities.OperationHeader
         public string Note { get; set; } = null!;
         public OperationHeader SrcDoc { get; set; }
         public EECCheckTypes EcrreceiptType { get; set; }
-        public int EcrreceiptNumber { get; set; }
+        public long EcrreceiptNumber { get; set; }
         public DateTime UserRealTime { get; set; }
         public EOperationModes Status { get; set; }
 
@@ -44,7 +44,7 @@ namespace DataBase.Entities.OperationHeader
         /// <param name="ecrreceiptType">Type of the cash register receipt.</param>
         /// <param name="ecrreceiptNumber">Number of the cash register receipt.</param>
         /// <param name="userRealTime">The date and time the operation was completed.</param>
-        private OperationHeader(EOperTypes operType, int acct, DateTime date, string uSN, Partners.Partner partner, PaymentTypes.PaymentType payment, string note, OperationHeader srcDoc, EECCheckTypes ecrreceiptType, int ecrreceiptNumber, DateTime userRealTime)
+        private OperationHeader(EOperTypes operType, long acct, DateTime date, string uSN, Partners.Partner partner, PaymentTypes.PaymentType payment, string note, OperationHeader srcDoc, EECCheckTypes ecrreceiptType, long ecrreceiptNumber, DateTime userRealTime)
         {
             this.OperType = operType;
             this.Acct = acct;
@@ -75,7 +75,7 @@ namespace DataBase.Entities.OperationHeader
         /// <param name="ecrreceiptNumber">Number of the cash register receipt.</param>
         /// <param name="userRealTime">The date and time the operation was completed.</param>
         /// <returns>Returns <see cref="OperationHeader"/> class if parameters are correct.</returns>
-        public static OperationHeader Create(EOperTypes operType, int acct, DateTime date, string uSN, Partners.Partner partner, PaymentTypes.PaymentType payment, string note, OperationHeader srcDoc, EECCheckTypes ecrreceiptType, int ecrreceiptNumber, DateTime userRealTime)
+        public static OperationHeader Create(EOperTypes operType, long acct, DateTime date, string uSN, Partners.Partner partner, PaymentTypes.PaymentType payment, string note, OperationHeader srcDoc, EECCheckTypes ecrreceiptType, long ecrreceiptNumber, DateTime userRealTime)
         {
             // check rule
 
@@ -95,7 +95,7 @@ namespace DataBase.Entities.OperationHeader
         /// <param name="ecrreceiptType">Type of the cash register receipt.</param>
         /// <param name="ecrreceiptNumber">Number of the cash register receipt.</param>
         /// <returns>Returns <see cref="OperationHeader"/> class if parameters are correct.</returns>
-        public static OperationHeader Create(EOperTypes operType, int acct, DateTime date, string uSN, Partners.Partner partner, PaymentTypes.PaymentType payment, string note, EECCheckTypes ecrreceiptType, int ecrreceiptNumber)
+        public static OperationHeader Create(EOperTypes operType, long acct, DateTime date, string uSN, Partners.Partner partner, PaymentTypes.PaymentType payment, string note, EECCheckTypes ecrreceiptType, long ecrreceiptNumber)
         {
             // check rule
 

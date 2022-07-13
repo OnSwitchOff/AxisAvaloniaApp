@@ -108,6 +108,21 @@ namespace AxisAvaloniaApp.Services.Settings
         }
 
         /// <summary>
+        /// Convert SettingsItemModel object to long.
+        /// </summary>
+        /// <param name="settingsItem">SettingsItemModel object.</param>
+        /// <date>13.07.2022.</date>
+        public static explicit operator long(SettingsItemModel settingsItem)
+        {
+            if (long.TryParse(settingsItem.Value, out long result))
+            {
+                return result;
+            }
+
+            throw new FormatException();
+        }
+
+        /// <summary>
         /// Convert SettingsItemModel object to DateTime.
         /// </summary>
         /// <param name="settingsItem">SettingsItemModel object.</param>

@@ -10,6 +10,7 @@ namespace DataBase.Repositories.OperationHeader
     public class OperationHeaderRepository : IOperationHeaderRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OperationHeaderRepository"/> class.
@@ -26,24 +27,26 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="operType">Operation type for which is needed to find next account number.</param>
         /// <returns>Next acc.</returns>
         /// <date>13.04.2022.</date>
-        public async Task<int> GetNextAcctAsync(EOperTypes operType)
+        public async Task<long> GetNextAcctAsync(EOperTypes operType)
         {
             return await Task.Run(() =>
             {
-                List<Entities.OperationHeader.OperationHeader> listItems = databaseContext.
-                     OperationHeaders.
-                     Where(oh => oh.OperType == operType).
-                     ToList();
-
-                if (listItems != null && listItems.Count > 0)
+                lock (locker)
                 {
-                    return listItems.Max(oh => oh.Acct) + 1;
-                }
-                else
-                {
-                    return 1;
-                }
+                    List<Entities.OperationHeader.OperationHeader> listItems = databaseContext.
+                         OperationHeaders.
+                         Where(oh => oh.OperType == operType).
+                         ToList();
 
+                    if (listItems != null && listItems.Count > 0)
+                    {
+                        return listItems.Select(oh => oh.Acct).Max() + 1;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
             });
         }
 
@@ -53,24 +56,26 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="fiscalDeviceNumber">Number of a fiscal device for which is needed to find next unique sale number.</param>
         /// <returns>Next unique sale number.</returns>
         /// <date>13.04.2022.</date>
-        public async Task<int> GetNextSaleNumberAsync(string fiscalDeviceNumber)
+        public async Task<long> GetNextSaleNumberAsync(string fiscalDeviceNumber)
         {
             return await Task.Run(() =>
             {
-                List<Entities.OperationHeader.OperationHeader> listItems = databaseContext.
-                    OperationHeaders.
-                    Where(oh => oh.OperType == EOperTypes.Sale && oh.USN.Equals(fiscalDeviceNumber)).
-                    ToList();
-
-                if (listItems != null && listItems.Count > 0)
+                lock (locker)
                 {
-                    return listItems.Max(oh => oh.EcrreceiptNumber);
-                }
-                else
-                {
-                    return 1;
-                }
+                    List<Entities.OperationHeader.OperationHeader> listItems = databaseContext.
+                        OperationHeaders.
+                        Where(oh => oh.OperType == EOperTypes.Sale && oh.USN.Equals(fiscalDeviceNumber)).
+                        ToList();
 
+                    if (listItems != null && listItems.Count > 0)
+                    {
+                        return listItems.Max(oh => oh.EcrreceiptNumber);
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
             });
         }
 
@@ -82,7 +87,10 @@ namespace DataBase.Repositories.OperationHeader
         /// <date>24.06.2022.</date>
         public Task<Entities.OperationHeader.OperationHeader> GetOperationHeaderByIdAsync(int id)
         {
-            return databaseContext.OperationHeaders.FirstOrDefaultAsync(x => x.Id == id);
+            lock (locker)
+            {
+                return databaseContext.OperationHeaders.FirstOrDefaultAsync(x => x.Id == id);
+            }
         }
 
         /// <summary>
@@ -95,25 +103,28 @@ namespace DataBase.Repositories.OperationHeader
         {
             return await Task.Run(() =>
             {
-                foreach (var detail in record.OperationDetails)
+                lock (locker)
                 {
-                    detail.Goods = databaseContext.Items.Where(i => i.Id == detail.Goods.Id).FirstOrDefault();
+                    foreach (var detail in record.OperationDetails)
+                    {
+                        detail.Goods = databaseContext.Items.Where(i => i.Id == detail.Goods.Id).FirstOrDefault();
+                    }
+
+                    if (record.Partner != null)
+                    {
+                        record.Partner = databaseContext.Partners.Where(p => p.Id == record.Partner.Id).FirstOrDefault();
+                    }
+
+                    if (record.Payment != null)
+                    {
+                        record.Payment = databaseContext.PaymentTypes.Where(pt => pt.Id == record.Payment.Id).FirstOrDefault();
+                    }
+
+                    databaseContext.OperationHeaders.Add(record);
+                    databaseContext.SaveChanges();
+
+                    return record.Id;
                 }
-
-                if (record.Partner != null)
-                {
-                    record.Partner = databaseContext.Partners.Where(p => p.Id == record.Partner.Id).FirstOrDefault();
-                }
-
-                if (record.Payment != null)
-                {
-                    record.Payment = databaseContext.PaymentTypes.Where(pt => pt.Id == record.Payment.Id).FirstOrDefault();
-                }
-
-                databaseContext.OperationHeaders.Add(record);
-                databaseContext.SaveChanges();
-
-                return record.Id;
             });
         }
 
@@ -127,31 +138,35 @@ namespace DataBase.Repositories.OperationHeader
         {
             return await Task.Run(() => 
             {
-                Entities.OperationHeader.OperationHeader currentPrice = databaseContext.OperationHeaders.
-                Where(oh => oh.OperType == EOperTypes.Revaluation).
-                Include(h => h.OperationDetails).
-                ThenInclude(d => d.Goods).
-                Where(delegate(Entities.OperationHeader.OperationHeader h)
+                lock (locker)
                 {
-                    foreach (var detail in h.OperationDetails)
+                    Entities.OperationHeader.OperationHeader currentPrice = databaseContext.OperationHeaders.
+                    Where(oh => oh.OperType == EOperTypes.Revaluation).
+                    Include(h => h.OperationDetails).
+                    ThenInclude(d => d.Goods).
+                    Where(delegate (Entities.OperationHeader.OperationHeader h)
                     {
-                        if (detail.Goods.Id == itemId)
+                        foreach (var detail in h.OperationDetails)
                         {
-                            return true;
+                            if (detail.Goods.Id == itemId)
+                            {
+                                return true;
+                            }
                         }
+
+                        return false;
+                    }).MaxBy(h => h.Date);
+
+                    if (currentPrice != null)
+                    {
+                        return (double)currentPrice.OperationDetails.Where(d => d.Goods.Id == itemId).Select(i => i.SalePrice).FirstOrDefault();
                     }
-
-                    return false;
-                }).MaxBy(h => h.Date);
-
-                if (currentPrice != null)
-                {
-                    return (double)currentPrice.OperationDetails.Where(d => d.Goods.Id == itemId).Select(i => i.SalePrice).FirstOrDefault();
+                    return 0;
                 }
-                return 0;
             });
         }
 
+        
 
         /// <summary>
         /// GetOperationHeadersByDates.
@@ -162,14 +177,45 @@ namespace DataBase.Repositories.OperationHeader
         {
             return await Task.Run(() =>
             {
-                List<Entities.OperationHeader.OperationHeader> list = databaseContext.
-                     OperationHeaders.
-                     Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1) && oh.OperType == operType).
-                     Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
-                     Include(oh => oh.Partner).
-                     Include(oh => oh.Payment).
-                     ToList();
-                return list;
+                lock (locker)
+                {
+                    List<Entities.OperationHeader.OperationHeader> list = databaseContext.OperationHeaders.
+                    Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1)).
+                    Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
+                    Include(oh => oh.Partner).
+                    Include(oh => oh.Payment).
+                    ToList();
+
+                    return list;
+                }
+            });
+        }
+
+        /// <summary>
+        /// Gets sales and refunds by acct range, specific year and month.
+        /// </summary>
+        /// <param name="year">Year to search data into the database.</param>
+        /// <param name="month">Month to search data into the database.</param>
+        /// <param name="acctFrom">Start acct to search data into the database.</param>
+        /// <param name="acctTo">End acct to search data into the database.</param>
+        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
+        /// <date>13.07.2022.</date>
+        public async Task<List<Entities.OperationHeader.OperationHeader>> GetSalesAndRefunds(int year, int month, long acctFrom, long acctTo)
+        {
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.OperationHeaders.
+                    Where(oh => 
+                    (oh.OperType == EOperTypes.Sale || oh.OperType == EOperTypes.Refund) &&
+                    oh.Date.Year == year &&
+                    oh.Date.Month == month).
+                    Include(oh => oh.Partner).
+                    Include(oh => oh.Payment).
+                    Include(oh => oh.OperationDetails).ThenInclude(od => od.Goods).ThenInclude(g => g.Vatgroup).
+                    ToList();
+                }
             });
         }
 

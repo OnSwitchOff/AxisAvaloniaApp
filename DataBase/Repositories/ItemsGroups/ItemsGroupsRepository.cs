@@ -9,6 +9,7 @@ namespace DataBase.Repositories.ItemsGroups
     public class ItemsGroupsRepository : IItemsGroupsRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemsGroupsRepository"/> class.
@@ -29,14 +30,16 @@ namespace DataBase.Repositories.ItemsGroups
         {
             return await Task.Run<string>(() =>
             {
-
-                ItemsGroup res = databaseContext.ItemsGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
-                if (res == null)
+                lock (locker)
                 {
-                    return "-2";
-                }
+                    ItemsGroup res = databaseContext.ItemsGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
+                    if (res == null)
+                    {
+                        return "-2";
+                    }
 
-                return res.Path;
+                    return res.Path;
+                }
             });
         }
 
@@ -46,9 +49,17 @@ namespace DataBase.Repositories.ItemsGroups
         /// <param name="id">Id to find group of items.</param>
         /// <returns>Returns group of items if group exists; otherwise returns null.</returns>
         /// <date>20.06.2022.</date>
-        public Task<ItemsGroup> GetGroupByIdAsync(int id)
+        public async Task<ItemsGroup> GetGroupByIdAsync(int id)
         {
-            return databaseContext.ItemsGroups.Where(g => g.Id == id).FirstOrDefaultAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.ItemsGroups.
+                    Where(g => g.Id == id).
+                    FirstOrDefault();
+                }
+            });
         }
 
         /// <summary>
@@ -59,10 +70,16 @@ namespace DataBase.Repositories.ItemsGroups
         /// <date>31.03.2022.</date>
         public async Task<int> AddGroupAsync(ItemsGroup itemsGroup)
         {
-            await databaseContext.ItemsGroups.AddAsync(itemsGroup);
-            await databaseContext.SaveChangesAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    databaseContext.ItemsGroups.Add(itemsGroup);
+                    databaseContext.SaveChanges();
 
-            return itemsGroup.Id;
+                    return itemsGroup.Id;
+                }
+            });            
         }
 
         /// <summary>
@@ -75,9 +92,12 @@ namespace DataBase.Repositories.ItemsGroups
         {
             return await Task.Run<bool>(() =>
             {
-                databaseContext.ChangeTracker.Clear();
-                databaseContext.ItemsGroups.Update(itemsGroup);
-                return databaseContext.SaveChanges() > 0;
+                lock (locker)
+                {
+                    databaseContext.ChangeTracker.Clear();
+                    databaseContext.ItemsGroups.Update(itemsGroup);
+                    return databaseContext.SaveChanges() > 0;
+                }
             });
         }
 
@@ -92,29 +112,32 @@ namespace DataBase.Repositories.ItemsGroups
         {
             return await Task.Run<bool>(() =>
             {
-                ItemsGroup itemsGroup = databaseContext.ItemsGroups.
-                Include(ig => ig.Items).
-                FirstOrDefault(i => i.Id == groupId);
-                if (itemsGroup == null)
+                lock (locker)
                 {
-                    return false;
-                }
-                else
-                {
-                    if (includeSubGroups)
+                    ItemsGroup itemsGroup = databaseContext.ItemsGroups.
+                    Include(ig => ig.Items).
+                    FirstOrDefault(i => i.Id == groupId);
+                    if (itemsGroup == null)
                     {
-                        List<ItemsGroup> subGroups = databaseContext.ItemsGroups.
-                        Where(ig => ig.Path.StartsWith(itemsGroup.Path)).
-                        Include(ig => ig.Items).
-                        ToList();
-                        if (subGroups != null && subGroups.Count > 0)
-                        {
-                            databaseContext.ItemsGroups.RemoveRange(subGroups);
-                        }
+                        return false;
                     }
+                    else
+                    {
+                        if (includeSubGroups)
+                        {
+                            List<ItemsGroup> subGroups = databaseContext.ItemsGroups.
+                            Where(ig => ig.Path.StartsWith(itemsGroup.Path)).
+                            Include(ig => ig.Items).
+                            ToList();
+                            if (subGroups != null && subGroups.Count > 0)
+                            {
+                                databaseContext.ItemsGroups.RemoveRange(subGroups);
+                            }
+                        }
 
-                    databaseContext.ItemsGroups.Remove(itemsGroup);
-                    return databaseContext.SaveChanges() > 0;
+                        databaseContext.ItemsGroups.Remove(itemsGroup);
+                        return databaseContext.SaveChanges() > 0;
+                    }
                 }
             });
         }
@@ -124,9 +147,15 @@ namespace DataBase.Repositories.ItemsGroups
         /// </summary>
         /// <returns>Returns list with groups of items.</returns>
         /// <date>01.04.2022.</date>
-        public Task<List<ItemsGroup>> GetItemsGroupsAsync()
+        public async Task<List<ItemsGroup>> GetItemsGroupsAsync()
         {
-            return databaseContext.ItemsGroups.ToListAsync();
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.ItemsGroups.ToList();
+                }
+            });
         }
 
         /// <summary>
@@ -140,9 +169,12 @@ namespace DataBase.Repositories.ItemsGroups
         {
             return await Task.Run(() =>
             {
-                return databaseContext.ItemsGroups.
-                Where(i => i.Id != itemsGroupId && i.Name.ToLower().Equals(itemsGroupName.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.ItemsGroups.
+                    Where(i => i.Id != itemsGroupId && i.Name.ToLower().Equals(itemsGroupName.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
     }

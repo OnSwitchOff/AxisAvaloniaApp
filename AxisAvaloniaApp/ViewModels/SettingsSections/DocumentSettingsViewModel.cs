@@ -134,8 +134,6 @@ namespace AxisAvaloniaApp.ViewModels.Settings
                 ELanguages newLanguage = (ELanguages)SelectedLanguage.Value;
                 if (settingsService.AppLanguage != newLanguage)
                 {
-                    translationService.InitializeDictionary(newLanguage.CombineCode);
-
                     if ((bool)settingsService.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIsUsed])
                     {
                         paymentService.SetPaymentTool(new RealDevice(settingsService));

@@ -46,7 +46,7 @@ namespace AxisAvaloniaApp.Actions.Sale
         /// Gets number of the current operation.
         /// </summary>
         /// <date>24.06.2022.</date>
-        public int Acct 
+        public long Acct 
         { 
             get; 
             private set;

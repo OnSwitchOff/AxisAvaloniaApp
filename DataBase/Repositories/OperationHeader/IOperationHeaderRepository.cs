@@ -13,7 +13,7 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="operType">Operation type for which is needed to find next account number.</param>
         /// <returns>Next acc.</returns>
         /// <date>13.04.2022.</date>
-        Task<int> GetNextAcctAsync(EOperTypes operType);
+        Task<long> GetNextAcctAsync(EOperTypes operType);
 
         /// <summary>
         /// Get next unique sale number.
@@ -21,7 +21,7 @@ namespace DataBase.Repositories.OperationHeader
         /// <param name="fiscalDeviceNumber">Number of a fiscal device for which is needed to find next unique sale number.</param>
         /// <returns>Next unique sale number.</returns>
         /// <date>13.04.2022.</date>
-        Task<int> GetNextSaleNumberAsync(string fiscalDeviceNumber);
+        Task<long> GetNextSaleNumberAsync(string fiscalDeviceNumber);
 
         /// <summary>
         /// Gets OperationHeader from the database by id.

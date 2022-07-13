@@ -61,10 +61,7 @@ namespace AxisAvaloniaApp.Services
 
             services.Register<INavigationService>(() => new NavigationService());
             services.RegisterLazySingleton<IThemeSelectorService>(() => new ThemeSelectorService());
-            services.RegisterLazySingleton<ISettingsService>(() => new SettingsService(
-                resolver.GetRequiredService<ISettingsRepository>(),
-                resolver.GetRequiredService<IOperationHeaderRepository>(),
-                resolver.GetRequiredService<IPaymentService>()));
+            services.RegisterLazySingleton<ISettingsService>(() => new SettingsService(resolver.GetRequiredService<ISettingsRepository>()));
             services.Register<ISerializationService>(() => new SerializationService(resolver.GetRequiredService<ISerializationRepository>()));
             services.RegisterLazySingleton<IScanningData>(() => new ScanningService(resolver.GetRequiredService<ISettingsService>()));
             services.RegisterLazySingleton<IPaymentService>(() => new PaymentService());

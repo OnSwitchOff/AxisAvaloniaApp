@@ -20,7 +20,8 @@ namespace AxisAvaloniaApp.UserControls.Buttons
         public ExecutionButton()
         {
             Foreground = Brushes.White;
-            Background = Brushes.Transparent;
+            Background = Brush.Parse("#006666"); // Brushes.Transparent;
+            FontSize = 18.0;
             BorderBrush = Brushes.White;
             BorderThickness = new Thickness(1.5);
 

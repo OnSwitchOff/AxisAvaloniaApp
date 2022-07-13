@@ -50,7 +50,7 @@ namespace AxisAvaloniaApp.Services.AxisCloud
         /// <date>22.03.2022.</date>
         public bool CheckTransactionNumber(string transactionNumber, out long recordId, out long acctNumber)
         {
-            var result = exchangesRepository.CheckRecordAsync(Microinvest.ExchangeDataService.Enums.EExchanges.ImportFromAxisCloud, axisCloudAppName, transactionNumber).GetAwaiter().GetResult();
+            var result = exchangesRepository.CheckRecordAsync(DataBase.Enums.EExchangeDirections.Import, axisCloudAppName, transactionNumber).GetAwaiter().GetResult();
             recordId = result.id;
             acctNumber = result.acct;
 

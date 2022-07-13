@@ -10,6 +10,7 @@ namespace DataBase.Repositories.Partners
     public class PartnerRepository : IPartnerRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PartnerRepository"/> class.
@@ -28,7 +29,18 @@ namespace DataBase.Repositories.Partners
         /// <date>28.03.2022.</date>
         public async Task<Partner> GetPartnerByIdAsync(int id)
         {
-            return await databaseContext.Partners.Include(p => p.Group).FirstOrDefaultAsync(x => x.Id == id);
+            return await Task.Run(() =>
+            {
+                Partner partner = null;
+                lock (locker)
+                {
+                    partner = databaseContext.Partners.
+                    Include(p => p.Group).
+                    FirstOrDefault(x => x.Id == id);
+                }
+
+                return partner;
+            });
         }
 
         /// <summary>
@@ -37,12 +49,18 @@ namespace DataBase.Repositories.Partners
         /// <param name="discountCardNumber">Number of a discount card to search partner in the database.</param>
         /// <returns>Returns Partner if data was searched; otherwise returns null.</returns>
         /// <date>30.03.2022.</date>
-        public Task<Partner> GetPartnerByDiscountCardAsync(string discountCardNumber)
+        public async Task<Partner> GetPartnerByDiscountCardAsync(string discountCardNumber)
         {
-            return databaseContext.Partners.
-                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
-                Include(p => p.Group).
-                FirstOrDefaultAsync(p => p.DiscountCard.ToLower().Equals(discountCardNumber.ToLower()));
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                    Include(p => p.Group).
+                    FirstOrDefault(p => p.DiscountCard.ToLower().Equals(discountCardNumber.ToLower()));
+                }
+            });
         }
 
         /// <summary>
@@ -53,10 +71,16 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public async Task<Partner> GetPartnerByKeyAsync(string key)
         {
-            return await databaseContext.Partners.
-                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
-                Include(p => p.Group).
-                FirstOrDefaultAsync(p => p.TaxNumber.Equals(key) || p.VATNumber.Equals(key) || p.Email.Equals(key));
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                    Include(p => p.Group).
+                    FirstOrDefault(p => p.TaxNumber.Equals(key) || p.VATNumber.Equals(key) || p.Email.Equals(key));
+                }
+            });            
         }
 
         /// <summary>
@@ -65,12 +89,18 @@ namespace DataBase.Repositories.Partners
         /// <param name="name">Name of partner to search partner in the database.</param>
         /// <returns>Returns Partner if data was searched; otherwise returns null.</returns>
         /// <date>30.03.2022.</date>
-        public Task<Partner> GetPartnerByNameAsync(string name)
+        public async Task<Partner> GetPartnerByNameAsync(string name)
         {
-            return databaseContext.Partners.
-                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
-                Include(p => p.Group).
-                FirstOrDefaultAsync(p => p.Company.Equals(name));
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                    Include(p => p.Group).
+                    FirstOrDefault(p => p.Company.Equals(name));
+                }
+            });
         }
 
         /// <summary>
@@ -81,11 +111,14 @@ namespace DataBase.Repositories.Partners
         /// <date>28.03.2022.</date>
         public IAsyncEnumerable<Partner> GetParnersAsync(ENomenclatureStatuses status = ENomenclatureStatuses.Active)
         {
-            return databaseContext.Partners.
-                Include(p => p.Group).
-                Where(x => (x.Status == ENomenclatureStatuses.All || x.Status == status)).
-                Include(p => p.Group).
-                AsAsyncEnumerable();
+            lock (locker)
+            {
+                return databaseContext.Partners.
+                    Include(p => p.Group).
+                    Where(x => (x.Status == ENomenclatureStatuses.All || x.Status == status)).
+                    Include(p => p.Group).
+                    AsAsyncEnumerable();
+            }
         }
 
         /// <summary>
@@ -97,19 +130,22 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Partner> GetParnersAsync(string groupPath, string searchKey)
         {
-            foreach (var partner in databaseContext.Partners.
-                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
-                Include(p => p.Group))
+            lock (locker)
             {
-                if ((groupPath.Equals("-2") ? 1 == 1 : partner.Group.Path.StartsWith(groupPath)) &&
-                    (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
-                        (partner.Company.ToLower().Contains(searchKey) ||
-                        partner.TaxNumber.Contains(searchKey) ||
-                        partner.VATNumber.Contains(searchKey) ||
-                        partner.Email.Contains(searchKey) ||
-                        partner.DiscountCard.Equals(searchKey))))
+                foreach (var partner in databaseContext.Partners.
+                    Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                    Include(p => p.Group))
                 {
-                    yield return partner;
+                    if ((groupPath.Equals("-2") ? 1 == 1 : partner.Group.Path.StartsWith(groupPath)) &&
+                        (string.IsNullOrEmpty(searchKey) ? 1 == 1 :
+                            (partner.Company.ToLower().Contains(searchKey) ||
+                            partner.TaxNumber.Contains(searchKey) ||
+                            partner.VATNumber.Contains(searchKey) ||
+                            partner.Email.Contains(searchKey) ||
+                            partner.DiscountCard.Equals(searchKey))))
+                    {
+                        yield return partner;
+                    }
                 }
             }
         }
@@ -122,17 +158,20 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public async IAsyncEnumerable<Partner> GetParnersAsync(string searchKey)
         {
-            foreach(var partner in databaseContext.Partners.
-                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
-                Include(p => p.Group))
+            lock (locker)
             {
-                if (partner.Company.ToLower().Contains(searchKey.ToLower()) ||
-                    partner.TaxNumber.Contains(searchKey) ||
-                    partner.VATNumber.Contains(searchKey) ||
-                    partner.Email.Contains(searchKey) ||
-                    partner.DiscountCard.Equals(searchKey))
+                foreach (var partner in databaseContext.Partners.
+                    Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                    Include(p => p.Group))
                 {
-                    yield return partner;
+                    if (partner.Company.ToLower().Contains(searchKey.ToLower()) ||
+                        partner.TaxNumber.Contains(searchKey) ||
+                        partner.VATNumber.Contains(searchKey) ||
+                        partner.Email.Contains(searchKey) ||
+                        partner.DiscountCard.Equals(searchKey))
+                    {
+                        yield return partner;
+                    }
                 }
             }
         }
@@ -145,10 +184,13 @@ namespace DataBase.Repositories.Partners
         /// <date>30.03.2022.</date>
         public IAsyncEnumerable<Partner> GetParnersByGroupIdAsync(int GroupID)
         {
-            return databaseContext.Partners.
-                Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
-                Include(p => p.Group).
-                Where(p => p.Group.Id == GroupID).AsAsyncEnumerable();
+            lock (locker)
+            {
+                return databaseContext.Partners.
+                    Where(p => p.Status != ENomenclatureStatuses.Hidden && p.Status != ENomenclatureStatuses.Deleted).
+                    Include(p => p.Group).
+                    Where(p => p.Group.Id == GroupID).AsAsyncEnumerable();
+            }
         }
 
         /// <summary>
@@ -161,11 +203,14 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run<int>(() =>
             {
-                partner.Group = databaseContext.PartnersGroups.Where(g => g.Id == partner.Group.Id).FirstOrDefault();
-                databaseContext.Partners.Add(partner);
-                int rec = databaseContext.SaveChanges();
+                lock (locker)
+                {
+                    partner.Group = databaseContext.PartnersGroups.Where(g => g.Id == partner.Group.Id).FirstOrDefault();
+                    databaseContext.Partners.Add(partner);
+                    int rec = databaseContext.SaveChanges();
 
-                return partner.Id;
+                    return partner.Id;
+                }
             });
         }
 
@@ -179,9 +224,12 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run<bool>(() =>
             {
-                databaseContext.ChangeTracker.Clear();
-                databaseContext.Partners.Update(partner);
-                return databaseContext.SaveChanges() > 0;
+                lock (locker)
+                {
+                    databaseContext.ChangeTracker.Clear();
+                    databaseContext.Partners.Update(partner);
+                    return databaseContext.SaveChanges() > 0;
+                }
             });
         }
 
@@ -195,25 +243,28 @@ namespace DataBase.Repositories.Partners
         {
             return Task.Run<bool>(() =>
             {
-                Partner partner = databaseContext.Partners.FirstOrDefault(p => p.Id == partnerId);
-                if (partner == null)
+                lock (locker)
                 {
-                    return false;
-                }
-                else
-                {
-                    if (databaseContext.OperationHeaders.Where(oh => oh.Partner.Id == partnerId).FirstOrDefault() != null)
+                    Partner partner = databaseContext.Partners.FirstOrDefault(p => p.Id == partnerId);
+                    if (partner == null)
                     {
-                        partner.Status = ENomenclatureStatuses.Hidden;
-                        databaseContext.ChangeTracker.Clear();
-                        databaseContext.Partners.Update(partner);
+                        return false;
                     }
                     else
                     {
-                        databaseContext.Partners.Remove(partner);
-                    }
+                        if (databaseContext.OperationHeaders.Where(oh => oh.Partner.Id == partnerId).FirstOrDefault() != null)
+                        {
+                            partner.Status = ENomenclatureStatuses.Hidden;
+                            databaseContext.ChangeTracker.Clear();
+                            databaseContext.Partners.Update(partner);
+                        }
+                        else
+                        {
+                            databaseContext.Partners.Remove(partner);
+                        }
 
-                    return databaseContext.SaveChanges() > 0;
+                        return databaseContext.SaveChanges() > 0;
+                    }
                 }
             });
         }
@@ -229,9 +280,12 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run(() =>
             {
-                return databaseContext.Partners.
-                Where(p => p.Id != partnerId && p.Company.ToLower().Equals(partnerName.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p => p.Id != partnerId && p.Company.ToLower().Equals(partnerName.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
 
@@ -246,9 +300,12 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run(() =>
             {
-                return databaseContext.Partners.
-                Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.TaxNumber) && p.TaxNumber.ToLower().Equals(taxNumber.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.TaxNumber) && p.TaxNumber.ToLower().Equals(taxNumber.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
 
@@ -263,9 +320,12 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run(() =>
             {
-                return databaseContext.Partners.
-                Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.VATNumber) && p.VATNumber.ToLower().Equals(vATNumber.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.VATNumber) && p.VATNumber.ToLower().Equals(vATNumber.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
 
@@ -280,12 +340,15 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run(() =>
             {
-                return databaseContext.Partners.
-                Where(p => 
-                p.Id != partnerId 
-                && !string.IsNullOrEmpty(p.Phone) 
-                && p.Phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Equals(phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", ""))).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p =>
+                    p.Id != partnerId
+                    && !string.IsNullOrEmpty(p.Phone)
+                    && p.Phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Equals(phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", ""))).
+                    FirstOrDefault() != null;
+                }
             });
         }
 
@@ -300,9 +363,12 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run(() =>
             {
-                return databaseContext.Partners.
-                Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.Email) && p.Email.ToLower().Equals(eMail.ToLower())).
-                FirstOrDefault() != null;
+                lock (locker)
+                {
+                    return databaseContext.Partners.
+                    Where(p => p.Id != partnerId && !string.IsNullOrEmpty(p.Email) && p.Email.ToLower().Equals(eMail.ToLower())).
+                    FirstOrDefault() != null;
+                }
             });
         }
 
@@ -316,25 +382,28 @@ namespace DataBase.Repositories.Partners
         {
             return await Task.Run(() =>
             {
-                Entities.PartnersGroups.PartnersGroup partnersGroup = databaseContext.PartnersGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
-                if (partnersGroup == null)
+                lock (locker)
                 {
-                    return false;
-                }
+                    Entities.PartnersGroups.PartnersGroup partnersGroup = databaseContext.PartnersGroups.Where(pg => pg.Id == groupId).FirstOrDefault();
+                    if (partnersGroup == null)
+                    {
+                        return false;
+                    }
 
-                List<Partner> partners = databaseContext.Partners.Where(p => p.Group == null).ToList();
-                if (partners == null || partners.Count == 0)
-                {
-                    return true;
-                }
+                    List<Partner> partners = databaseContext.Partners.Where(p => p.Group == null).ToList();
+                    if (partners == null || partners.Count == 0)
+                    {
+                        return true;
+                    }
 
-                foreach (Partner partner in partners)
-                {
-                    partner.Group = partnersGroup;
-                }
+                    foreach (Partner partner in partners)
+                    {
+                        partner.Group = partnersGroup;
+                    }
 
-                databaseContext.Partners.UpdateRange(partners);
-                return databaseContext.SaveChanges() > 0;
+                    databaseContext.Partners.UpdateRange(partners);
+                    return databaseContext.SaveChanges() > 0;
+                }
             });
         }
     }

@@ -1,12 +1,11 @@
-﻿using DataBase.Repositories.OperationHeader;
-using DataBase.Repositories.Settings;
+﻿using DataBase.Repositories.Settings;
 using Microinvest.CommonLibrary.Enums;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using AxisAvaloniaApp.Enums;
-using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Translation;
+using AxisAvaloniaApp.Helpers;
 
 namespace AxisAvaloniaApp.Services.Settings
 {
@@ -16,8 +15,7 @@ namespace AxisAvaloniaApp.Services.Settings
     public partial class SettingsService : ISettingsService
     {
         private readonly ISettingsRepository settingsRepository;
-        private readonly IOperationHeaderRepository headerRepository;
-        private readonly IPaymentService paymentService;
+        private ITranslationService translationService;
         private char? decimalSeparator = null;
         private string priceFormat = null;
         private string qtyFormat = null;
@@ -29,14 +27,10 @@ namespace AxisAvaloniaApp.Services.Settings
         private Microinvest.DeviceService.CustomTypes.UniqueSaleNumber uniqueSaleNumber;
         private string logfilePath = null;
 
-        public SettingsService(
-            ISettingsRepository settingsRepository,
-            IOperationHeaderRepository headerRepository,
-            IPaymentService paymentService)
+        public SettingsService(ISettingsRepository settingsRepository)
         {
             this.settingsRepository = settingsRepository;
-            this.headerRepository = headerRepository;
-            this.paymentService = paymentService;
+            translationService = null;
         }
 
         /// <summary>
@@ -110,6 +104,11 @@ namespace AxisAvaloniaApp.Services.Settings
                     this.AppSettings[ESettingKeys.Language].Value = ((int)value).ToString();
                     this.AppSettings[ESettingKeys.Language].UpdateData();
 
+                    if (translationService == null)
+                    {
+                        translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+                    }
+                    translationService.InitializeDictionary(value.CombineCode);
                     Microinvest.PDFCreator.Helpers.TranslationHelper.Language = value;
                 }
             }

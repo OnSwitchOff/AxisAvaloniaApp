@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Platform;
 using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.AxisCloud;
 using AxisAvaloniaApp.Services.Logger;
@@ -126,8 +124,8 @@ namespace AxisAvaloniaApp.Services.StartUp
                         paymentService.SetPaymentTool(new NoDevice(settings));
                     }
 
-                    int uSNFromDatabase = await headerRepository.GetNextSaleNumberAsync(paymentService.FiscalDevice.FiscalPrinterSerialNumber);
-                    settings.UniqueSaleNumber = Math.Max((int)settings.AppSettings[Enums.ESettingKeys.UniqueSaleNumber], uSNFromDatabase);
+                    long uSNFromDatabase = await headerRepository.GetNextSaleNumberAsync(paymentService.FiscalDevice.FiscalPrinterSerialNumber);
+                    settings.UniqueSaleNumber = (int)Math.Max((long)settings.AppSettings[Enums.ESettingKeys.UniqueSaleNumber], uSNFromDatabase);
                 }
                 catch (Exception e)
                 {
