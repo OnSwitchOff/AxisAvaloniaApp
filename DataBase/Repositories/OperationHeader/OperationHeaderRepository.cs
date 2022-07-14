@@ -189,9 +189,10 @@ namespace DataBase.Repositories.OperationHeader
                 lock (locker)
                 {
                     List<Entities.OperationHeader.OperationHeader> list = databaseContext.OperationHeaders.
-                    Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1)).
+                    Where(oh => oh.Date >= from && oh.Date <= to.AddDays(1) && operType == oh.OperType).
                     Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
-                    Include(oh => oh.Partner).
+                    Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Group).
+                    Include(oh => oh.Partner).ThenInclude(p => p.Group).
                     Include(oh => oh.Payment).
                     ToList();
 

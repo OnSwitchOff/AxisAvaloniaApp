@@ -1,5 +1,6 @@
 ﻿using DataBase.Entities.Documents;
 using Microinvest.CommonLibrary.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace DataBase.Repositories.Documents
     public class DocumentsRepository : IDocumentsRepository
     {
         private readonly DatabaseContext databaseContext;
+        private static object locker = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentsRepository"/> class.
@@ -107,6 +109,27 @@ namespace DataBase.Repositories.Documents
             return await Task.Run(() =>
             {
                 return databaseContext.Documents.Any(d => documentType == d.DocumentType && d.DocumentNumber == documentNumber);
+            });
+        }
+
+        /// <summary>
+        /// GetDocumentsByDatesByDates.
+        /// </summary>
+        /// <returns>Documents</returns>
+        /// <date>14.07.2022.</date>
+        public async Task<List<Document>> GetDocumentsByDatesAsync(DateTime from, DateTime to, EDocumentTypes DocumentType)
+        {
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    List<Document> list = databaseContext.Documents.
+                    Where(d => d.DocumentDate >= from && d.DocumentDate <= to.AddDays(1) && DocumentType == d.DocumentType).
+                    Include(d => d.OperationHeader).ThenInclude(oh => oh.Partner).
+                    Include(d => d.OperationHeader).ThenInclude(oh => oh.OperationDetails).
+                    ToList();
+                    return list;
+                }
             });
         }
     }
