@@ -119,7 +119,7 @@ namespace AxisAvaloniaApp.Services.Document
             get
             {
                 // если массив с шириной колонок таблицы не сформирован - формируем его с данными по умолчанию
-                if (this.tableColumnsWidth == null)
+                if (this.tableColumnsWidth == null || this.tableColumnsWidth.Length != ItemsData.Columns.Count)
                 {
                     this.tableColumnsWidth = new double[this.ItemsData.Columns.Count > 0 ? this.ItemsData.Columns.Count : 1];
                     double defaultWidth = (this.pdfDocument.PageWidth - this.pdfDocument.LeftIndentation - this.pdfDocument.RightIndentation) / this.tableColumnsWidth.Length;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Services.Reports
 {
@@ -32,7 +33,7 @@ namespace AxisAvaloniaApp.Services.Reports
         /// <param name="dateFrom">Start date to filter data</param>
         /// <param name="dateTo">End date to filter data.</param>
         /// <date>16.06.2022.</date>
-        void GenerateReportData(int reportKey, ulong acctFrom, ulong acctTo, DateTime dateFrom, DateTime dateTo);
+        Task<bool> GenerateReportDataAsync(int reportKey, ulong acctFrom, ulong acctTo, DateTime dateFrom, DateTime dateTo);
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Translation;
 using DataBase.Entities.OperationHeader;
 using DataBase.Repositories.Documents;
 using DataBase.Repositories.Items;
@@ -11,7 +12,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Services.Reports.Bulgaria
 {
@@ -27,6 +30,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         private readonly IPartnerRepository partnersRepository;
         private readonly IPaymentTypesRepository paymentTypesRepository;
         private readonly ISettingsService settingsService;
+        private readonly ITranslationService translationService;
 
         public BulgarianReportsService()
         {
@@ -36,6 +40,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
             partnersRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
             paymentTypesRepository = Splat.Locator.Current.GetRequiredService<IPaymentTypesRepository>();
             settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
+            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
 
             supportedReports = new ObservableCollection<ReportItemModel>();
             InitSupportedReports();
@@ -56,7 +61,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                     },
                 }
             });
-            
+
             // менеджмент
             supportedReports.Add(new ReportItemModel()
             {
@@ -114,7 +119,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         LocalizeReportNameKey = "strOutputCreditNotes"
                     }
                 }
-            }) ;
+            });
 
             // Номенклатуры
 
@@ -172,7 +177,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
         /// <param name="dateFrom">Start date to filter data</param>
         /// <param name="dateTo">End date to filter data.</param>
         /// <date>16.06.2022.</date>
-        public async void GenerateReportData(int reportKey, ulong acctFrom, ulong acctTo, DateTime dateFrom, DateTime dateTo)
+        public async Task<bool> GenerateReportDataAsync(int reportKey, ulong acctFrom, ulong acctTo, DateTime dateFrom, DateTime dateTo)
         {
             switch ((EBulgarianReports)reportKey)
             {
@@ -226,7 +231,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         SaleSum = totalSaleSum.ToString(settingsService.PriceFormat),
                         PurchaseSum = totalPurchaseSum.ToString(settingsService.PriceFormat)
                     };
-                    ((ObservableCollection<SalesReportModel>)source).Add(resultRow);   
+                    ((ObservableCollection<SalesReportModel>)source).Add(resultRow);
 
                     break;
                 case EBulgarianReports.SalesByItems:
@@ -512,7 +517,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
 
                     OutputDebitNoteReportModel resultRow7 = new OutputDebitNoteReportModel()
                     {
-                        Sum = totalSum7.ToString("F")
+                        Sum = totalSum7.ToString(settingsService.PriceFormat)
                     };
                     ((ObservableCollection<OutputDebitNoteReportModel>)source).Add(resultRow7);
 
@@ -562,7 +567,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                     {
                         new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
                         new ReportDataModel("strCode", "Code", Avalonia.Layout.HorizontalAlignment.Left, 100),
-                        new ReportDataModel("strGoods", "Item", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
+                        new ReportDataModel("strGoods", "Item", Avalonia.Layout.HorizontalAlignment.Left, double.NaN),
                     };
 
                     source = new ObservableCollection<NomenclatureOfItemsReportModel>();
@@ -583,7 +588,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                     {
                         new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
                         new ReportDataModel("strClientCode", "ClientCode", Avalonia.Layout.HorizontalAlignment.Left, 100),
-                        new ReportDataModel("strNameOfClient", "NameOfClient", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
+                        new ReportDataModel("strNameOfClient", "NameOfClient", Avalonia.Layout.HorizontalAlignment.Left, double.NaN),
                         new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strPrincipal", "Principal", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strCity", "City", Avalonia.Layout.HorizontalAlignment.Right, 95),
@@ -617,7 +622,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                     {
                         new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
                         new ReportDataModel("strId", "Id", Avalonia.Layout.HorizontalAlignment.Left, 100),
-                        new ReportDataModel("strPaymentType", "PaymentType", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
+                        new ReportDataModel("strPaymentType", "PaymentType", Avalonia.Layout.HorizontalAlignment.Left, double.NaN),
                     };
 
                     source = new ObservableCollection<NomenclatureOfPaymentTypesReportModel>();
@@ -636,6 +641,7 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                     break;
 
             }
+            return ColumnsData.Count > 0 && Source.Count() > 0;
         }
     }
 }

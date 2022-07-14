@@ -4,6 +4,11 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System;
 using AxisAvaloniaApp.Services.Serialization;
+using System.Data;
+using System.Linq;
+using AxisAvaloniaApp.Services.Translation;
+using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Document;
 
 namespace AxisAvaloniaApp.ViewModels
 {
@@ -11,6 +16,8 @@ namespace AxisAvaloniaApp.ViewModels
     {
         private readonly IReportsService reportsService;
         private readonly ISerializationService serializationService;
+        private readonly ITranslationService translationService;
+        private readonly IDocumentService documentService;
 
         private bool isMainContentVisible;
         private ReportItemModel selectedReport;
@@ -20,7 +27,7 @@ namespace AxisAvaloniaApp.ViewModels
         private string acctTo;
         private DateTime dateFrom = new DateTime(2022, 1, 1);
         private DateTime dateTo = DateTime.Today;
-
+        private ObservableCollection<System.Drawing.Image> pages;
         /// <summary>
         /// 
         /// </summary>
@@ -30,6 +37,9 @@ namespace AxisAvaloniaApp.ViewModels
         {
             this.reportsService = reportsService;
             this.serializationService = serializationService;
+            translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+            documentService = Splat.Locator.Current.GetRequiredService<IDocumentService>();
+            documentService.PageParameters.PageOrientation = Microinvest.PDFCreator.Enums.EPageOrientations.Landscape;
             serializationService.InitSerializationData(Enums.ESerializationGroups.Report);
 
             IsMainContentVisible = true;
@@ -111,16 +121,56 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref dateTo, value);
         }
 
-        public void GenerateReport()
+        public ObservableCollection<System.Drawing.Image> Pages
         {
-            reportsService.GenerateReportData(SelectedReport.ReportKey, 0, 0, DateFrom, DateTo);
+            get => pages == null ? pages = new ObservableCollection<System.Drawing.Image>() : pages;
+            set => this.RaiseAndSetIfChanged(ref pages, value);
+        }
+
+        public IDocumentService DocumentService { get => documentService; }
+
+        public async void GenerateReport()
+        {
+            if(!await reportsService.GenerateReportDataAsync(SelectedReport.ReportKey, 0, 0, DateFrom, DateTo))
+            {
+                return;
+            }
             Source = reportsService.Source;
             ColumnsData = reportsService.ColumnsData;
         }
 
         public void Print_Export()
         {
-            IsMainContentVisible = false;
+            DataTable ReportTable = new System.Data.DataTable();
+            ColumnsData.ToList().ForEach(cd => ReportTable.Columns.Add(translationService.Localize(cd.HeaderKey)));
+
+            foreach (var item in Source)
+            {
+                object[] rowData = new object[ColumnsData.Count];
+                int i = 0;
+                foreach (ReportDataModel dataModel in ColumnsData)
+                {
+                    rowData[i] = item.GetType().GetProperty(dataModel.DataKey).GetValue(item, null);
+                    i++;
+                }
+                ReportTable.Rows.Add(rowData);
+            }
+
+            documentService.ItemsData = ReportTable;
+
+
+
+            // генерируем документ
+            if (documentService.GenerateReport())
+            {
+                Pages = documentService.ConvertDocumentToImageList().Clone();
+            }
+            else
+            {
+                //loggerService.ShowDialog("msgErrorDuringReceiptGeneration", "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
+            }
+
+            IsMainContentVisible = Pages.Count == 0;
         }
     }
 }
