@@ -280,7 +280,7 @@ namespace DataBase.Repositories.OperationHeader
 
 
         //public double GetLastPriceByGoodId(int goodId)
-        //{
+        //{*
         //    try
         //    {
         //        return (double)databaseContext.
