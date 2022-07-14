@@ -4,6 +4,7 @@ using AxisAvaloniaApp.Services.Settings;
 using DataBase.Repositories.Documents;
 using DataBase.Repositories.Exchanges;
 using DataBase.Repositories.OperationHeader;
+using Microinvest.ExchangeDataService;
 using Microinvest.ExchangeDataService.Enums;
 using Microinvest.ExchangeDataService.Models.Auditor;
 using System;
@@ -53,11 +54,12 @@ namespace AxisAvaloniaApp.Services.ExchangeService
                         Operation operation;
                         DataBase.Entities.Documents.Document? document;
                         Goods nAPItem;
+                        Refund nAPRefund;
                         decimal amount;
                         decimal vATAmount;
                         decimal totalAmount;
 
-                        List<DataBase.Entities.OperationHeader.OperationHeader> sales = await operationHeaderRepository.GetSalesAndRefunds(dateFrom.Year, dateFrom.Month, acctFrom, acctTo);
+                        List<DataBase.Entities.OperationHeader.OperationHeader> sales = await operationHeaderRepository.GetRecords(Microinvest.CommonLibrary.Enums.EOperTypes.Sale, dateFrom.Year, dateFrom.Month, acctFrom, acctTo);
                         foreach (var sale in sales)
                         {
                             operation = new Operation();
@@ -88,6 +90,7 @@ namespace AxisAvaloniaApp.Services.ExchangeService
                                 amount += nAPItem.Price * nAPItem.Quantity;
                                 vATAmount += nAPItem.TotalVATValue;
                                 totalAmount += nAPItem.Sum;
+
                                 operation.Products.Add(nAPItem);
                             }
 
@@ -97,8 +100,30 @@ namespace AxisAvaloniaApp.Services.ExchangeService
                             operation.TotalSum = totalAmount;
                             operation.PaymentMethod = sale.Payment.PaymentIndex;
                             auditor.Operations.Add(operation);
+                            await exchangesRepository.AddNewRecordAsync(sale.Id, DataBase.Enums.EExchangeDirections.Export, app.ToString(), string.Empty, 0, 0);
                         }
 
+                        List<DataBase.Entities.OperationHeader.OperationHeader> refunds = await operationHeaderRepository.GetRecords(Microinvest.CommonLibrary.Enums.EOperTypes.Refund, dateFrom.Year, dateFrom.Month, acctFrom, acctTo);
+                        totalAmount = 0;
+                        foreach (var refund in refunds)
+                        {
+                            nAPRefund = new Refund()
+                            {
+                                Acct = (ulong)refund.Acct,
+                                TotalSumRefund = refund.OperationDetails.Sum(od => od.SalePrice * od.Qtty),
+                                DateRefund = refund.Date,
+                                PaymentType = refund.Payment.PaymentIndex,
+                            };
+
+                            auditor.Refunds.Add(nAPRefund);
+                            totalAmount += nAPRefund.TotalSumRefund;
+                            await exchangesRepository.AddNewRecordAsync(refund.Id, DataBase.Enums.EExchangeDirections.Export, app.ToString(), string.Empty, 0, 0);
+                        }
+                        auditor.CountReturn = refunds.Count;
+                        auditor.TotalSumRefund = totalAmount;
+
+                        return await ExchangeData.ExportToAuditorAsync(auditor);
+                    case EExchanges.ExportToDeltaPro:
                         break;
                 }
 

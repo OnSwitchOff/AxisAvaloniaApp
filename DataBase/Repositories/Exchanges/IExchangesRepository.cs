@@ -69,5 +69,18 @@ namespace DataBase.Repositories.Exchanges
         /// <returns>Returns true if data was imported; otherwise returns false.</returns>
         /// <date>12.07.2022.</date>
         Task<bool> DataWasImported(string appName, string appKey, long acct, EOperTypes operType);
+
+        /// <summary>
+        /// Adds new record to the Exchange table.
+        /// </summary>
+        /// <param name="operationHeaderId">Id of record of an OperationHeader table.</param>
+        /// <param name="direction">Direction of an exchange.</param>
+        /// <param name="appName">Name of the application to search data to the database.</param>
+        /// <param name="appKey">Specific key of the application to search data to the database.</param>
+        /// <param name="acct">Acct to search data to the database.</param>
+        /// <param name="operType">Type of operation to search data to the database.</param>
+        /// <returns>Returns false if record wasn't added to database; otherwise returns true.</returns>
+        /// <date>13.07.2022.</date>
+        Task<bool> AddNewRecordAsync(int operationHeaderId, EExchangeDirections direction, string appName, string appKey, long acct, EOperTypes operType);
     }
 }

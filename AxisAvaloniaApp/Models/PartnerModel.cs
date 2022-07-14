@@ -224,7 +224,7 @@ namespace AxisAvaloniaApp.Models
         {
             Microinvest.PDFCreator.Models.CompanyModel company = new Microinvest.PDFCreator.Models.CompanyModel();
             company.Name = partner.Name;
-            company.Address = string.Format("{0}, {1}", partner.City, partner.Address);
+            company.Address = string.Format("{0}, {1}", partner.City, partner.Address).Trim(',');
             company.Principal = partner.Principal;
             company.TaxNumber = partner.TaxNumber;
             company.Phone = partner.Phone;

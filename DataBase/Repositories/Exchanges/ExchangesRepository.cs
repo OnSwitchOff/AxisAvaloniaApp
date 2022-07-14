@@ -181,7 +181,18 @@ namespace DataBase.Repositories.Exchanges
             });
         }
 
-        public async Task<bool> AddNewRecord(int operationHeaderId, EExchangeDirections direction, string appName, string appKey, long acct)
+        /// <summary>
+        /// Adds new record to the Exchange table.
+        /// </summary>
+        /// <param name="operationHeaderId">Id of record of an OperationHeader table.</param>
+        /// <param name="direction">Direction of an exchange.</param>
+        /// <param name="appName">Name of the application to search data to the database.</param>
+        /// <param name="appKey">Specific key of the application to search data to the database.</param>
+        /// <param name="acct">Acct to search data to the database.</param>
+        /// <param name="operType">Type of operation to search data to the database.</param>
+        /// <returns>Returns false if record wasn't added to database; otherwise returns true.</returns>
+        /// <date>13.07.2022.</date>
+        public async Task<bool> AddNewRecordAsync(int operationHeaderId, EExchangeDirections direction, string appName, string appKey, long acct, EOperTypes operType)
         {
             return await Task.Run(() =>
             {
@@ -195,9 +206,8 @@ namespace DataBase.Repositories.Exchanges
                         return false;
                     }
 
-                    //databaseContext.Exchanges.Add(Exchange.Create(header, direction, appName, appKey, header.OperType));
-
-                    return true;
+                    databaseContext.Exchanges.Add(Exchange.Create(header, direction, appName, appKey, acct, operType));
+                    return databaseContext.SaveChanges() > 0;
                 }
             });
         }

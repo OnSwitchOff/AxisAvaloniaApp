@@ -64,7 +64,7 @@ namespace AxisAvaloniaApp.Services.Document
                 string.Format(
                     "{0}, {1}",
                     this.settings.AppSettings[ESettingKeys.City],
-                    this.settings.AppSettings[ESettingKeys.Address]);
+                    this.settings.AppSettings[ESettingKeys.Address]).Trim(',');
             this.pdfDocument.Saler.Principal = this.settings.AppSettings[ESettingKeys.Principal];
             this.pdfDocument.Saler.TaxNumber = this.settings.AppSettings[ESettingKeys.TaxNumber];
             this.pdfDocument.Saler.VATNumber = this.settings.AppSettings[ESettingKeys.VATNumber];

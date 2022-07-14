@@ -48,15 +48,41 @@ namespace DataBase.Repositories.OperationHeader
         Task<double> GetItemPriceAsync(int itemId);
 
         /// <summary>
+        /// Gets price of item.
+        /// </summary>
+        /// <param name="itemId">Id of item to search price.</param>
+        /// <returns>Returns 0 if record is absent; otherwise returns actual price of item.</returns>
+        /// <date>13.07.2022.</date>
+        double GetItemPrice(int itemId);
+
+        /// <summary>
         /// GetOperationHeadersByDates.
         /// </summary>
         /// <returns>Next acc.</returns>
         /// <date>06.07.2022.</date>
         Task<List<Entities.OperationHeader.OperationHeader>> GetOperationHeadersByDatesAsync(DateTime from, DateTime to, EOperTypes operType);
 
+        /// <summary>
+        /// Gets records in according to parameters.
+        /// </summary>
+        /// <param name="operType">Type of operation to search data into the database.</param>
+        /// <param name="year">Year to search data into the database.</param>
+        /// <param name="month">Month to search data into the database.</param>
+        /// <param name="acctFrom">Start acct to search data into the database.</param>
+        /// <param name="acctTo">End acct to search data into the database.</param>
+        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
+        /// <date>13.07.2022.</date>
+        Task<List<Entities.OperationHeader.OperationHeader>> GetRecords(EOperTypes operType, int year, int month, long acctFrom, long acctTo);
 
-        Task<List<Entities.OperationHeader.OperationHeader>> GetSalesAndRefunds(int year, int month, long acctFrom, long acctTo);
-
-        double GetLastPriceByGoodId(int goodId);
+        /// <summary>
+        /// Gets records to generate export file for Delta Pro.
+        /// </summary>
+        /// <param name="dateFrom">Start date to search data into the database.</param>
+        /// <param name="dateTo">End date to search data into the database.</param>
+        /// <param name="acctFrom">Start acct to search data into the database.</param>
+        /// <param name="acctTo">End acct to search data into the database.</param>
+        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
+        /// <date>13.07.2022.</date>
+        Task<List<Entities.OperationHeader.OperationHeader>> GetRecordsForDeltaProAsync(DateTime dateFrom, DateTime dateTo, long acctFrom, long acctTo);
     }
 }

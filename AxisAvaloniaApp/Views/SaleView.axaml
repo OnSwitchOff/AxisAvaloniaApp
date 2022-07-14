@@ -21,6 +21,7 @@
     <converters:ENomenclaturesToBoolConverter x:Key="NomenclatureToBool"/>
     <converters:EItemTypesToComboBoxItemModelConverter x:Key="ItemTypesToComboBoxItem"/>
     <converters:NullableObjectToBoolConverter x:Key="ObjectToBool"/>
+    <converters:VATGroupsConverter x:Key="VATGroupsConverter"/>
 
     <miEnums:ENomenclatures x:Key="Items">Items</miEnums:ENomenclatures>
     <miEnums:ENomenclatures x:Key="ItemsGroups">ItemsGroups</miEnums:ENomenclatures>
@@ -499,10 +500,11 @@
                                       LocalizeTextKey="strVATGroup"/>
             <controlsEx:AxisComboBox Grid.Row="4"
                                      Grid.Column="1"
+                                     Name="comboBoxVATGroups"
                                      Classes="RightMargin"
                                      ExplanationKey="SelectItemVATGroup"
                                      Items="{Binding VATGroups, Mode=TwoWay}"
-                                     SelectedItem="{Binding EditableItem.VATGroup, Mode=TwoWay}">
+                                     SelectedItem="{Binding EditableItem.VATGroup, Mode=TwoWay, Converter={StaticResource VATGroupsConverter}, ConverterParameter={Binding $self.Items}}">
               <controlsEx:AxisComboBox.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Text="{Binding Name}"/>

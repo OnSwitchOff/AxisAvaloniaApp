@@ -140,33 +140,42 @@ namespace DataBase.Repositories.OperationHeader
             {
                 lock (locker)
                 {
-                    Entities.OperationHeader.OperationHeader currentPrice = databaseContext.OperationHeaders.
-                    Where(oh => oh.OperType == EOperTypes.Revaluation).
-                    Include(h => h.OperationDetails).
-                    ThenInclude(d => d.Goods).
-                    Where(delegate (Entities.OperationHeader.OperationHeader h)
-                    {
-                        foreach (var detail in h.OperationDetails)
-                        {
-                            if (detail.Goods.Id == itemId)
-                            {
-                                return true;
-                            }
-                        }
-
-                        return false;
-                    }).MaxBy(h => h.Date);
-
-                    if (currentPrice != null)
-                    {
-                        return (double)currentPrice.OperationDetails.Where(d => d.Goods.Id == itemId).Select(i => i.SalePrice).FirstOrDefault();
-                    }
-                    return 0;
+                    return GetItemPrice(itemId);
                 }
             });
         }
 
-        
+        /// <summary>
+        /// Gets price of item.
+        /// </summary>
+        /// <param name="itemId">Id of item to search price.</param>
+        /// <returns>Returns 0 if record is absent; otherwise returns actual price of item.</returns>
+        /// <date>13.07.2022.</date>
+        public double GetItemPrice(int itemId)
+        {
+            Entities.OperationHeader.OperationHeader currentPrice = databaseContext.OperationHeaders.
+                Where(oh => oh.OperType == EOperTypes.Revaluation).
+                Include(h => h.OperationDetails).
+                ThenInclude(d => d.Goods).
+                Where(delegate (Entities.OperationHeader.OperationHeader h)
+                {
+                    foreach (var detail in h.OperationDetails)
+                    {
+                        if (detail.Goods.Id == itemId)
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }).MaxBy(h => h.Date);
+
+            if (currentPrice != null)
+            {
+                return (double)currentPrice.OperationDetails.Where(d => d.Goods.Id == itemId).Select(i => i.SalePrice).FirstOrDefault();
+            }
+            return 0;
+        }
 
         /// <summary>
         /// GetOperationHeadersByDates.
@@ -192,15 +201,16 @@ namespace DataBase.Repositories.OperationHeader
         }
 
         /// <summary>
-        /// Gets sales and refunds by acct range, specific year and month.
+        /// Gets records in according to parameters.
         /// </summary>
+        /// <param name="operType">Type of operation to search data into the database.</param>
         /// <param name="year">Year to search data into the database.</param>
         /// <param name="month">Month to search data into the database.</param>
         /// <param name="acctFrom">Start acct to search data into the database.</param>
         /// <param name="acctTo">End acct to search data into the database.</param>
         /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
         /// <date>13.07.2022.</date>
-        public async Task<List<Entities.OperationHeader.OperationHeader>> GetSalesAndRefunds(int year, int month, long acctFrom, long acctTo)
+        public async Task<List<Entities.OperationHeader.OperationHeader>> GetRecords(EOperTypes operType, int year, int month, long acctFrom, long acctTo)
         {
             return await Task.Run(() =>
             {
@@ -208,7 +218,7 @@ namespace DataBase.Repositories.OperationHeader
                 {
                     return databaseContext.OperationHeaders.
                     Where(oh => 
-                    (oh.OperType == EOperTypes.Sale || oh.OperType == EOperTypes.Refund) &&
+                    oh.OperType == operType &&
                     oh.Date.Year == year &&
                     oh.Date.Month == month).
                     Include(oh => oh.Partner).
@@ -219,22 +229,52 @@ namespace DataBase.Repositories.OperationHeader
             });
         }
 
-        public double GetLastPriceByGoodId(int goodId)
+        /// <summary>
+        /// Gets records to generate export file for Delta Pro.
+        /// </summary>
+        /// <param name="dateFrom">Start date to search data into the database.</param>
+        /// <param name="dateTo">End date to search data into the database.</param>
+        /// <param name="acctFrom">Start acct to search data into the database.</param>
+        /// <param name="acctTo">End acct to search data into the database.</param>
+        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
+        /// <date>13.07.2022.</date>
+        public async Task<List<Entities.OperationHeader.OperationHeader>> GetRecordsForDeltaProAsync(DateTime dateFrom, DateTime dateTo, long acctFrom, long acctTo)
         {
-            try
+            return await Task.Run(() =>
             {
-                return ((double)databaseContext.
-                OperationHeaders.
-                Where(oh => oh.OperType == EOperTypes.Revaluation).
-                Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
-                Where(oh => oh.OperationDetails.Any(od => od.Goods.Id == goodId)).
-                Select(oh => oh.OperationDetails.Where(od => od.Goods.Id == goodId).OrderByDescending(od => od.Id).First().SalePrice).FirstOrDefault());
-            }
-            catch (Exception e)
-            {
-                return 0;
-            }
+                lock (locker)
+                {
+                    // only cash
+                    List<Entities.OperationHeader.OperationHeader> records = null;
+                    var res = databaseContext.OperationHeaders.
+                    Where(oh => 
+                    (oh.OperType == EOperTypes.Sale || oh.OperType == EOperTypes.Delivery) &&
+                    oh.Date >= dateFrom &&
+                    oh.Date <= dateTo.AddDays(1) &&
+                    oh.Acct >= acctFrom &&
+                    oh.Acct <= acctTo).
+                    Include(oh => oh.Partner).
+                    Include(oh => oh.OperationDetails).ThenInclude(od => od.Goods).ThenInclude(g => g.Vatgroup).
+                    SelectMany(oh => oh.OperationDetails, (h, d) => new
+                    {
+                        h.Id,
+                        h.Acct,
+                        h.OperType,
+                        h.Date,
+                        h.Partner,
+                        d.Qtty,
+                        d.SalePrice,
+                        d.PurchasePrice,
+                        d.SaleVAT,
+                        d.PurchaseVAT,
+                        d.Goods.Vatgroup.VATValue,
+                    }).
+                    AsEnumerable().
+                    GroupBy(g => g.VATValue);
 
+                    return records;
+                }
+            });
         }
     }
 }

@@ -396,7 +396,7 @@ namespace AxisAvaloniaApp.ViewModels
         /// Gets or sets item to edit or create is selected by user.
         /// </summary>
         /// <date>22.06.2022.</date>
-        public ItemModel? EditableItem
+        public ItemModel EditableItem
         {
             get => editableItem == null ? editableItem = new ItemModel() : editableItem;
             set => this.RaiseAndSetIfChanged(ref editableItem, value);
@@ -600,7 +600,6 @@ namespace AxisAvaloniaApp.ViewModels
             }
 
             USN = paymentService.FiscalDevice.ReceiptNumber;
-            //TotalAmount = 0.ToString(settingsService.PriceFormat);
             Order.Add(new OperationItemModel());
 
             List<DataBase.Entities.ItemsGroups.ItemsGroup> itemsGroups = await itemsGroupsRepository.GetItemsGroupsAsync();
@@ -615,7 +614,6 @@ namespace AxisAvaloniaApp.ViewModels
             await foreach (var item in itemRepository.GetItemsAsync())
             {
                 itemModel = (ItemModel)item;
-                itemModel.Price = await headerRepository.GetItemPriceAsync(itemModel.Id);
                 Items.Add(itemModel);
             }
 
@@ -764,7 +762,6 @@ namespace AxisAvaloniaApp.ViewModels
 
                         await foreach (ItemModel item in itemRepository.GetItemsAsync(SelectedItemsGroup.Path, string.Empty))
                         {
-                           // item.Price = await headerRepository.GetItemPriceAsync(item.Id);
                             Items.Add(item);
                         }
                     }
@@ -1159,8 +1156,9 @@ namespace AxisAvaloniaApp.ViewModels
                     }
                     else
                     {
-                        EditableItem?.Clone(SelectedItem);
-                        EditableItem?.RegisterValidationData<ItemModel, string>(
+                        EditableItem.Clone(SelectedItem);
+                        //EditableItem.VATGroup = VATGroups.FirstOrDefault(vg => vg.Id == EditableItem.VATGroup.Id);
+                        EditableItem.RegisterValidationData<ItemModel, string>(
                             nameof(ItemModel.Barcode),
                             () =>
                             {
@@ -1417,7 +1415,14 @@ namespace AxisAvaloniaApp.ViewModels
                                         Items.Add(EditableItem);                                        
                                     }
 
-                                    SelectedItem?.Clone(EditableItem);
+                                    if (SelectedItem == null || SelectedItem.Id != EditableItem.Id)
+                                    {
+                                        SelectedItem = EditableItem;
+                                    }
+                                    else
+                                    {
+                                        SelectedItem?.Clone(EditableItem);
+                                    }
                                 }
                                 else
                                 {
@@ -1505,7 +1510,14 @@ namespace AxisAvaloniaApp.ViewModels
                                         Partners.Add(EditablePartner);                                        
                                     }
 
-                                    SelectedPartner?.Clone(EditablePartner);
+                                    if (SelectedPartner == null || SelectedPartner.Id != EditablePartner.Id)
+                                    {
+                                        SelectedPartner = EditablePartner;
+                                    }
+                                    else
+                                    {
+                                        SelectedPartner?.Clone(EditablePartner);
+                                    }
                                 }
                                 else
                                 {

@@ -1,4 +1,6 @@
-﻿namespace DataBase.Entities.VATGroups
+﻿using System.Collections.Generic;
+
+namespace DataBase.Entities.VATGroups
 {
     public class VATGroup : Entity
     {

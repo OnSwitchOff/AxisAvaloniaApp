@@ -3,6 +3,7 @@ using AxisAvaloniaApp.Rules;
 using AxisAvaloniaApp.Rules.Exchange;
 using AxisAvaloniaApp.Services.Printing;
 using AxisAvaloniaApp.UserControls.Models;
+using DataBase.Repositories.OperationHeader;
 using Microinvest.ExchangeDataService.Enums;
 using ReactiveUI;
 using System;
@@ -290,8 +291,11 @@ namespace AxisAvaloniaApp.ViewModels
         /// Prepares data and exports/imports it.
         /// </summary>
         /// <date>12.07.2022.</date>
-        private void Execute()
+        private async void Execute()
         {
+            IOperationHeaderRepository headerRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+            var tmp = await headerRepository.GetRecordsForDeltaProAsync(DateTime.Now.AddDays(-3), DateTime.Now, 0, long.MaxValue);
+
             IStage fullMonthForNAP;
             IStage dataWasExportedEarlier;
             EExchanges exchange;

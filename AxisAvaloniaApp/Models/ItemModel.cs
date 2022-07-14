@@ -222,8 +222,7 @@ namespace AxisAvaloniaApp.Models
                 Status = item.Status,
                 
             };
-
-            itemModel.Price = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>().GetLastPriceByGoodId(item.Id);
+            itemModel.Price = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>().GetItemPrice(item.Id);
 
             foreach (DataBase.Entities.ItemsCodes.ItemCode itemCode in item.ItemsCodes)
             {

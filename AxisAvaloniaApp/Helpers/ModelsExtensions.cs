@@ -60,7 +60,7 @@ namespace AxisAvaloniaApp.Helpers
             item.Measure = clonedItem.Measure;
             item.Price = clonedItem.Price;
             item.Group.Clone(clonedItem.Group);
-            item.VATGroup.Clone(clonedItem.VATGroup);
+            item.VATGroup=clonedItem.VATGroup;
             item.ItemType = clonedItem.ItemType;
             item.Status = clonedItem.Status;
         }

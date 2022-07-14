@@ -5,14 +5,6 @@ namespace DataBase.Entities.Exchanges
 {
     public class Exchange : Entity
     {
-        public int Id { get; set; }
-        public OperationHeader.OperationHeader OperationHeader { get; set; }
-        public EExchangeDirections ExchangeType { get; set; }
-        public string AppName { get; set; } = null!;
-        public string AppKey { get; set; } = null!;
-        public long Acct { get; set; }
-        public EOperTypes OperType { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Exchange"/> class.
         /// </summary>
@@ -38,7 +30,49 @@ namespace DataBase.Entities.Exchanges
             this.AppKey = appKey;
             this.Acct = acct;
             this.OperType = operType;
-        }
+        }        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <date>12.05.2022.</date>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets record of OperationHeader table.
+        /// </summary>
+        /// <date>12.05.2022.</date>
+        public OperationHeader.OperationHeader OperationHeader { get; set; }
+
+        /// <summary>
+        /// Gets or sets direction of an exchange.
+        /// </summary>
+        /// <date>12.05.2022.</date>
+        public EExchangeDirections ExchangeType { get; set; }
+
+        /// <summary>
+        /// Gets or sets name of app from or for which data import/export.
+        /// </summary>
+        /// <date>12.05.2022.</date>
+        public string AppName { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets key of app from or for which data import/export.
+        /// </summary>
+        /// <date>12.05.2022.</date>
+        public string AppKey { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets acct of the imported data.
+        /// </summary>
+        /// <date>12.05.2022.</date>
+        public long Acct { get; set; }
+
+        /// <summary>
+        /// Gets or sets operation type of the imported data.
+        /// </summary>
+        /// <date>12.05.2022.</date>
+        public EOperTypes OperType { get; set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="Exchange"/> class.
