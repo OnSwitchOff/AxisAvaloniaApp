@@ -1,6 +1,11 @@
 ﻿using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Settings;
+using DataBase.Entities.OperationHeader;
 using DataBase.Repositories.Documents;
+using DataBase.Repositories.Items;
 using DataBase.Repositories.OperationHeader;
+using DataBase.Repositories.Partners;
+using DataBase.Repositories.PaymentTypes;
 using Microinvest.CommonLibrary.Enums;
 using System;
 using System.Collections;
@@ -18,11 +23,19 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
 
         private readonly IOperationHeaderRepository operationHeaderRepository;
         private readonly IDocumentsRepository documentsRepository;
+        private readonly IItemRepository itemsRepository;
+        private readonly IPartnerRepository partnersRepository;
+        private readonly IPaymentTypesRepository paymentTypesRepository;
+        private readonly ISettingsService settingsService;
 
         public BulgarianReportsService()
         {
             operationHeaderRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
             documentsRepository = Splat.Locator.Current.GetRequiredService<IDocumentsRepository>();
+            itemsRepository = Splat.Locator.Current.GetRequiredService<IItemRepository>();
+            partnersRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
+            paymentTypesRepository = Splat.Locator.Current.GetRequiredService<IPaymentTypesRepository>();
+            settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
 
             supportedReports = new ObservableCollection<ReportItemModel>();
             InitSupportedReports();
@@ -195,10 +208,10 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                                         Acct = oh.Acct.ToString(),
                                         Date = oh.Date.ToShortDateString(),
                                         ItemName = od.Goods.Name,
-                                        Qty = od.Qtty.ToString(),
+                                        Qty = od.Qtty.ToString(settingsService.QtyFormat),
                                         Measure = od.Goods.Measure,
-                                        PurchaseSum = (od.Qtty * od.PurchasePrice).ToString("F"),
-                                        SaleSum = (od.Qtty * od.SalePrice).ToString("F")
+                                        PurchaseSum = (od.Qtty * od.PurchasePrice).ToString(settingsService.PriceFormat),
+                                        SaleSum = (od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat)
                                     }); 
 
                                 }
@@ -209,12 +222,11 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
 
                     SalesReportModel resultRow = new SalesReportModel()
                     {
-                        Qty = totalQtty.ToString("F"),
-                        SaleSum = totalSaleSum.ToString("F"),
-                        PurchaseSum = totalPurchaseSum.ToString("F")
+                        Qty = totalQtty.ToString(settingsService.QtyFormat),
+                        SaleSum = totalSaleSum.ToString(settingsService.PriceFormat),
+                        PurchaseSum = totalPurchaseSum.ToString(settingsService.PriceFormat)
                     };
-                    ((ObservableCollection<SalesReportModel>)source).Add(resultRow);
-    
+                    ((ObservableCollection<SalesReportModel>)source).Add(resultRow);   
 
                     break;
                 case EBulgarianReports.SalesByItems:
@@ -227,6 +239,41 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strPurchaseSum", "PurchaseSum", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSaleSum", "SaleSum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+
+                    source = new ObservableCollection<SalesByItemsReportModel>();
+                    int i1 = 0;
+                    decimal totalQtty1 = 0;
+                    decimal totalSaleSum1 = 0;
+                    decimal totalPurchaseSum1 = 0;
+
+                    var operByDates1 = await operationHeaderRepository.GetOperationHeadersByDatesAsync(dateFrom, dateTo, EOperTypes.Sale);
+
+                    operByDates1.SelectMany(oh => oh.OperationDetails).GroupBy(od => od.Goods.Id).
+                     Select(gr =>
+                     {
+                         i1++;
+                         return new SalesByItemsReportModel(i1)
+                         {
+                             ItemName = gr.First().Goods.Name,
+                             Qty = gr.Sum(od => od.Qtty).ToString(settingsService.QtyFormat),
+                             Measure = gr.First().Goods.Measure,
+                             PurchaseSum = gr.Sum(od => od.Qtty * od.PurchasePrice).ToString(settingsService.PriceFormat),
+                             SaleSum = gr.Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat)
+                         };
+                     }).ToList().ForEach(model => {
+                         totalQtty1 += decimal.Parse(model.Qty);
+                         totalSaleSum1 += decimal.Parse(model.SaleSum);
+                         totalPurchaseSum1 += decimal.Parse(model.PurchaseSum);
+                         ((ObservableCollection<SalesByItemsReportModel>)source).Add(model);
+                     });
+
+                    SalesByItemsReportModel resultRow1 = new SalesByItemsReportModel()
+                    {
+                        Qty = totalQtty1.ToString(settingsService.QtyFormat),
+                        SaleSum = totalSaleSum1.ToString(settingsService.PriceFormat),
+                        PurchaseSum = totalPurchaseSum1.ToString(settingsService.PriceFormat)
+                    };
+                    ((ObservableCollection<SalesByItemsReportModel>)source).Add(resultRow1);
                     break;
                 case EBulgarianReports.SalesByPartners:
                     columnsData = new ObservableCollection<ReportDataModel>()
@@ -236,6 +283,33 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Left, 75),
                         new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+
+                    source = new ObservableCollection<SalesByPartnersReportModel>();
+                    int i2 = 0;
+                    decimal totalSum2 = 0; 
+
+                    var operByDates2 = await operationHeaderRepository.GetOperationHeadersByDatesAsync(dateFrom, dateTo, EOperTypes.Sale);
+
+                    operByDates2.GroupBy(oh => oh.Partner.Id).
+                    Select(gr =>
+                    {
+                        i2++;
+                        return new SalesByPartnersReportModel(i2)
+                        {
+                            PartnerName = gr.First().Partner.Company,
+                            TaxNumber = gr.First().Partner.TaxNumber,
+                            Sum = gr.SelectMany(oh => oh.OperationDetails).Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat)
+                        };
+                    }).ToList().ForEach(model => {
+                        totalSum2 += decimal.Parse(model.Sum);
+                        ((ObservableCollection<SalesByPartnersReportModel>)source).Add(model);
+                    });
+
+                    SalesByPartnersReportModel resultRow2 = new SalesByPartnersReportModel()
+                    {
+                        Sum = totalSum2.ToString(settingsService.PriceFormat)
+                    };
+                    ((ObservableCollection<SalesByPartnersReportModel>)source).Add(resultRow2);
                     break;
                 case EBulgarianReports.SalesByItemsGroups:
                     columnsData = new ObservableCollection<ReportDataModel>()
@@ -246,6 +320,41 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strPurchaseSum", "PurchaseSum", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSaleSum", "SaleSum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+
+                    source = new ObservableCollection<SalesByItemsGroupsReportModel>();
+                    int i3 = 0;
+                    decimal totalSaleSum3 = 0;
+                    decimal totalPurchaseSum3 = 0;
+                    decimal totalQty3 = 0;
+
+                    var operByDates3 = await operationHeaderRepository.GetOperationHeadersByDatesAsync(dateFrom, dateTo, EOperTypes.Sale);
+
+                    operByDates3.SelectMany(oh => oh.OperationDetails).GroupBy(od => od.Goods.Group.Id).
+                    Select(gr =>
+                    {
+                        i3++;
+                        return new SalesByItemsGroupsReportModel(i3)
+                        {
+                            ItemsGroupName = gr.First().Goods.Group.Name,
+                            Qty = gr.Sum(od => od.Qtty).ToString(settingsService.QtyFormat),
+                            PurchaseSum = gr.Sum(od => od.Qtty * od.PurchasePrice).ToString(settingsService.PriceFormat),
+                            SaleSum = gr.Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat),
+                        };
+                    }).ToList().ForEach(model => {
+                        totalQty3 += decimal.Parse(model.Qty);
+                        totalPurchaseSum3 += decimal.Parse(model.PurchaseSum);
+                        totalSaleSum3 += decimal.Parse(model.SaleSum);
+                        ((ObservableCollection<SalesByItemsGroupsReportModel>)source).Add(model);
+                    });
+
+                    SalesByItemsGroupsReportModel resultRow3 = new SalesByItemsGroupsReportModel()
+                    {
+                        Qty = totalQty3.ToString(settingsService.QtyFormat),                        
+                        PurchaseSum = totalPurchaseSum3.ToString(settingsService.PriceFormat),
+                        SaleSum = totalSaleSum3.ToString(settingsService.PriceFormat)
+                    };
+                    ((ObservableCollection<SalesByItemsGroupsReportModel>)source).Add(resultRow3);
+
                     break;
                 case EBulgarianReports.SalesByPartnersGroups:
                     columnsData = new ObservableCollection<ReportDataModel>()
@@ -256,6 +365,41 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strPurchaseSum", "PurchaseSum", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSaleSum", "SaleSum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+
+                    source = new ObservableCollection<SalesByPartnersGroupsReportModel>();
+                    int i4 = 0;
+                    decimal totalSaleSum4 = 0;
+                    decimal totalPurchaseSum4 = 0;
+                    decimal totalQty4 = 0;
+
+                    var operByDates4 = await operationHeaderRepository.GetOperationHeadersByDatesAsync(dateFrom, dateTo, EOperTypes.Sale);
+
+                    operByDates4.GroupBy(oh => oh.Partner.Group.Id).
+                    Select(gr =>
+                    {
+                        i4++;
+                        return new SalesByPartnersGroupsReportModel(i4)
+                        {
+                            PartnersGroupName = gr.First().Partner.Group.Name,
+                            Qty = gr.SelectMany(oh => oh.OperationDetails).Sum(od => od.Qtty).ToString(settingsService.QtyFormat),
+                            PurchaseSum = gr.SelectMany(oh => oh.OperationDetails).Sum(od => od.Qtty * od.PurchasePrice).ToString(settingsService.PriceFormat),
+                            SaleSum = gr.SelectMany(oh => oh.OperationDetails).Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat),
+                        };
+                    }).ToList().ForEach(model => {
+                        totalQty4 += decimal.Parse(model.Qty);
+                        totalPurchaseSum4 += decimal.Parse(model.PurchaseSum);
+                        totalSaleSum4 += decimal.Parse(model.SaleSum);
+                        ((ObservableCollection<SalesByPartnersGroupsReportModel>)source).Add(model);
+                    });
+
+                    SalesByPartnersGroupsReportModel resultRow4 = new SalesByPartnersGroupsReportModel()
+                    {
+                        Qty = totalQty4.ToString(settingsService.QtyFormat),
+                        PurchaseSum = totalPurchaseSum4.ToString(settingsService.PriceFormat),
+                        SaleSum = totalSaleSum4.ToString(settingsService.PriceFormat)
+                    };
+                    ((ObservableCollection<SalesByPartnersGroupsReportModel>)source).Add(resultRow4);
+
                     break;
 
                 case EBulgarianReports.OutputInvoices:
@@ -268,7 +412,35 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+
+                    source = new ObservableCollection<OutputInvoiceReportModel>();
+                    int i5 = 0;
+                    decimal totalSum5 = 0;
+
+                    var docsByDates5 = await documentsRepository.GetDocumentsByDatesAsync(dateFrom, dateTo, EDocumentTypes.Invoice);
+
+                    docsByDates5.ToList().ForEach(async d=>
+                    {
+                        i5++;
+                        OutputInvoiceReportModel model = new OutputInvoiceReportModel(i5)
+                        {
+                            InvoiceNumber = d.DocumentNumber,
+                            InvoiceDate = d.DocumentDate.ToShortDateString(),
+                            Partner = d.OperationHeader.Partner.Company,
+                            TaxNumber = d.OperationHeader.Partner.TaxNumber,
+                            Sum = d.OperationHeader.OperationDetails.Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat)
+                        };
+                        totalSum5 += decimal.Parse(model.Sum);
+                        ((ObservableCollection<OutputInvoiceReportModel>)source).Add(model);
+                    });
+
+                    OutputInvoiceReportModel resultRow5 = new OutputInvoiceReportModel()
+                    {
+                        Sum = totalSum5.ToString(settingsService.PriceFormat)
+                    };
+                    ((ObservableCollection<OutputInvoiceReportModel>)source).Add(resultRow5);
                     break;
+
                 case EBulgarianReports.OutputProformInvoices:
                     columnsData = new ObservableCollection<ReportDataModel>()
                     {
@@ -279,6 +451,32 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+                    source = new ObservableCollection<ProformaInvoiceReportModel>();
+                    int i6 = 0;
+                    decimal totalSum6 = 0;
+
+                    var docsByDates6 = await documentsRepository.GetDocumentsByDatesAsync(dateFrom, dateTo, EDocumentTypes.ProformInvoice);
+
+                    docsByDates6.ToList().ForEach(async d =>
+                    {
+                        i6++;
+                        ProformaInvoiceReportModel model = new ProformaInvoiceReportModel(i6)
+                        {
+                            ProformaInvoiceNumber = d.DocumentNumber,
+                            ProformaInvoiceDate = d.DocumentDate.ToShortDateString(),
+                            Partner = d.OperationHeader.Partner.Company,
+                            TaxNumber = d.OperationHeader.Partner.TaxNumber,
+                            Sum = d.OperationHeader.OperationDetails.Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat)
+                        };
+                        totalSum6 += decimal.Parse(model.Sum);
+                        ((ObservableCollection<ProformaInvoiceReportModel>)source).Add(model);
+                    });
+
+                    ProformaInvoiceReportModel resultRow6 = new ProformaInvoiceReportModel()
+                    {
+                        Sum = totalSum6.ToString(settingsService.PriceFormat)
+                    };
+                    ((ObservableCollection<ProformaInvoiceReportModel>)source).Add(resultRow6);
                     break;
                 case EBulgarianReports.OutputDebitNotes:
                     columnsData = new ObservableCollection<ReportDataModel>()
@@ -290,6 +488,34 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+
+                    source = new ObservableCollection<OutputDebitNoteReportModel>();
+                    int i7 = 0;
+                    decimal totalSum7 = 0;
+
+                    var docsByDates7 = await documentsRepository.GetDocumentsByDatesAsync(dateFrom, dateTo, EDocumentTypes.DebitNote);
+
+                    docsByDates7.ToList().ForEach(async d =>
+                    {
+                        i7++;
+                        OutputDebitNoteReportModel model = new OutputDebitNoteReportModel(i7)
+                        {
+                            DebitNoteNumber = d.DocumentNumber,
+                            DebitNoteDate = d.DocumentDate.ToShortDateString(),
+                            Partner = d.OperationHeader.Partner.Company,
+                            TaxNumber = d.OperationHeader.Partner.TaxNumber,
+                            Sum = d.OperationHeader.OperationDetails.Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat)
+                        };
+                        totalSum7 += decimal.Parse(model.Sum);
+                        ((ObservableCollection<OutputDebitNoteReportModel>)source).Add(model);
+                    });
+
+                    OutputDebitNoteReportModel resultRow7 = new OutputDebitNoteReportModel()
+                    {
+                        Sum = totalSum7.ToString("F")
+                    };
+                    ((ObservableCollection<OutputDebitNoteReportModel>)source).Add(resultRow7);
+
                     break;
                 case EBulgarianReports.OutputCreditNotes:
                     columnsData = new ObservableCollection<ReportDataModel>()
@@ -301,6 +527,34 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strTaxNumber", "TaxNumber", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strSum", "Sum", Avalonia.Layout.HorizontalAlignment.Right, 100),
                     };
+
+                    source = new ObservableCollection<OutputCreditNoteReportModel>();
+                    int i8 = 0;
+                    decimal totalSum8 = 0;
+
+                    var docsByDates8 = await documentsRepository.GetDocumentsByDatesAsync(dateFrom, dateTo, EDocumentTypes.CreditNote);
+
+                    docsByDates8.ToList().ForEach(async d =>
+                    {
+                        i8++;
+                        OutputCreditNoteReportModel model = new OutputCreditNoteReportModel(i8)
+                        {
+                            CreditNoteNumber = d.DocumentNumber,
+                            CreditNoteDate = d.DocumentDate.ToShortDateString(),
+                            Partner = d.OperationHeader.Partner.Company,
+                            TaxNumber = d.OperationHeader.Partner.TaxNumber,
+                            Sum = d.OperationHeader.OperationDetails.Sum(od => od.Qtty * od.SalePrice).ToString(settingsService.PriceFormat)
+                        };
+                        totalSum8 += decimal.Parse(model.Sum);
+                        ((ObservableCollection<OutputCreditNoteReportModel>)source).Add(model);
+                    });
+
+                    OutputCreditNoteReportModel resultRow8 = new OutputCreditNoteReportModel()
+                    {
+                        Sum = totalSum8.ToString("F")
+                    };
+                    ((ObservableCollection<OutputCreditNoteReportModel>)source).Add(resultRow8);
+
                     break;
 
                 case EBulgarianReports.NomenclatureOfItems:
@@ -310,14 +564,19 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strCode", "Code", Avalonia.Layout.HorizontalAlignment.Left, 100),
                         new ReportDataModel("strGoods", "Item", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
                     };
-                    break;
-                case EBulgarianReports.NomenclatureOfPaymentTypes:
-                    columnsData = new ObservableCollection<ReportDataModel>()
+
+                    source = new ObservableCollection<NomenclatureOfItemsReportModel>();
+                    int i9 = 0;
+                    await foreach (var item in itemsRepository.GetItemsAsync())
                     {
-                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
-                        new ReportDataModel("strId", "Id", Avalonia.Layout.HorizontalAlignment.Left, 100),
-                        new ReportDataModel("strPaymentType", "PaymentType", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
-                    };
+                        i9++;
+                        NomenclatureOfItemsReportModel model = new NomenclatureOfItemsReportModel(i9)
+                        {
+                            Code = item.Code,
+                            Item = item.Name
+                        };
+                        ((ObservableCollection<NomenclatureOfItemsReportModel>)source).Add(model);
+                    }
                     break;
                 case EBulgarianReports.NomenclatureOfPartners:
                     columnsData = new ObservableCollection<ReportDataModel>()
@@ -332,7 +591,48 @@ namespace AxisAvaloniaApp.Services.Reports.Bulgaria
                         new ReportDataModel("strPhone", "Phone", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strDiscountCard", "DiscountCard", Avalonia.Layout.HorizontalAlignment.Right, 95),
                         new ReportDataModel("strDiscount", "Discount", Avalonia.Layout.HorizontalAlignment.Right, 95),
+                    };                   
+                    source = new ObservableCollection<NomenclatureOfPartnersReportModel>();
+                    int i10 = 0;
+                    await foreach (var partner in partnersRepository.GetParnersAsync())
+                    {
+                        i10++;
+                        NomenclatureOfPartnersReportModel model = new NomenclatureOfPartnersReportModel(i10)
+                        {
+                            ClientCode = partner.Id.ToString(),
+                            NameOfClient = partner.Company,
+                            TaxNumber = partner.TaxNumber,
+                            Principal = partner.Principal,
+                            City = partner.City,
+                            Address = partner.Address,
+                            Phone = partner.Phone,
+                            DiscountCard = partner.DiscountCard,
+                            Discount = partner.Group.Discount.ToString(settingsService.PriceFormat),
+                        };
+                        ((ObservableCollection<NomenclatureOfPartnersReportModel>)source).Add(model);
+                    }
+                    break;
+                case EBulgarianReports.NomenclatureOfPaymentTypes:
+                    columnsData = new ObservableCollection<ReportDataModel>()
+                    {
+                        new ReportDataModel("strRowNumber", "RowNumber", Avalonia.Layout.HorizontalAlignment.Right, 50),
+                        new ReportDataModel("strId", "Id", Avalonia.Layout.HorizontalAlignment.Left, 100),
+                        new ReportDataModel("strPaymentType", "PaymentType", Avalonia.Layout.HorizontalAlignment.Center, double.NaN),
                     };
+
+                    source = new ObservableCollection<NomenclatureOfPaymentTypesReportModel>();
+                    int i11 = 0;
+                    await foreach (var paymentType in paymentTypesRepository.GetPaymentTypes())
+                    {
+                        i11++;
+                        NomenclatureOfPaymentTypesReportModel model = new NomenclatureOfPaymentTypesReportModel(i11)
+                        {
+                            Id = paymentType.Id.ToString(),
+                            PaymentType = paymentType.Name,
+                        };
+                        ((ObservableCollection<NomenclatureOfPaymentTypesReportModel>)source).Add(model);
+                    }
+
                     break;
 
             }

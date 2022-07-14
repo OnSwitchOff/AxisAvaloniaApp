@@ -1417,7 +1417,7 @@ namespace AxisAvaloniaApp.ViewModels
                                         Items.Add(EditableItem);                                        
                                     }
 
-                                    SelectedItem?.Clone(EditableItem);
+                                    SelectedItem = EditableItem;
                                 }
                                 else
                                 {
