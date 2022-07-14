@@ -111,10 +111,9 @@ namespace AxisAvaloniaApp.ViewModels
             set => this.RaiseAndSetIfChanged(ref dateTo, value);
         }
 
-        public void GenerateReport()
+        public async void GenerateReport()
         {
-            reportsService.GenerateReportData(SelectedReport.ReportKey, 0, 0, DateFrom, DateTo);
-            Source = reportsService.Source;
+            Source = await reportsService.GenerateReportData(SelectedReport.ReportKey, 0, 0, DateFrom, DateTo);
             ColumnsData = reportsService.ColumnsData;
         }
 
