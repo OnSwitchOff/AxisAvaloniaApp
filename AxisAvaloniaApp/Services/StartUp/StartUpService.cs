@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using AxisAvaloniaApp.Configurations;
 using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Activation;
+using AxisAvaloniaApp.Services.Activation.ResponseModels;
 using AxisAvaloniaApp.Services.AxisCloud;
 using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Payment;
@@ -9,9 +14,11 @@ using AxisAvaloniaApp.Services.Payment.Device;
 using AxisAvaloniaApp.Services.Scanning;
 using AxisAvaloniaApp.Services.SearchNomenclatureData;
 using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Zip;
 using DataBase.Entities.VATGroups;
 using DataBase.Repositories.OperationHeader;
 using Microinvest.CommonLibrary.Enums;
+using Newtonsoft.Json;
 
 namespace AxisAvaloniaApp.Services.StartUp
 {
@@ -24,6 +31,8 @@ namespace AxisAvaloniaApp.Services.StartUp
         private readonly ILoggerService loggerService;
         private readonly ISearchData searchService;
         private readonly IOperationHeaderRepository headerRepository;
+        private readonly IZipService zipService;
+        private readonly IActivationService activationService;
 
         //private UIElement shell = null;
 
@@ -51,6 +60,9 @@ namespace AxisAvaloniaApp.Services.StartUp
             this.loggerService = loggerService;
             this.searchService = searchService;
             this.headerRepository = headerRepository;
+
+            zipService = Splat.Locator.Current.GetRequiredService<IZipService>();
+            activationService = Splat.Locator.Current.GetRequiredService<IActivationService>();
         }
 
         public async Task ActivateAsync(bool isFirstRun)
@@ -60,7 +72,73 @@ namespace AxisAvaloniaApp.Services.StartUp
                 await InitializeAsync();
             }
 
+            BackUp();
+
+            if (!await CheckStartupEnvironment(isFirstRun))
+            {
+                return;
+            }
+
             await StartupAsync();
+        }
+
+        private async Task<bool> CheckStartupEnvironment(bool isFirstRun)
+        {
+            if(CheckNetworkConnection())
+            {
+                // получаем с сервера серийный номер нашего приложения
+                var x1 = await activationService.GetStatus("8714536025");
+                x1.EnsureSuccessStatusCode();
+                var r1 = await x1.Content.ReadAsStringAsync();
+                ActivationResponse.GetStatusModel getStatus = JsonConvert.DeserializeObject<ActivationResponse.GetStatusModel>(r1);
+
+                // получаем с сервера данные о последней версии программы
+                var x3 = await activationService.GetLastVersion();
+                x3.EnsureSuccessStatusCode();
+                var r3 = await x3.Content.ReadAsStringAsync();
+                VersionResponse.GetLastVersion r = JsonConvert.DeserializeObject<VersionResponse.GetLastVersion>(r3);
+            }
+            else
+            {
+                if (isFirstRun)
+                {
+                    Environment.Exit(-218);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Проверяет наличие интернета методом пинга google.com
+        /// </summary>
+        /// <returns>результат проверки</returns>
+        private bool CheckNetworkConnection()
+        {
+            try
+            {
+                PingReply pingStatus = null;
+
+                using (Ping ping = new Ping())
+                {
+                    pingStatus = ping.Send("google.com");
+                }
+
+                return pingStatus.Status == IPStatus.Success;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private void BackUp()
+        {
+            string curentDate = DateTime.Now.ToString("dd.MM.yyyy(HH-mm)") + ".zip";
+            string ZipName = Path.Combine(AppConfiguration.BackupFolderPath, curentDate);
+            if (!zipService.CompressFileToZip(AppConfiguration.DatabaseFullName, ZipName, AppConfiguration.DatabaseShortName))
+            {
+
+            }
         }
 
         private async Task InitializeAsync()
@@ -91,6 +169,8 @@ namespace AxisAvaloniaApp.Services.StartUp
         {
             await Task.Run(async () =>
             {
+
+
                 try
                 {
                     searchService.InitializeSearchDataTool(settings.AppLanguage);

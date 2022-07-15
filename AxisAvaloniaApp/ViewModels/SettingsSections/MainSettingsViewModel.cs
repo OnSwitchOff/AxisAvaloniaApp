@@ -61,7 +61,7 @@ namespace AxisAvaloniaApp.ViewModels.Settings
 
 
             var x1 = await activationService.GetStatus("8714536025");
-            //x1.EnsureSuccessStatusCode();
+            x1.EnsureSuccessStatusCode();
             var r1 = await x1.Content.ReadAsStringAsync();
 
             var x2 = await activationService.TryLicense("8714536025", "123");

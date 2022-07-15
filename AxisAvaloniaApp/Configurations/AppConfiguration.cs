@@ -192,5 +192,29 @@ namespace AxisAvaloniaApp.Configurations
                 return databaseLocation;
             }
         }
+
+        /// <summary>
+        /// Path to ZipArchives
+        /// </summary>
+        public static string BackupFolderPath
+        { 
+            get
+            {
+                string path = Path.Combine(DatabaseLocation, "Backup");
+                DirectoryInfo di = new DirectoryInfo(path);
+                if (!di.Exists)
+                {
+                    di.Create();
+                }
+                return  path;
+            }                
+        }
+
+        /// <summary>
+        /// Path to Database
+        /// </summary>
+        public static string DatabaseFullName { get => Path.Combine(DatabaseLocation, DatabaseName); }
+        public static string DatabaseShortName { get =>  DatabaseName; }
+
     }
 }

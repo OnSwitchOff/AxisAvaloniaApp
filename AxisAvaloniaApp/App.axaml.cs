@@ -26,8 +26,7 @@ namespace AxisAvaloniaApp
             Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-               
+            {              
 
                 MainWindow mw = null;
                 bool isFirstStart = false;
@@ -40,6 +39,9 @@ namespace AxisAvaloniaApp
                 }
                 IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
                 startUpService.ActivateAsync(isFirstStart);
+
+
+
                 desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
                 MainWindow.Closing += MainWindow_Closing;

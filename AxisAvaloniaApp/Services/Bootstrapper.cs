@@ -37,6 +37,7 @@ using AxisAvaloniaApp.Services.Explanation;
 using AxisAvaloniaApp.Services.Reports;
 using AxisAvaloniaApp.Services.Reports.Bulgaria;
 using AxisAvaloniaApp.Services.Activation;
+using AxisAvaloniaApp.Services.Zip;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -58,7 +59,6 @@ namespace AxisAvaloniaApp.Services
                 resolver.GetRequiredService<IOperationHeaderRepository>()));
 
             services.Register<IActivationService>(() => new ActivationService("https://axis.sx/"));
-
             services.Register<INavigationService>(() => new NavigationService());
             services.RegisterLazySingleton<IThemeSelectorService>(() => new ThemeSelectorService());
             services.RegisterLazySingleton<ISettingsService>(() => new SettingsService(resolver.GetRequiredService<ISettingsRepository>()));
@@ -73,6 +73,7 @@ namespace AxisAvaloniaApp.Services
             services.RegisterLazySingleton<ILoggerService>(() => new LoggerService());
             services.RegisterLazySingleton<IValidationService>(() => new ValidationService(resolver.GetRequiredService<ISettingsService>()));
             services.Register<IReportsService>(() => new BulgarianReportsService());
+            services.Register<IZipService>(() => new ZipService());
 
             switch (AvaloniaLocator.Current?.GetService<IRuntimePlatform>()?.GetRuntimeInfo().OperatingSystem)
             {
