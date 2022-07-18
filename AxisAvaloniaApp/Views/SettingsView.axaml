@@ -79,5 +79,6 @@
 	  <settings:DocumentSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding DocumentSettings}"   IsVisible="{Binding DocumentSettings.IsVisible, Mode=TwoWay}" />
 	  <settings:DeviceSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding DeviceSettings}"   IsVisible="{Binding DeviceSettings.IsVisible, Mode=TwoWay}"/>
 	  <settings:MainSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding MainSettings}"   IsVisible="{Binding MainSettings.IsVisible, Mode=TwoWay}"/>
+	  <settings:SpecialSettings Grid.Column="1" Grid.RowSpan="3" ViewModel="{Binding SpecialSettings}"   IsVisible="{Binding SpecialSettings.IsVisible, Mode=TwoWay}"/>
   </Grid>
 </UserControl>

@@ -102,7 +102,7 @@
 		
 		<Border Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="10,0,10,10">
 			<Button Padding="40,5" Foreground="White" Background="#990e1434" BorderThickness="2" BorderBrush="#BB0e1434" Command="{Binding ConfirmCommand}" CommandParameter="{Binding ElementName=window, Path=.}">
-				<controlsEx:AxisTextBlock Foreground="White" Text="Confirm" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />										
+				<controlsEx:AxisTextBlock Foreground="White" LocalizeTextKey="strOk" FontSize="14"  VerticalAlignment="Center" Padding="10,0"  />										
 			</Button>
 		</Border>
 		

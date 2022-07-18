@@ -149,11 +149,13 @@ namespace AxisAvaloniaApp.Services.StartUp
                 {
                     Microinvest.PDFCreator.MicroinvestPdfDocument pdf = new Microinvest.PDFCreator.MicroinvestPdfDocument();
                     pdf.DefaultHeaderImage.Save(Configurations.AppConfiguration.LogoPath);
+                    pdf.DefaultHeaderImage.Save(Configurations.AppConfiguration.DocumentHeaderPath);
+                    pdf.DefaultFooterImage.Save(Configurations.AppConfiguration.DocumentFooterPath);
                     //using (Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico"))))
                     //{
                     //    logo.Save(Configurations.AppConfiguration.LogoPath);
                     //}
-                    
+
                     WriteDefaultValuesIntoDatabase();
                     
                     System.IO.File.Create(Configurations.AppConfiguration.LogFilePath);

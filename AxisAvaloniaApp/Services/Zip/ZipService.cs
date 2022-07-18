@@ -23,7 +23,7 @@ namespace AxisAvaloniaApp.Services.Zip
         {
             try
             {
-                using (ZipArchive archive = ZipFile.Open(destination, ZipArchiveMode.Create))
+                using (ZipArchive archive = ZipFile.Open(destination, ZipArchiveMode.Update))
                 {
                     archive.CreateEntryFromFile(fileName, entryName);
                 }

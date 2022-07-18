@@ -3,6 +3,7 @@ using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.Services.Validation;
 using AxisAvaloniaApp.UserControls.Models;
 using AxisAvaloniaApp.ViewModels.Settings;
+using AxisAvaloniaApp.ViewModels.SettingsSections;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace AxisAvaloniaApp.ViewModels
         private DocumentSettingsViewModel documentSettings;
         private MainSettingsViewModel mainSettings;
         private ObjectSettingsViewModel objectSettings;
+        private SpecialSettingsViewModel specialSettings;
 
         public ObservableCollection<ComboBoxItemModel> Sections
         {
@@ -51,6 +53,7 @@ namespace AxisAvaloniaApp.ViewModels
         public DocumentSettingsViewModel DocumentSettings { get => documentSettings; set => this.RaiseAndSetIfChanged(ref documentSettings, value); }
         public MainSettingsViewModel MainSettings { get => mainSettings; set => this.RaiseAndSetIfChanged(ref mainSettings, value); }
         public ObjectSettingsViewModel ObjectSettings { get => objectSettings; set => this.RaiseAndSetIfChanged(ref objectSettings, value); }
+        public SpecialSettingsViewModel SpecialSettings { get => specialSettings; set => this.RaiseAndSetIfChanged(ref specialSettings, value); }
 
         public SettingsViewModel()
         {
@@ -76,11 +79,14 @@ namespace AxisAvaloniaApp.ViewModels
             ComboBoxItemModel documentItem = new ComboBoxItemModel() { Key = "strDocuments", Value = DocumentSettings };
             ComboBoxItemModel mainItem = new ComboBoxItemModel() { Key = "strBasics", Value = MainSettings };
             ComboBoxItemModel objectItem = new ComboBoxItemModel() { Key = "strFirm", Value = ObjectSettings };
+            ComboBoxItemModel specialItem = new ComboBoxItemModel() { Key = "strSpecial", Value = SpecialSettings };
+
 
             sections.Add(objectItem);
             sections.Add(documentItem);
             sections.Add(deviceItem);
             sections.Add(mainItem);
+            sections.Add(specialItem);
         }
 
         private void LoadSettings()
@@ -89,6 +95,7 @@ namespace AxisAvaloniaApp.ViewModels
             DocumentSettings = LoadDocumentSettings();
             MainSettings = LoadMainSettings();
             ObjectSettings = new ObjectSettingsViewModel();
+            SpecialSettings = new SpecialSettingsViewModel();
         }
 
         //private ObjectSettingsViewModel LoadObjectSettings()

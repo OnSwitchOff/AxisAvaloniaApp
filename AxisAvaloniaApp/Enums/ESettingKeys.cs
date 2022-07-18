@@ -174,5 +174,10 @@
         /// Domain name of the online shop or link to one
         /// </summary>
         OnlineShopDomainName,
+
+        /// <summary>
+        /// BackUpOption
+        /// </summary>
+        BackUpOption,
     }
 }
