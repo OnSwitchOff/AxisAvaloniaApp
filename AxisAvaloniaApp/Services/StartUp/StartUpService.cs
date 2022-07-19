@@ -84,17 +84,12 @@ namespace AxisAvaloniaApp.Services.StartUp
                 activationService.SoftwareID = settings.AppSettings[Enums.ESettingKeys.SoftwareID].Value;
             }
 
-
-            if (true)
+            if (settings.AppSettings[Enums.ESettingKeys.BackUpOption].Value == "1")
             {
                 BackUp();
             }
- 
 
-            if (!await CheckStartupEnvironment(isFirstRun))
-            {
-                return;
-            }
+            await CheckStartupEnvironment(isFirstRun);
 
             await StartupAsync();
         }
