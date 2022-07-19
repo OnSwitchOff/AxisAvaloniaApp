@@ -103,10 +103,18 @@ namespace AxisAvaloniaApp.Services.Settings
         UniqueSaleNumber UniqueSaleNumber { get; set; }
 
         /// <summary>
+        /// IsActiveLicense 
+        /// </summary>
+        /// <date>16/03/2022.</date>
+        public bool IsActiveLicense { get; set; }
+
+        /// <summary>
         /// Update settings in the database.
         /// </summary>
         /// <param name="settingsGroup">Group of settings to update.</param>
         /// <date>16/03/2022.</date>
         void UpdateSettings(ESettingGroups settingsGroup);
+
+
     }
 }

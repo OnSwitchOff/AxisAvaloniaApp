@@ -1,4 +1,6 @@
 ﻿using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Activation.ResponseModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,7 @@ namespace AxisAvaloniaApp.Services.Activation
     {
         readonly HttpClient client;
         Uri BaseAddress { get; set; }
-
+        public string SoftwareID { get; set; }
         public ActivationService(string baseAddress)
         {
             client = new HttpClient();
@@ -53,5 +55,43 @@ namespace AxisAvaloniaApp.Services.Activation
             return await client.GetAsync(destination);
         }
 
+
+        public async Task<ActivationResponse.GetStatusModel> GetStatusModel()
+        {
+            try
+            {
+                HttpResponseMessage x1 = await GetStatus(SoftwareID);
+                x1.EnsureSuccessStatusCode();
+                string r1 = await x1.Content.ReadAsStringAsync();
+                ActivationResponse.GetStatusModel getStatus = JsonConvert.DeserializeObject<ActivationResponse.GetStatusModel>(r1);
+                return getStatus;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<VersionResponse.GetLastVersion> GetLastVersionModel()
+        {
+            try
+            {
+                HttpResponseMessage x1 = await GetLastVersion();
+                x1.EnsureSuccessStatusCode();
+                string r1 = await x1.Content.ReadAsStringAsync();
+                VersionResponse.GetLastVersion getStatus = JsonConvert.DeserializeObject<VersionResponse.GetLastVersion>(r1);
+                return getStatus;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public string GenerateUserAgentID()
+        {
+            SoftwareID = "8714536025";
+            return SoftwareID;
+        }
     }
 }

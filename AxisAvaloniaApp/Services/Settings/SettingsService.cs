@@ -33,6 +33,8 @@ namespace AxisAvaloniaApp.Services.Settings
             translationService = null;
         }
 
+        public bool IsActiveLicense { get ; set; }
+
         /// <summary>
         /// Gets culture used on the PC.
         /// </summary>
@@ -647,6 +649,7 @@ namespace AxisAvaloniaApp.Services.Settings
             get => uniqueSaleNumber;
             set => this.uniqueSaleNumber = value;
         }
+
 
         /// <summary>
         /// Update settings in the database.

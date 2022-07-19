@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
@@ -25,8 +26,9 @@ namespace AxisAvaloniaApp.Services.StartUp
 {
     public class StartUpService : IStartUpService
     {
-        private const int OFFLINE_CHECK_INTERVAL = 5;
-        private const int OFFLINE_LIMIT_INTERVAL = 20; //60*60*24*3;
+        private const int OFFLINE_CHECK_INTERVAL = 60 * 60;
+        private const int OFFLINE_LIMIT_INTERVAL = 60 * 60 * 24 * 3;
+        private const int ACTIVATION_CHECK_INTERVAL = 60 * 60 * 24; 
 
         private readonly ISettingsService settings;
         private readonly IScanningData scanningService;
@@ -77,6 +79,11 @@ namespace AxisAvaloniaApp.Services.StartUp
             {
                 await InitializeAsync();
             }
+            else
+            {
+                activationService.SoftwareID = settings.AppSettings[Enums.ESettingKeys.SoftwareID].Value;
+            }
+
 
             if (true)
             {
@@ -96,19 +103,12 @@ namespace AxisAvaloniaApp.Services.StartUp
         {
             if(CheckNetworkConnection())
             {
-                ResetOfflinecounter(); 
-
-                // получаем с сервера серийный номер нашего приложения
-                var x1 = await activationService.GetStatus("8714536025");
-                x1.EnsureSuccessStatusCode();
-                var r1 = await x1.Content.ReadAsStringAsync();
-                ActivationResponse.GetStatusModel getStatus = JsonConvert.DeserializeObject<ActivationResponse.GetStatusModel>(r1);
-
-                // получаем с сервера данные о последней версии программы
-                var x3 = await activationService.GetLastVersion();
-                x3.EnsureSuccessStatusCode();
-                var r3 = await x3.Content.ReadAsStringAsync();
-                VersionResponse.GetLastVersion r = JsonConvert.DeserializeObject<VersionResponse.GetLastVersion>(r3);
+                ResetOfflinecounter();
+                ActivationResponse.GetStatusModel getStatus = await activationService.GetStatusModel();
+                VersionResponse.GetLastVersion getLastVersion = await activationService.GetLastVersionModel();
+                DateTime expirDate = DateTime.ParseExact(getStatus.Expirationdate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                settings.IsActiveLicense = DateTime.Compare(expirDate, DateTime.Now) > 0;
+                StartActivationChecker();
             }
             else
             {
@@ -119,6 +119,26 @@ namespace AxisAvaloniaApp.Services.StartUp
                 StartOfflineTimer();
             }
             return true;
+        }
+
+        private void StartActivationChecker()
+        {
+            Avalonia.Threading.DispatcherTimer ActivationCheckerTimer = new Avalonia.Threading.DispatcherTimer();
+            ActivationCheckerTimer.Interval = TimeSpan.FromSeconds(ACTIVATION_CHECK_INTERVAL);
+            ActivationCheckerTimer.Tick += ActivationCheckerTimer_Tick;
+            ActivationCheckerTimer.Start();
+        }
+
+        private async void ActivationCheckerTimer_Tick(object? sender, EventArgs e)
+        {
+            ActivationResponse.GetStatusModel getStatus = await activationService.GetStatusModel();
+            DateTime expirDate = DateTime.ParseExact(getStatus.Expirationdate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            settings.IsActiveLicense = DateTime.Compare(expirDate, DateTime.Now) > 0;
+            if (!settings.IsActiveLicense)
+            {
+                await loggerService.ShowDialog("Activate me, please!", icon: UserControls.MessageBox.EButtonIcons.Info);
+                Environment.Exit(-1);
+            }
         }
 
         private void ResetOfflinecounter()
@@ -197,7 +217,10 @@ namespace AxisAvaloniaApp.Services.StartUp
             await Task.Run(() =>
             {
                 try
-                {
+                {             
+                    settings.AppSettings[Enums.ESettingKeys.SoftwareID].Value = activationService.GenerateUserAgentID();
+                    settings.UpdateSettings(Enums.ESettingGroups.App);
+
                     Microinvest.PDFCreator.MicroinvestPdfDocument pdf = new Microinvest.PDFCreator.MicroinvestPdfDocument();
                     pdf.DefaultHeaderImage.Save(Configurations.AppConfiguration.LogoPath);
                     pdf.DefaultHeaderImage.Save(Configurations.AppConfiguration.DocumentHeaderPath);
@@ -217,6 +240,7 @@ namespace AxisAvaloniaApp.Services.StartUp
                 }
             });
         }
+
 
         private async Task StartupAsync()
         {
@@ -362,6 +386,8 @@ namespace AxisAvaloniaApp.Services.StartUp
                 DataBase.Entities.PaymentTypes.PaymentType.Create(string.Format("{0} {1}", translationService.Localize("strOtherPaymentType"), 4), EPaymentTypes.Other4),
             };
             await paymentTypesRepository.AddPaymentTypesAsync(payments);
+
+
         }
     }
 }
