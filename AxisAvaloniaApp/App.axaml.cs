@@ -6,6 +6,7 @@ using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.StartUp;
 using AxisAvaloniaApp.Views;
 using Splat;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -13,6 +14,9 @@ namespace AxisAvaloniaApp
 {
     public partial class App : Application
     {
+        public static Avalonia.Threading.DispatcherTimer OfflineTimer { get; set; }
+        public static DateTime OfflineStartDate { get; set; }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -38,9 +42,10 @@ namespace AxisAvaloniaApp
                     mw = await dialog.MyShowDialog();
                 }
                 IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
+
+                OfflineTimer = new Avalonia.Threading.DispatcherTimer();
+
                 startUpService.ActivateAsync(isFirstStart);
-
-
 
                 desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
@@ -48,7 +53,7 @@ namespace AxisAvaloniaApp
             }
 
             base.OnFrameworkInitializationCompleted();
-        }
+        }      
 
 
         /// <summary>

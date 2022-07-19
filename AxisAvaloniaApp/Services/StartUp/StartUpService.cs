@@ -8,6 +8,7 @@ using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Activation;
 using AxisAvaloniaApp.Services.Activation.ResponseModels;
 using AxisAvaloniaApp.Services.AxisCloud;
+using AxisAvaloniaApp.Services.Crypto;
 using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Payment.Device;
@@ -24,6 +25,9 @@ namespace AxisAvaloniaApp.Services.StartUp
 {
     public class StartUpService : IStartUpService
     {
+        private const int OFFLINE_CHECK_INTERVAL = 5;
+        private const int OFFLINE_LIMIT_INTERVAL = 20; //60*60*24*3;
+
         private readonly ISettingsService settings;
         private readonly IScanningData scanningService;
         private readonly IPaymentService paymentService;
@@ -33,6 +37,7 @@ namespace AxisAvaloniaApp.Services.StartUp
         private readonly IOperationHeaderRepository headerRepository;
         private readonly IZipService zipService;
         private readonly IActivationService activationService;
+        private readonly ICryptoService cryptoService;
 
         //private UIElement shell = null;
 
@@ -63,6 +68,7 @@ namespace AxisAvaloniaApp.Services.StartUp
 
             zipService = Splat.Locator.Current.GetRequiredService<IZipService>();
             activationService = Splat.Locator.Current.GetRequiredService<IActivationService>();
+            cryptoService = Splat.Locator.Current.GetRequiredService<ICryptoService>();
         }
 
         public async Task ActivateAsync(bool isFirstRun)
@@ -72,7 +78,11 @@ namespace AxisAvaloniaApp.Services.StartUp
                 await InitializeAsync();
             }
 
-            BackUp();
+            if (true)
+            {
+                BackUp();
+            }
+ 
 
             if (!await CheckStartupEnvironment(isFirstRun))
             {
@@ -86,6 +96,8 @@ namespace AxisAvaloniaApp.Services.StartUp
         {
             if(CheckNetworkConnection())
             {
+                ResetOfflinecounter(); 
+
                 // получаем с сервера серийный номер нашего приложения
                 var x1 = await activationService.GetStatus("8714536025");
                 x1.EnsureSuccessStatusCode();
@@ -104,8 +116,47 @@ namespace AxisAvaloniaApp.Services.StartUp
                 {
                     Environment.Exit(-218);
                 }
+                StartOfflineTimer();
             }
             return true;
+        }
+
+        private void ResetOfflinecounter()
+        {
+            settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value = cryptoService.Encrypt("0");
+            settings.UpdateSettings(Enums.ESettingGroups.App);
+        }
+
+        private void StartOfflineTimer()
+        {
+            int currentInterval = (StartUpAppWorkModel)settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value;
+            int remainingInterval = OFFLINE_LIMIT_INTERVAL - currentInterval < 0 ? 0 : OFFLINE_LIMIT_INTERVAL - currentInterval;
+            App.OfflineTimer.Interval = TimeSpan.FromSeconds(remainingInterval);
+            App.OfflineTimer.Tick += OfflineTimer_Tick;
+            App.OfflineTimer.Start();
+
+            Avalonia.Threading.DispatcherTimer offlineTimeRefresherTimer = new Avalonia.Threading.DispatcherTimer();
+            offlineTimeRefresherTimer.Interval = TimeSpan.FromSeconds(OFFLINE_CHECK_INTERVAL);
+            offlineTimeRefresherTimer.Tick += OfflineTimeRefresherTimer_Tick;
+            offlineTimeRefresherTimer.Start();
+        }
+        private async void OfflineTimer_Tick(object? sender, EventArgs e)
+        {
+            App.OfflineTimer.Tick -= OfflineTimer_Tick;
+            App.OfflineTimer.Stop();
+            settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value = cryptoService.Encrypt(OFFLINE_LIMIT_INTERVAL.ToString());
+            settings.UpdateSettings(Enums.ESettingGroups.App);
+
+            await loggerService.ShowDialog("Offline limit - 0!", icon: UserControls.MessageBox.EButtonIcons.Stop);
+
+            Environment.Exit(-1);
+        }
+
+        private void OfflineTimeRefresherTimer_Tick(object? sender, EventArgs e)
+        {
+            int currentInterval = (StartUpAppWorkModel)settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value + OFFLINE_CHECK_INTERVAL;
+            settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value = cryptoService.Encrypt(currentInterval.ToString());
+            settings.UpdateSettings(Enums.ESettingGroups.App);
         }
 
         /// <summary>

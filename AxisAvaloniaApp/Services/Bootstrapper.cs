@@ -38,6 +38,7 @@ using AxisAvaloniaApp.Services.Reports;
 using AxisAvaloniaApp.Services.Reports.Bulgaria;
 using AxisAvaloniaApp.Services.Activation;
 using AxisAvaloniaApp.Services.Zip;
+using AxisAvaloniaApp.Services.Crypto;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -58,6 +59,7 @@ namespace AxisAvaloniaApp.Services
                 resolver.GetRequiredService<ISearchData>(),
                 resolver.GetRequiredService<IOperationHeaderRepository>()));
 
+            services.Register<ICryptoService>(() => new CryptoService());
             services.Register<IActivationService>(() => new ActivationService("https://axis.sx/"));
             services.Register<INavigationService>(() => new NavigationService());
             services.RegisterLazySingleton<IThemeSelectorService>(() => new ThemeSelectorService());
