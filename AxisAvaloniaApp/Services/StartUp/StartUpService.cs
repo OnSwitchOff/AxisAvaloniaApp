@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using AxisAvaloniaApp.Configurations;
@@ -28,7 +29,8 @@ namespace AxisAvaloniaApp.Services.StartUp
     {
         private const int OFFLINE_CHECK_INTERVAL = 60 * 60;
         private const int OFFLINE_LIMIT_INTERVAL = 60 * 60 * 24 * 3;
-        private const int ACTIVATION_CHECK_INTERVAL = 60 * 60 * 24; 
+        private const int ACTIVATION_CHECK_INTERVAL = 60 * 60 * 24;
+        private const int AUTOBACKUPFILES_COUNT_LIMIT = 5;
 
         private readonly ISettingsService settings;
         private readonly IScanningData scanningService;
@@ -206,7 +208,49 @@ namespace AxisAvaloniaApp.Services.StartUp
             string ZipName = Path.Combine(AppConfiguration.BackupFolderPath, curentDate);
             if (!zipService.CompressFileToZip(AppConfiguration.DatabaseFullName, ZipName, AppConfiguration.DatabaseShortName))
             {
+                return;
+            }
+            DeleteOldBackups();
+        }
 
+        private void DeleteOldBackups()
+        {
+            DirectoryInfo di = new DirectoryInfo(AppConfiguration.BackupFolderPath);
+            if (!di.Exists)
+            {
+                return;
+            }
+            List<DateTime> backupDates = new List<DateTime>();
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                try
+                {
+                    DateTime itemDate = DateTime.ParseExact(fi.Name.Trim(".zip".ToCharArray()), "dd.MM.yyyy(HH-mm)", CultureInfo.InvariantCulture);
+                    backupDates.Add(itemDate);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            if (backupDates.Count > AUTOBACKUPFILES_COUNT_LIMIT)
+            {
+                int counter = 0;
+                var temp = backupDates.OrderByDescending(d => d).ToList();
+                counter = 0;
+                temp.ForEach(d => 
+                {
+                    counter++;
+                    if (counter > AUTOBACKUPFILES_COUNT_LIMIT)
+                    {
+                        FileInfo fi = new FileInfo(Path.Combine(AppConfiguration.BackupFolderPath, d.ToString("dd.MM.yyyy(HH-mm)") + ".zip"));
+                        if (fi.Exists)
+                        {
+                            fi.Delete();
+                        }
+                    }
+                });
             }
         }
 

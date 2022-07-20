@@ -57,6 +57,7 @@ namespace AxisAvaloniaApp.ViewModels.SettingsSections
         }
 
         public ReactiveCommand<Unit, Task<bool>> BackupCommand { get; }
+        public ReactiveCommand<Unit, Task<bool>> RestoreCommand { get; }
 
         public SpecialSettingsViewModel()
         {
@@ -66,6 +67,7 @@ namespace AxisAvaloniaApp.ViewModels.SettingsSections
 
             BackupOptions = LoadBackUpOptions();
             BackupCommand = ReactiveCommand.Create(BackUp);
+            RestoreCommand = ReactiveCommand.Create(Restore);
             TitleMinWidth = 250;
         }
 
@@ -102,6 +104,32 @@ namespace AxisAvaloniaApp.ViewModels.SettingsSections
                 return false;
             }
             EButtonResults sucRessult = await loggerService.ShowDialog("msgFileWasSaved", icon: UserControls.MessageBox.EButtonIcons.Success);
+            return true;
+        }
+
+        private async Task<bool> Restore()
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filters.Add(new FileDialogFilter() { Name = "Zip", Extensions = { "zip" } });
+            string[]? filePath = await dialog.ShowAsync(App.MainWindow);
+            if (filePath == null || filePath.Length == 0)
+            {
+                return false;
+            }
+
+            bool? extractDbResult = zipService.ExtractDbFromZip(filePath[0], AppConfiguration.DatabaseLocation);
+
+            if (!(bool)extractDbResult)
+            {
+                EButtonResults errResult = await loggerService.ShowDialog("msgErrorDuringSaving", icon: UserControls.MessageBox.EButtonIcons.Error);
+                return false;
+            }
+            if (extractDbResult == null)
+            {
+                EButtonResults errResult = await loggerService.ShowDialog("msgNoDbFile", icon: UserControls.MessageBox.EButtonIcons.Error);
+                return false;
+            }
+            EButtonResults sucRessult = await loggerService.ShowDialog("msgFileWasExtracted", icon: UserControls.MessageBox.EButtonIcons.Success);
             return true;
         }
 

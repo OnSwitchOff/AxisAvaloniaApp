@@ -230,7 +230,7 @@ namespace AxisAvaloniaApp.Configurations
         /// </summary>
         /// <returns>Path to folder with database.</returns>
         /// <date>09.09.2022.</date>
-        private static string DatabaseLocation
+        public static string DatabaseLocation
         {
             get
             {
