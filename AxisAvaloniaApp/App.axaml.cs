@@ -33,20 +33,25 @@ namespace AxisAvaloniaApp
             {              
 
                 MainWindow mw = null;
+                SplashScreenView sw = null;
                 bool isFirstStart = false;
+                desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+
                 if (!Configurations.AppConfiguration.IsDatabaseExist)
                 {
                     isFirstStart = true;
-                    desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
                     LocalizationView dialog = new LocalizationView();
-                    mw = await dialog.MyShowDialog();
+                    sw = await dialog.MyShowDialog();
                 }
-                IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
+
+                if (sw == null)
+                {
+                    sw = new SplashScreenView();
+                }
+                mw = await sw.MyShowDialog();
 
                 OfflineTimer = new Avalonia.Threading.DispatcherTimer();
-
-                startUpService.ActivateAsync(isFirstStart);
-
                 desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
                 MainWindow.Closing += MainWindow_Closing;

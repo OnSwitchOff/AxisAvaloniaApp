@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AxisAvaloniaApp.Views.SplashScreenView"
+		xmlns:controlsEx="using:AxisAvaloniaApp.UserControls.Extensions"
+		xmlns:conv="using:AxisAvaloniaApp.Converters"
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+		Width="750"
+	    Height="450"
+		CanResize="False"
+		WindowStartupLocation="CenterScreen"
+        Title="SplashScreenView">
+	<Window.Background>
+		<ImageBrush Source="/Assets/BackgroundSplashscreen.jpg" Stretch="Fill"/>
+	</Window.Background>
+	<Window.Styles>
+		<Style Selector="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+		</Style>
+	</Window.Styles>
+	<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" Margin="20,250">
+		<ProgressBar  Value="{Binding Progress, Mode=OneWay}" Height="20" Minimum="0" Maximum="100" ShowProgressText="False" />
+		<TextBlock Margin="160,3,0,0" Foreground="White"  Text="{Binding Progress, Mode=OneWay, StringFormat={}{0}%}" ZIndex="99"/>
+		<TextBlock Grid.Row="1"  Text="{Binding Message, Mode=OneWay}" Padding="10"/>	
+	</Grid>
+</Window>

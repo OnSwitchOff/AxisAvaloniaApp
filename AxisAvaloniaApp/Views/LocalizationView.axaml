@@ -48,7 +48,7 @@
 			<Grid RowDefinitions="Auto,*">
 				
 				<Border BorderBrush="Gold" BorderThickness="0" Background="#BB0e1434"   Padding="20,10" CornerRadius="10,10,0,0">
-					<controlsEx:AxisTextBlock Foreground="White"  Text="Select Country" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<controlsEx:AxisTextBlock Foreground="White"  LocalizeTextKey="strSelectCountry" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 				</Border>
 				<Border BorderBrush="Gold" BorderThickness="0" Grid.Row="1" Background="#990e1434" CornerRadius="0,0,10,10"  >
 					 <ListBox Grid.Column="0" Grid.Row="1" Background="Transparent" MinWidth="200" Padding="0,0,0,0" SelectionMode="Single" Items="{Binding Countries}" SelectedItem="{Binding SelectedCountry}">
@@ -75,7 +75,7 @@
 			<Grid RowDefinitions="Auto,*">
 				
 				<Border BorderBrush="Gold" BorderThickness="0" Background="#BB0e1434" Padding="20,10"  CornerRadius="10,10,0,0">
-					<controlsEx:AxisTextBlock Text="Select Language" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<controlsEx:AxisTextBlock  LocalizeTextKey="strSelectLanguage" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 				</Border>
 				
 				<Border BorderBrush="Gold" BorderThickness="0" Grid.Row="1" Background="#990e1434" CornerRadius="0,0,10,10">

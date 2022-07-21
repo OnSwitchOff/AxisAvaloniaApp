@@ -43,6 +43,8 @@ namespace AxisAvaloniaApp.Services.StartUp
         private readonly IActivationService activationService;
         private readonly ICryptoService cryptoService;
 
+        public event Action<int,string>? ProgressChanged;
+
         //private UIElement shell = null;
 
         /// <summary>
@@ -77,8 +79,10 @@ namespace AxisAvaloniaApp.Services.StartUp
 
         public async Task ActivateAsync(bool isFirstRun)
         {
+            ProgressChanged?.Invoke(0,"Start loading...");
             if (isFirstRun)
             {
+                ProgressChanged?.Invoke(10, "First initialize...");
                 await InitializeAsync();
             }
             else
@@ -88,9 +92,11 @@ namespace AxisAvaloniaApp.Services.StartUp
 
             if (settings.AppSettings[Enums.ESettingKeys.BackUpOption].Value == "1")
             {
+                ProgressChanged?.Invoke(30, "Auto backup...");
                 BackUp();
-            } 
+            }
 
+            ProgressChanged?.Invoke(60, "CheckStartupEnvironmen backup...");
             if (!await CheckStartupEnvironment(isFirstRun))
             {
                 return;
@@ -292,6 +298,8 @@ namespace AxisAvaloniaApp.Services.StartUp
 
                 try
                 {
+                    ProgressChanged?.Invoke(80, "InitializeSearchDataTool backup...");
+
                     searchService.InitializeSearchDataTool(settings.AppLanguage);
 
                     Microinvest.PDFCreator.Helpers.TranslationHelper.Language = settings.AppLanguage;
@@ -314,6 +322,7 @@ namespace AxisAvaloniaApp.Services.StartUp
 
                 try
                 {
+                    ProgressChanged?.Invoke(90, "SetPaymentTool...");
                     if ((bool)settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIsUsed])
                     {
                         paymentService.SetPaymentTool(new RealDevice(settings));
@@ -330,6 +339,8 @@ namespace AxisAvaloniaApp.Services.StartUp
                 {
                     loggerService.RegisterError(this, e, nameof(StartupAsync) + " (Fiscal printer)");
                 }
+
+                ProgressChanged?.Invoke(100, "All Complete!");
             });
         }
 

@@ -72,6 +72,26 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="strSelectCountry">
+		<Value Lang="bg-BG">Изберете държава</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Select Country</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Выберите страну</Value>
+		<Value Lang="uk-UA">Виберіть країну</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strSelectLanguage">
+		<Value Lang="bg-BG">Изберете език</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Select Language</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Выберите язык</Value>
+		<Value Lang="uk-UA">Виберіть мову</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
     
     <!--Главное меню-->
     <Data Key="strSales">

@@ -1,16 +1,16 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using AxisAvaloniaApp.ViewModels;
 using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Views
 {
-    public partial class LocalizationView : Window
+    public partial class SplashScreenView : Window
     {
+
         private bool? dialogResult;
-        public  bool? DialogResult
+        public bool? DialogResult
         {
             get => dialogResult;
             set
@@ -23,9 +23,7 @@ namespace AxisAvaloniaApp.Views
             }
         }
 
-        //private MainWindow mainWindow = null;
-
-        public LocalizationView()
+        public SplashScreenView()
         {
             dialogResult = null;
 
@@ -33,13 +31,17 @@ namespace AxisAvaloniaApp.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
-            DataContext = new LocalizationViewModel();
-            //this.Closed += LocalizationView_Closed;
+            SplashScreenViewModel dc = new SplashScreenViewModel();
+            DataContext = dc;
+            dc.PropertyChanged += Dc_PropertyChanged;
         }
 
-        private void LocalizationView_Closed(object? sender, System.EventArgs e)
+        private void Dc_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-
+            if (e.PropertyName == "Progress" && ((SplashScreenViewModel)DataContext).Progress == 101)
+            {
+                this.DialogResult = true;
+            }
         }
 
         private void InitializeComponent()
@@ -48,22 +50,22 @@ namespace AxisAvaloniaApp.Views
         }
 
 
-        private TaskCompletionSource<SplashScreenView> taskSource;
-        public async Task<SplashScreenView> MyShowDialog()
+        private TaskCompletionSource<MainWindow> taskSource;
+        public async Task<MainWindow> MyShowDialog()
         {
-            taskSource = new TaskCompletionSource<SplashScreenView>();
+            taskSource = new TaskCompletionSource<MainWindow>();
             this.Closed += delegate
             {
                 if (DialogResult != null)
                 {
-                    SplashScreenView splashScreenView = new SplashScreenView();
-                    splashScreenView.Show();
-                    taskSource.TrySetResult(splashScreenView);
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    taskSource.TrySetResult(mainWindow);
                 }
                 else
                 {
                     System.Environment.Exit(0);
-                }                         
+                }
             };
             this.Show();
             return await taskSource.Task;
