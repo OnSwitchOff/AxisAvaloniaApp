@@ -37,6 +37,8 @@ namespace AxisAvaloniaApp.Services.Settings
             this.searchService = searchService;
         }
 
+        public bool IsActiveLicense { get ; set; }
+
         /// <summary>
         /// Gets culture used on the PC.
         /// </summary>
@@ -573,6 +575,14 @@ namespace AxisAvaloniaApp.Services.Settings
                                 ESettingGroups.App,
                                 string.Empty)
                         },
+                        {
+                            ESettingKeys.BackUpOption,
+                            new SettingsItemModel(
+                                this.settingsRepository,
+                                ESettingKeys.BackUpOption,
+                                ESettingGroups.App,
+                                ((int)(EBackUpOptions.EVERY_START)).ToString())
+                        },
                     };
                 }
 
@@ -640,7 +650,7 @@ namespace AxisAvaloniaApp.Services.Settings
             get => uniqueSaleNumber;
             set => this.uniqueSaleNumber = value;
         }
-   
+
 
         /// <summary>
         /// Update settings in the database.

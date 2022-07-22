@@ -1,4 +1,5 @@
-﻿using AxisAvaloniaApp.Helpers;
+﻿using AxisAvaloniaApp.Configurations;
+using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Logger;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace AxisAvaloniaApp.Services.Zip
         {
             try
             {
-                using (ZipArchive archive = ZipFile.Open(destination, ZipArchiveMode.Create))
+                using (ZipArchive archive = ZipFile.Open(destination, ZipArchiveMode.Update))
                 {
                     archive.CreateEntryFromFile(fileName, entryName);
                 }
@@ -46,8 +47,11 @@ namespace AxisAvaloniaApp.Services.Zip
             try
             {
                 using (ZipArchive archive = ZipFile.Open(zipName, ZipArchiveMode.Read))
-                {
-                    archive.ExtractToDirectory(destination);
+                {                  
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        entry.ExtractToFile(Path.Combine(destination, entry.Name), true);    
+                    }
                 }
             }
             catch (Exception ex)
@@ -56,6 +60,31 @@ namespace AxisAvaloniaApp.Services.Zip
                 return false;
             }
             return true;
+        }
+
+        public bool? ExtractDbFromZip(string zipName, string destination)
+        {
+            try
+            {
+                using (ZipArchive archive = ZipFile.Open(zipName, ZipArchiveMode.Read))
+                {
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        if (entry.Name == AppConfiguration.DatabaseShortName)
+                        {
+                            entry.ExtractToFile(Path.Combine(destination, entry.Name), true);
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                loggerService.RegisterError(this, ex, nameof(ExtractAllFromZip));
+                return false;
+            }
+            loggerService.ShowDialog("msgNoDbFileInArchive", icon: UserControls.MessageBox.EButtonIcons.Info);
+            return null;
         }
 
         public async Task<bool> ExtractAllFromZipAsync(string zipName, string destination)

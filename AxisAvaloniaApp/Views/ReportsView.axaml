@@ -25,6 +25,8 @@
   </UserControl.Styles>
   
   <container:OperationContainer ViewCloseCommand="{Binding CloseViewCommand}" 
+								Pages="{Binding Pages, Mode=TwoWay}"
+								DocumentService="{Binding DocumentService}"
                                 PrintContentVisible="{Binding !IsMainContentVisible, Mode=TwoWay}">
     <container:OperationContainer.TitleContent>
       <controlsEx:AxisTextBlock LocalizeTextKey="strReports" Classes="Title"/>

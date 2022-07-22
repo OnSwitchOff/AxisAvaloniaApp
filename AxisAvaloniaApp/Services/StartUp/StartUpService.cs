@@ -1,22 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using AxisAvaloniaApp.Configurations;
 using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Activation;
+using AxisAvaloniaApp.Services.Activation.ResponseModels;
 using AxisAvaloniaApp.Services.AxisCloud;
+using AxisAvaloniaApp.Services.Crypto;
 using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Payment.Device;
 using AxisAvaloniaApp.Services.Scanning;
 using AxisAvaloniaApp.Services.SearchNomenclatureData;
 using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Zip;
 using DataBase.Entities.VATGroups;
 using DataBase.Repositories.OperationHeader;
 using Microinvest.CommonLibrary.Enums;
+using Newtonsoft.Json;
 
 namespace AxisAvaloniaApp.Services.StartUp
 {
     public class StartUpService : IStartUpService
     {
+        private const int OFFLINE_CHECK_INTERVAL = 60 * 60;
+        private const int OFFLINE_LIMIT_INTERVAL = 60 * 60 * 24 * 3;
+        private const int ACTIVATION_CHECK_INTERVAL = 60 * 60 * 24;
+        private const int AUTOBACKUPFILES_COUNT_LIMIT = 5;
+
         private readonly ISettingsService settings;
         private readonly IScanningData scanningService;
         private readonly IPaymentService paymentService;
@@ -24,6 +39,11 @@ namespace AxisAvaloniaApp.Services.StartUp
         private readonly ILoggerService loggerService;
         private readonly ISearchData searchService;
         private readonly IOperationHeaderRepository headerRepository;
+        private readonly IZipService zipService;
+        private readonly IActivationService activationService;
+        private readonly ICryptoService cryptoService;
+
+        public event Action<int,string>? ProgressChanged;
 
         //private UIElement shell = null;
 
@@ -51,16 +71,193 @@ namespace AxisAvaloniaApp.Services.StartUp
             this.loggerService = loggerService;
             this.searchService = searchService;
             this.headerRepository = headerRepository;
+
+            zipService = Splat.Locator.Current.GetRequiredService<IZipService>();
+            activationService = Splat.Locator.Current.GetRequiredService<IActivationService>();
+            cryptoService = Splat.Locator.Current.GetRequiredService<ICryptoService>();
         }
 
         public async Task ActivateAsync(bool isFirstRun)
         {
+            ProgressChanged?.Invoke(0,"Start loading...");
             if (isFirstRun)
             {
+                ProgressChanged?.Invoke(10, "First initialize...");
                 await InitializeAsync();
+            }
+            else
+            {
+                activationService.SoftwareID = settings.AppSettings[Enums.ESettingKeys.SoftwareID].Value;
+            }
+
+            if (settings.AppSettings[Enums.ESettingKeys.BackUpOption].Value == "1")
+            {
+                ProgressChanged?.Invoke(30, "Auto backup...");
+                BackUp();
+            }
+
+            ProgressChanged?.Invoke(60, "CheckStartupEnvironmen backup...");
+            if (!await CheckStartupEnvironment(isFirstRun))
+            {
+                return;
             }
 
             await StartupAsync();
+        }
+
+        private async Task<bool> CheckStartupEnvironment(bool isFirstRun)
+        {
+            if(CheckNetworkConnection())
+            {
+                ResetOfflinecounter();
+                ActivationResponse.GetStatusModel getStatus = await activationService.GetStatusModel();
+                VersionResponse.GetLastVersion getLastVersion = await activationService.GetLastVersionModel();
+                DateTime expirDate = DateTime.ParseExact(getStatus.Expirationdate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                settings.IsActiveLicense = DateTime.Compare(expirDate, DateTime.Now) > 0;
+                StartActivationChecker();
+            }
+            else
+            {
+                if (isFirstRun)
+                {
+                    Environment.Exit(-218);
+                }
+                StartOfflineTimer();
+            }
+            return true;
+        }
+
+        private void StartActivationChecker()
+        {
+            Avalonia.Threading.DispatcherTimer ActivationCheckerTimer = new Avalonia.Threading.DispatcherTimer();
+            ActivationCheckerTimer.Interval = TimeSpan.FromSeconds(ACTIVATION_CHECK_INTERVAL);
+            ActivationCheckerTimer.Tick += ActivationCheckerTimer_Tick;
+            ActivationCheckerTimer.Start();
+        }
+
+        private async void ActivationCheckerTimer_Tick(object? sender, EventArgs e)
+        {
+            ActivationResponse.GetStatusModel getStatus = await activationService.GetStatusModel();
+            DateTime expirDate = DateTime.ParseExact(getStatus.Expirationdate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            settings.IsActiveLicense = DateTime.Compare(expirDate, DateTime.Now) > 0;
+            if (!settings.IsActiveLicense)
+            {
+                await loggerService.ShowDialog("Activate me, please!", icon: UserControls.MessageBox.EButtonIcons.Info);
+                Environment.Exit(-1);
+            }
+        }
+
+        private void ResetOfflinecounter()
+        {
+            settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value = cryptoService.Encrypt("0");
+            settings.UpdateSettings(Enums.ESettingGroups.App);
+        }
+
+        private void StartOfflineTimer()
+        {
+            int currentInterval = (StartUpAppWorkModel)settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value;
+            int remainingInterval = OFFLINE_LIMIT_INTERVAL - currentInterval < 0 ? 0 : OFFLINE_LIMIT_INTERVAL - currentInterval;
+            App.OfflineTimer.Interval = TimeSpan.FromSeconds(remainingInterval);
+            App.OfflineTimer.Tick += OfflineTimer_Tick;
+            App.OfflineTimer.Start();
+
+            Avalonia.Threading.DispatcherTimer offlineTimeRefresherTimer = new Avalonia.Threading.DispatcherTimer();
+            offlineTimeRefresherTimer.Interval = TimeSpan.FromSeconds(OFFLINE_CHECK_INTERVAL);
+            offlineTimeRefresherTimer.Tick += OfflineTimeRefresherTimer_Tick;
+            offlineTimeRefresherTimer.Start();
+        }
+        private async void OfflineTimer_Tick(object? sender, EventArgs e)
+        {
+            App.OfflineTimer.Tick -= OfflineTimer_Tick;
+            App.OfflineTimer.Stop();
+            settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value = cryptoService.Encrypt(OFFLINE_LIMIT_INTERVAL.ToString());
+            settings.UpdateSettings(Enums.ESettingGroups.App);
+
+            await loggerService.ShowDialog("Offline limit - 0!", icon: UserControls.MessageBox.EButtonIcons.Stop);
+
+            Environment.Exit(-1);
+        }
+
+        private void OfflineTimeRefresherTimer_Tick(object? sender, EventArgs e)
+        {
+            int currentInterval = (StartUpAppWorkModel)settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value + OFFLINE_CHECK_INTERVAL;
+            settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value = cryptoService.Encrypt(currentInterval.ToString());
+            settings.UpdateSettings(Enums.ESettingGroups.App);
+        }
+
+        /// <summary>
+        /// Проверяет наличие интернета методом пинга google.com
+        /// </summary>
+        /// <returns>результат проверки</returns>
+        private bool CheckNetworkConnection()
+        {
+            try
+            {
+                PingReply pingStatus = null;
+
+                using (Ping ping = new Ping())
+                {
+                    pingStatus = ping.Send("google.com");
+                }
+
+                return pingStatus.Status == IPStatus.Success;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private void BackUp()
+        {
+            string curentDate = DateTime.Now.ToString("dd.MM.yyyy(HH-mm)") + ".zip";
+            string ZipName = Path.Combine(AppConfiguration.BackupFolderPath, curentDate);
+            if (!zipService.CompressFileToZip(AppConfiguration.DatabaseFullName, ZipName, AppConfiguration.DatabaseShortName))
+            {
+                return;
+            }
+            DeleteOldBackups();
+        }
+
+        private void DeleteOldBackups()
+        {
+            DirectoryInfo di = new DirectoryInfo(AppConfiguration.BackupFolderPath);
+            if (!di.Exists)
+            {
+                return;
+            }
+            List<DateTime> backupDates = new List<DateTime>();
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                try
+                {
+                    DateTime itemDate = DateTime.ParseExact(fi.Name.Trim(".zip".ToCharArray()), "dd.MM.yyyy(HH-mm)", CultureInfo.InvariantCulture);
+                    backupDates.Add(itemDate);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            if (backupDates.Count > AUTOBACKUPFILES_COUNT_LIMIT)
+            {
+                int counter = 0;
+                var temp = backupDates.OrderByDescending(d => d).ToList();
+                counter = 0;
+                temp.ForEach(d => 
+                {
+                    counter++;
+                    if (counter > AUTOBACKUPFILES_COUNT_LIMIT)
+                    {
+                        FileInfo fi = new FileInfo(Path.Combine(AppConfiguration.BackupFolderPath, d.ToString("dd.MM.yyyy(HH-mm)") + ".zip"));
+                        if (fi.Exists)
+                        {
+                            fi.Delete();
+                        }
+                    }
+                });
+            }
         }
 
         private async Task InitializeAsync()
@@ -68,14 +265,19 @@ namespace AxisAvaloniaApp.Services.StartUp
             await Task.Run(() =>
             {
                 try
-                {
+                {             
+                    settings.AppSettings[Enums.ESettingKeys.SoftwareID].Value = activationService.GenerateUserAgentID();
+                    settings.UpdateSettings(Enums.ESettingGroups.App);
+
                     Microinvest.PDFCreator.MicroinvestPdfDocument pdf = new Microinvest.PDFCreator.MicroinvestPdfDocument();
                     pdf.DefaultHeaderImage.Save(Configurations.AppConfiguration.LogoPath);
+                    pdf.DefaultHeaderImage.Save(Configurations.AppConfiguration.DocumentHeaderPath);
+                    pdf.DefaultFooterImage.Save(Configurations.AppConfiguration.DocumentFooterPath);
                     //using (Avalonia.Media.Imaging.Bitmap logo = new Avalonia.Media.Imaging.Bitmap(AvaloniaLocator.Current.GetService<IAssetLoader>().Open(new Uri("avares://AxisAvaloniaApp/Assets/AxisIcon.ico"))))
                     //{
                     //    logo.Save(Configurations.AppConfiguration.LogoPath);
                     //}
-                    
+
                     WriteDefaultValuesIntoDatabase();
                     
                     System.IO.File.Create(Configurations.AppConfiguration.LogFilePath);
@@ -87,12 +289,17 @@ namespace AxisAvaloniaApp.Services.StartUp
             });
         }
 
+
         private async Task StartupAsync()
         {
             await Task.Run(async () =>
             {
+
+
                 try
                 {
+                    ProgressChanged?.Invoke(80, "InitializeSearchDataTool backup...");
+
                     searchService.InitializeSearchDataTool(settings.AppLanguage);
 
                     Microinvest.PDFCreator.Helpers.TranslationHelper.Language = settings.AppLanguage;
@@ -115,6 +322,7 @@ namespace AxisAvaloniaApp.Services.StartUp
 
                 try
                 {
+                    ProgressChanged?.Invoke(90, "SetPaymentTool...");
                     if ((bool)settings.FiscalPrinterSettings[Enums.ESettingKeys.DeviceIsUsed])
                     {
                         paymentService.SetPaymentTool(new RealDevice(settings));
@@ -131,6 +339,8 @@ namespace AxisAvaloniaApp.Services.StartUp
                 {
                     loggerService.RegisterError(this, e, nameof(StartupAsync) + " (Fiscal printer)");
                 }
+
+                ProgressChanged?.Invoke(100, "All Complete!");
             });
         }
 
@@ -229,6 +439,8 @@ namespace AxisAvaloniaApp.Services.StartUp
                 DataBase.Entities.PaymentTypes.PaymentType.Create(string.Format("{0} {1}", translationService.Localize("strOtherPaymentType"), 4), EPaymentTypes.Other4),
             };
             await paymentTypesRepository.AddPaymentTypesAsync(payments);
+
+
         }
     }
 }

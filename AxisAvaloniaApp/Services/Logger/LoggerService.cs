@@ -58,7 +58,7 @@ namespace AxisAvaloniaApp.Services.Logger
         {
             try
             {
-                using (TextWriter logFile = new StreamWriter(settingsService.LogfilePath, true))
+                using (TextWriter logFile = new StreamWriter(Configurations.AppConfiguration.LogFilePath, true))
                 {
                     logFile.Write("\r\n" + "Application:{0} {1}" + "\r\n" + "Date/Time:  {2:yyyy/MM/dd HH:mm:ss.fff}" + "\r\n" + "OS:         {3}" + "\r\n" + "Object:     {4}" + "\r\n" + "Method:      {5}" + "\r\n" + "Message:    {6}", FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion, DateTime.Now, Environment.OSVersion, sender.ToString(), method, message);
                     logFile.WriteLine();
@@ -83,7 +83,7 @@ namespace AxisAvaloniaApp.Services.Logger
         {
             try
             {
-                using (TextWriter logFile = new StreamWriter(settingsService.LogfilePath, true))
+                using (TextWriter logFile = new StreamWriter(Configurations.AppConfiguration.LogFilePath, true))
                 {
                     logFile.Write("\r\n" + "Application:{0} {1}" + "\r\n" + "Date/Time:  {2:yyyy/MM/dd HH:mm:ss.fff}" + "\r\n" + "OS:         {3}" + "\r\n" + "Object:     {4}" + "\r\n" + "Method:      {5}" + "\r\n" + "Message:    {6}", FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion, DateTime.Now, Environment.OSVersion, sender.ToString(), method, exception.Source, exception.Message, exception.TargetSite, exception.StackTrace);
                     logFile.WriteLine();

@@ -48,17 +48,17 @@ namespace AxisAvaloniaApp.Views
         }
 
 
-        private TaskCompletionSource<MainWindow> taskSource;
-        public async Task<MainWindow> MyShowDialog()
+        private TaskCompletionSource<SplashScreenView> taskSource;
+        public async Task<SplashScreenView> MyShowDialog()
         {
-            taskSource = new TaskCompletionSource<MainWindow>();
+            taskSource = new TaskCompletionSource<SplashScreenView>();
             this.Closed += delegate
             {
                 if (DialogResult != null)
                 {
-                    MainWindow mainWindow = new MainWindow();
-                    mainWindow.Show();
-                    taskSource.TrySetResult(mainWindow);
+                    SplashScreenView splashScreenView = new SplashScreenView(true);
+                    splashScreenView.Show();
+                    taskSource.TrySetResult(splashScreenView);
                 }
                 else
                 {

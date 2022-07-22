@@ -76,18 +76,18 @@
                                              TitleMinWidth="{Binding	ElementName=UC, Path=ViewModel.TitleMinWidth, Mode=TwoWay}" 
                                              Margin="0,0,0,1">
 							<set:AdaptiveSettingsItemControl.Input>
-                <ComboBox Margin="10,5"
-                          HorizontalAlignment="Stretch"
-                          Items="{Binding	ElementName=UC, Path=ViewModel.COMScannerPorts}"
-                          SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedComScannerPort, Mode=TwoWay}"
-                          CornerRadius="0">
-                  <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                      <ucext:AxisTextBlock LocalizeTextKey="{Binding}"
-                                           Classes="Settings"/>
-                    </DataTemplate>
-                  </ComboBox.ItemTemplate>
-                </ComboBox>
+                        <ComboBox Margin="10,5"
+                                  HorizontalAlignment="Stretch"
+                                  Items="{Binding	ElementName=UC, Path=ViewModel.COMScannerPorts}"
+                                  SelectedItem="{Binding	ElementName=UC, Path=ViewModel.SelectedComScannerPort, Mode=TwoWay}"
+                                  CornerRadius="0">
+                          <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                              <ucext:AxisTextBlock LocalizeTextKey="{Binding}"
+                                                   Classes="Settings"/>
+                            </DataTemplate>
+                          </ComboBox.ItemTemplate>
+                        </ComboBox>
 							</set:AdaptiveSettingsItemControl.Input>
 						</set:AdaptiveSettingsItemControl>
 					</Grid>
@@ -139,7 +139,7 @@
                                       CornerRadius="0">
 										<ComboBox.ItemTemplate>
 											<DataTemplate>
-												<ucext:AxisTextBlock Text="{Binding	Key, Mode=TwoWay}" 
+												<ucext:AxisTextBlock LocalizeTextKey="{Binding	Key, Mode=TwoWay}" 
                                              Classes="Settings"/>
 											</DataTemplate>
 										</ComboBox.ItemTemplate>

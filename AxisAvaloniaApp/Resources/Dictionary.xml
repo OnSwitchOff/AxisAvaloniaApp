@@ -72,6 +72,26 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	<Data Key="strSelectCountry">
+		<Value Lang="bg-BG">Изберете държава</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Select Country</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Выберите страну</Value>
+		<Value Lang="uk-UA">Виберіть країну</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+	<Data Key="strSelectLanguage">
+		<Value Lang="bg-BG">Изберете език</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Select Language</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Выберите язык</Value>
+		<Value Lang="uk-UA">Виберіть мову</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
     
     <!--Главное меню-->
     <Data Key="strSales">
@@ -2278,6 +2298,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+	  <Data Key="strSpecial">
+		  <Value Lang="bg-BG">Разширени</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Advanced</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Расширенные</Value>
+		  <Value Lang="uk-UA">Розширені</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
 	  <Data Key="strAxisCloudIntegration">
 		  <Value Lang="bg-BG">Интеграция с AxisCloud</Value>
 		  <Value Lang="el-GR">Ενσωμάτωση με το AxisCloud</Value>
@@ -2397,8 +2427,30 @@
 		  <Value Lang="hy-AM">Not translated</Value>
 		  <Value Lang="ka-GE">Not translated</Value>
 	  </Data>
-	  
-    <Data Key="strExportLogFile">
+
+	  <Data Key="strOk">
+		  <Value Lang="bg-BG">Ok</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Ok</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Ok</Value>
+		  <Value Lang="uk-UA">Ok</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+
+	  <Data Key="strEveryStart">
+		  <Value Lang="bg-BG">Всяко стартиране</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Every start</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Каждый запуск</Value>
+		  <Value Lang="uk-UA">Кожен запуск</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+
+	  <Data Key="strExportLogFile">
       <Value Lang="bg-BG">Експортиране на лог-файл</Value>
       <Value Lang="el-GR">Not translated</Value>
       <Value Lang="en-GB">Export log file</Value>
@@ -2408,8 +2460,42 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
-    
-    <!--Welcome view-->
+
+	<Data Key="strAutoBackUp">
+		<Value Lang="bg-BG">Активиране</Value>
+		<Value Lang="el-GR">Not translated</Value>
+		<Value Lang="en-GB">Automactic data-backup</Value>
+		<Value Lang="ro-RO">Not translated</Value>
+		<Value Lang="ru-RU">Активировать</Value>
+		<Value Lang="uk-UA">Автоматична архивація данних</Value>
+		<Value Lang="hy-AM">Not translated</Value>
+		<Value Lang="ka-GE">Not translated</Value>
+	</Data>
+
+	  <Data Key="strActivate">
+		  <Value Lang="bg-BG">Активиране</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Activate</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Активация</Value>
+		  <Value Lang="uk-UA">Активація</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+
+	  <Data Key="strGetLicense">
+		  <Value Lang="bg-BG">Get license</Value>
+		  <Value Lang="el-GR">Not translated</Value>
+		  <Value Lang="en-GB">Get license</Value>
+		  <Value Lang="ro-RO">Not translated</Value>
+		  <Value Lang="ru-RU">Получить лицензию</Value>
+		  <Value Lang="uk-UA">Отримати ліцензию</Value>
+		  <Value Lang="hy-AM">Not translated</Value>
+		  <Value Lang="ka-GE">Not translated</Value>
+	  </Data>
+
+
+	  <!--Welcome view-->
     <Data Key="strThanksToChoice">
       <Value Lang="bg-BG">Благодарим Ви за избора на Axis My100R!</Value>
       <Value Lang="el-GR">Not translated</Value>

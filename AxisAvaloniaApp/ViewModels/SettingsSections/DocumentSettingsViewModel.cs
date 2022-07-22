@@ -20,6 +20,8 @@ namespace AxisAvaloniaApp.ViewModels.Settings
         private string userName;
         private ObservableCollection<ComboBoxItemModel> languages;
         private ComboBoxItemModel selectedLanguage;
+        private string documentHeaderSource;
+        private string documentFooterSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentSettingsViewModel"/> class.
@@ -49,6 +51,9 @@ namespace AxisAvaloniaApp.ViewModels.Settings
                     }
                 }
             }
+
+            DocumentHeaderSource = Configurations.AppConfiguration.DocumentHeaderPath;
+            DocumentFooterSource = Configurations.AppConfiguration.DocumentFooterPath;
         }
 
         /// <summary>
@@ -104,6 +109,36 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             }
         }
 
+        public string DocumentHeaderSource
+        {
+            get => documentHeaderSource;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref documentHeaderSource, value);
+
+                if (Configurations.AppConfiguration.DocumentHeaderPath !=documentHeaderSource)
+                {
+                    Configurations.AppConfiguration.DocumentHeaderPath = documentHeaderSource;
+                }
+            }
+        }
+
+
+        public string DocumentFooterSource
+        {
+            get => documentFooterSource;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref documentFooterSource, value);
+
+                if (Configurations.AppConfiguration.DocumentFooterPath != documentFooterSource)
+                {
+                    Configurations.AppConfiguration.DocumentFooterPath = documentFooterSource;
+                }
+            }
+        }
+
+
         /// <summary>
         /// Exports log file.
         /// </summary>
@@ -154,6 +189,48 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             {
                 loggerService.RegisterError(this, ex, nameof(SaveDocumentSettings));
                 await loggerService.ShowDialog("msgErrorDuringSavingSettings", "strError", UserControls.MessageBoxes.EButtonIcons.Error);
+            }
+        }
+
+
+        /// <summary>
+        /// Opens FileDialog.
+        /// </summary>
+        /// <date>09.06.2022.</date>
+        public async void ShowChoseDocumentHeaderCommand()
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filters.Add(new FileDialogFilter() { Name = "Image Files", Extensions = { "png", "jpg", "jpeg", "bmp", "ico" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "PNG", Extensions = { "png" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "JPEG", Extensions = { "jpg", "jpeg" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "BMP", Extensions = { "bmp" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "ICO", Extensions = { "ico" } });
+            string[]? filePath = await dialog.ShowAsync(App.MainWindow);
+
+            if (filePath != null)
+            {
+                DocumentHeaderSource = filePath[0];
+            }
+        }
+
+
+        /// <summary>
+        /// Opens FileDialog.
+        /// </summary>
+        /// <date>09.06.2022.</date>
+        public async void ShowChoseDocumentFooterCommand()
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filters.Add(new FileDialogFilter() { Name = "Image Files", Extensions = { "png", "jpg", "jpeg", "bmp", "ico" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "PNG", Extensions = { "png" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "JPEG", Extensions = { "jpg", "jpeg" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "BMP", Extensions = { "bmp" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "ICO", Extensions = { "ico" } });
+            string[]? filePath = await dialog.ShowAsync(App.MainWindow);
+
+            if (filePath != null)
+            {
+                DocumentFooterSource = filePath[0];
             }
         }
     }

@@ -230,5 +230,25 @@ namespace DataBase.Repositories.OperationHeader
                 }
             });
         }
+
+        //public double GetLastPriceByGoodId(int goodId)
+        //{*
+        //    try
+        //    {
+        //        return (double)databaseContext.
+        //        OperationHeaders.
+        //        Where(oh => oh.OperType == EOperTypes.Revaluation).
+        //        Include(oh => oh.OperationDetails).ThenInclude(d => d.Goods).ThenInclude(g => g.Vatgroup).
+        //        Where(oh => oh.OperationDetails.Any(od => od.Goods.Id == goodId)).
+        //        OrderByDescending(oh => oh.Date).
+        //        Select(oh => oh.OperationDetails.Where(od => od.Goods.Id == goodId).First().SalePrice).FirstOrDefault();
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return 0;
+        //    }
+
+        //}
     }
 }

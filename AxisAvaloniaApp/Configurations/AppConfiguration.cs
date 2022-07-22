@@ -1,4 +1,5 @@
-﻿using DataBase;
+﻿using AxisAvaloniaApp.Enums;
+using DataBase;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
@@ -129,6 +130,101 @@ namespace AxisAvaloniaApp.Configurations
             }
         }
 
+
+        /// <summary>
+        /// Gets or sets path to logo.
+        /// </summary>
+        /// <date>13.06.2022.</date>
+        public static string DocumentHeaderPath
+        {
+            get
+            {
+                string documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.png");
+                if (File.Exists(Path.Combine(DatabaseLocation, "DocumentHeader.jpg")))
+                {
+                    documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.jpg");
+                }
+                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentHeader.bmp")))
+                {
+                    documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.bmp");
+                }
+                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentHeader.ico")))
+                {
+                    documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.ico");
+                }
+
+                return documentHeaderPath;
+            }
+            set
+            {
+                string extention = value.Substring(value.LastIndexOf("."), value.Length - value.LastIndexOf("."));
+                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".bmp") || extention.Equals(".ico"))
+                {
+                    try
+                    {
+                        if (File.Exists(DocumentHeaderPath))
+                        {
+                            File.Delete(DocumentHeaderPath);
+                        }
+
+                        File.Copy(value, Path.Combine(DatabaseLocation, "DocumentHeader" + extention), true);
+                    }
+                    catch (System.Exception ex)
+                    {
+
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets path to logo.
+        /// </summary>
+        /// <date>13.06.2022.</date>
+        public static string DocumentFooterPath
+        {
+            get
+            {
+                string documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.png");
+                if (File.Exists(Path.Combine(DatabaseLocation, "DocumentFooter.jpg")))
+                {
+                    documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.jpg");
+                }
+                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentFooter.bmp")))
+                {
+                    documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.bmp");
+                }
+                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentFooter.ico")))
+                {
+                    documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.ico");
+                }
+
+                return documentFooterPath;
+            }
+            set
+            {
+                string extention = value.Substring(value.LastIndexOf("."), value.Length - value.LastIndexOf("."));
+                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".bmp") || extention.Equals(".ico"))
+                {
+                    try
+                    {
+                        if (File.Exists(DocumentFooterPath))
+                        {
+                            File.Delete(DocumentFooterPath);
+                        }
+
+                        File.Copy(value, Path.Combine(DatabaseLocation, "DocumentFooter" + extention), true);
+                    }
+                    catch (System.Exception ex)
+                    {
+
+                    }
+                }
+            }
+        }
+
+
         /// <summary>
         /// Gets or sets path to log file.
         /// </summary>
@@ -159,7 +255,7 @@ namespace AxisAvaloniaApp.Configurations
         /// </summary>
         /// <returns>Path to folder with database.</returns>
         /// <date>09.09.2022.</date>
-        private static string DatabaseLocation
+        public static string DatabaseLocation
         {
             get
             {
@@ -242,5 +338,31 @@ namespace AxisAvaloniaApp.Configurations
                 return databaseLocation;
             }
         }
+
+        /// <summary>
+        /// Path to ZipArchives
+        /// </summary>
+        public static string BackupFolderPath
+        { 
+            get
+            {
+                string path = Path.Combine(DatabaseLocation, "Backup");
+                DirectoryInfo di = new DirectoryInfo(path);
+                if (!di.Exists)
+                {
+                    di.Create();
+                }
+                return  path;
+            }                
+        }
+
+        /// <summary>
+        /// Path to Database
+        /// </summary>
+        public static string DatabaseFullName { get => Path.Combine(DatabaseLocation, DatabaseName); }
+        public static string DatabaseShortName { get =>  DatabaseName; }
+
+
+
     }
 }

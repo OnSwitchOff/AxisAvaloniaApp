@@ -6,6 +6,7 @@ using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.StartUp;
 using AxisAvaloniaApp.Views;
 using Splat;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -13,6 +14,9 @@ namespace AxisAvaloniaApp
 {
     public partial class App : Application
     {
+        public static Avalonia.Threading.DispatcherTimer OfflineTimer { get; set; }
+        public static DateTime OfflineStartDate { get; set; }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -26,25 +30,34 @@ namespace AxisAvaloniaApp
             Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
+            {              
+
                 MainWindow mw = null;
+                SplashScreenView sw = null;
                 bool isFirstStart = false;
+                desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
                 if (!Configurations.AppConfiguration.IsDatabaseExist)
                 {
                     isFirstStart = true;
-                    desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
                     LocalizationView dialog = new LocalizationView();
-                    mw = await dialog.MyShowDialog();
+                    sw = await dialog.MyShowDialog();
                 }
-                IStartUpService startUpService = Locator.Current.GetRequiredService<IStartUpService>();
-                startUpService.ActivateAsync(isFirstStart);
+
+                if (sw == null)
+                {
+                    sw = new SplashScreenView(false);
+                }
+                mw = await sw.MyShowDialog();
+
+                OfflineTimer = new Avalonia.Threading.DispatcherTimer();
                 desktop.MainWindow = mw == null ? new MainWindow() : mw;
                 MainWindow = desktop.MainWindow;
                 MainWindow.Closing += MainWindow_Closing;
             }
 
             base.OnFrameworkInitializationCompleted();
-        }
+        }      
 
 
         /// <summary>

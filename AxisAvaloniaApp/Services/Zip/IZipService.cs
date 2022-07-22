@@ -11,6 +11,7 @@ namespace AxisAvaloniaApp.Services.Zip
     {
         bool CompressFileToZip(string fileName, string destination, string entryName);
         bool ExtractAllFromZip(string zipName, string destination);
+        bool? ExtractDbFromZip(string zipName, string destination);
         Task<bool> CompressFileToZipAsync(string fileName, string destination, string entryName);
         Task<bool> ExtractAllFromZipAsync(string zipName, string destination);
     }

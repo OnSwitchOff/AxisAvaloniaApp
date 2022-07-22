@@ -187,6 +187,26 @@ namespace AxisAvaloniaApp.Services.Settings
         }
 
         /// <summary>
+        /// Convert SettingsItemModel object to EBackUpOptions.
+        /// </summary>
+        /// <param name="settingsItem">SettingsItemModel object.</param>
+        /// <date>18.07.2022.</date>
+        public static explicit operator EBackUpOptions(SettingsItemModel settingsItem)
+        {
+            if (int.TryParse(settingsItem.Value, out int value) && Enum.IsDefined(typeof(EBackUpOptions), value))
+            {
+                return (EBackUpOptions)value;
+            }
+            else if (Enum.IsDefined(typeof(EBackUpOptions), settingsItem.Value))
+            {
+                return (EBackUpOptions)Enum.Parse(typeof(EBackUpOptions), settingsItem.Value);
+            }
+
+            throw new FormatException();
+        }
+
+
+        /// <summary>
         /// Returns a string that represents the SettingsDataHelper object.
         /// </summary>
         /// <returns>String value.</returns>

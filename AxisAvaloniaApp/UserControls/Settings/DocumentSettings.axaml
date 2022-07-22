@@ -7,6 +7,7 @@
              xmlns:buttons="using:AxisAvaloniaApp.UserControls.Buttons"
              mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="300" MinHeight="200" MinWidth="200"
              x:Class="AxisAvaloniaApp.UserControls.Settings.DocumentSettings"
+			 xmlns:conv="using:AxisAvaloniaApp.Converters"
              x:Name="UC">
 
 	<UserControl.Resources>
@@ -15,6 +16,7 @@
 		<Thickness x:Key="ComboBoxDropdownBorderPadding">0</Thickness>
 		<Thickness x:Key="ComboBoxDropdownBorderThickness">1,1,1,2</Thickness>
 		<Thickness x:Key="OverlayCornerRadius">0</Thickness>
+		<conv:BitmapAssetValueConverter x:Key="IconAssetsConv" />
 	</UserControl.Resources>
 	<UserControl.Styles>
 		<Style Selector="Border">
@@ -38,10 +40,15 @@
       <Setter Property="CornerRadius" Value="0"/>
     </Style>
 	</UserControl.Styles>
-	<Grid RowDefinitions="50,*,Auto" Margin="0">
-		<Border Grid.Row="0" 
+	<Grid RowDefinitions="50,50,*,50,50" Margin="20,5,0,5">
+
+		
+
+
+
+		<Border Grid.Row="0"
             BorderThickness="0,0,0,1" 
-            Margin="20,5,0,5">
+            Margin="0">
 			<ucext:AxisTextBlock  VerticalAlignment="Center" 
                             LocalizeTextKey="strDocuments"  
                             Background="Transparent" Padding="20,0" 
@@ -50,8 +57,19 @@
                             TextAlignment="Left" />
 		</Border>
 
+		<Grid Grid.Row="1" ColumnDefinitions="Auto,*" Background="Transparent">
 
-		<Border Grid.Row="1"  BorderThickness="0">
+			<Image Grid.Column="0"	 VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="0"
+					Source="{Binding ElementName=UC, Path=ViewModel.DocumentHeaderSource, Mode=OneWay, Converter={StaticResource IconAssetsConv}}"/>
+
+			<Button Grid.Column="1"	Command="{Binding  ElementName=UC, Path=ViewModel.ShowChoseDocumentHeaderCommand}" HorizontalAlignment="Right"
+					Background="Transparent"  VerticalAlignment="Center" Margin="0" Padding="0" BorderThickness="0">
+				<Image Source="/Assets/Icons/edit.png" Width="26" Height="26"/>
+			</Button>
+		</Grid>
+
+
+		<Border Grid.Row="2"  BorderThickness="0">
 			<ScrollViewer Padding="20,0">
 				<Grid x:Name="AdaptiveSettingsGrid" 
               RowDefinitions="Auto,Auto,Auto,Auto">
@@ -122,10 +140,21 @@
 
 				</Grid>
 			</ScrollViewer>
-		</Border>		
-		
+		</Border>
+
+
+		<Grid Grid.Row="3" ColumnDefinitions="*,Auto" Background="Transparent">
+			<Button Grid.Column="0"	Command="{Binding  ElementName=UC, Path=ViewModel.ShowChoseDocumentFooterCommand}" VerticalAlignment="Center"
+					Background="Transparent"
+					HorizontalAlignment="Left" Margin="0" Padding="0"  BorderThickness="0">
+				<Image Source="/Assets/Icons/edit.png" Width="26" Height="26"/>
+			</Button>
+			<Image Grid.Column="1"	  VerticalAlignment="Stretch" HorizontalAlignment="Right" Margin="0"
+				Source="{Binding ElementName=UC, Path=ViewModel.DocumentFooterSource, Mode=OneWay, Converter={StaticResource IconAssetsConv}}"/>
+		</Grid>
+
 		<Grid RowDefinitions="Auto,Auto, auto"  
-          Grid.Row="2" 
+          Grid.Row="4" 
           Background="Transparent">
       <buttons:ExecutionButton Grid.Row="1"
                                LocalizeTextKey="strExportLogFile"
@@ -148,5 +177,7 @@
                                Margin="20,5"
                                Command="{Binding $parent[UserControl].ViewModel.SaveDocumentSettings}"/>
 		</Grid>
+		
+		
 	</Grid>
 </UserControl>
