@@ -86,6 +86,7 @@ namespace AxisAvaloniaApp.Services.Document
                 {
                     if (!string.IsNullOrEmpty(Configurations.AppConfiguration.LogoPath))
                     {
+                        
                         byte[] imageBytes = File.ReadAllBytes(Configurations.AppConfiguration.LogoPath);
                         imageStream = new MemoryStream(imageBytes);
                         try

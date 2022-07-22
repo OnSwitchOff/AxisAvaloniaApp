@@ -25,7 +25,11 @@ namespace AxisAvaloniaApp
         [System.Obsolete]
         public override async void OnFrameworkInitializationCompleted()
         {
-
+            Avalonia.Media.Imaging.Bitmap bitmap = new Avalonia.Media.Imaging.Bitmap(@"C:\Users\serhii.rozniuk\Desktop\fiscalDeviceLogo.png");
+            using (System.IO.Stream stream = new System.IO.MemoryStream())
+            {
+                bitmap.Save(stream);
+            }
             // регистрируем зависимости (сервисы)
             Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
