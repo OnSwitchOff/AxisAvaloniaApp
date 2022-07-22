@@ -38,7 +38,7 @@ namespace AxisAvaloniaApp.Views
 
         private void Dc_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Progress" && ((SplashScreenViewModel)DataContext).Progress == 101)
+            if (e.PropertyName == "Progress" && ((SplashScreenViewModel)DataContext).Progress == 100)
             {
                 this.DialogResult = true;
             }
