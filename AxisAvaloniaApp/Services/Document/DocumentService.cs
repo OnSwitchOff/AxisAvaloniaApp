@@ -88,7 +88,15 @@ namespace AxisAvaloniaApp.Services.Document
                     {
                         byte[] imageBytes = File.ReadAllBytes(Configurations.AppConfiguration.LogoPath);
                         imageStream = new MemoryStream(imageBytes);
-                        logo = Image.FromStream(imageStream);
+                        try
+                        {
+                            logo = Image.FromStream(imageStream);
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+            
                     }
                     else
                     {
