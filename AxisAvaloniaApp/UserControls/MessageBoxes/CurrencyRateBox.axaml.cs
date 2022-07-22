@@ -38,17 +38,17 @@ namespace AxisAvaloniaApp.UserControls.MessageBoxes
             set => SetValue(ResultProperty, value);
         }
 
-        public static readonly StyledProperty<string> Exchangeable—urrenciesProperty =
-           AvaloniaProperty.Register<CurrencyRateBox, string>(nameof(Exchangeable—urrencies));
+        public static readonly StyledProperty<string> ExchangeableCurrenciesProperty =
+           AvaloniaProperty.Register<CurrencyRateBox, string>(nameof(ExchangeableCurrencies));
 
         /// <summary>
         ///Gets or sets value to convert from which currency to which currency we need the exchange rate.
         /// </summary>
         /// <date>20.07.2022.</date>
-        public string Exchangeable—urrencies
+        public string ExchangeableCurrencies
         {
-            get => GetValue(Exchangeable—urrenciesProperty);
-            set => SetValue(Exchangeable—urrenciesProperty, value);
+            get => GetValue(ExchangeableCurrenciesProperty);
+            set => SetValue(ExchangeableCurrenciesProperty, value);
         }
 
         public static readonly StyledProperty<string> RateProperty =

@@ -452,7 +452,7 @@ namespace AxisAvaloniaApp.ViewModels
             return await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 UserControls.MessageBoxes.CurrencyRateBox rateBox = new UserControls.MessageBoxes.CurrencyRateBox();
-                rateBox.ExchangeableСurrencies = currencies;
+                rateBox.ExchangeableCurrencies = currencies;
                 var result = await rateBox.ShowDialog();
                 switch (result.result)
                 {
