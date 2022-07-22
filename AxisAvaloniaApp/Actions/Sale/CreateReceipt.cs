@@ -119,7 +119,7 @@ namespace AxisAvaloniaApp.Actions.Sale
             }
             else
             {
-                await loggerService.ShowDialog("msgErrorDuringReceiptGeneration", "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgErrorDuringReceiptGeneration", "strWarning", UserControls.MessageBoxes.EButtonIcons.Warning);
             }
 
             return await base.Invoke(request);

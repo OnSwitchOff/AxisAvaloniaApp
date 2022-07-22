@@ -9,7 +9,8 @@ namespace AxisAvaloniaApp.Configurations
     public static class AppConfiguration
     {
         private const string DatabaseName = "AxisUno.db";
-        private static string databaseLocation;
+        //private static string databaseLocation;
+        public static bool? isDatabaseExist;
 
         /// <summary>
         /// Initialize databaseLocation field
@@ -17,26 +18,26 @@ namespace AxisAvaloniaApp.Configurations
         /// <exception cref="Exception">Throws Exception if operation system is not identified.</exception>
         static AppConfiguration()
         {
-            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-            {
-                databaseLocation = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ProgramData");
-            }
-            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
-            {
-                //databaseLocation = Path.Combine("/var", "lib");
-                databaseLocation = Path.Combine("/home", Environment.UserName);
-            }
-            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
-            {
-                databaseLocation = Path.Combine("Library", "Application Support");
+            //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            //{
+            //    databaseLocation = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ProgramData");
+            //}
+            //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+            //{
+            //    //databaseLocation = Path.Combine("/var", "lib");
+            //    databaseLocation = Path.Combine("/home", Environment.UserName);
+            //}
+            //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+            //{
+            //    databaseLocation = Path.Combine("/Users", Environment.UserName, "Library", "Application Support");
 
-            }
-            else
-            {
-                throw new Exception("Unidentified operating system!");
-            }
+            //}
+            //else
+            //{
+            //    throw new Exception("Unidentified operating system!");
+            //}
 
-            databaseLocation = Path.Combine(databaseLocation, "Axis", "Uno");
+            //databaseLocation = Path.Combine(databaseLocation, "Axis", "Uno");
         }
 
         /// <summary>
@@ -56,7 +57,27 @@ namespace AxisAvaloniaApp.Configurations
         /// <summary>
         /// Gets value indicating whether database exists. 
         /// </summary>
-        public static bool IsDatabaseExist => Directory.Exists(databaseLocation);
+        public static bool IsDatabaseExist
+        {
+            get
+            {
+                if (isDatabaseExist == null)
+                {
+                    string initial = DatabaseLocation;
+                }
+
+                return (bool)isDatabaseExist;
+            }
+            private set
+            {
+                if (isDatabaseExist == null)
+                {
+                    isDatabaseExist = value;
+                }
+            }
+
+        }
+        //=> Directory.Exists(databaseLocation);
 
         /// <summary>
         /// Gets or sets path to logo.
@@ -70,6 +91,10 @@ namespace AxisAvaloniaApp.Configurations
                 if (File.Exists(Path.Combine(DatabaseLocation, "logo.jpg")))
                 {
                     logoPath = Path.Combine(DatabaseLocation, "logo.jpg");
+                }
+                else if (File.Exists(Path.Combine(DatabaseLocation, "logo.jpeg")))
+                {
+                    logoPath = Path.Combine(DatabaseLocation, "logo.jpeg");
                 }
                 else if (File.Exists(Path.Combine(DatabaseLocation, "logo.bmp")))
                 {
@@ -85,7 +110,7 @@ namespace AxisAvaloniaApp.Configurations
             set
             {
                 string extention = value.Substring(value.LastIndexOf("."), value.Length - value.LastIndexOf("."));
-                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".bmp") || extention.Equals(".ico"))
+                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".jpeg") || extention.Equals(".bmp") || extention.Equals(".ico"))
                 {
                     try
                     {
@@ -138,10 +163,35 @@ namespace AxisAvaloniaApp.Configurations
         {
             get
             {
+                string databaseLocation;
+                if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+                {
+                    databaseLocation = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ProgramData");
+                }
+                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+                {
+                    //databaseLocation = Path.Combine("/var", "lib");
+                    databaseLocation = Path.Combine("/home", Environment.UserName);
+                }
+                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+                {
+                    databaseLocation = Path.Combine("/Users", Environment.UserName, "Library", "Application Support");
+
+                }
+                else
+                {
+                    throw new Exception("Unidentified operating system!");
+                }
+
+                databaseLocation = Path.Combine(databaseLocation, "Axis", "Uno");
+
                 if (!Directory.Exists(databaseLocation))
                 {
+                    IsDatabaseExist = false;
                     Directory.CreateDirectory(databaseLocation);
                 }
+
+                IsDatabaseExist = true;
 
                 //string dataBasePath = string.Empty;
                 //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
@@ -182,7 +232,7 @@ namespace AxisAvaloniaApp.Configurations
                 //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
                 //{
                 //    dataBasePath = Path.Combine("Library", "Application Support", "Axis", "Uno");
-                    
+
                 //}
                 //else
                 //{

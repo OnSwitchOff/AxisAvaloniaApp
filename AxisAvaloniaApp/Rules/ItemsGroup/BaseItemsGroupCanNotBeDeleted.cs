@@ -26,7 +26,7 @@ namespace AxisAvaloniaApp.Rules.ItemsGroup
         {
             if (group.Id == 0 || group.Id == 1)
             {
-                await loggerService.ShowDialog("msgBaseItemGroupCanNotBeDeleted", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgBaseItemGroupCanNotBeDeleted", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

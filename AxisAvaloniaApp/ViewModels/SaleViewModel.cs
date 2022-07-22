@@ -1,4 +1,5 @@
-﻿using AxisAvaloniaApp.Actions.Item;
+﻿using AxisAvaloniaApp.Actions.Common;
+using AxisAvaloniaApp.Actions.Item;
 using AxisAvaloniaApp.Actions.ItemsGroup;
 using AxisAvaloniaApp.Actions.Partner;
 using AxisAvaloniaApp.Actions.PartnersGroup;
@@ -945,7 +946,7 @@ namespace AxisAvaloniaApp.ViewModels
 
             if (items == null)
             {
-                if (await loggerService.ShowDialog("msgItemNotFound", "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
+                if (await loggerService.ShowDialog("msgItemNotFound", "strAttention", UserControls.MessageBoxes.EButtonIcons.Info, UserControls.MessageBoxes.EButtons.YesNo) == UserControls.MessageBoxes.EButtonResults.Yes)
                 {
                     AddNewNomenclature(ENomenclatures.Items);
                 }
@@ -990,7 +991,7 @@ namespace AxisAvaloniaApp.ViewModels
         {
             if (partner == null || partner.Id == 0)
             {
-                if (await loggerService.ShowDialog("msgPartnerNotFound", "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
+                if (await loggerService.ShowDialog("msgPartnerNotFound", "strAttention", UserControls.MessageBoxes.EButtonIcons.Info, UserControls.MessageBoxes.EButtons.YesNo) == UserControls.MessageBoxes.EButtonResults.Yes)
                 {
                     if (partner == null)
                     {
@@ -1152,7 +1153,7 @@ namespace AxisAvaloniaApp.ViewModels
                 case ENomenclatures.Items:
                     if (SelectedItem == null)
                     {
-                        loggerService.ShowDialog("msgItemToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                        loggerService.ShowDialog("msgItemToEditNotChoosen", "strAttention", UserControls.MessageBoxes.EButtonIcons.Info);
                     }
                     else
                     {
@@ -1172,7 +1173,7 @@ namespace AxisAvaloniaApp.ViewModels
                 case ENomenclatures.Partners:
                     if (SelectedPartner == null)
                     {
-                        loggerService.ShowDialog("msgPartnerToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                        loggerService.ShowDialog("msgPartnerToEditNotChoosen", "strAttention", UserControls.MessageBoxes.EButtonIcons.Info);
                     }
                     else
                     {
@@ -1198,7 +1199,7 @@ namespace AxisAvaloniaApp.ViewModels
                 case ENomenclatures.ItemsGroups:
                     if (SelectedItemsGroup == null)
                     {
-                        loggerService.ShowDialog("msgGroupToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                        loggerService.ShowDialog("msgGroupToEditNotChoosen", "strAttention", UserControls.MessageBoxes.EButtonIcons.Info);
                     }
                     else
                     {
@@ -1212,7 +1213,7 @@ namespace AxisAvaloniaApp.ViewModels
                 case ENomenclatures.PartnersGroups:
                     if (SelectedPartnersGroup == null)
                     {
-                        loggerService.ShowDialog("msgGroupToEditNotChoosen", "strAttention", UserControls.MessageBox.EButtonIcons.Info);
+                        loggerService.ShowDialog("msgGroupToEditNotChoosen", "strAttention", UserControls.MessageBoxes.EButtonIcons.Info);
                     }
                     else
                     {
@@ -1619,7 +1620,7 @@ namespace AxisAvaloniaApp.ViewModels
         {
             if (Order.Count == 1 && Order[0].Item.Id == 0)
             {
-                await loggerService.ShowDialog("msgEmptyTable", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgEmptyTable", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 InvalidOrderRecord?.Invoke(-1, -1);
                 return;
             }
@@ -1630,14 +1631,14 @@ namespace AxisAvaloniaApp.ViewModels
                 {
                     if (Order[i].Price == 0)
                     {
-                        await loggerService.ShowDialog("msgEmptyPrice", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                        await loggerService.ShowDialog("msgEmptyPrice", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                         InvalidOrderRecord?.Invoke(6, i);
                         return;
                     }
 
                     if (Order[i].Qty == 0)
                     {
-                        await loggerService.ShowDialog("msgEmptyQtty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                        await loggerService.ShowDialog("msgEmptyQtty", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                         InvalidOrderRecord?.Invoke(5, i);
                         return;
                     }

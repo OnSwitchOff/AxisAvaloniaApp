@@ -121,7 +121,7 @@
     <PackageReference Include="FluentValidation" Version="11.0.1" />
     <PackageReference Include="Microinvest.CommonLibrary" Version="1.0.0" />
     <PackageReference Include="Microinvest.DeviceService" Version="1.0.2" />
-    <PackageReference Include="Microinvest.ExchangeDataService" Version="1.0.0" />
+    <PackageReference Include="Microinvest.ExchangeDataService" Version="1.0.1" />
     <PackageReference Include="Microinvest.IntegrationService" Version="1.0.0" />
     <PackageReference Include="Microinvest.PDFCreator" Version="1.0.1" />
     <PackageReference Include="Microinvest.SearchService" Version="1.0.0" />

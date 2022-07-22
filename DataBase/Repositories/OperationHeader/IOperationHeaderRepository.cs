@@ -73,16 +73,5 @@ namespace DataBase.Repositories.OperationHeader
         /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
         /// <date>13.07.2022.</date>
         Task<List<Entities.OperationHeader.OperationHeader>> GetRecords(EOperTypes operType, int year, int month, long acctFrom, long acctTo);
-
-        /// <summary>
-        /// Gets records to generate export file for Delta Pro.
-        /// </summary>
-        /// <param name="dateFrom">Start date to search data into the database.</param>
-        /// <param name="dateTo">End date to search data into the database.</param>
-        /// <param name="acctFrom">Start acct to search data into the database.</param>
-        /// <param name="acctTo">End acct to search data into the database.</param>
-        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
-        /// <date>13.07.2022.</date>
-        Task<List<Entities.OperationHeader.OperationHeader>> GetRecordsForDeltaProAsync(DateTime dateFrom, DateTime dateTo, long acctFrom, long acctTo);
     }
 }

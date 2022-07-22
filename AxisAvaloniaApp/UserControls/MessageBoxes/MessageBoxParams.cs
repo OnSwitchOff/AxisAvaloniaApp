@@ -1,6 +1,6 @@
 ﻿using Avalonia.Media.Imaging;
 
-namespace AxisAvaloniaApp.UserControls.MessageBox
+namespace AxisAvaloniaApp.UserControls.MessageBoxes
 {
     public class MessageBoxParams
     {

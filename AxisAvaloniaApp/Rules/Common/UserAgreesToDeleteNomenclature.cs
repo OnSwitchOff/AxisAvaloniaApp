@@ -23,7 +23,7 @@ namespace AxisAvaloniaApp.Rules.Common
         /// <date>07.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            if (await loggerService.ShowDialog(keyMessage, "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.No)
+            if (await loggerService.ShowDialog(keyMessage, "strAttention", UserControls.MessageBoxes.EButtonIcons.Info, UserControls.MessageBoxes.EButtons.YesNo) == UserControls.MessageBoxes.EButtonResults.No)
             {
                 return await Task.FromResult<object>(-1);
             }

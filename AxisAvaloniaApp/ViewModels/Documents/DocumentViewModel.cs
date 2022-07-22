@@ -373,7 +373,7 @@ namespace AxisAvaloniaApp.ViewModels
         {
             if (await CheckDocNumberRepeating(SelectedItem.TempDocumentNumber, documentType))
             {
-                loggerService.ShowDialog("msgErrorDuplicateDocumentNumber",icon: UserControls.MessageBox.EButtonIcons.Info);
+                loggerService.ShowDialog("msgErrorDuplicateDocumentNumber",icon: UserControls.MessageBoxes.EButtonIcons.Info);
                 return;
             }
             if (CheckDocDataAfterOperation(SelectedItem.SaleDateTimeOffset, SelectedItem.InvoiceDateTimeOffset))
@@ -450,7 +450,7 @@ namespace AxisAvaloniaApp.ViewModels
             }
             else
             {
-               loggerService.ShowDialog("msgErrorDuringReceiptGeneration", "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
+               loggerService.ShowDialog("msgErrorDuringReceiptGeneration", "strWarning", UserControls.MessageBoxes.EButtonIcons.Warning);
             }
 
             IsMainContentVisible = Pages.Count == 0;

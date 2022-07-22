@@ -33,7 +33,7 @@ namespace AxisAvaloniaApp.Rules.Exchange
         {
             if (app == EExchanges.ExportToNAP && (from.Month - to.Month) > 0)
             {
-                await loggerService.ShowDialog("msgSelectOneFullMonth", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgSelectOneFullMonth", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

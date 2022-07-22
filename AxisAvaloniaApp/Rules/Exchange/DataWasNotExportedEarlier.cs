@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Rules.Exchange
 {
-    public class DataWasExportedEarlier : AbstractStage
+    public class DataWasNotExportedEarlier : AbstractStage
     {
         private readonly IExchangesRepository exchangesRepository;
         private EExchanges app;
@@ -16,14 +16,14 @@ namespace AxisAvaloniaApp.Rules.Exchange
         private long acctTo;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataWasExportedEarlier"/> class.
+        /// Initializes a new instance of the <see cref="DataWasNotExportedEarlier"/> class.
         /// </summary>
         /// <param name="app">Application to exhange data.</param>
         /// <param name="from">Start date to get data from the database.</param>
         /// <param name="to">Start date to get data from the database.</param>
         /// <param name="acctFrom">Start acct to get data from the database.</param>
         /// <param name="acctTo">End acct to get data from the database.</param>
-        public DataWasExportedEarlier(EExchanges app, DateTime from, DateTime to, long acctFrom, long acctTo)
+        public DataWasNotExportedEarlier(EExchanges app, DateTime from, DateTime to, long acctFrom, long acctTo)
         {
             exchangesRepository = Splat.Locator.Current.GetRequiredService<IExchangesRepository>();
             this.app = app;
@@ -33,6 +33,9 @@ namespace AxisAvaloniaApp.Rules.Exchange
             this.acctTo = acctTo;
         }
 
+        public string AppName { get; private set; }
+        public string AppKey { get; private set; }
+
         /// <summary>
         /// Starts invocation of stages.
         /// </summary>
@@ -41,7 +44,9 @@ namespace AxisAvaloniaApp.Rules.Exchange
         /// <date>12.07.2022.</date>
         public async override Task<object> Invoke(object request)
         {
-            bool wasExported = false;
+            bool wasExported;
+            AppName = string.Empty;
+            AppKey = string.Empty;
             switch (app)
             {
                 case EExchanges.ExportToNAP:
@@ -53,21 +58,29 @@ namespace AxisAvaloniaApp.Rules.Exchange
                 case EExchanges.ExportToWarehouseSkladPro:
                     wasExported = await exchangesRepository.DataWasExportedToWarehouseSkladPro(from, to, acctFrom, acctTo);
                     break;
+                default:
+                    wasExported = false;
+                    break;
             }
 
-            if (wasExported)
+            if ((bool)wasExported)
             {
-                if (await loggerService.ShowDialog("msgDataWasExported", "strAttention", UserControls.MessageBox.EButtonIcons.Info, UserControls.MessageBox.EButtons.YesNo) == UserControls.MessageBox.EButtonResults.Yes)
+                UserControls.MessageBoxes.EButtonResults result = await loggerService.ShowDialog("msgDataWasExported", "strAttention", UserControls.MessageBoxes.EButtonIcons.Info, UserControls.MessageBoxes.EButtons.YesNoCancel);
+                switch (result)
                 {
-                    return await base.Invoke(request);
-                }
-                else
-                {
-                    return await Task.FromResult<object>(-1);
+                    case UserControls.MessageBoxes.EButtonResults.Yes:
+                        return await base.Invoke(request);
+                    case UserControls.MessageBoxes.EButtonResults.No:
+                        AppName = app.ToString();
+                        return await base.Invoke(request);
+                    default:
+                        return await Task.FromResult<object>(-1);
                 }
             }
-
-            return await base.Invoke(request);
+            else
+            {
+                return await base.Invoke(request);
+            }
         }
     }
 }

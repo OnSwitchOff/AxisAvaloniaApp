@@ -25,7 +25,7 @@ namespace AxisAvaloniaApp.Rules.Item
         {
             if (string.IsNullOrEmpty(itemMeasure))
             {
-                await loggerService.ShowDialog("msgItemMeasureIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgItemMeasureIsEmpty", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

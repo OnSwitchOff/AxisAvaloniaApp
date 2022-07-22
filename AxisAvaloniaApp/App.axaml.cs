@@ -27,8 +27,6 @@ namespace AxisAvaloniaApp
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-               
-
                 MainWindow mw = null;
                 bool isFirstStart = false;
                 if (!Configurations.AppConfiguration.IsDatabaseExist)

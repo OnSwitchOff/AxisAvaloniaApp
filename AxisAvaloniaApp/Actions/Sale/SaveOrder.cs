@@ -27,15 +27,21 @@ namespace AxisAvaloniaApp.Actions.Sale
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentOrder"/> class.
         /// </summary>
+        public SaveOrder()
+        {
+            headerRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
+            paymentTypesRepository = Splat.Locator.Current.GetRequiredService<IPaymentTypesRepository>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentOrder"/> class.
+        /// </summary>
         /// <param name="uSN">Unique sale number.</param>
         /// <param name="order">Orders list.</param>
         /// <param name="partner">Partner that is selected for the operation.</param>
         /// <param name="paymentType">Type of payment of the operation.</param>
-        public SaveOrder(string uSN, ObservableCollection<OperationItemModel> order, PartnerModel partner, EPaymentTypes paymentType)
+        public SaveOrder(string uSN, ObservableCollection<OperationItemModel> order, PartnerModel partner, EPaymentTypes paymentType) : this()
         {
-            headerRepository = Splat.Locator.Current.GetRequiredService<IOperationHeaderRepository>();
-            paymentTypesRepository = Splat.Locator.Current.GetRequiredService<IPaymentTypesRepository>();
-
             this.uSN = uSN;
             ordersList = order;
             this.partner = partner;
@@ -50,6 +56,43 @@ namespace AxisAvaloniaApp.Actions.Sale
         { 
             get; 
             private set;
+        }
+
+        /// <summary>
+        /// Sets unique sale number.
+        /// </summary>
+        /// <date>20.07.2022.</date>
+        public string USN
+        {
+            set => uSN = value;
+        }
+
+        /// <summary>
+        /// Gets or sets list with orders.
+        /// </summary>
+        /// <date>20.07.2022.</date>
+        public ObservableCollection<OperationItemModel> OrdersList
+        {
+            get => ordersList;
+            set => ordersList = value;
+        }
+
+        /// <summary>
+        /// Sets data of partner.
+        /// </summary>
+        /// <date>20.07.2022.</date>
+        public PartnerModel Partner
+        {
+            set => partner = value;
+        }
+
+        /// <summary>
+        /// Sets type of payment.
+        /// </summary>
+        /// <date>20.07.2022.</date>
+        public EPaymentTypes PaymentType
+        {
+            set => paymentType = value;
         }
 
         /// <summary>
@@ -102,13 +145,13 @@ namespace AxisAvaloniaApp.Actions.Sale
                 }
                 else
                 {
-                    switch (await loggerService.ShowDialog("msgErrorDuringSavingOperation", "strError", UserControls.MessageBox.EButtonIcons.Error, UserControls.MessageBox.EButtons.AbortRetryIgnore))
+                    switch (await loggerService.ShowDialog("msgErrorDuringSavingOperation", "strError", UserControls.MessageBoxes.EButtonIcons.Error, UserControls.MessageBoxes.EButtons.AbortRetryIgnore))
                     {
-                        case UserControls.MessageBox.EButtonResults.Abort:
+                        case UserControls.MessageBoxes.EButtonResults.Abort:
                             return await Task.FromResult<object>(-1);
-                        case UserControls.MessageBox.EButtonResults.Retry:
+                        case UserControls.MessageBoxes.EButtonResults.Retry:
                             break;
-                        case UserControls.MessageBox.EButtonResults.Ignore:
+                        case UserControls.MessageBoxes.EButtonResults.Ignore:
                             loggerService.RegisterError(DataBase.Enums.EApplicationLogEvents.SaveOperation, "Writing data to database is ignored by user!");
                             return await base.Invoke(header);
                     }

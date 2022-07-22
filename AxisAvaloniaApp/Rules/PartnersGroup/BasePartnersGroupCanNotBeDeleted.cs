@@ -26,7 +26,7 @@ namespace AxisAvaloniaApp.Rules.PartnersGroup
         {
             if (group.Id == 0 || group.Id == 1)
             {
-                await loggerService.ShowDialog("msgBasePartnerGroupCanNotBeDeleted", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgBasePartnerGroupCanNotBeDeleted", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

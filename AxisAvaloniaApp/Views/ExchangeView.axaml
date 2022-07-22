@@ -11,6 +11,7 @@
              xmlns:switch ="using:AxisAvaloniaApp.UserControls.Switcher"
              xmlns:gb="using:AxisAvaloniaApp.UserControls.GroupBox"
              xmlns:buttons="using:AxisAvaloniaApp.UserControls.Buttons"
+             xmlns:loader="using:AxisAvaloniaApp.UserControls.RoundLoader"
              x:Class="AxisAvaloniaApp.Views.ExchangeView">
 	<UserControl.Styles>
 		<Style Selector="ComboBox.Light">
@@ -40,16 +41,16 @@
 		</container:OperationContainer.TitleContent>
 		<container:OperationContainer.WorkContent>
       <Grid>
-        <TextBlock Text="Axis avalonia app"
-                 FontSize="48"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 Foreground="Gray"/>
+        <TextBlock Text="Axis avalonia app" 
+                   FontSize="48"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="Gray"/>
+        <loader:RoundLoader IsVisible="{Binding IsLoadingData, Mode=OneWay}"/>
       </Grid>
     </container:OperationContainer.WorkContent>
 		<container:OperationContainer.AdditionalContent>
-			<ScrollViewer>
-				<Grid RowDefinitions="Auto,*">
+				<Grid RowDefinitions="auto, *">
 					<Border Margin="10">
 						<Grid ColumnDefinitions="Auto,*" 
                   RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
@@ -263,14 +264,20 @@
 							</Border>
 						</Grid>
 					</Border>
-					<TextBox Grid.Row="1" 
-                   Grid.ColumnSpan="2" 
-                   Text="{Binding StatusString, Mode=TwoWay}"
-                   Background="Transparent" 
-                   IsReadOnly="True" 
-                   Margin="10,0,10,10"/>
+          <Border Grid.Row="1"
+                  Grid.ColumnSpan="2" 
+                  BorderBrush="White"
+                  BorderThickness="1.0"
+                  Margin="10,0,10,10">
+            <ScrollViewer>
+              <TextBlock Text="{Binding StatusString, Mode=TwoWay}"
+                       Foreground="White"
+                       TextWrapping="WrapWithOverflow"
+                       Background="Transparent"/>
+            </ScrollViewer>            
+          </Border>
+					
 				</Grid>
-			</ScrollViewer>
 		</container:OperationContainer.AdditionalContent>
 	</container:OperationContainer>
 </UserControl>

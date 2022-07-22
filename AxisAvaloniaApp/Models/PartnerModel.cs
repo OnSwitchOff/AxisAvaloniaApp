@@ -1,4 +1,12 @@
-﻿using ReactiveUI;
+﻿using AxisAvaloniaApp.Actions.Partner;
+using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Rules;
+using AxisAvaloniaApp.Services.Translation;
+using DataBase.Repositories.Partners;
+using DataBase.Repositories.PartnersGroups;
+using ReactiveUI;
+using System;
+using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Models
 {
@@ -289,6 +297,91 @@ namespace AxisAvaloniaApp.Models
             }
 
             return partner;
+        }
+
+        /// <summary>
+        /// Casts Microinvest.ExchangeDataService.Models.WarehousePro.PartnerModel object to PartnerModel.
+        /// </summary>
+        /// <param name="partnerModel">Data of partner from file of import.</param>
+        /// <date>21.07.2022.</date>
+        public static explicit operator PartnerModel(Microinvest.ExchangeDataService.Models.WarehousePro.PartnerModel partnerModel)
+        {
+            return new PartnerModel()
+            {
+                Name = partnerModel.Name,
+                Principal = partnerModel.Principal,
+                City = partnerModel.Address.City,
+                Address = partnerModel.Address.Address,
+                Phone = partnerModel.Phone,
+                Email = partnerModel.EMail,
+                TaxNumber = partnerModel.TaxNumber,
+                VATNumber = partnerModel.VATNumber,
+                BankName = partnerModel.BankAccount.BankName,
+                BankBIC = partnerModel.BankAccount.BankBIC,
+                IBAN = partnerModel.BankAccount.CompanyIBAN,
+                DiscountCardNumber = partnerModel.DiscountCardNumber,                
+            };
+        }
+
+        /// <summary>
+        /// Searches or creates PartnerModel object by tax number, VAT number, e-mail or name.
+        /// </summary>
+        /// <param name="partnerData">Data of partner to search or create PartnerModel object.</param>
+        /// <param name="onlyDatabase">Flag indicating whether search should be only into database (without search on Microinvest club).</param>
+        /// <param name="newPartnerMessage">Method to show that new partner was created.</param>
+        /// <returns>Returns PartnerModel.</returns>
+        /// <exception cref="FormatException">Throws exception if data of partner is empty.</exception>
+        /// <date>20.07.2022.</date>
+        public static async Task<PartnerModel> FindOrCreatePartnerAsync(PartnerModel partnerData, bool onlyDatabase, Action<string> newPartnerMessage)
+        {
+            IPartnerRepository partnerRepository = Splat.Locator.Current.GetRequiredService<IPartnerRepository>();
+
+            IStage searchPartnerIntoDatabaseByKey = new SearchPartnerIntoDatabaseByKey(partnerRepository, partnerData.TaxNumber, partnerData.VATNumber, partnerData.Email);
+            IStage searchPartnerOnMicroinvestClub = new SearchPartnerOnMicroinvestClub(partnerData.TaxNumber, partnerData.VATNumber);
+            IStage searchPartnerIntoDatabaseByName = new SearchPartnerIntoDatabaseByName(partnerRepository, partnerData.Name);
+            IStage createNewPartner = new CreateNewPartner(partnerData);
+
+            if (onlyDatabase)
+            {
+                searchPartnerIntoDatabaseByKey.
+                SetNext(searchPartnerIntoDatabaseByName).
+                SetNext(createNewPartner);
+            }
+            else
+            {
+                searchPartnerIntoDatabaseByKey.
+                SetNext(searchPartnerOnMicroinvestClub).
+                SetNext(searchPartnerIntoDatabaseByName).
+                SetNext(createNewPartner);
+            }
+
+            var result = await searchPartnerIntoDatabaseByKey.Invoke(new object());
+            if (result != null && result is PartnerModel newPartner)
+            {
+                if (newPartner.Id == 0)
+                {
+                    IPartnersGroupsRepository partnersGroupsRepository = Splat.Locator.Current.GetRequiredService<IPartnersGroupsRepository>();
+                    newPartner.Group = (GroupModel)await partnersGroupsRepository.GetGroupByIdAsync(1);
+                    if ((newPartner.Id = await partnerRepository.AddPartnerAsync((DataBase.Entities.Partners.Partner)newPartner)) > 0)
+                    {
+                        if (newPartnerMessage != null)
+                        {
+                            ITranslationService translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+                            newPartnerMessage.Invoke(
+                                string.Format(
+                                    "{0} ({1})",
+                                    translationService.Localize("msgNewPartnerWasCreated"),
+                                    newPartner.Name));
+                        }
+                    }
+                }
+
+                return newPartner;
+            }
+            else
+            {
+                throw new FormatException();
+            }
         }
     }
 }

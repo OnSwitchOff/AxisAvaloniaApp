@@ -3,7 +3,7 @@ using AxisAvaloniaApp.Models;
 using AxisAvaloniaApp.Rules;
 using AxisAvaloniaApp.Services.Payment;
 using AxisAvaloniaApp.Services.Translation;
-using AxisAvaloniaApp.UserControls.MessageBox;
+using AxisAvaloniaApp.UserControls.MessageBoxes;
 using Microinvest.CommonLibrary.Enums;
 using Microinvest.DeviceService.Exceptions;
 using Microinvest.DeviceService.Helpers;

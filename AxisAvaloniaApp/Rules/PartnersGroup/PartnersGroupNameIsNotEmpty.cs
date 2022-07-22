@@ -25,7 +25,7 @@ namespace AxisAvaloniaApp.Rules.PartnersGroup
         {
             if (string.IsNullOrEmpty(partnersGroupName))
             {
-                await loggerService.ShowDialog("msgGroupNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgGroupNameIsEmpty", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

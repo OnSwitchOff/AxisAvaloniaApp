@@ -260,7 +260,7 @@ namespace AxisAvaloniaApp.Models
                     SelectedMeasure = Measures[0];
                     Qty = 1;
                     Price = Item.Price * (double)Multiplier;
-                    ItemDiscount = this.Item.Group.Discount;
+                    ItemDiscount = Item.Group == null ? 0 : Item.Group.Discount;
 
                     break;
                 case nameof(SelectedMeasure):
@@ -287,7 +287,7 @@ namespace AxisAvaloniaApp.Models
                 case nameof(this.Price):
                 case nameof(this.Discount):
                     priceWithDiscount = Price * (1 - Discount / 100);
-                    VATValue = priceWithDiscount - (priceWithDiscount / (1 + Item.VATGroup.Value / 100));
+                    VATValue = Item.VATGroup == null ? 0 : priceWithDiscount - (priceWithDiscount / (1 + Item.VATGroup.Value / 100));
                     Amount = priceWithDiscount * Qty;
                     break;
                 case nameof(this.ItemDiscount):

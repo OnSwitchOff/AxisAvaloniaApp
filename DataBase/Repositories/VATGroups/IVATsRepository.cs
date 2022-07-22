@@ -27,5 +27,14 @@ namespace DataBase.Repositories.VATGroups
         /// <returns>Returns 0 if VAT groups were not added to database; otherwise returns count of new records.</returns>
         /// <date>17.06.2022.</date>
         Task<int> AddVATGroupsAsync(IList<Entities.VATGroups.VATGroup> vATGroups);
+
+        /// <summary>
+        /// Gets group of VAT by key.
+        /// </summary>
+        /// <param name="name">Name of VAT group.</param>
+        /// <param name="value">Value of VAT.</param>
+        /// <returns></returns>
+        /// <date>21.07.2022.</date>
+        Task<Entities.VATGroups.VATGroup> GetVATGroupByKeyAsync(string name, decimal value);
     }
 }

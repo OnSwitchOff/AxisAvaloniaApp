@@ -36,7 +36,7 @@ namespace AxisAvaloniaApp.Actions.Partner
             else
             {
                 loggerService.RegisterError(this, "An error occurred during deleting the partner data from the database!", nameof(DeletePartner.Invoke));
-                await loggerService.ShowDialog("msgErrorDuringDeletingPartner", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringDeletingPartner", "strWarning", UserControls.MessageBoxes.EButtonIcons.Error);
                 return await Task.FromResult<object>(-1);
             }
         }

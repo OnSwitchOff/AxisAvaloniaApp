@@ -1,12 +1,11 @@
 ﻿using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.Services.Translation;
-using AxisAvaloniaApp.UserControls.MessageBox;
+using AxisAvaloniaApp.UserControls.MessageBoxes;
 using DataBase.Entities.ApplicationLog;
 using DataBase.Entities.OperationHeader;
 using DataBase.Enums;
 using DataBase.Repositories.ApplicationLog;
-using DataBase.Repositories.Items;
 using DataBase.Repositories.OperationHeader;
 using System;
 using System.Diagnostics;
@@ -26,7 +25,6 @@ namespace AxisAvaloniaApp.Services.Logger
         private MessageBox messageBox;
         private MessageBoxModel dataContext;
         private MessageBoxParams boxParams;
-        private TaskCompletionSource<EButtonResults> taskSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoggerService"/> class.
@@ -47,12 +45,6 @@ namespace AxisAvaloniaApp.Services.Logger
 
             dataContext = new MessageBoxModel(boxParams);
             messageBox.DataContext = dataContext;
-
-            taskSource = new TaskCompletionSource<EButtonResults>();
-            messageBox.Closing += delegate
-            {
-                taskSource.TrySetResult(messageBox.Result);
-            };
         }
 
         /// <summary>
@@ -141,6 +133,12 @@ namespace AxisAvaloniaApp.Services.Logger
         /// <date>14.06.2022.</date>
         public async Task<EButtonResults> ShowDialog(string messageKey, string headerKey = "", EButtonIcons icon = EButtonIcons.None, EButtons buttons = EButtons.Ok)
         {
+            TaskCompletionSource<EButtonResults> taskSource = new TaskCompletionSource<EButtonResults>();
+            messageBox.Closing += delegate
+            {
+                taskSource.TrySetResult(messageBox.Result);
+            };
+
             boxParams.ContentHeaderKey = headerKey;
             boxParams.ContentMessageKey = messageKey;
             boxParams.Icon = icon;
@@ -163,6 +161,11 @@ namespace AxisAvaloniaApp.Services.Logger
         /// <date>14.06.2022.</date>
         public async Task<EButtonResults> ShowDialog1(string message, string header = "", EButtonIcons icon = EButtonIcons.None, EButtons buttons = EButtons.Ok)
         {
+            TaskCompletionSource<EButtonResults> taskSource = new TaskCompletionSource<EButtonResults>();
+            messageBox.Closing += delegate
+            {
+                taskSource.TrySetResult(messageBox.Result);
+            };
             boxParams.ContentHeader = header;
             boxParams.ContentMessage = message;
             boxParams.Icon = icon;

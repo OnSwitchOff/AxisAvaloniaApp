@@ -36,7 +36,7 @@ namespace AxisAvaloniaApp.Actions.Item
             else
             {
                 loggerService.RegisterError(this, "An error occurred during deleting the item data from the database!", nameof(DeleteItem.Invoke));
-                await loggerService.ShowDialog("msgErrorDuringDeletingItem", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringDeletingItem", "strWarning", UserControls.MessageBoxes.EButtonIcons.Error);
                 return await Task.FromResult<object>(-1);
             }
         }

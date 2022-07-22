@@ -140,8 +140,13 @@ namespace AxisAvaloniaApp.Models
         /// </summary>
         /// <param name="group">Data of group.</param>
         /// <date>25.03.2022.</date>
-        public static explicit operator DataBase.Entities.ItemsGroups.ItemsGroup(GroupModel group)
+        public static explicit operator DataBase.Entities.ItemsGroups.ItemsGroup?(GroupModel group)
         {
+            if (group == null)
+            {
+                return null;
+            }
+
             DataBase.Entities.ItemsGroups.ItemsGroup itemGroup = DataBase.Entities.ItemsGroups.ItemsGroup.Create(group.Path, group.Name, (int)group.Discount);
             itemGroup.Id = group.Id;
 

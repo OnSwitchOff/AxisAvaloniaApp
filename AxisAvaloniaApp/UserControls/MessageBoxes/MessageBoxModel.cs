@@ -5,7 +5,7 @@ using ReactiveUI;
 using System;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.UserControls.MessageBox
+namespace AxisAvaloniaApp.UserControls.MessageBoxes
 {
     public class MessageBoxModel : ReactiveObject
     {

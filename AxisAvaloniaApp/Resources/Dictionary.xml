@@ -436,6 +436,16 @@
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
+    <Data Key="strUnidentifiedImportedPartner">
+      <Value Lang="bg-BG">Неопределен импортиран партньор</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Unidentified imported partner</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Неопределённый импортированный партнёр</Value>
+      <Value Lang="uk-UA">Невизначений імпортований партнер</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
     <Data Key="strBasePartner">
       <Value Lang="bg-BG">Основен партньор</Value>
       <Value Lang="el-GR">Not translated</Value>
@@ -500,9 +510,19 @@
       <Value Lang="bg-BG">Стока</Value>
       <Value Lang="el-GR">Not translated</Value>
       <Value Lang="en-GB">Item</Value>
-      <Value Lang="ro-RO">Marfă</Value>
+      <Value Lang="ro-RO">Not translated</Value>
       <Value Lang="ru-RU">Товар</Value>
       <Value Lang="uk-UA">Товар</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strUnidentifiedImportedGoods">
+      <Value Lang="bg-BG">Неопределена импортирана стока</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Unidentified imported item</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Неопределённый импортированный товар</Value>
+      <Value Lang="uk-UA">Невизначений імпортований товар</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
@@ -3147,12 +3167,386 @@
       <Value Lang="ka-GE">Not translated</Value>
     </Data>
     <Data Key="msgDataWasExported">
-      <Value Lang="bg-BG">Текущите данни вече са експортирани! Желаете ли повторен експорт на данните?</Value>
+      <Value Lang="bg-BG">
+        Текущите данни вече са експортирани изцяло или частично! Искате ли да експортирате повторно вашите данни?
+        Когато щракнете върху бутона „Не“, ще бъдат експортирани само данни, които не са били експортирани преди.
+        За да отмените експортирането, щракнете върху бутона "Отказ".
+      </Value>
       <Value Lang="el-GR">Not translated</Value>
-      <Value Lang="en-GB">The current data has already been exported! Are you sure you want to re-export them?</Value>
+      <Value Lang="en-GB">
+        The current data has already been exported in whole or in part! Would you like to re-export the data?
+        When you click on the "No" button, only data that has not been exported before will be exported.
+        To cancel the export, click the "Cancel" button.
+      </Value>
       <Value Lang="ro-RO">Not translated</Value>
-      <Value Lang="ru-RU">Текущие данные уже ранее экспортировались! Вы действительно желаете экспортировать их повторно?</Value>
-      <Value Lang="uk-UA">Поточні дані вже раніше були експортовані! Ви справді бажаєте експортувати їх повторно?</Value>
+      <Value Lang="ru-RU">
+        Текущие данные уже ранее экспортировались полностью или частично! Желаете повторно экспортировать данные?
+        При нажатии на кнопку "Нет" будут экспортированы только данные, которые ранее не экспортировались.
+        Для отмены экспорта нажмите кнопку "Отмена".
+      </Value>
+      <Value Lang="uk-UA">
+        Поточні дані вже раніше були експортовані повністю або частково! Бажаєте повторно експортувати дані?
+        При натисканні на кнопку "Ні" буде експортовано лише дані, які раніше не експортувалися.
+        Щоб скасувати експорт, натисніть кнопку "Скасувати".
+      </Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgOnlineShopNumberHasNotBeenSet">
+      <Value Lang="bg-BG">Не е зададен уникален номер на онлайн магазина! Въведете липсващите данни в настройките на приложението (раздел "Фирма").</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The unique number of the online store has not been set! Enter the missing data in the application settings (section "Company").</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Не задан уникальный номер онлайн-магазина! Введите недостающие данные в настройках приложения (раздел "Фирма").</Value>
+      <Value Lang="uk-UA">Не вказано унікальний номер онлайн-магазину! Введіть відсутні дані в налаштуваннях програми (розділ "Фірма").</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgOnlineShopTypeIsNotChosen">
+      <Value Lang="bg-BG">Не е избран тип на онлайн магазина! Въведете липсващите данни в настройките на приложението (раздел "Фирма").</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Online store type not selected! Install the missing data in the application settings (section "Company").</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Тип онлайн-магазина не выбран! Установите недостающие данные в настройках приложения (раздел "Фирма").</Value>
+      <Value Lang="uk-UA">Тип онлайн-магазину не вибрано! Встановіть відсутні дані в налаштуваннях програми (розділ "Фірма").</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgDomainNameHasNotBeenSet">
+      <Value Lang="bg-BG">Не е посочено име на домейна на онлайн магазина! Въведете липсващите данни в настройките на приложението (раздел "Фирма").</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The domain name of the online store has not been specified! Enter the missing data in the application settings (section "Company").</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Не указано доменное имя онлайн-магазина! Введите недостающие данные в настройках приложения (раздел "Фирма").</Value>
+      <Value Lang="uk-UA">Не вказано доменне ім'я онлайн-магазину! Введіть відсутні дані в налаштуваннях програми (розділ "Фірма").</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgTaxNumberHasNotBeenSpecified">
+      <Value Lang="bg-BG">Не е посочен данъчен номер! Въведете липсващите данни в настройките на приложението (раздел "Фирма").</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax number not specified! Enter the missing data in the application settings (section "Company").</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Не указан налоговый номер! Введите недостающие данные в настройках приложения (раздел "Фирма").</Value>
+      <Value Lang="uk-UA">Не вказано податковий номер! Введіть відсутні дані в налаштуваннях програми (розділ "Фірма").</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgIsSupportedOnlyFrom2020">
+      <Value Lang="bg-BG">Този файл може да съдържа операции само от 2020 г.!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">This file can only contain operations starting from 2020!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">В данном файле могут быть указаны только операции начиная с 2020 года!</Value>
+      <Value Lang="uk-UA">У цьому файлі можуть бути вказані лише операції починаючи з 2020 року!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgSomeElementInAdditionalCodesSectionAreInvalid">
+      <Value Lang="bg-BG">Елемент номер {0} от секцията "AdditionalCodes", разположен в елемент номер {1} на секция "Products", не съдържа всички задължителни полета и/или неверни данни</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Element number {0} of the "AdditionalCodes" section located in element number {1} of the "Products" section does not contain all required fields and / or incorrect data</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Элемент номер {0} раздела "AdditionalCodes", находящегося в элементе номер {1} раздела "Products", содержит не все обязательные поля и/или некорректные данные</Value>
+      <Value Lang="uk-UA">Елемент номер {0} розділу "AdditionalCodes", що знаходиться в елементі номер {1} розділу "Products", містить не всі обов'язкові поля та/або некоректні дані</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgApplicationDescriptionSectionAbsentOrInvalid">
+      <Value Lang="bg-BG">Разделът "ApplicationDescription" липсва или не съдържа всички задължителни полета</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The "ApplicationDescription" section is missing or does not contain all required fields</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Раздел "ApplicationDescription" отсутствует или содержит не все обязательные поля</Value>
+      <Value Lang="uk-UA">Розділ "ApplicationDescription" відсутній або містить не всі обов'язкові поля</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgElementSectionIsInvalid">
+      <Value Lang="bg-BG">Номер на елемент {0} от секцията "{1}" не съдържа всички задължителни полета и/или неправилни данни</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Element number {0} of the "{1}" section does not contain all required fields and / or incorrect data</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Элемент номер {0} раздела "{1}" содержит не все обязательные поля и/или некорректные данные</Value>
+      <Value Lang="uk-UA">Елемент номер {0} розділу "{1}" містить не всі обов'язкові поля та/або некоректні дані</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgSectionIsInvalid">
+      <Value Lang="bg-BG">Раздел {0} не съдържа всички задължителни полета и/или невалидни данни</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Section {0} does not contain all required fields and / or invalid data</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Раздел {0} содержит не все обязательные поля и/или недопустимые данные</Value>
+      <Value Lang="uk-UA">Розділ {0} містить не всі обов'язкові поля та/або неприпустимі дані</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgValueInRowIsInvalid">
+      <Value Lang="bg-BG">Стойността {0} на ред {1} е невалидна</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The value {0} on line {1} is invalid</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Значение {0} в строке {1} является недопустимым</Value>
+      <Value Lang="uk-UA">Значення {0} у рядку {1} ​​є неприпустимим</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgNomenclatureDescriptionIsAbsent">
+      <Value Lang="bg-BG">Номенклатурата с идентификатор {0} не е описана в раздел {1}</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Nomenclature with identifier {0} is not described in section {1}</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Номенклатура с идентификатором {0} не описана в секции {1} </Value>
+      <Value Lang="uk-UA">Номенклатура з ідентифікатором {0} не описана у розділі {1}</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgNonSupportedOperType">
+      <Value Lang="bg-BG">Типът на операцията {0} не се поддържа от текущото приложение</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operation type {0} is not supported by the current application</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Тип операции {0} не поддерживается текущим приложением</Value>
+      <Value Lang="uk-UA">Тип операції {0} не підтримується поточною програмою</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgTax_VATNumberOrEmainMustBeFilled">
+      <Value Lang="bg-BG">Необходимо е да се попълни данъчен номер, номер по ДДС, e-mail или име на партньор</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Tax number, VAT number, e-mail or partner's name must be filled in</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Налоговый номер, номер плательщика НДС, e-mail или имя партнёра должны быть заполнены</Value>
+      <Value Lang="uk-UA">Податковий номер, номер платника ПДВ, e-mail або ім'я партнера мають бути заповнені</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgProductNameOrBarcodeMustBeFilled">
+      <Value Lang="bg-BG">Необходимо е да се попълни името на продукта или баркод</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Product name or barcode must be filled in</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Название товара либо штрихкод должны быть заполнены</Value>
+      <Value Lang="uk-UA">Назва товару або штрихкод мають бути заповнені</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgQtyOrPriceCanNotBeNegativeOrZero">
+      <Value Lang="bg-BG">Цената и/или количеството на стоките не могат да бъдат отрицателни или равни на "0"</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The price and / or quantity of the goods cannot be negative or equal to "0"</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Цена и/или количество товара не могут быть отрицательными или равняться "0"</Value>
+      <Value Lang="uk-UA">Ціна та/або кількість товару не можуть бути негативними або дорівнювати "0"</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgSaleForRefundIsAbsent">
+      <Value Lang="bg-BG">Продажбата, въз основа на която е извършено възстановяването, не е в списъка на сделките за замяна</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">The sale, on the basis of which the refund was made, is not in the list of transactions for exchange</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Продажа, на основании которой был произведён возврат, отсутствует в списке операция для обмена</Value>
+      <Value Lang="uk-UA">Продаж, на підставі якого було здійснено повернення, відсутій у списку операцій для обміну</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgInvalidDataFormat">
+      <Value Lang="bg-BG">Невалиден формат на данните!</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Invalid data format!</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Неправильный формат данных!</Value>
+      <Value Lang="uk-UA">Невірний формат даних!</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgGettingDataFromDatabase">
+      <Value Lang="bg-BG">Извличане на данни от база данни</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Getting data from the database</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Получение данных из базы данных</Value>
+      <Value Lang="uk-UA">Отримання даних із бази даних</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgCreatingDataModel">
+      <Value Lang="bg-BG">Формиране на модела на данните</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Creation of the data model</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Формирование модели данных</Value>
+      <Value Lang="uk-UA">Формування моделі даних</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgConvertingDataModelToTextFile">
+      <Value Lang="bg-BG">Преобразуване на модела на данни в текстов файл</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Converting the data model to a text file</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Преобразование модели данных в текстовый файл</Value>
+      <Value Lang="uk-UA">Перетворення моделі даних на текстовий файл</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgExportDataIsAbsent">
+      <Value Lang="bg-BG">Данните за експорт според заявката не са налични или вече са били експортирани</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Data for export as requested is not available or has already been exported earlier</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Данные для экспорта согласно запросу  отсутствуют или уже ранее были экспортированы</Value>
+      <Value Lang="uk-UA">Дані для експорту, згідно з запитом, відсутні або вже раніше були експортовані</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgWritingDataToFile">
+      <Value Lang="bg-BG">Записване на данни във файл</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Writing data to a file</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Запись данных в файл</Value>
+      <Value Lang="uk-UA">Запис даних у файл</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgExportIsFinished">
+      <Value Lang="bg-BG">Експортът на данни приключи</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Data export completed</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Экспорт данных завершен</Value>
+      <Value Lang="uk-UA">Експорт даних завершено</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgExportIsCanceled">
+      <Value Lang="bg-BG">Експортирането на данни е отменено</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Data export canceled</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Экспорт данных отменён</Value>
+      <Value Lang="uk-UA">Експорт даних скасовано</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDataReading">
+      <Value Lang="bg-BG">Четене на данни</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Reading data</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Чтение данных</Value>
+      <Value Lang="uk-UA">Читання даних</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="strDataWriting">
+      <Value Lang="bg-BG">Запис на данни</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Writing data</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Запись данных</Value>
+      <Value Lang="uk-UA">Збереження даних</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgImportIsFinished">
+      <Value Lang="bg-BG">Импортирането на данни приключи</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Data import completed</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Импорт данных завершен</Value>
+      <Value Lang="uk-UA">Імпорт даних завершено</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgNewItemWasCreated">
+      <Value Lang="bg-BG">Добавена е нова стока</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">New item added</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Добавлен новый  товар</Value>
+      <Value Lang="uk-UA">Додано новий товар</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgNewPartnerWasCreated">
+      <Value Lang="bg-BG">Добавен е нов запис за партньор</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Added a new record for a partner</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Добавлена новая запись по партнёру</Value>
+      <Value Lang="uk-UA">Додано новий запис по партнеру</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgImportAppCurrencyAndImportCurrencyAreDifferent">
+      <Value Lang="bg-BG">
+        Валутата, използвана от текущото приложение, е различна от валутата, посочена в импортирания файл. 
+        Задайте курс, който ще се прилага към всички импортирани данни.</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">
+        The currency used by the current application is different from the currency specified in the imported file. 
+        Set a course that will be applied to all imported data.</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">
+        Валюта, используемая данным приложением, отличается от валюты, указанной в импортируемом файле. 
+        Установите курс, который будет применён ко всем импортируемым данным.</Value>
+      <Value Lang="uk-UA">
+        Валюта, що використовується даним додатком, відрізняється від валюти, зазначеної в імпортованому файлі. 
+        Встановіть курс, який буде застосований до всіх імпортованих даних.</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgCurrencyRateIsAbsent">
+      <Value Lang="bg-BG">Импортирането на данни приключи</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Data import completed</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Импорт данных завершен</Value>
+      <Value Lang="uk-UA">Імпорт даних завершено</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgImportDataIsExisted">
+      <Value Lang="bg-BG">Операция "{0}" с номер {1} е била въведена по-рано</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operation "{0}" with number {1} has already been imported earlier</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Операция "{0}" с номером {1} ранее уже была импортирована</Value>
+      <Value Lang="uk-UA">Операцію "{0}" з номером {1} раніше вже було імпортовано</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgImportErrorNonSupportedOperType">
+      <Value Lang="bg-BG">Операция номер {0} не може да бъде импортирана: тип операция "{1}" не се поддържа на това приложение</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operation number {0} cannot be imported because operation type "{1}" is not supported by this application</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Операция номер {0} не может быть импортирована - тип операции "{1}" не поддерживается данным приложение</Value>
+      <Value Lang="uk-UA">Операцію номер {0} не можна імпортувати - тип операції "{1}" не підтримується даним додатком</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgImportError_RefundNoCorrespondingToSale">
+      <Value Lang="bg-BG">Операция "Връщане" с номер {0} не може да бъде импортирана, тъй като базата данни няма съответна операция "Продажба"</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">Operation "Return" numbered {0} cannot be imported because the database does not have a corresponding operation "Sale"</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Операция "Возврат" под номером {0} не может быть импортирована, так как в базе данных отсутствует соответствующая ей операция "Продажа"</Value>
+      <Value Lang="uk-UA">Операція "Повернення" під номером {0} не може бути імпортована, тому що у базі даних відсутня відповідна їй операція "Продаж"</Value>
+      <Value Lang="hy-AM">Not translated</Value>
+      <Value Lang="ka-GE">Not translated</Value>
+    </Data>
+    <Data Key="msgImportErrorOccuredSavingOperationData">
+      <Value Lang="bg-BG">Възникна грешка при запазване на операция Номер за продажби {0} в базата данни</Value>
+      <Value Lang="el-GR">Not translated</Value>
+      <Value Lang="en-GB">An error occurred while saving the operation Sales number {0} in the database</Value>
+      <Value Lang="ro-RO">Not translated</Value>
+      <Value Lang="ru-RU">Произошла ошибка во время сохранения операции Продажа номер {0} в базе данных</Value>
+      <Value Lang="uk-UA">Виникла помилка під час збереження операції Продаж номер {0} у базі даних</Value>
       <Value Lang="hy-AM">Not translated</Value>
       <Value Lang="ka-GE">Not translated</Value>
     </Data>

@@ -30,7 +30,7 @@ namespace AxisAvaloniaApp.Rules.Partner
         {
             if (await partnerRepository.PartnerEMailIsDuplicatedAsync(partner.Email, partner.Id))
             {
-                await loggerService.ShowDialog("msgPartnerEMailIsDuplicated", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgPartnerEMailIsDuplicated", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

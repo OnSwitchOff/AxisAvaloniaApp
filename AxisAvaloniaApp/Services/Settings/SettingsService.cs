@@ -6,6 +6,7 @@ using System.Globalization;
 using AxisAvaloniaApp.Enums;
 using AxisAvaloniaApp.Services.Translation;
 using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.SearchNomenclatureData;
 
 namespace AxisAvaloniaApp.Services.Settings
 {
@@ -15,10 +16,11 @@ namespace AxisAvaloniaApp.Services.Settings
     public partial class SettingsService : ISettingsService
     {
         private readonly ISettingsRepository settingsRepository;
-        private ITranslationService translationService;
+        private readonly ITranslationService translationService;
+        private readonly ISearchData searchService;
         private char? decimalSeparator = null;
-        private string priceFormat = null;
-        private string qtyFormat = null;
+        private string? priceFormat = null;
+        private string? qtyFormat = null;
         private Dictionary<ESettingKeys, SettingsItemModel> fiscalPrinterSettings;
         private Dictionary<ESettingKeys, SettingsItemModel> pOSTerminalSettings;
         private Dictionary<ESettingKeys, SettingsItemModel> cOMScannerSettings;
@@ -27,10 +29,12 @@ namespace AxisAvaloniaApp.Services.Settings
         private Microinvest.DeviceService.CustomTypes.UniqueSaleNumber uniqueSaleNumber;
         private string logfilePath = null;
 
-        public SettingsService(ISettingsRepository settingsRepository)
+        public SettingsService(ISettingsRepository settingsRepository, ITranslationService translationService, ISearchData searchService)
         {
             this.settingsRepository = settingsRepository;
-            translationService = null;
+            this.translationService = translationService;
+            this.translationService.InitializeDictionary(AppLanguage.CombineCode);
+            this.searchService = searchService;
         }
 
         /// <summary>
@@ -103,12 +107,9 @@ namespace AxisAvaloniaApp.Services.Settings
                     // актуализируем язык
                     this.AppSettings[ESettingKeys.Language].Value = ((int)value).ToString();
                     this.AppSettings[ESettingKeys.Language].UpdateData();
-
-                    if (translationService == null)
-                    {
-                        translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
-                    }
+                   
                     translationService.InitializeDictionary(value.CombineCode);
+                    searchService.InitializeSearchDataTool(value);
                     Microinvest.PDFCreator.Helpers.TranslationHelper.Language = value;
                 }
             }

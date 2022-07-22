@@ -27,7 +27,7 @@ namespace AxisAvaloniaApp.Rules.Item
         {
             if (item.Codes.GroupBy(i => i.Measure).Where(c => c.Count() > 1 || c.Key.Equals(item.Measure)).FirstOrDefault() != null)
             {
-                await loggerService.ShowDialog("msgDuplicateAdditionalMeasures", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgDuplicateAdditionalMeasures", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

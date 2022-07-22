@@ -1,4 +1,5 @@
 ﻿using Microinvest.CommonLibrary.Enums;
+using Microinvest.ExchangeDataService.Models.DeltaPro;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -226,54 +227,6 @@ namespace DataBase.Repositories.OperationHeader
                     Include(oh => oh.Payment).
                     Include(oh => oh.OperationDetails).ThenInclude(od => od.Goods).ThenInclude(g => g.Vatgroup).
                     ToList();
-                }
-            });
-        }
-
-        /// <summary>
-        /// Gets records to generate export file for Delta Pro.
-        /// </summary>
-        /// <param name="dateFrom">Start date to search data into the database.</param>
-        /// <param name="dateTo">End date to search data into the database.</param>
-        /// <param name="acctFrom">Start acct to search data into the database.</param>
-        /// <param name="acctTo">End acct to search data into the database.</param>
-        /// <returns>Returns data in according to parameters to prepare data for export to NAP.</returns>
-        /// <date>13.07.2022.</date>
-        public async Task<List<Entities.OperationHeader.OperationHeader>> GetRecordsForDeltaProAsync(DateTime dateFrom, DateTime dateTo, long acctFrom, long acctTo)
-        {
-            return await Task.Run(() =>
-            {
-                lock (locker)
-                {
-                    // only cash
-                    List<Entities.OperationHeader.OperationHeader> records = null;
-                    var res = databaseContext.OperationHeaders.
-                    Where(oh => 
-                    (oh.OperType == EOperTypes.Sale || oh.OperType == EOperTypes.Delivery) &&
-                    oh.Date >= dateFrom &&
-                    oh.Date <= dateTo.AddDays(1) &&
-                    oh.Acct >= acctFrom &&
-                    oh.Acct <= acctTo).
-                    Include(oh => oh.Partner).
-                    Include(oh => oh.OperationDetails).ThenInclude(od => od.Goods).ThenInclude(g => g.Vatgroup).
-                    SelectMany(oh => oh.OperationDetails, (h, d) => new
-                    {
-                        h.Id,
-                        h.Acct,
-                        h.OperType,
-                        h.Date,
-                        h.Partner,
-                        d.Qtty,
-                        d.SalePrice,
-                        d.PurchasePrice,
-                        d.SaleVAT,
-                        d.PurchaseVAT,
-                        d.Goods.Vatgroup.VATValue,
-                    }).
-                    AsEnumerable().
-                    GroupBy(g => g.VATValue);
-
-                    return records;
                 }
             });
         }

@@ -1,4 +1,4 @@
-﻿using AxisAvaloniaApp.UserControls.MessageBox;
+﻿using AxisAvaloniaApp.UserControls.MessageBoxes;
 using DataBase.Enums;
 using System;
 

@@ -184,12 +184,12 @@ namespace AxisAvaloniaApp.ViewModels.Settings
 
                 settingsService.UpdateSettings(Enums.ESettingGroups.App);
 
-                await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBox.EButtonIcons.Success);
+                await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBoxes.EButtonIcons.Success);
             }
             catch (Exception ex)
             {
                 loggerService.RegisterError(this, ex, nameof(SaveObjectSettings));
-                await loggerService.ShowDialog("msgErrorDuringSavingSettings", "strError", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringSavingSettings", "strError", UserControls.MessageBoxes.EButtonIcons.Error);
             }
         }
     }

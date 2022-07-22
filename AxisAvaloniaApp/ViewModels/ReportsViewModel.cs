@@ -3,6 +3,7 @@ using ReactiveUI;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System;
+using System.Linq;
 using AxisAvaloniaApp.Services.Serialization;
 
 namespace AxisAvaloniaApp.ViewModels

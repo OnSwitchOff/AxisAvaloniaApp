@@ -2,7 +2,7 @@
 using Avalonia.Markup.Xaml.Styling;
 using System;
 
-namespace AxisAvaloniaApp.UserControls.MessageBox
+namespace AxisAvaloniaApp.UserControls.MessageBoxes
 {
     public static class StyleExtensions
     {

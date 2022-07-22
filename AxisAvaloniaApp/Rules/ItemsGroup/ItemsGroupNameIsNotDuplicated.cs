@@ -30,7 +30,7 @@ namespace AxisAvaloniaApp.Rules.ItemsGroup
         {
             if (await itemsGroupRepository.ItemsGroupNameIsDuplicatedAsync(group.Name, group.Id))
             {
-                await loggerService.ShowDialog("msgGroupNameIsDuplicated", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgGroupNameIsDuplicated", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

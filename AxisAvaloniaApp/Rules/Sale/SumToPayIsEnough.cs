@@ -39,7 +39,7 @@ namespace AxisAvaloniaApp.Rules.Sale
                 case EPaymentTypes.Cash:
                     if (Math.Round(totalAmount, 3) > Math.Round(amountSum, 3))
                     {
-                        await loggerService.ShowDialog("msgNotEnoughMoney", "strWarning", UserControls.MessageBox.EButtonIcons.Warning);
+                        await loggerService.ShowDialog("msgNotEnoughMoney", "strWarning", UserControls.MessageBoxes.EButtonIcons.Warning);
                         return await Task.FromResult<object>(-1);
                     }
 

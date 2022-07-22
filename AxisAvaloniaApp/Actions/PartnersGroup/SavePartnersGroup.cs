@@ -56,7 +56,7 @@ namespace AxisAvaloniaApp.Actions.PartnersGroup
             else
             {
                 loggerService.RegisterError(this, "An error occurred during writing/updating the partners group data in the database!", nameof(SavePartnersGroup.Invoke));
-                await loggerService.ShowDialog("msgErrorDuringSavingOrUpdatingGroup", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringSavingOrUpdatingGroup", "strWarning", UserControls.MessageBoxes.EButtonIcons.Error);
                 return await Task.FromResult<object>(-1);
             }
         }

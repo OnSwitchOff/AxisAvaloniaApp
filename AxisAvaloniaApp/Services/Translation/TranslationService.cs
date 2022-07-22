@@ -13,14 +13,12 @@ namespace AxisAvaloniaApp.Services.Translation
         private Dictionary<string, string> helpDictionary;
         private Dictionary<int, string> wishesDictionary;
 
-        public TranslationService(Settings.ISettingsService settings)
+        public TranslationService()
         {
             this.mainDictionary = new Dictionary<string, string>();
             this.helpDictionary = new Dictionary<string, string>();
             this.wishesDictionary = new Dictionary<int, string>();
             this.SupportedLanguages = new Dictionary<string, string>();
-
-            InitializeDictionary(settings.AppLanguage.CombineCode);
         }
 
         /// <summary>

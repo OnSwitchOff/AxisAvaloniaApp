@@ -7,7 +7,8 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="Microinvest.CommonLibrary" Version="1.0.0" />
-    <PackageReference Include="Microinvest.ExchangeDataService" Version="1.0.0" />
+    <PackageReference Include="Microinvest.DeviceService" Version="1.0.2" />
+    <PackageReference Include="Microinvest.ExchangeDataService" Version="1.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.16" />
   </ItemGroup>

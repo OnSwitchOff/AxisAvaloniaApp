@@ -1,4 +1,4 @@
-﻿namespace AxisAvaloniaApp.UserControls.MessageBox
+﻿namespace AxisAvaloniaApp.UserControls.MessageBoxes
 {
     public enum EMessageBoxStyles
     {

@@ -48,7 +48,7 @@ namespace AxisAvaloniaApp.Actions.Partner
             else
             {
                 loggerService.RegisterError(this, "An error occurred during writing/updating the partner data in the database!", nameof(SavePartner.Invoke));
-                await loggerService.ShowDialog("msgErrorDuringSavingOrUpdatingPartner", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringSavingOrUpdatingPartner", "strWarning", UserControls.MessageBoxes.EButtonIcons.Error);
                 return await Task.FromResult<object>(-1);
             }
         }

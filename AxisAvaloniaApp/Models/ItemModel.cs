@@ -1,9 +1,18 @@
-﻿using AxisAvaloniaApp.Helpers;
+﻿using AxisAvaloniaApp.Actions.Item;
+using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Rules;
+using AxisAvaloniaApp.Services.Translation;
+using DataBase.Repositories.Items;
+using DataBase.Repositories.ItemsGroups;
 using DataBase.Repositories.OperationHeader;
+using DataBase.Repositories.VATGroups;
 using Microinvest.CommonLibrary.Enums;
 using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AxisAvaloniaApp.Models
 {
@@ -230,6 +239,106 @@ namespace AxisAvaloniaApp.Models
             }
 
             return itemModel;
+        }
+
+        /// <summary>
+        /// Casts Microinvest.ExchangeDataService.Models.WarehousePro.ProductModel object to ItemModel.
+        /// </summary>
+        /// <param name="product">Product data from the file of import.</param>
+        /// <date>21.07.2022.</date>
+        public static explicit operator ItemModel(Microinvest.ExchangeDataService.Models.WarehousePro.ProductModel product)
+        {
+            ItemModel item = new ItemModel()
+            {
+                Name = product.Name,
+                Code = product.Code,
+                Barcode = product.Barcode,
+                Measure = product.Measure,
+                Price = (double)product.SalePrices.RetailPrice,
+                ItemType = product.Type,
+            };
+
+            if (product.AdditionalCodes != null)
+            {
+                foreach (var code in product.AdditionalCodes)
+                {
+                    item.Codes.Add(new ItemCodeModel()
+                    {
+                        Code = code.Value,
+                        Measure = code.Measure,
+                        Multiplier = code.Ratio,
+                    });
+                }
+            }
+
+            return item;
+        }
+
+        /// <summary>
+        /// Searches or creates ItemModel object by barcode or name.
+        /// </summary>
+        /// <param name="itemData">Data of item to search or create ItemModel object.</param>
+        /// <param name="onlyDatabase">Flag indicating whether search should be only into database (without search on Microinvest club).</param>
+        /// <param name="newItemMessage">Method to show that new item was created.</param>
+        /// <returns>Returns ItemModel.</returns>
+        /// <exception cref="FormatException">Throws exception if data of item is empty.</exception>
+        /// <date>19.07.2022.</date>
+        public static async Task<ItemModel> FindOrCreateItemAsync(ItemModel itemData, bool onlyDatabase, Action<string> newItemMessage)
+        {
+            IItemRepository itemRepository = Splat.Locator.Current.GetRequiredService<IItemRepository>();
+
+            IStage searchItemIntoDatabaseByBarcode = new SearchItemIntoDatabaseByBarcode(itemData.Barcode, itemRepository);
+            IStage searchItemOnMicroinvestClub = new SearchItemOnMicroinvestClub(itemData.Barcode);
+            IStage searchItemIntoDatabaseByName = new SearchItemIntoDatabaseByName(itemData.Name, itemRepository);
+            IStage createNewItem = new CreateNewItem(itemData);
+
+            if (onlyDatabase)
+            {
+                searchItemIntoDatabaseByBarcode.
+                    SetNext(searchItemIntoDatabaseByName).
+                    SetNext(createNewItem);
+            }
+            else
+            {
+                searchItemIntoDatabaseByBarcode.
+                    SetNext(searchItemOnMicroinvestClub).
+                    SetNext(searchItemIntoDatabaseByName).
+                    SetNext(createNewItem);
+            }
+
+            var result = await searchItemIntoDatabaseByBarcode.Invoke(new object());
+
+            if (result != null && result is Models.ItemModel product)
+            {
+                if (product.Id == 0)
+                {
+                    IItemsGroupsRepository itemsGroupsRepository = Splat.Locator.Current.GetRequiredService<IItemsGroupsRepository>();
+                    IVATsRepository vATsRepository = Splat.Locator.Current.GetRequiredService<IVATsRepository>();
+
+                    product.Price = itemData.Price;
+                    product.Group = (GroupModel)await itemsGroupsRepository.GetGroupByIdAsync(1);
+                    product.VATGroup = await vATsRepository.GetVATGroupByIdAsync(1);
+                    if ((product.Id = await itemRepository.AddItemAsync((DataBase.Entities.Items.Item)product)) > 0)
+                    {
+                        IStage addRevaluationData = new AddRevaluationData(product, 0);
+                        await addRevaluationData.Invoke(new object());
+                        if (newItemMessage != null)
+                        {
+                            ITranslationService translationService = Splat.Locator.Current.GetRequiredService<ITranslationService>();
+                            newItemMessage.Invoke(
+                                string.Format("{0} ({1})", 
+                                translationService.Localize("msgNewItemWasCreated"), 
+                                product.Name));
+                        }
+                    }
+                }
+
+                return product;
+            }
+            else
+            {
+                throw new FormatException();
+            }
         }
     }
 }

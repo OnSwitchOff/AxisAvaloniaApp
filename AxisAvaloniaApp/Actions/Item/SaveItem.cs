@@ -49,7 +49,7 @@ namespace AxisAvaloniaApp.Actions.Item
             else
             {
                 loggerService.RegisterError(this, "An error occurred during writing/updating the item data in the database!", nameof(SaveItem.Invoke));
-                await loggerService.ShowDialog("msgErrorDuringSavingOrUpdatingItem", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringSavingOrUpdatingItem", "strWarning", UserControls.MessageBoxes.EButtonIcons.Error);
                 return await Task.FromResult<object>(-1);
             }
         }

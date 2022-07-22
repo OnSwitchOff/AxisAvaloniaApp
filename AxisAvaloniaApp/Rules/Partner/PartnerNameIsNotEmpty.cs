@@ -25,7 +25,7 @@ namespace AxisAvaloniaApp.Rules.Partner
         {
             if (string.IsNullOrEmpty(partnerName))
             {
-                await loggerService.ShowDialog("msgPartnerNameIsEmpty", "strAttention", UserControls.MessageBox.EButtonIcons.Warning);
+                await loggerService.ShowDialog("msgPartnerNameIsEmpty", "strAttention", UserControls.MessageBoxes.EButtonIcons.Warning);
                 return await Task.FromResult<object>(-1);
             }
 

@@ -65,5 +65,34 @@ namespace DataBase.Repositories.VATGroups
                 }
             });            
         }
+
+        /// <summary>
+        /// Gets group of VAT by key.
+        /// </summary>
+        /// <param name="name">Name of VAT group.</param>
+        /// <param name="value">Value of VAT.</param>
+        /// <returns></returns>
+        /// <date>21.07.2022.</date>
+        public async Task<Entities.VATGroups.VATGroup> GetVATGroupByKeyAsync(string name, decimal value)
+        {
+            return await Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    Entities.VATGroups.VATGroup group = databaseContext.Vatgroups.
+                    FirstOrDefault(v => v.Name == name && v.VATValue == value);
+
+                    if (group == null)
+                    {
+                        return databaseContext.Vatgroups.
+                        FirstOrDefault(group => group.VATValue == value);
+                    }
+                    else
+                    {
+                        return group;
+                    }
+                }
+            });
+        }
     }
 }

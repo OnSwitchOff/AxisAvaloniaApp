@@ -1,0 +1,78 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:exControls="using:AxisAvaloniaApp.UserControls.Extensions"
+        xmlns:enums="using:AxisAvaloniaApp.UserControls.MessageBoxes"
+        mc:Ignorable="d" 
+        d:DesignWidth="500" d:DesignHeight="200"
+        Width="450" Height="250" 
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="0"
+        x:Class="AxisAvaloniaApp.UserControls.MessageBoxes.CurrencyRateBox"
+        Title="CurrencyRateBox">
+
+  <Grid RowDefinitions="15, auto, *, 5"
+        ColumnDefinitions="15, auto, *">
+    <Image Grid.Row="1"
+           Grid.Column="1"
+           Source="/Assets/Icons/MessageBox/info.ico"
+           MaxHeight="50" 
+           MaxWidth="50" 
+           VerticalAlignment="Top"/>
+    <Grid Grid.Row="1"
+          Grid.Column="2"          
+          RowDefinitions="auto, auto, auto" 
+          ColumnDefinitions="auto, *"
+          Margin="20, 0">
+      <exControls:AxisTextBlock Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                LocalizeTextKey="strAttention"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                TextWrapping="WrapWithOverflow"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"/>
+      <exControls:AxisTextBlock Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                LocalizeTextKey="msgImportAppCurrencyAndImportCurrencyAreDifferent"
+                                TextWrapping="WrapWithOverflow"
+                                Margin="0, 10, 0, 10"/>
+      <TextBlock Grid.Row="2"
+                 Grid.Column="0"
+                 VerticalAlignment="Center"                 
+                 Text="{Binding $parent[Window].ExchangeableСurrencies}"/>
+      <exControls:AxisTextBox Grid.Row="2"
+                              Grid.Column="1"
+                              Text="{Binding $parent[Window].Rate, Mode=TwoWay}"
+                              InputDataChecker="OnlyDigitsAndPoint"
+                              HorizontalContentAlignment="Right"/>
+    </Grid>
+    <Grid Grid.Row="2"
+          Grid.Column="1"
+          Grid.ColumnSpan="2"
+          Margin="0, 0, 20, 0"
+          ColumnDefinitions="*, auto, 20, auto">
+      <Button Grid.Column="1" 
+              MinWidth="100"     
+              IsEnabled="{Binding $parent[Window].RateIsValid}"
+              Command="{Binding $parent[Window].ButtonClick}"
+              CommandParameter="{x:Static enums:EButtonResults.Ok}">
+        <TextBlock Text="OK"
+                   HorizontalAlignment="Center"/>
+      </Button>
+      <Button Grid.Column="3" 
+              MinWidth="100"
+              Command="{Binding $parent[Window].ButtonClick}"
+              CommandParameter="{x:Static enums:EButtonResults.Cancel}">
+        <exControls:AxisTextBlock LocalizeTextKey="strCancel"
+                                  HorizontalAlignment="Center"/>
+      </Button>
+    </Grid>
+  </Grid>
+</Window>

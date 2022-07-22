@@ -16,6 +16,16 @@ namespace AxisAvaloniaApp.UserControls.RoundLoader
         private const int elipse7Angle = 45;
         private const int elipse8Angle = 90;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public RoundLoader()
+        {
+            LoaderColor = Brushes.Black;
+            LoaderDiameter = 160;
+            CircleDiameter = 40;
+        }
+
         public static readonly StyledProperty<IBrush> LoaderColorProperty =
            AvaloniaProperty.Register<RoundLoader, IBrush>(nameof(LoaderColor));
 

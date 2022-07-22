@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace AxisAvaloniaApp.Actions.Sale
+namespace AxisAvaloniaApp.Actions.Common
 {
     public class PrepareView : AbstractStage
     {

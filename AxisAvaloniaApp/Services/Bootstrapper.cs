@@ -37,6 +37,7 @@ using AxisAvaloniaApp.Services.Explanation;
 using AxisAvaloniaApp.Services.Reports;
 using AxisAvaloniaApp.Services.Reports.Bulgaria;
 using AxisAvaloniaApp.Services.Activation;
+using AxisAvaloniaApp.Services.Exchange;
 
 namespace AxisAvaloniaApp.Services
 {
@@ -59,20 +60,37 @@ namespace AxisAvaloniaApp.Services
 
             services.Register<IActivationService>(() => new ActivationService("https://axis.sx/"));
 
-            services.Register<INavigationService>(() => new NavigationService());
+            services.Register((Func<INavigationService?>)(() => new NavigationService()));
             services.RegisterLazySingleton<IThemeSelectorService>(() => new ThemeSelectorService());
-            services.RegisterLazySingleton<ISettingsService>(() => new SettingsService(resolver.GetRequiredService<ISettingsRepository>()));
+            services.RegisterLazySingleton<ISettingsService>(() => new SettingsService(
+                resolver.GetRequiredService<ISettingsRepository>(),
+                resolver.GetRequiredService<ITranslationService>(),
+                resolver.GetRequiredService<ISearchData>()));
             services.Register<ISerializationService>(() => new SerializationService(resolver.GetRequiredService<ISerializationRepository>()));
             services.RegisterLazySingleton<IScanningData>(() => new ScanningService(resolver.GetRequiredService<ISettingsService>()));
             services.RegisterLazySingleton<IPaymentService>(() => new PaymentService());
             services.RegisterLazySingleton<ISearchData>(() => new SearchDataService());
             services.Register<IDocumentService>(() => new DocumentService(resolver.GetRequiredService<ISettingsService>()));
             services.RegisterLazySingleton<IAxisCloudService>(() => new AxisCloudService());
-            services.RegisterLazySingleton<ITranslationService>(() => new TranslationService(resolver.GetRequiredService<ISettingsService>()));
+            services.RegisterLazySingleton<ITranslationService>(() => new TranslationService());
             services.RegisterLazySingleton<IExplanationService>(() => new ExplanationService());            
             services.RegisterLazySingleton<ILoggerService>(() => new LoggerService());
             services.RegisterLazySingleton<IValidationService>(() => new ValidationService(resolver.GetRequiredService<ISettingsService>()));
             services.Register<IReportsService>(() => new BulgarianReportsService());
+            services.Register<IExchangeService>(() => new ExchangeService(
+                resolver.GetRequiredService<ISettingsService>(),
+                resolver.GetRequiredService<IExchangesRepository>(), 
+                resolver.GetRequiredService<ISearchData>(),
+                resolver.GetRequiredService<IOperationHeaderRepository>(),
+                resolver.GetRequiredService<IVATsRepository>(),
+                resolver.GetRequiredService<IPaymentTypesRepository>(),
+                resolver.GetRequiredService<ITranslationService>(),
+                resolver.GetRequiredService<ILoggerService>(),
+                resolver.GetRequiredService<IItemRepository>(),
+                resolver.GetRequiredService<IPartnerRepository>(),
+                resolver.GetRequiredService<IItemsGroupsRepository>(),
+                resolver.GetRequiredService<IPartnersGroupsRepository>()));
+
 
             switch (AvaloniaLocator.Current?.GetService<IRuntimePlatform>()?.GetRuntimeInfo().OperatingSystem)
             {

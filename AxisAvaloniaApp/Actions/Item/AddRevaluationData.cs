@@ -56,7 +56,7 @@ namespace AxisAvaloniaApp.Actions.Item
 
                 if (await headerRepository.AddNewRecordAsync(header) == 0)
                 {
-                    await loggerService.ShowDialog("msgErrorDuringSavingRevaluationData", "strWarning", UserControls.MessageBox.EButtonIcons.Error);
+                    await loggerService.ShowDialog("msgErrorDuringSavingRevaluationData", "strWarning", UserControls.MessageBoxes.EButtonIcons.Error);
                 }
             }
             

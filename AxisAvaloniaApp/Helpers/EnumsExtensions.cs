@@ -1,5 +1,7 @@
 ﻿using Common.Enums;
+using Microinvest.CommonLibrary.CustomTypes;
 using Microinvest.CommonLibrary.Enums;
+using Microinvest.DeviceService.Enums;
 using System;
 
 namespace AxisAvaloniaApp.Helpers
@@ -47,7 +49,7 @@ namespace AxisAvaloniaApp.Helpers
         /// <param name="receiptType">Type of receipt to convert.</param>
         /// <returns>EECRReceiptType.</returns>
         /// <date>23.06.2022.</date>
-        public static EECCheckTypes Convert(this Microinvest.DeviceService.Enums.EECRReceiptType receiptType)
+        public static EECCheckTypes Convert(this EECRReceiptType receiptType)
         {
             switch (receiptType)
             {
@@ -85,6 +87,30 @@ namespace AxisAvaloniaApp.Helpers
                     return ECurrencies.UAH;
                 default:
                     throw new Exception(String.Format("The currency \"{0}\" is not supported", currencyCode));
+            }
+        }
+
+        /// <summary>
+        /// Convert XmlSerializerEECCheckType object to EECRReceiptType enum
+        /// </summary>
+        /// <param name="checkType">Value to convert</param>
+        /// <returns>EECRReceiptType</returns>
+        /// <developer>Serhii Rozniuk</developer>
+        /// <date>21.07.2022.</date>
+        public static EECRReceiptType Convert(this XmlSerializerEECCheckType checkType)
+        {
+            switch ((EECCheckTypes)checkType)
+            {
+                case EECCheckTypes.FiscalCheck:
+                    return EECRReceiptType.FiscalReceipt;
+                case EECCheckTypes.NonFiscalCheck:
+                    return EECRReceiptType.NonFiscalReceipt;
+                case EECCheckTypes.ReturnCheck:
+                    return EECRReceiptType.ReturnReceipt;
+                case EECCheckTypes.DuplicateCheck:
+                    return EECRReceiptType.DuplicateReceipt;
+                default:
+                    return EECRReceiptType.Unknown;
             }
         }
     }

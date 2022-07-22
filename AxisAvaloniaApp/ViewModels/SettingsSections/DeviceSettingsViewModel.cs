@@ -360,11 +360,11 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             var result = await RealDevice.FiscalDeviceIsConnectedAsync(FiscalPrinter, settingsService.AppLanguage, settingsService.Country);
             if (result.IsConnected)
             {
-                _ = loggerService.ShowDialog("msgSuccessfulConnection", "", UserControls.MessageBox.EButtonIcons.Success);
+                _ = loggerService.ShowDialog("msgSuccessfulConnection", "", UserControls.MessageBoxes.EButtonIcons.Success);
             }
             else
             {
-                _ = loggerService.ShowDialog1(result.error, translationService.Localize("strError"), UserControls.MessageBox.EButtonIcons.Error);
+                _ = loggerService.ShowDialog1(result.error, translationService.Localize("strError"), UserControls.MessageBoxes.EButtonIcons.Error);
             }
         }
 
@@ -377,11 +377,11 @@ namespace AxisAvaloniaApp.ViewModels.Settings
             var result = await RealDevice.POSTerminalIsConnectedAsync(POSTerminal, settingsService.AppLanguage, settingsService.Country);
             if (result.IsConnected)
             {
-                _ = loggerService.ShowDialog("msgSuccessfulConnection", "", UserControls.MessageBox.EButtonIcons.Success);
+                _ = loggerService.ShowDialog("msgSuccessfulConnection", "", UserControls.MessageBoxes.EButtonIcons.Success);
             }
             else
             {
-                _ = loggerService.ShowDialog1(result.error, translationService.Localize("strError"), UserControls.MessageBox.EButtonIcons.Error);
+                _ = loggerService.ShowDialog1(result.error, translationService.Localize("strError"), UserControls.MessageBoxes.EButtonIcons.Error);
             }
         }
 
@@ -450,12 +450,12 @@ namespace AxisAvaloniaApp.ViewModels.Settings
                 settingsService.UpdateSettings(Enums.ESettingGroups.FiscalPrinter);
                 settingsService.UpdateSettings(Enums.ESettingGroups.POSTerminal);                
 
-                await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBox.EButtonIcons.Success);
+                await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBoxes.EButtonIcons.Success);
             }
             catch (Exception ex)
             {
                 loggerService.RegisterError(this, ex, nameof(SaveDeviceSettings));
-                await loggerService.ShowDialog("msgErrorDuringConnectingToDeviceOrSavingSettings", "strError", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringConnectingToDeviceOrSavingSettings", "strError", UserControls.MessageBoxes.EButtonIcons.Error);
             }
         }
 
