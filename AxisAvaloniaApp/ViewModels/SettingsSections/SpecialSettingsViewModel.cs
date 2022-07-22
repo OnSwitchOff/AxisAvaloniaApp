@@ -4,7 +4,7 @@ using AxisAvaloniaApp.Helpers;
 using AxisAvaloniaApp.Services.Logger;
 using AxisAvaloniaApp.Services.Settings;
 using AxisAvaloniaApp.Services.Zip;
-using AxisAvaloniaApp.UserControls.MessageBox;
+using AxisAvaloniaApp.UserControls.MessageBoxes;
 using AxisAvaloniaApp.UserControls.Models;
 using AxisAvaloniaApp.ViewModels.Settings;
 using ReactiveUI;
@@ -100,10 +100,10 @@ namespace AxisAvaloniaApp.ViewModels.SettingsSections
             }
             if (!zipService.CompressFileToZip(AppConfiguration.DatabaseFullName, filePath, AppConfiguration.DatabaseShortName))
             {
-                EButtonResults errResult = await loggerService.ShowDialog("msgErrorDuringSaving", icon: UserControls.MessageBox.EButtonIcons.Error);
+                EButtonResults errResult = await loggerService.ShowDialog("msgErrorDuringSaving", icon: EButtonIcons.Error);
                 return false;
             }
-            EButtonResults sucRessult = await loggerService.ShowDialog("msgFileWasSaved", icon: UserControls.MessageBox.EButtonIcons.Success);
+            EButtonResults sucRessult = await loggerService.ShowDialog("msgFileWasSaved", icon: EButtonIcons.Success);
             return true;
         }
 
@@ -121,15 +121,15 @@ namespace AxisAvaloniaApp.ViewModels.SettingsSections
 
             if (!(bool)extractDbResult)
             {
-                EButtonResults errResult = await loggerService.ShowDialog("msgErrorDuringSaving", icon: UserControls.MessageBox.EButtonIcons.Error);
+                EButtonResults errResult = await loggerService.ShowDialog("msgErrorDuringSaving", icon: UserControls.MessageBoxes.EButtonIcons.Error);
                 return false;
             }
             if (extractDbResult == null)
             {
-                EButtonResults errResult = await loggerService.ShowDialog("msgNoDbFile", icon: UserControls.MessageBox.EButtonIcons.Error);
+                EButtonResults errResult = await loggerService.ShowDialog("msgNoDbFile", icon: UserControls.MessageBoxes.EButtonIcons.Error);
                 return false;
             }
-            EButtonResults sucRessult = await loggerService.ShowDialog("msgFileWasExtracted", icon: UserControls.MessageBox.EButtonIcons.Success);
+            EButtonResults sucRessult = await loggerService.ShowDialog("msgFileWasExtracted", icon: UserControls.MessageBoxes.EButtonIcons.Success);
             return true;
         }
 
@@ -141,12 +141,12 @@ namespace AxisAvaloniaApp.ViewModels.SettingsSections
                 settingsService.AppSettings[Enums.ESettingKeys.BackUpOption].Value = ((int)SelectedBackupOption.Value).ToString();
                 settingsService.UpdateSettings(Enums.ESettingGroups.App);
 
-                await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBox.EButtonIcons.Success);
+                await loggerService.ShowDialog("msgSettingsSuccessfullySaved", "", UserControls.MessageBoxes.EButtonIcons.Success);
             }
             catch (Exception ex)
             {
                 loggerService.RegisterError(this, ex, nameof(SaveSpecialSettings));
-                await loggerService.ShowDialog("msgErrorDuringSavingSettings", "strError", UserControls.MessageBox.EButtonIcons.Error);
+                await loggerService.ShowDialog("msgErrorDuringSavingSettings", "strError", UserControls.MessageBoxes.EButtonIcons.Error);
             }
         }
     }

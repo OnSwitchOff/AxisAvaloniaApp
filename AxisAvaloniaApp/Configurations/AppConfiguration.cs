@@ -1,8 +1,6 @@
-﻿using AxisAvaloniaApp.Enums;
-using DataBase;
+﻿using DataBase;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace AxisAvaloniaApp.Configurations
@@ -10,8 +8,9 @@ namespace AxisAvaloniaApp.Configurations
     public static class AppConfiguration
     {
         private const string DatabaseName = "AxisUno.db";
-        //private static string databaseLocation;
-        public static bool? isDatabaseExist;
+        private static bool? isDatabaseExist;
+        private static readonly System.Collections.Generic.List<string> supportedImageFormats;
+
 
         /// <summary>
         /// Initialize databaseLocation field
@@ -19,26 +18,7 @@ namespace AxisAvaloniaApp.Configurations
         /// <exception cref="Exception">Throws Exception if operation system is not identified.</exception>
         static AppConfiguration()
         {
-            //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-            //{
-            //    databaseLocation = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ProgramData");
-            //}
-            //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
-            //{
-            //    //databaseLocation = Path.Combine("/var", "lib");
-            //    databaseLocation = Path.Combine("/home", Environment.UserName);
-            //}
-            //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
-            //{
-            //    databaseLocation = Path.Combine("/Users", Environment.UserName, "Library", "Application Support");
-
-            //}
-            //else
-            //{
-            //    throw new Exception("Unidentified operating system!");
-            //}
-
-            //databaseLocation = Path.Combine(databaseLocation, "Axis", "Uno");
+            supportedImageFormats = new System.Collections.Generic.List<string>() { ".png", ".jpg", ".jpeg", ".bmp", };
         }
 
         /// <summary>
@@ -78,7 +58,6 @@ namespace AxisAvaloniaApp.Configurations
             }
 
         }
-        //=> Directory.Exists(databaseLocation);
 
         /// <summary>
         /// Gets or sets path to logo.
@@ -88,30 +67,20 @@ namespace AxisAvaloniaApp.Configurations
         {
             get
             {
-                string logoPath = Path.Combine(DatabaseLocation, "logo.png");
-                if (File.Exists(Path.Combine(DatabaseLocation, "logo.jpg")))
+                foreach (string imageFormat in supportedImageFormats)
                 {
-                    logoPath = Path.Combine(DatabaseLocation, "logo.jpg");
-                }
-                else if (File.Exists(Path.Combine(DatabaseLocation, "logo.jpeg")))
-                {
-                    logoPath = Path.Combine(DatabaseLocation, "logo.jpeg");
-                }
-                else if (File.Exists(Path.Combine(DatabaseLocation, "logo.bmp")))
-                {
-                    logoPath = Path.Combine(DatabaseLocation, "logo.bmp");
-                }
-                else if (File.Exists(Path.Combine(DatabaseLocation, "logo.ico")))
-                {
-                    logoPath = Path.Combine(DatabaseLocation, "logo.ico");
+                    if (File.Exists(Path.Combine(DatabaseLocation, "logo" + imageFormat)))
+                    {
+                        return Path.Combine(DatabaseLocation, "logo" + imageFormat);
+                    }
                 }
 
-                return logoPath;
+                return Path.Combine(DatabaseLocation, "logo.png");
             }
             set
             {
-                string extention = value.Substring(value.LastIndexOf("."), value.Length - value.LastIndexOf("."));
-                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".jpeg") || extention.Equals(".bmp") || extention.Equals(".ico"))
+                string extention = GetFileFormat(value);
+                if (supportedImageFormats.Contains(extention))
                 {
                     try
                     {
@@ -130,7 +99,6 @@ namespace AxisAvaloniaApp.Configurations
             }
         }
 
-
         /// <summary>
         /// Gets or sets path to logo.
         /// </summary>
@@ -139,26 +107,20 @@ namespace AxisAvaloniaApp.Configurations
         {
             get
             {
-                string documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.png");
-                if (File.Exists(Path.Combine(DatabaseLocation, "DocumentHeader.jpg")))
+                foreach (string imageFormat in supportedImageFormats)
                 {
-                    documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.jpg");
-                }
-                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentHeader.bmp")))
-                {
-                    documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.bmp");
-                }
-                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentHeader.ico")))
-                {
-                    documentHeaderPath = Path.Combine(DatabaseLocation, "DocumentHeader.ico");
+                    if (File.Exists(Path.Combine(DatabaseLocation, "DocumentHeader" + imageFormat)))
+                    {
+                        return Path.Combine(DatabaseLocation, "DocumentHeader" + imageFormat);
+                    }
                 }
 
-                return documentHeaderPath;
+                return Path.Combine(DatabaseLocation, "DocumentHeader.png");
             }
             set
             {
-                string extention = value.Substring(value.LastIndexOf("."), value.Length - value.LastIndexOf("."));
-                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".bmp") || extention.Equals(".ico"))
+                string extention = GetFileFormat(value);
+                if (supportedImageFormats.Contains(extention))
                 {
                     try
                     {
@@ -186,26 +148,20 @@ namespace AxisAvaloniaApp.Configurations
         {
             get
             {
-                string documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.png");
-                if (File.Exists(Path.Combine(DatabaseLocation, "DocumentFooter.jpg")))
+                foreach (string imageFormat in supportedImageFormats)
                 {
-                    documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.jpg");
-                }
-                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentFooter.bmp")))
-                {
-                    documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.bmp");
-                }
-                else if (File.Exists(Path.Combine(DatabaseLocation, "DocumentFooter.ico")))
-                {
-                    documentFooterPath = Path.Combine(DatabaseLocation, "DocumentFooter.ico");
+                    if (File.Exists(Path.Combine(DatabaseLocation, "DocumentFooter" + imageFormat)))
+                    {
+                        return Path.Combine(DatabaseLocation, "DocumentFooter" + imageFormat);
+                    }
                 }
 
-                return documentFooterPath;
+                return Path.Combine(DatabaseLocation, "DocumentFooter.png");
             }
             set
             {
-                string extention = value.Substring(value.LastIndexOf("."), value.Length - value.LastIndexOf("."));
-                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".bmp") || extention.Equals(".ico"))
+                string extention = GetFileFormat(value);
+                if (supportedImageFormats.Contains(extention))
                 {
                     try
                     {
@@ -289,52 +245,6 @@ namespace AxisAvaloniaApp.Configurations
 
                 IsDatabaseExist = true;
 
-                //string dataBasePath = string.Empty;
-                //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-                //{
-                //    dataBasePath = Path.Combine(
-                //        Path.GetPathRoot(System.Environment.SystemDirectory),
-                //        "ProgramData",
-                //        "Axis",
-                //        "Uno");
-
-                //    if (!Directory.Exists(dataBasePath))
-                //    {
-                //        Directory.CreateDirectory(dataBasePath);
-                //    }
-                //}
-                //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
-                //{
-                //    dataBasePath = Path.Combine("/var", "lib", "Axis", "Uno");
-                //    string cmd = "chmod -R 777 " + Path.Combine("/var", "lib");
-                //    try
-                //    {
-                //        using (Process proc = Process.Start("/bin/bash", $"-c \"{cmd}\""))
-                //        {
-                //            proc.WaitForExit();
-                //            //return proc.ExitCode == 0;
-
-                //            if (!Directory.Exists(databaseLocation))
-                //            {
-                //                Directory.CreateDirectory(databaseLocation);
-                //            }
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    {
-
-                //    }
-                //}
-                //else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
-                //{
-                //    dataBasePath = Path.Combine("Library", "Application Support", "Axis", "Uno");
-
-                //}
-                //else
-                //{
-                //    throw new System.Exception("Unidentified operating system!");
-                //}
-
                 return databaseLocation;
             }
         }
@@ -362,7 +272,15 @@ namespace AxisAvaloniaApp.Configurations
         public static string DatabaseFullName { get => Path.Combine(DatabaseLocation, DatabaseName); }
         public static string DatabaseShortName { get =>  DatabaseName; }
 
-
-
+        /// <summary>
+        /// Gets format of file.
+        /// </summary>
+        /// <param name="filePath">Path to file.</param>
+        /// <returns>returns format of file.</returns>
+        /// <date>22.07.2022.</date>
+        private static string GetFileFormat(string filePath)
+        {
+            return filePath.Substring(filePath.LastIndexOf("."), filePath.Length - filePath.LastIndexOf("."));
+        }
     }
 }

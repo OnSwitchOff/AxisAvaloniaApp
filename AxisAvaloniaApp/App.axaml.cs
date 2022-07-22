@@ -30,23 +30,20 @@ namespace AxisAvaloniaApp
             Services.Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {              
-
+            { 
                 MainWindow mw = null;
                 SplashScreenView sw = null;
-                bool isFirstStart = false;
                 desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
                 if (!Configurations.AppConfiguration.IsDatabaseExist)
                 {
-                    isFirstStart = true;
                     LocalizationView dialog = new LocalizationView();
                     sw = await dialog.MyShowDialog();
                 }
 
                 if (sw == null)
                 {
-                    sw = new SplashScreenView(false);
+                    sw = new SplashScreenView();
                 }
                 mw = await sw.MyShowDialog();
 

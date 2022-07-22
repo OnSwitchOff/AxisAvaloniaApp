@@ -83,7 +83,7 @@ namespace AxisAvaloniaApp.Services.Zip
                 loggerService.RegisterError(this, ex, nameof(ExtractAllFromZip));
                 return false;
             }
-            loggerService.ShowDialog("msgNoDbFileInArchive", icon: UserControls.MessageBox.EButtonIcons.Info);
+            loggerService.ShowDialog("msgNoDbFileInArchive", icon: UserControls.MessageBoxes.EButtonIcons.Info);
             return null;
         }
 

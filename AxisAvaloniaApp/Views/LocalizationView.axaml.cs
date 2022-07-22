@@ -2,6 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using AxisAvaloniaApp.Helpers;
+using AxisAvaloniaApp.Services.Settings;
+using AxisAvaloniaApp.Services.Translation;
 using AxisAvaloniaApp.ViewModels;
 using System.Threading.Tasks;
 
@@ -28,6 +31,8 @@ namespace AxisAvaloniaApp.Views
         public LocalizationView()
         {
             dialogResult = null;
+
+            ISettingsService settingsService = Splat.Locator.Current.GetRequiredService<ISettingsService>();
 
             InitializeComponent();
 #if DEBUG
@@ -56,7 +61,7 @@ namespace AxisAvaloniaApp.Views
             {
                 if (DialogResult != null)
                 {
-                    SplashScreenView splashScreenView = new SplashScreenView(true);
+                    SplashScreenView splashScreenView = new SplashScreenView();
                     splashScreenView.Show();
                     taskSource.TrySetResult(splashScreenView);
                 }

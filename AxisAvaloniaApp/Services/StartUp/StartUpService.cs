@@ -77,10 +77,10 @@ namespace AxisAvaloniaApp.Services.StartUp
             cryptoService = Splat.Locator.Current.GetRequiredService<ICryptoService>();
         }
 
-        public async Task ActivateAsync(bool isFirstRun)
+        public async Task ActivateAsync()
         {
             ProgressChanged?.Invoke(0,"Start loading...");
-            if (isFirstRun)
+            if (!AppConfiguration.IsDatabaseExist)
             {
                 ProgressChanged?.Invoke(10, "First initialize...");
                 await InitializeAsync();
@@ -97,7 +97,7 @@ namespace AxisAvaloniaApp.Services.StartUp
             }
 
             ProgressChanged?.Invoke(60, "CheckStartupEnvironmen backup...");
-            if (!await CheckStartupEnvironment(isFirstRun))
+            if (!await CheckStartupEnvironment(!AppConfiguration.IsDatabaseExist))
             {
                 return;
             }
@@ -142,7 +142,7 @@ namespace AxisAvaloniaApp.Services.StartUp
             settings.IsActiveLicense = DateTime.Compare(expirDate, DateTime.Now) > 0;
             if (!settings.IsActiveLicense)
             {
-                await loggerService.ShowDialog("Activate me, please!", icon: UserControls.MessageBox.EButtonIcons.Info);
+                await loggerService.ShowDialog("Activate me, please!", icon: UserControls.MessageBoxes.EButtonIcons.Info);
                 Environment.Exit(-1);
             }
         }
@@ -173,7 +173,7 @@ namespace AxisAvaloniaApp.Services.StartUp
             settings.AppSettings[Enums.ESettingKeys.SoftwareVersion].Value = cryptoService.Encrypt(OFFLINE_LIMIT_INTERVAL.ToString());
             settings.UpdateSettings(Enums.ESettingGroups.App);
 
-            await loggerService.ShowDialog("Offline limit - 0!", icon: UserControls.MessageBox.EButtonIcons.Stop);
+            await loggerService.ShowDialog("Offline limit - 0!", icon: UserControls.MessageBoxes.EButtonIcons.Stop);
 
             Environment.Exit(-1);
         }
