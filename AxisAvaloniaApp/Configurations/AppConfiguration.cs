@@ -29,7 +29,9 @@ namespace AxisAvaloniaApp.Configurations
             }
             else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
             {
-                databaseLocation = Path.Combine("Library", "Application Support");
+
+                string str = Path.GetPathRoot(Environment.SystemDirectory);
+                databaseLocation = Path.Combine(Environment.UserName, "Library", "Application Support");
 
             }
             else
