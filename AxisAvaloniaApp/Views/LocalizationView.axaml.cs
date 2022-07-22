@@ -56,7 +56,7 @@ namespace AxisAvaloniaApp.Views
             {
                 if (DialogResult != null)
                 {
-                    SplashScreenView splashScreenView = new SplashScreenView();
+                    SplashScreenView splashScreenView = new SplashScreenView(true);
                     splashScreenView.Show();
                     taskSource.TrySetResult(splashScreenView);
                 }

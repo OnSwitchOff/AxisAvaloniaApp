@@ -31,18 +31,19 @@ namespace AxisAvaloniaApp.ViewModels
         public SplashScreenViewModel()
         {
             startUpService = Locator.Current.GetRequiredService<IStartUpService>();
-            StarupLoading();
+            StarupLoading(false);
         }
 
-        private void StartLoadingTask()
+        public SplashScreenViewModel(bool isFirstStart)
         {
-            Task.Run(() => StarupLoading());
+            startUpService = Locator.Current.GetRequiredService<IStartUpService>();
+            StarupLoading(isFirstStart);
         }
 
-        private void StarupLoading()
+        private void StarupLoading(bool isFirstStart)
         {
             startUpService.ProgressChanged += StartUpService_ProgressChanged;
-            startUpService.ActivateAsync(!Configurations.AppConfiguration.IsDatabaseExist);
+            startUpService.ActivateAsync(isFirstStart);
         }
 
         private void StartUpService_ProgressChanged(int prog, string msg)

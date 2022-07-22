@@ -37,7 +37,6 @@ namespace AxisAvaloniaApp
                 bool isFirstStart = false;
                 desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
-
                 if (!Configurations.AppConfiguration.IsDatabaseExist)
                 {
                     isFirstStart = true;
@@ -47,7 +46,7 @@ namespace AxisAvaloniaApp
 
                 if (sw == null)
                 {
-                    sw = new SplashScreenView();
+                    sw = new SplashScreenView(false);
                 }
                 mw = await sw.MyShowDialog();
 

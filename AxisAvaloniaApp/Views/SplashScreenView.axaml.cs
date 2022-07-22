@@ -31,7 +31,21 @@ namespace AxisAvaloniaApp.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
-            SplashScreenViewModel dc = new SplashScreenViewModel();
+            SplashScreenViewModel dc = new SplashScreenViewModel(false);
+            DataContext = dc;
+            //dc.PropertyChanged += Dc_PropertyChanged;
+        }
+
+
+        public SplashScreenView(bool isFirstStart)
+        {
+            dialogResult = null;
+
+            InitializeComponent();
+#if DEBUG
+            this.AttachDevTools();
+#endif
+            SplashScreenViewModel dc = new SplashScreenViewModel(isFirstStart);
             DataContext = dc;
             dc.PropertyChanged += Dc_PropertyChanged;
         }
